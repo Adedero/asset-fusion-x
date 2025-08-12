@@ -23,6 +23,7 @@
     "@vueuse/core": "^13.5.0",
     "axios": "^1.11.0",
     "better-auth": "^1.2.12",
+    "dotenv": "^17.2.1",
     "eslint": "^9.0.0",
     "html2canvas-pro": "^1.5.11",
     "jspdf": "^3.0.1",

@@ -8,7 +8,9 @@ export default function normalizeException(exception: unknown): Error {
     exception !== null &&
     !Array.isArray(exception)
   ) {
-    if ("message" in exception && typeof exception.message === "string") {
+    if ("data" in exception) {
+      normalizedException = new Error((exception.data as Record<string, string>).statusMessage);
+    } else if ("message" in exception && typeof exception.message === "string") {
       normalizedException = new Error(exception.message);
     } else if (
       "statusMessage" in exception &&
