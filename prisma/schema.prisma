@@ -1,0 +1,508 @@
+generator client {
+  provider      = "prisma-client"
+  output        = "../server/generated/prisma"
+  binaryTargets = ["native", "debian-openssl-1.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator json {
+  provider = "prisma-json-types-generator"
+}
+
+generator zod {
+  provider = "zod-prisma-types"
+  output   = "../shared/zod"
+}
+
+enum UserRole {
+  admin
+  user
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  emailVerified Boolean
+  image         String?
+  role          UserRole  @default(user)
+  banned        Boolean?
+  banReason     String?
+  banExpires    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Existing Relations
+  profile  Profile?
+  sessions Session[]
+  accounts Account[]
+
+  // New Relations
+  createdAccounts                 FinancialAccount[]               @relation("UserCreatedAccounts")
+  accountMemberships              AccountUser[]
+  createdJointAccountRequests     JointAccountRequest[]
+  receivedJointAccountRequests    JointAccountRequest[]            @relation("JointRequestRecipient")
+  createdJointAccountModRequests  JointAccountModRequest[]
+  notifications                   Notification[]
+  approvedJointAccountModRequests JointAccountModRequestApproval[]
+
+  @@map("user")
+}
+
+model Session {
+  id             String   @id @default(uuid())
+  userId         String
+  token          String   @unique
+  expiresAt      DateTime
+  ipAddress      String?
+  userAgent      String?
+  impersonatedBy String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relation
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  idToken               String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relation
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([accountId, providerId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+enum KycStatus {
+  pending
+  verified
+  rejected
+  resubmit
+}
+
+enum GovernmentIdType {
+  international_passport
+  national_id
+  driving_license
+}
+
+model Profile {
+  id               String            @id @default(uuid())
+  userId           String            @unique
+  address          String?
+  country          String?
+  state            String?
+  city             String?
+  postalCode       String?
+  governmentId     String?
+  governmentIdType GovernmentIdType?
+  governmentIdExt  String?
+  kycStatus        KycStatus?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  // Relation
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profile")
+}
+
+model BusinessProfile {
+  id                 String   @id @default(uuid())
+  financialAccountId String   @unique
+  address            String?
+  creationMonth      String?
+  creationYear       Int?
+  proofOfAddress     String?
+  proofOfAddressExt  String?
+  certificate        String?
+  certificateExt     String?
+  approved           Boolean
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relation
+  account FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)
+
+  @@map("business_profile")
+}
+
+enum AccountType {
+  personal
+  business
+}
+
+enum AccountOwnership {
+  single
+  joint
+}
+
+enum AccountStatus {
+  active
+  dormant
+  closed
+}
+
+model FinancialAccount {
+  id                 String           @id @default(uuid())
+  creatorId          String
+  name               String
+  number             String
+  status             AccountStatus    @default(active)
+  type               AccountType      @default(personal)
+  ownership          AccountOwnership @default(single)
+  balance            Float            @default(0)
+  totalTransactions  Int              @default(0)
+  totalInvestments   Int              @default(0)
+  firstTransactionAt DateTime?
+  lastTransactionAt  DateTime?
+  closedAt           DateTime?
+  dormantAt          DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  // Relations
+  creator                 User                     @relation("UserCreatedAccounts", fields: [creatorId], references: [id], onDelete: Cascade)
+  businessProfile         BusinessProfile?
+  accountUsers            AccountUser[]
+  jointAccountRequests    JointAccountRequest[]
+  jointAccountModRequests JointAccountModRequest[]
+  notifications           Notification[]
+  transactions            Transaction[]
+  receivedTransactions    Transaction[]            @relation("RecipientTransaction")
+  investments             Investment[]
+
+  @@index([status])
+  @@map("financial_account")
+}
+
+enum AccountUserRole {
+  owner
+  co_owner
+  manager
+  admin
+  accountant
+  investor
+  contributor
+  legal_guardian
+  signatory
+}
+
+model AccountUser {
+  id                 String          @id @default(uuid())
+  userId             String
+  financialAccountId String
+  role               AccountUserRole @default(owner)
+  ownership          Float           @default(100)
+  autosign           Boolean         @default(false)
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  // Relations
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)
+  transactions     Transaction[]
+  investments      Investment[]
+
+  @@unique([userId, financialAccountId])
+  @@index([financialAccountId])
+  @@map("account_user")
+}
+
+enum JointAccountRequestStatus {
+  pending
+  accepted
+  rejected
+}
+
+model JointAccountRequest {
+  id                 String                    @id @default(uuid())
+  creatorId          String
+  recipientName      String
+  recipientEmail     String
+  role               AccountUserRole
+  ownership          Float
+  recipientId        String? // If user already has an account
+  financialAccountId String
+  description        String?
+  lastReminderAt     DateTime?
+  reminderCount      Int                       @default(0)
+  status             JointAccountRequestStatus @default(pending)
+  createdAt          DateTime                  @default(now())
+  updatedAt          DateTime                  @updatedAt
+
+  // Relation
+  creator          User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  recipient        User?            @relation("JointRequestRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)
+
+  @@map("joint_account_request")
+}
+
+enum JointAccountModRequestType {
+  transfer
+  withdrawal
+  name_change
+}
+
+model JointAccountModRequest {
+  id                 String                     @id @default(uuid())
+  creatorId          String
+  financialAccountId String
+  type               JointAccountModRequestType
+  transactionId      String?
+  description        String?
+  createdAt          DateTime                   @default(now())
+  updatedAt          DateTime                   @updatedAt
+
+  creator     User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  account     FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)
+  transaction Transaction?     @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  approvals JointAccountModRequestApproval[]
+
+  @@map("joint_account_mod_request")
+}
+
+model JointAccountModRequestApproval {
+  id                       String                    @id @default(uuid())
+  jointAccountModRequestId String
+  approverId               String
+  status                   JointAccountRequestStatus @default(pending)
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+
+  request  JointAccountModRequest @relation(fields: [jointAccountModRequestId], references: [id], onDelete: Cascade)
+  approver User                   @relation(fields: [approverId], references: [id], onDelete: Cascade)
+
+  @@map("joint_account_mod_approval")
+}
+
+enum ProfitDistribution {
+  daily
+  weekly
+  bi_weekly
+  monthly
+}
+
+enum InvestmentPlanCategory {
+  forex
+  stocks
+  real_estate
+  bonds
+  commodities
+  cryptocurrencies
+  derivatives
+}
+
+model InvestmentPlan {
+  id                       String                 @id @default(uuid())
+  name                     String
+  category                 InvestmentPlanCategory
+  minimumDeposit           Float
+  maximumDeposit           Float
+  duration                 Int
+  profitDistribution       ProfitDistribution     @default(daily)
+  percentageTotalReturn    Float
+  percentagePeriodicReturn Float
+  terminationFee           Float                  @default(0)
+  createdAt                DateTime               @default(now())
+  updatedAt                DateTime               @updatedAt
+
+  @@map("investment_plan")
+}
+
+enum InvestmentStatus {
+  open
+  closed
+  paused
+  terminated
+}
+
+model Investment {
+  id                 String                 @id @default(uuid())
+  financialAccountId String
+  investorId         String
+  deposit            Float
+  investmentName     String
+  totalProfit        Float                  @default(0)
+  profitCount        Int                    @default(0)
+  status             InvestmentStatus       @default(open)
+  pausedAt           DateTime?
+  pausedReason       String?
+  closedAt           DateTime?
+  closedReason       String?
+  terminatedAt       DateTime?
+  terminatedReason   String?
+  category           InvestmentPlanCategory
+  daysCompleted      Int                    @default(0)
+  duration           Int
+  totalReturn        Float
+  periodicReturn     Float
+  profitDistribution ProfitDistribution     @default(daily)
+  terminationFee     Float                  @default(0)
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+
+  // Relation
+  investor         AccountUser      @relation(fields: [investorId], references: [id], onDelete: Cascade)
+  // profits          Profit[]
+  transactions     Transaction[]
+  financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)
+
+  @@index([financialAccountId])
+  @@index([status])
+  @@map("investment")
+}
+
+/**
+ * model Profit {
+ * id                 String   @id @default(uuid())
+ * financialAccountId String
+ * investmentId       String
+ * amount             Float
+ * createdAt          DateTime @default(now())
+ * updatedAt          DateTime @updatedAt
+ * // Relation
+ * investment       Investment       @relation(fields: [investmentId], references: [id], onDelete: Cascade)
+ * financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)
+ * @@map("profit")
+ * }
+ */
+
+enum TransactionType {
+  deposit
+  withdrawal
+  transfer
+  investment
+  profit
+}
+
+enum TransactionStatus {
+  pending
+  successfull
+  reversed
+  failed
+}
+
+enum TransactionMedium {
+  wire
+  crypto
+}
+
+model Transaction {
+  id                             String            @id @default(uuid())
+  amount                         Float
+  currency                       String            @default("USD")
+  USDAmount                      Float
+  rate                           Float             @default(1)
+  charges                        Float             @default(0)
+  financialAccountId             String
+  type                           TransactionType
+  initiatorAccountId             String
+  recipientAccountId             String?
+  investmentId                   String?
+  status                         TransactionStatus @default(pending)
+  parentTransactionId            String?
+  approvedAt                     DateTime?
+  failedAt                       DateTime?
+  failReason                     String?
+  depositWalletAddress           String?
+  depositWalletAddressNetwork    String?
+  withdrawalWalletAddress        String?
+  withdrawalWalletAddressNetwork String?
+  bank                           String?
+  bankAccount                    String?
+  description                    String?
+  createdAt                      DateTime          @default(now())
+  updatedAt                      DateTime          @updatedAt
+
+  initiator               AccountUser              @relation(fields: [initiatorAccountId], references: [id])
+  financialAccount        FinancialAccount         @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)
+  recipientAccount        FinancialAccount?        @relation("RecipientTransaction", fields: [recipientAccountId], references: [id])
+  investment              Investment?              @relation(fields: [investmentId], references: [id], onDelete: Cascade)
+  jointAccountModRequests JointAccountModRequest[]
+  parentTransaction       Transaction?             @relation("childTransactions", fields: [parentTransactionId], references: [id])
+  childTransactions       Transaction[]            @relation("childTransactions")
+
+  @@map("transaction")
+}
+
+enum NotificationBodyType {
+  string
+  html
+}
+
+model Notification {
+  id                 String               @id @default(uuid())
+  title              String
+  body               String
+  bodyType           NotificationBodyType @default(string)
+  userId             String?
+  financialAccountId String?
+  link               String?
+  isRead             Boolean              @default(false)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+
+  user             User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  financialAccount FinancialAccount? @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)
+
+  @@map("notification")
+}
+
+model Currency {
+  id                   String    @id @default(uuid())
+  name                 String
+  symbol               String    @unique
+  image                String?
+  rate                 Float
+  rateUpdatedAt        DateTime?
+  walletAddress        String?
+  walletAddressNetwork String?
+  allowWithdrawal      Boolean   @default(true)
+  withdrawalCharge     Float     @default(0)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@map("currency")
+}
+
+model Settings {
+  id               String  @id @default(uuid())
+  allowWithdrawals Boolean
+
+  @@map("settings")
+}

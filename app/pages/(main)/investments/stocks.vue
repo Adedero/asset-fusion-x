@@ -1,0 +1,187 @@
+<script setup lang="ts">
+definePageMeta({
+  layout: "main",
+});
+
+const { appName } = useRuntimeConfig().public;
+</script>
+
+<template>
+  <main>
+  <div class="grid *:[grid-column:1/2] *:[grid-row:1/2]">
+    <div class="flex flex-col items-center justify-center z-10">
+      <div class="max-w-[32rem] text-center p-4 bg-slate-700/30 border border-white/30 backdrop-blur-[5px] rounded-xl">
+        <h1 class="text-6xl font-medium">Stocks (Equities)</h1>
+
+        <div class="mt-5">
+          <p>
+            Discover the world of publicly traded companies—from innovative startups to global giants. {{ appName }} connects you to the stock market with intelligence, clarity, and performance-focused strategies.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="h-96">
+      <NuxtImg placeholder src="/img/pages/investments/stocks.jpg" class="h-full w-full object-cover brightness-50" />
+    </div>
+  </div>
+
+  <section class="py-24 px-16 grid grid-cols-2 gap-16 items-center">
+    <div>
+      <h2 class="text-3xl font-semibold text-tertiary-500 mb-6">What Are Stocks?</h2>
+      <p class="text-slate-300 mb-4">
+        Stocks, also known as shares or equities, represent ownership in a company. When you own a stock, you own a fraction of that company and share in its profits and losses. Stocks are traded on exchanges like the NYSE and NASDAQ, enabling individuals and institutions to invest in the future of companies across industries.
+      </p>
+      <p class="text-slate-400">
+        Over time, investing in stocks has proven to be one of the most effective ways to build wealth. The key lies in selecting the right companies, understanding market cycles, and staying informed.
+      </p>
+    </div>
+
+    <div class="bg-white rounded-lg px-10 py-20">
+      <NuxtImg placeholder src="/img/pages/investments/what-are-stocks.svg" alt="Understanding stocks" />
+    </div>
+  </section>
+
+  <!-- Why Invest in Stocks -->
+  <section class="py-24 px-16">
+    <h2 class="text-3xl font-semibold text-primary-500 text-center mb-14">Why Invest in Stocks?</h2>
+    <div class="grid grid-cols-3 gap-10">
+      <div class="bg-slate-800 p-8 rounded-2xl shadow-md">
+        <div class="bg-white rounded-lg p-2 w-20 h-20">
+          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512.001 512.001" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect x="341.162" y="84.649" style="fill:#F4A026;" width="76.954" height="369.379"></rect> <rect x="341.162" y="247.792" style="fill:#61ACD2;" width="76.954" height="206.236"></rect> <rect x="218.036" y="201.619" style="fill:#E46A53;" width="76.954" height="252.409"></rect> <rect x="218.036" y="325.772" style="fill:#30A987;" width="76.954" height="128.257"></rect> <rect x="94.91" y="325.772" style="fill:#EFEFEF;" width="76.954" height="128.257"></rect> <path style="fill:#231F20;" d="M508.459,446.275l-38.477-33.347c-4.283-3.711-10.763-3.247-14.473,1.033 c-3.711,4.283-3.248,10.762,1.034,14.473l17.691,15.332h-45.857v-79.076l62.638,9.194c5.604,0.829,10.819-3.055,11.642-8.661 c0.823-5.606-3.056-10.819-8.662-11.642l-65.618-9.632V84.649c0-5.666-4.594-10.261-10.261-10.261h-76.954 c-5.667,0-10.261,4.595-10.261,10.261v271.752l-25.651,10.388v-165.17c0-5.666-4.594-10.261-10.261-10.261h-76.954 c-5.667,0-10.261,4.595-10.261,10.261v173.844l-25.651-6.098v-43.594c0-5.666-4.594-10.261-10.261-10.261H94.91 c-5.667,0-10.261,4.595-10.261,10.261v47.98l-25.651,9.241V50.079L74.33,67.77c2.03,2.341,4.885,3.541,7.758,3.541 c2.381,0,4.774-0.825,6.716-2.507c4.282-3.711,4.745-10.192,1.033-14.472L56.49,15.855c-0.043-0.05-0.084-0.089-0.127-0.135 c-1.084-1.206-2.453-2.166-4.041-2.758c-4.011-1.498-8.534-0.343-11.34,2.892L7.636,54.331c-3.71,4.283-3.247,10.762,1.035,14.473 s10.762,3.248,14.473-1.033L38.477,50.08v393.688H10.261C4.594,443.768,0,448.362,0,454.028s4.594,10.261,10.261,10.261h28.216 v25.138c0,5.666,4.594,10.261,10.261,10.261s10.261-4.595,10.261-10.261v-25.138h415.236l-17.691,15.332 c-4.282,3.711-4.745,10.192-1.033,14.473c2.03,2.341,4.885,3.541,7.758,3.541c2.381,0,4.774-0.825,6.716-2.507l38.477-33.347 c0.072-0.062,0.13-0.12,0.195-0.18c1.178-1.074,2.116-2.427,2.699-3.987C512.851,453.601,511.696,449.081,508.459,446.275z M407.856,94.91v142.621h-56.433V94.91H407.856z M351.423,258.052h56.433v82.888l-25.701-3.773c-1.806-0.269-3.65-0.045-5.342,0.641 l-25.391,10.283V258.052z M330.902,378.541v65.227h-25.651v-54.839L330.902,378.541z M284.729,211.88v103.631h-56.433V211.88 H284.729z M228.297,336.032h56.433v39.066l-29.031,11.757l-27.402-6.513V336.032z M207.776,396.557v47.211h-25.651v-53.309 L207.776,396.557z M105.17,336.032h56.433v28.457l-27.896-6.63c-1.938-0.462-3.974-0.347-5.851,0.328l-22.687,8.173v-30.327H105.17z M58.998,404.805l25.651-9.241v48.204H58.998V404.805z M105.17,443.768v-55.597l26.766-9.642l29.667,7.052v58.186H105.17z M228.297,443.768v-42.334l25.844,6.143c2.074,0.493,4.249,0.328,6.224-0.472l24.366-9.867v46.529H228.297z M351.423,443.768 v-73.537l30.51-12.356l25.923,3.805v82.088H351.423z"></path> </g></svg>
+        </div>
+        <h3 class="mt-4 text-xl font-medium text-tertiary-500 mb-2">Capital Appreciation</h3>
+        <p class="text-slate-400">
+          As companies grow and increase in value, so does the price of their stock—allowing you to benefit from long-term market growth.
+        </p>
+      </div>
+      <div class="bg-slate-800 p-8 rounded-2xl shadow-md">
+        <div class="bg-white rounded-lg p-2 w-20 h-20">
+          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path style="fill:#C3E678;" d="M484.551,143.163C452.489,63.52,374.486,7.342,283.385,7.514l0.407,216.391L484.551,143.163z"></path> <path style="fill:#9BE6D2;" d="M243.433,71.705c-49.128,0.092-94.393,16.56-130.663,44.213l131.064,169.409L243.433,71.705z"></path> <path style="fill:#00D2FF;" d="M444.599,207.354L245.47,287.44l7.812,10.098l-7.812-10.097l-1.63,0.655l-0.005-2.769 L112.771,115.918C60.809,155.534,27.317,218.12,27.449,288.502c0.224,119.509,97.288,216.209,216.798,215.985 c119.509-0.224,216.209-97.288,215.985-216.798C460.177,259.281,454.597,232.189,444.599,207.354z"></path> <path style="fill:#18BDF6;" d="M63.656,252.295c-0.095-50.644,17.22-97.249,46.297-134.167 c-50.344,39.713-82.633,101.278-82.503,170.373c0.224,119.509,97.288,216.209,216.798,215.985 c68.824-0.129,130.077-32.381,169.617-82.534c-36.718,28.932-83.037,46.233-133.41,46.327 C160.944,468.504,63.88,371.805,63.656,252.295z"></path> <path d="M441.796,200.383l-190.463,76.601l-0.386-205.292c-0.008-4.146-3.37-7.5-7.514-7.5c-0.005,0-0.01,0-0.015,0 C183.611,64.304,127.427,87.7,85.217,130.07c-42.209,42.368-65.394,98.639-65.281,158.446 c0.112,59.729,23.459,115.862,65.74,158.058C127.951,488.764,184.119,512,243.831,512h0.431 c59.807-0.112,115.991-23.509,158.201-65.878s65.395-98.64,65.283-158.447c-0.054-28.633-5.496-56.6-16.175-83.128 C450.019,200.699,445.643,198.835,441.796,200.383z M236.284,265.85L122.963,117.695c32.96-23.485,71.92-36.811,112.971-38.33 L236.284,265.85z M391.816,435.517c-39.377,39.527-91.79,61.352-147.583,61.457h-0.402c-114.954,0-208.652-93.525-208.868-208.484 c-0.104-55.793,21.524-108.288,60.901-147.814c4.866-4.884,9.935-9.492,15.18-13.828l126.827,165.814 c0.062,0.082,0.133,0.152,0.198,0.23c0.093,0.111,0.184,0.222,0.284,0.329c0.117,0.125,0.24,0.242,0.364,0.359 c0.091,0.085,0.18,0.171,0.277,0.252c0.148,0.126,0.304,0.24,0.46,0.354c0.063,0.046,0.12,0.098,0.185,0.142 c0.023,0.015,0.047,0.026,0.07,0.041c0.175,0.115,0.357,0.218,0.54,0.318c0.08,0.043,0.157,0.092,0.238,0.132 c0.196,0.097,0.398,0.18,0.601,0.26c0.074,0.029,0.146,0.065,0.22,0.091c0.242,0.086,0.49,0.156,0.738,0.217 c0.038,0.009,0.074,0.024,0.112,0.032c0.286,0.065,0.574,0.113,0.865,0.144c0.09,0.01,0.181,0.009,0.271,0.015 c0.183,0.013,0.366,0.031,0.549,0.031c0.016,0,0.032-0.004,0.049-0.004c0.354-0.002,0.707-0.031,1.06-0.084 c0.105-0.016,0.209-0.043,0.315-0.063c0.25-0.049,0.499-0.108,0.745-0.182c0.128-0.039,0.254-0.081,0.381-0.126 c0.083-0.03,0.167-0.05,0.249-0.083l193.666-77.889c8.191,22.641,12.361,46.329,12.407,70.526 C452.823,343.496,431.194,395.99,391.816,435.517z"></path> <path d="M491.522,140.357c-16.494-40.97-44.5-75.904-80.994-101.028c-1.752-1.206-3.522-2.376-5.303-3.529 c-0.077-0.053-0.156-0.103-0.235-0.152C368.856,12.31,327.104,0,283.8,0h-0.43c-1.993,0.004-3.902,0.799-5.309,2.211 c-1.407,1.412-2.194,3.324-2.191,5.317l0.06,32.056c0,0.002,0,0.003,0,0.003l0.075,40.067v0.007l0.075,40.065v0.009l0.075,40.062 v0.01l0.075,40.061v0.011l0.045,24.037c0.005,2.494,1.246,4.822,3.313,6.216c1.259,0.85,2.725,1.283,4.201,1.283 c0.947,0,1.899-0.179,2.803-0.543l22.585-9.083c0.064,0.002,0.127,0.009,0.191,0.009c1.927,0,3.855-0.737,5.323-2.211l0.027-0.027 l65.296-26.262c0.024-0.01,0.047-0.019,0.071-0.028l66.661-26.809c0.027-0.011,0.055-0.022,0.082-0.033l40.523-16.297 c1.849-0.743,3.327-2.192,4.108-4.025C492.245,144.275,492.265,142.205,491.522,140.357z M408.381,165.698l52.477-52.674 c2.419,3.883,4.721,7.863,6.899,11.932l-28.031,28.135L408.381,165.698z M412.948,59.528L291.227,181.707l-0.035-18.82 L402.105,51.554C405.803,54.094,409.419,56.752,412.948,59.528z M290.965,42.669l25.081-25.177 c5.312,0.818,10.566,1.834,15.753,3.046L291,61.491L290.965,42.669z M291.04,82.742l57.374-57.589c4.669,1.508,9.274,3.175,13.803,5 l-71.142,71.41L291.04,82.742z M291.115,122.814l85.758-86.082c4.152,2.06,8.231,4.254,12.228,6.583l-97.951,98.32L291.115,122.814z M296.884,15.437l-5.959,5.982l-0.012-6.272C292.91,15.213,294.899,15.315,296.884,15.437z M291.266,202.958l133.18-133.682 c3.274,2.985,6.46,6.077,9.545,9.277L306.253,206.772l-14.968,6.02L291.266,202.958z M444.037,89.761 c2.855,3.425,5.609,6.949,8.253,10.571l-79.301,79.6l-31.344,12.606L444.037,89.761z"></path> </g></svg>
+        </div>
+        <h3 class="mt-4 text-xl font-medium text-tertiary-500 mb-2">Dividend Income</h3>
+        <p class="text-slate-400">
+          Many established companies pay regular dividends to shareholders, offering a steady income stream on top of potential gains.
+        </p>
+      </div>
+      <div class="bg-slate-800 p-8 rounded-2xl shadow-md">
+        <div class="bg-white rounded-lg p-2 w-20 h-20">
+          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <circle style="fill:#48f0a5;" cx="141.851" cy="141.851" r="131.651"></circle> <circle style="fill:#48f0a5;" cx="370.15" cy="370.15" r="131.651"></circle> </g> <g> <path style="fill:#000000;" d="M283.693,141.846C283.693,63.633,220.061,0,141.846,0S0,63.633,0,141.846 s63.632,141.846,141.846,141.846S283.693,220.061,283.693,141.846z M20.398,141.846c0-66.967,54.481-121.448,121.448-121.448 s121.448,54.481,121.448,121.448s-54.481,121.448-121.448,121.448S20.398,208.813,20.398,141.846z"></path> <path style="fill:#000000;" d="M148.003,218.864v-6.883c21.865-3.037,36.847-16.804,36.847-41.707 c0-27.534-19.233-36.442-36.847-42.92V86.255c14.172,1.012,19.436,7.491,24.295,7.491c6.074,0,8.908-7.694,8.908-11.54 c0-9.921-19.436-14.172-33.202-14.577v-5.466c0-2.429-3.037-4.656-6.074-4.656c-3.442,0-5.871,2.228-5.871,4.656v5.872 c-19.233,2.024-38.466,12.147-38.466,37.656c0,25.914,20.245,33.204,38.466,39.681v47.577c-20.65-1.62-26.117-15.791-32.798-15.791 c-5.061,0-9.313,6.681-9.313,11.539c0,9.921,17.006,23.485,42.111,23.89v6.277c0,2.429,2.429,4.656,5.871,4.656 C144.965,223.52,148.003,221.293,148.003,218.864z M146.788,149.825c9.921,4.252,17.816,9.921,17.816,22.675 c0,11.539-6.883,18.019-17.816,20.042V149.825z M137.272,123.507c-10.731-4.05-19.436-8.301-19.436-19.841 c0-10.528,8.098-15.589,19.436-17.007V123.507z"></path> <path style="fill:#000000;" d="M370.154,228.307c-78.215,0-141.846,63.633-141.846,141.846S291.939,512,370.154,512 S512,448.367,512,370.154S448.368,228.307,370.154,228.307z M370.154,491.602c-66.967,0-121.448-54.481-121.448-121.448 s54.481-121.448,121.448-121.448s121.448,54.481,121.448,121.448S437.121,491.602,370.154,491.602z"></path> <path style="fill:#000000;" d="M370.773,316.155c17.296,0,23.733,11.061,23.733,21.519c0,4.626,3.218,6.638,10.659,6.638 c7.24,0,10.659-2.011,10.659-9.854c0-22.727-18.905-37.207-45.654-37.207c-24.939,0-44.648,12.268-44.648,44.85v7.642h-10.659 c-4.023,0-6.839,3.419-6.839,8.045c0,4.424,2.816,7.441,6.839,7.441h10.659v16.088h-10.659c-4.023,0-6.839,3.42-6.839,8.045 c0,4.425,2.816,7.441,6.839,7.441h10.659v5.833c0,26.95,16.894,42.839,44.648,42.839c26.748,0,45.654-15.085,45.654-38.213 c0-8.044-3.218-10.055-10.659-10.055c-7.24,0-10.659,1.81-10.659,6.638c-0.201,12.067-6.839,22.726-23.531,22.726 c-18.301,0-24.134-12.871-24.134-23.933v-5.833h24.536c3.62,0,7.24-3.217,7.24-7.642c0-4.424-3.62-7.843-7.24-7.843H346.84V365.23 h24.536c3.62,0,7.24-3.218,7.24-7.642c0-4.425-3.62-7.843-7.24-7.843H346.84v-7.642 C346.839,324.401,355.487,316.155,370.773,316.155z"></path> <path style="fill:#000000;" d="M440.304,190.147c1.474,4.196,5.414,6.821,9.623,6.821c1.122,0,2.262-0.187,3.38-0.579 c5.314-1.866,8.109-7.688,6.242-13.003c-1.147-3.268-2.395-6.554-3.704-9.768c-2.128-5.215-8.077-7.718-13.296-5.592 c-5.216,2.128-7.72,8.08-5.592,13.296C438.14,184.225,439.266,187.194,440.304,190.147z"></path> <path style="fill:#000000;" d="M321.684,107.742c1.868,3.342,5.337,5.225,8.912,5.225c1.684,0,3.392-0.418,4.967-1.297 c4.917-2.749,6.674-8.962,3.927-13.879l-13.554-24.25c36.163,13.534,68.113,38.229,90.4,70.003 c1.985,2.829,5.147,4.344,8.359,4.344c2.023,0,4.065-0.601,5.847-1.849c4.611-3.235,5.728-9.595,2.494-14.208 c-24.373-34.75-59.211-61.845-98.68-76.916l20.507-11.462c4.917-2.749,6.675-8.962,3.927-13.879 c-2.748-4.917-8.962-6.673-13.879-3.928l-43.758,24.457c-2.361,1.32-4.101,3.524-4.837,6.127c-0.736,2.603-0.409,5.391,0.911,7.753 L321.684,107.742z"></path> <path style="fill:#000000;" d="M191.598,398.277c-2.748-4.917-8.962-6.676-13.879-3.927c-4.917,2.748-6.675,8.962-3.927,13.878 l13.906,24.879c-51.972-20.623-93.332-63.804-111.44-116.842c-1.821-5.33-7.619-8.174-12.948-6.356 c-5.331,1.821-8.177,7.618-6.357,12.948c10.327,30.244,27.741,58.287,50.36,81.099c20.21,20.38,44.642,36.629,71.13,47.416 l-20.024,11.192c-4.917,2.749-6.675,8.962-3.927,13.879c1.868,3.342,5.337,5.225,8.912,5.225c1.684,0,3.392-0.418,4.967-1.297 l43.758-24.457c2.361-1.32,4.101-3.524,4.837-6.127c0.736-2.604,0.409-5.391-0.911-7.753L191.598,398.277z"></path> </g> </g></svg>
+        </div>
+        <h3 class="mt-4 text-xl font-medium text-tertiary-500 mb-2">Market Liquidity</h3>
+        <p class="text-slate-400">
+          Stocks are easy to buy and sell during market hours, giving you the flexibility to enter and exit positions quickly and efficiently.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Types of Stocks -->
+  <section class="py-24 px-16 grid grid-cols-2 gap-16 items-center">
+    <div class="rounded-xl bg-white shadow-lg px-2 py-6">
+      <NuxtImg placeholder src="/img/pages/investments/types-of-stocks.png" class="w-full h-full" alt="Types of stocks" />
+    </div>
+    <div>
+      <h2 class="text-3xl font-semibold text-tertiary-500 mb-6">Types of Stocks</h2>
+      <p class="text-slate-300 mb-4">Not all stocks are created equal. Investors can choose from:</p>
+      <ul class="text-slate-400 space-y-3 list-disc list-inside">
+        <li><span class="text-slate-100">Blue-chip stocks</span> - shares in large, stable companies with a history of solid performance.</li>
+        <li><span class="text-slate-100">Growth stocks</span> - companies expected to grow faster than the market average, often reinvesting profits.</li>
+        <li><span class="text-slate-100">Dividend stocks</span> - stocks that provide regular income through shareholder payouts.</li>
+        <li><span class="text-slate-100">Penny stocks</span> - low-priced stocks with high volatility and higher risk/reward potential.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- How AssetFusionX Makes It Easy -->
+  <section class="py-24 px-16">
+    <div class="text-center max-w-4xl mx-auto mb-16">
+      <h2 class="text-3xl font-semibold text-primary-500 mb-4">How {{ appName }} Simplifies Stock Investing</h2>
+      <p class="text-slate-400 text-lg">
+        With {{ appName }}, you don't need to worry about brokerage platforms, technical analysis, or reading 50-page financial reports. We make investing in stocks smart, effortless, and accessible.
+      </p>
+    </div>
+    <div class="grid grid-cols-3 gap-10">
+      <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+        <h3 class="text-lg font-medium text-slate-100 mb-2">Curated Stock Baskets</h3>
+        <p class="text-slate-400">Choose from themed baskets like “AI Innovators,” “Sustainable Energy,” or “Dividend Aristocrats”—professionally selected for impact and performance.</p>
+      </div>
+      <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+        <h3 class="text-lg font-medium text-slate-100 mb-2">No Trading Knowledge Needed</h3>
+        <p class="text-slate-400">We do the market watching and decision-making. You simply pick a strategy, and we take care of the rest—seamlessly and securely.</p>
+      </div>
+      <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+        <h3 class="text-lg font-medium text-slate-100 mb-2">Performance Monitoring</h3>
+        <p class="text-slate-400">Your dashboard provides real-time updates on your investments with clear visuals, earnings reports, and reallocation history.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global Market Access -->
+  <section class="py-24 px-16 grid grid-cols-2 gap-16 items-center">
+    <div>
+      <h2 class="text-3xl font-semibold text-tertiary-500 mb-6">Global Market Access</h2>
+      <p class="text-slate-300 mb-4">
+        With {{ appName }}, you gain access to top stock markets around the world—including the U.S., Europe, and Asia. We break down barriers and enable participation in the global economy with a few clicks.
+      </p>
+      <p class="text-slate-400">
+        Our platform handles currency conversions, trading regulations, and security compliance so that you can focus solely on your growth.
+      </p>
+    </div>
+    <div>
+      <NuxtImg placeholder src="/img/pages/investments/global-stock-market.webp" alt="World market access" class="rounded-xl shadow-lg" />
+    </div>
+  </section>
+
+  <!-- Real-World Examples -->
+  <section class="py-24 px-16">
+    <h2 class="text-3xl font-semibold text-primary-500 text-center mb-16">Real-World Stocks, Real Impact</h2>
+    <div class="grid grid-cols-3 gap-10">
+      <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+        <div class="bg-white p-4 h-20 w-20 mb-4 rounded-lg">
+          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="512" cy="512" r="512" style="fill:#c90000"></circle> <path transform="translate(-33.796 -64.797)" d="m545.8 845.8 71.9-404.6c68.6 0 90.2 7.5 93.3 38.2 0 0 46-17.2 69.2-52-90.5-41.9-181.5-43.8-181.5-43.8l-53.1 64.6h.1l-53.1-64.6s-91 1.9-181.5 43.8c23.2 34.8 69.2 52 69.2 52 3.1-30.7 24.7-38.2 92.8-38.3l72.7 404.7m0-480.9c73.2-.6 156.9 11.3 242.7 48.7 11.5-20.6 14.4-29.7 14.4-29.7-93.7-37.1-181.5-49.8-257.1-50.1-75.6.3-163.4 13-257.1 50.1 0 0 4.2 11.2 14.4 29.7 85.7-37.3 169.5-49.2 242.7-48.7" style="fill:#fff"></path> </g></svg>
+        </div>
+        <h3 class="text-xl font-medium text-slate-100">Tesla, Inc.</h3>
+        <p class="text-slate-400">Pioneer in electric vehicles, energy storage, and autonomous driving technology.</p>
+      </div>
+      <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+        <div class="bg-white p-4 h-20 w-20 mb-4 rounded-lg">
+          <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 448.334 448.334" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="apple"> <g> <path d="M362.806,278.708c-5.486-12.602-8.572-26.77-8.572-41.686c0-6.328,0.561-12.423,1.621-18.299 c4.52-25.415,18.36-46.409,37.439-60.018c3.43-2.415,7.014-4.598,10.723-6.53c-25.749-40.627-67.708-44.103-80.895-45.49 c-28.68-2.992-69.111,22.367-91.059,22.367h-0.592c-21.946,0-62.379-25.359-91.059-22.367 c-14.276,1.465-59.916,9.555-87.441,53.408c-9.665,15.385-17.114,34.322-20.169,59.315c-1.093,9.009-1.622,18.424-1.498,28.867 c0.125,10.489,0.967,20.597,2.4,30.605c3.087,21.369,8.886,41.461,16.367,59.924c8.323,20.48,18.735,38.857,29.801,54.499 c24.474,34.649,52.186,54.655,67.835,55.014c32.109,0.717,60.009-21.003,83.047-20.442c0.25,0.078,0.498,0.078,0.717,0.063 l0.311-0.031l0.281,0.031c0.219,0.016,0.467,0,0.686-0.078c23.037-0.592,50.969,21.144,83.141,20.427 c15.586-0.358,43.332-20.38,67.803-55.03c11.066-15.641,21.478-34.049,29.739-54.545c1.246-3.055,2.432-6.157,3.615-9.306 C393.107,321.931,373.404,303.196,362.806,278.708z"></path> </g> <g> <path d="M288.176,73.384c24.691-29.21,23.724-71.256,21.479-73.11c-2.213-1.886-42.987,5.61-68.27,33.831 c-25.282,28.259-23.722,71.255-21.478,73.125C222.12,109.101,263.519,102.585,288.176,73.384z"></path> </g> </g> </g></svg>
+        </div>
+        <h3 class="text-xl font-medium text-slate-100">Apple, Inc.</h3>
+        <p class="text-slate-400">Iconic consumer electronics brand with powerful global distribution and brand loyalty.</p>
+      </div>
+      <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+        <div class="bg-white p-4 h-20 w-20 mb-4 rounded-lg">
+          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="512.25" cy="512.25" r="512" style="fill:#76b900"></circle> <path d="M430.58 436.9v-33.66c3.26-.23 6.56-.41 9.92-.51 92-2.89 152.41 79.09 152.41 79.09S527.7 572.4 457.78 572.4a84.86 84.86 0 0 1-27.2-4.35V466c35.83 4.33 43 20.15 64.57 56.06l47.91-40.4s-35-45.87-93.91-45.87a170.07 170.07 0 0 0-18.56 1.1m0-111.17V376c3.3-.27 6.61-.47 9.92-.59 128-4.31 211.37 105 211.37 105s-95.79 116.42-195.57 116.42a146.92 146.92 0 0 1-25.74-2.27v31.08A169.64 169.64 0 0 0 452 627c92.85 0 160-47.42 225-103.54 10.77 8.64 54.9 29.63 64 38.83-61.83 51.76-205.91 93.48-287.59 93.48-7.87 0-15.44-.47-22.86-1.19v43.67h352.93V325.73zm0 242.31v26.52C344.69 579.26 320.85 490 320.85 490s41.24-45.69 109.73-53.08V466h-.14c-35.93-4.31-64 29.25-64 29.25s15.74 56.53 64.16 72.8M278 486.11s50.9-75.11 152.54-82.87V376C318 385 220.52 480.36 220.52 480.36S275.73 640 430.58 654.6v-29C316.95 611.34 278 486.11 278 486.11" style="fill:#fff"></path> </g></svg>
+        </div>
+        <h3 class="text-xl font-medium text-slate-100">Nvidia Corp.</h3>
+        <p class="text-slate-400">A key player in AI, gaming, and data center infrastructure with market-defining chips.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQs -->
+  <section class="py-24 px-16 max-w-5xl mx-auto">
+    <h2 class="text-3xl font-semibold text-tertiary-500 text-center mb-12">FAQs About Stock Investing with {{ appName }}</h2>
+    <div class="space-y-6">
+      <details class="bg-slate-800 p-6 rounded-xl">
+        <summary class="cursor-pointer text-tertiary-500 font-medium">Do I need a broker to use {{ appName }}?</summary>
+        <p class="text-slate-400 mt-2">No. {{ appName }} acts as your intelligent investment engine. You don't need a broker or trading platform—we manage everything on your behalf.</p>
+      </details>
+      <details class="bg-slate-800 p-6 rounded-xl">
+        <summary class="cursor-pointer text-tertiary-500 font-medium">Can I customize my stock portfolio?</summary>
+        <p class="text-slate-400 mt-2">Yes. While we offer curated baskets, you can fine-tune exposure to industries, markets, or ESG principles based on your preferences.</p>
+      </details>
+      <details class="bg-slate-800 p-6 rounded-xl">
+        <summary class="cursor-pointer text-tertiary-500 font-medium">Are there fees?</summary>
+        <p class="text-slate-400 mt-2">We charge a transparent, flat annual management fee. There are no hidden costs or performance-based charges.</p>
+      </details>
+    </div>
+  </section>
+
+  <div>
+    <MainCtaBanner color="neutral" />
+  </div>
+</main>
+</template>

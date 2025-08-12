@@ -1,0 +1,474 @@
+<script setup lang="ts">
+definePageMeta({
+  layout: "main",
+});
+
+const { appName } = useRuntimeConfig().public;
+</script>
+
+<template>
+  <div class="min-h-screen flex flex-col items-center py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <section
+      class="relative w-full h-[650px] overflow-hidden rounded-lg mb-24 flex items-center justify-center text-center"
+    >
+      <NuxtImg
+        placeholder
+        src="https://static.vecteezy.com/system/resources/previews/024/390/792/non_2x/charts-dashboard-financial-analytical-chart-futuristic-web-admin-panel-and-trading-analysis-website-ui-concept-vector.jpg"
+        alt="Digital financial dashboard with charts and data"
+        class="absolute inset-0 w-full h-full object-cover brightness-50"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"
+      />
+      <div class="relative z-10 p-8">
+        <h1
+          class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-primary-300 leading-tight mb-6 animate-fade-in-up"
+        >Navigating
+          {{appName}}: Seamless Walkthroughs for Effortless Investing</h1>
+        <p
+          class="text-base sm:text-lg text-slate-300 max-w-4xl mx-auto mb-8 animate-fade-in-up delay-200"
+        >Unlock the full potential of your passive income journey with our
+          intuitive platform. Our comprehensive walkthroughs ensure you get the
+          most out of every feature, from initial setup to advanced portfolio
+          management, all designed for your ease and confidence.</p>
+        <div
+          class="mt-8 inline-block bg-slate-800/70 p-4 rounded-lg shadow-xl border border-white/30 backdrop-blur-sm animate-fade-in-up delay-400"
+        >
+          <p class="text-base text-slate-200">Experience a user-friendly
+            investment platform. We make navigating your financial goals simple
+            and transparent.</p>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="mb-24 py-16 px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+    >
+      <div>
+        <h2
+          class="text-4xl font-bold text-tertiary-500 mb-8 leading-tight"
+        >Mastering Your Financial Toolkit: The Importance of Platform
+          Walkthroughs</h2>
+        <p class="text-base text-slate-300 leading-relaxed mb-6">Even the most
+          powerful tools are only effective if you know how to use them. At
+          {{appName}}, we've built a cutting-edge platform designed to simplify
+          passive income generation through smart investing. But we also
+          know that a smooth user experience is paramount. That's why our
+          detailed Platform Walkthroughs are an essential resource, ensuring
+          you can harness every feature to its fullest potential.</p>
+        <p class="text-base text-slate-300 leading-relaxed mb-6">Our
+          walkthroughs take you by the hand, from your very first login to
+          executing sophisticated portfolio adjustments. They're more than just
+          instructions; they're an interactive guide to maximizing your
+          investment journey. You'll gain confidence in managing your account,
+          understanding your portfolio's performance, and leveraging all the
+          innovative features
+          {{appName}}
+          offers to meet your financial goals efficiently.</p>
+        <ul class="list-disc list-inside text-slate-300 text-base space-y-2">
+          <li><span class="text-primary-500 font-semibold">Accelerated Learning:</span>
+            Get up to speed quickly and efficiently.</li>
+          <li><span class="text-primary-500 font-semibold">Maximized Feature
+              Use:</span>
+            Discover and utilize every tool available to you.</li>
+          <li><span class="text-primary-500 font-semibold">Reduced Frustration:</span>
+            Smooth out any learning curves with clear guidance.</li>
+          <li><span class="text-primary-500 font-semibold">Increased Confidence:</span>
+            Feel empowered navigating your financial dashboard.</li>
+        </ul>
+      </div>
+      <div
+        class="relative w-full h-96 rounded-lg overflow-hidden shadow-xl border border-primary-500"
+      >
+        <NuxtImg
+          placeholder
+          src="https://img.freepik.com/premium-photo/man-interacting-with-digital-interface-futuristic-technology-user-interface-design_1222783-20562.jpg"
+          alt="User interacting with a digital interface, symbolizing ease of use"
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-tl from-slate-900/70 via-transparent to-transparent"
+        />
+      </div>
+    </section>
+
+    <section
+      class="mb-24 py-16 px-8 bg-slate-800 rounded-lg shadow-inner border border-white/30"
+    >
+      <h2
+        class="text-4xl font-bold text-primary-500 mb-16 text-center"
+      >Comprehensive Guidance: What Our Platform Walkthroughs Include</h2>
+      <p
+        class="text-base text-slate-300 mb-12 text-center max-w-4xl mx-auto"
+      >Our walkthroughs are meticulously crafted to cover every aspect of the
+        {{appName}}
+        platform, ensuring you have the knowledge and confidence to manage your
+        passive income investments effectively.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div
+          class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+        >
+          <div class="text-tertiary-500 mb-6 flex justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-user-plus"
+            ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle
+                cx="9"
+                cy="7"
+                r="4"
+              /><line x1="22" x2="19" y1="11" y2="11" /><line
+                x1="19"
+                x2="19"
+                y1="8"
+                y2="14"
+              /></svg>
+          </div>
+          <h3
+            class="text-2xl font-semibold text-slate-200 mb-4 text-center"
+          >Account Setup & Onboarding</h3>
+          <p class="text-base text-slate-400 text-center">Learn how to easily
+            create your account, complete necessary verifications, link your
+            bank accounts, and set up your initial investment profile. We guide
+            you through every step to ensure a smooth and secure start to your
+            journey with
+            {{appName}}.</p>
+        </div>
+        <div
+          class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+        >
+          <div class="text-tertiary-500 mb-6 flex justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-layout-dashboard"
+            ><rect width="7" height="9" x="3" y="3" rx="1" /><rect
+                width="7"
+                height="5"
+                x="14"
+                y="3"
+                rx="1"
+              /><rect width="7" height="9" x="14" y="12" rx="1" /><rect
+                width="7"
+                height="5"
+                x="3"
+                y="16"
+                rx="1"
+              /></svg>
+          </div>
+          <h3
+            class="text-2xl font-semibold text-slate-200 mb-4 text-center"
+          >Dashboard Navigation & Overview</h3>
+          <p class="text-base text-slate-400 text-center">Familiarize yourself
+            with your personalized dashboard. Understand how to read your
+            portfolio's performance, track your passive income payouts, view
+            asset allocation, and quickly access key features and reports at a
+            glance.</p>
+        </div>
+        <div
+          class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+        >
+          <div class="text-tertiary-500 mb-6 flex justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-pie-chart"
+            ><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path
+                d="M22 12A10 10 0 0 0 12 2v10z"
+              /></svg>
+          </div>
+          <h3
+            class="text-2xl font-semibold text-slate-200 mb-4 text-center"
+          >Portfolio Customization & Management</h3>
+          <p class="text-base text-slate-400 text-center">Explore options for
+            adjusting your investment preferences, understanding automated
+            rebalancing, and making additional contributions. Learn how to
+            monitor your portfolio's health and ensure it aligns with your
+            evolving financial goals.</p>
+        </div>
+        <div
+          class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+        >
+          <div class="text-tertiary-500 mb-6 flex justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-wallet"
+            ><path
+                d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h12a2 2 0 0 1 0 4H5a2 2 0 0 0 0 4h12a2 2 0 0 1 0 4H5a2 2 0 0 0 0 4v-3"
+              /><path d="M2 7h1v4h-1" /><path d="M2 13h1v4h-1" /></svg>
+          </div>
+          <h3
+            class="text-2xl font-semibold text-slate-200 mb-4 text-center"
+          >Deposits, Withdrawals & Transfers</h3>
+          <p class="text-base text-slate-400 text-center">Detailed instructions
+            on funding your account, setting up recurring deposits, and
+            initiating withdrawals. We cover all the secure methods for moving
+            your money in and out of your
+            {{appName}}
+            account seamlessly.</p>
+        </div>
+        <div
+          class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+        >
+          <div class="text-tertiary-500 mb-6 flex justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-lock-keyhole"
+            ><circle cx="12" cy="16" r="1" /><path
+                d="M15 16a3 3 0 1 0-6 0v-5a3 3 0 1 0-6 0v5a3 3 0 1 0-6 0h18a3 3 0 1 0-6 0v-5a3 3 0 1 0-6 0V7a4 4 0 1 1 8 0v4h-2"
+              /></svg>
+          </div>
+          <h3
+            class="text-2xl font-semibold text-slate-200 mb-4 text-center"
+          >Security & Account Settings</h3>
+          <p class="text-base text-slate-400 text-center">Understand
+            {{appName}}'s robust security features and how to manage your
+            personal and account settings. Learn about two-factor
+            authentication, notification preferences, and how to keep your
+            investment secure.</p>
+        </div>
+        <div
+          class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+        >
+          <div class="text-tertiary-500 mb-6 flex justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-help-circle"
+            ><circle cx="12" cy="12" r="10" /><path
+                d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"
+              /><path d="M12 17h.01" /></svg>
+          </div>
+          <h3
+            class="text-2xl font-semibold text-slate-200 mb-4 text-center"
+          >Support & Resources Access</h3>
+          <p class="text-base text-slate-400 text-center">Easily find where to
+            access our help center, FAQs, contact customer support, and explore
+            additional resources like market insights and investor education
+            materials directly from the platform.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-24 py-16 px-8">
+      <h2 class="text-4xl font-bold text-tertiary-500 mb-16 text-center">Your
+        Learning Style, Our Walkthroughs: Engaging Formats</h2>
+      <p class="text-base text-slate-300 mb-12 text-center max-w-4xl mx-auto">We
+        offer a variety of formats to ensure you can learn how to use the
+        {{appName}}
+        platform in the way that suits you best, providing clear and practical
+        guidance every step of the way.</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="space-y-8">
+          <div class="flex items-start">
+            <span class="text-5xl text-primary-500 mr-4">&#128187;</span>
+            <div>
+              <h3
+                class="text-2xl font-semibold text-slate-200 mb-2"
+              >Step-by-Step Interactive Guides</h3>
+              <p class="text-base text-slate-400">Our primary walkthroughs
+                feature dynamic, clickable guides that simulate the platform
+                experience. Follow along at your own pace, with visual cues and
+                clear instructions guiding you through each action. It's like
+                having a personal tutor right on your screen.</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <span class="text-5xl text-primary-500 mr-4">&#128250;</span>
+            <div>
+              <h3
+                class="text-2xl font-semibold text-slate-200 mb-2"
+              >High-Definition Video Tutorials</h3>
+              <p class="text-base text-slate-400">For visual learners, our
+                extensive library of HD video tutorials demonstrates each
+                feature in action. Watch our experts navigate the platform,
+                explaining every click and why it matters. Pause, rewind, and
+                re-watch as needed to master every detail.</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <span class="text-5xl text-primary-500 mr-4">&#128214;</span>
+            <div>
+              <h3 class="text-2xl font-semibold text-slate-200 mb-2">Printable
+                Quick-Start Checklists</h3>
+              <p class="text-base text-slate-400">Need a quick reference?
+                Download our concise, printable checklists for key tasks. These
+                handy guides provide bullet-point summaries of essential steps,
+                perfect for keeping by your side as you manage your investments.</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <span class="text-5xl text-primary-500 mr-4">&#128227;</span>
+            <div>
+              <h3 class="text-2xl font-semibold text-slate-200 mb-2">Contextual
+                Help & Tooltips</h3>
+              <p class="text-base text-slate-400">Throughout the
+                {{appName}}
+                platform itself, you'll find intelligent tooltips and contextual
+                help icons. Hover over an element or click a question mark for
+                instant explanations, ensuring you're never left wondering what
+                a feature does.</p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="relative w-full h-96 rounded-lg overflow-hidden shadow-xl border border-primary-500"
+        >
+          <NuxtImg
+            placeholder
+            src="https://img.freepik.com/premium-photo/man-using-laptop-stream-online-videos-tutorials-watch-captivating-content-internet-using-your-mouse-keyboard-explore-world-digital-entertainment-learning_143683-13523.jpg"
+            alt="Person watching a tutorial on a laptop"
+            class="absolute inset-0 w-full h-full object-cover"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-l from-slate-900/80 via-transparent to-transparent"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="mb-24 py-16 px-8 bg-slate-800 rounded-lg shadow-inner border border-white/30"
+    >
+      <h2 class="text-4xl font-bold text-primary-500 mb-16 text-center">Beyond
+        Instructions: The Real Benefits of Our Platform Walkthroughs</h2>
+      <p
+        class="text-base text-slate-300 mb-12 text-center max-w-4xl mx-auto"
+      >Our platform walkthroughs are designed with your success in mind. They
+        don't just show you how to click; they empower you to invest with
+        greater ease, efficiency, and peace of mind.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div
+          class="p-8 bg-slate-900 rounded-lg shadow-xl border border-white/30 flex flex-col items-center text-center"
+        >
+          <div class="text-tertiary-500 mb-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-hourglass"
+            ><path d="M5 2H19v2H5z" /><path d="M5 22H19v2H5z" /><path
+                d="M12 12L19 2H5z"
+              /><path d="M12 12L5 22H19z" /></svg>
+          </div>
+          <h3 class="text-2xl font-semibold text-slate-200 mb-4">Save Valuable
+            Time</h3>
+          <p class="text-base text-slate-400">Avoid guesswork and lengthy
+            trial-and-error. Our clear, concise walkthroughs allow you to
+            quickly grasp platform functionalities, freeing up your time to
+            focus on your financial goals rather than navigating complex
+            interfaces.</p>
+        </div>
+        <div
+          class="p-8 bg-slate-900 rounded-lg shadow-xl border border-white/30 flex flex-col items-center text-center"
+        >
+          <div class="text-tertiary-500 mb-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-shield-check"
+            ><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /><path
+                d="m9 12 2 2 4-4"
+              /></svg>
+          </div>
+          <h3 class="text-2xl font-semibold text-slate-200 mb-4">Enhance
+            Security Awareness</h3>
+          <p class="text-base text-slate-400">Understand exactly how to utilize
+            all of
+            {{appName}}'s robust security features, from multi-factor
+            authentication to secure document uploads. Our walkthroughs help you
+            keep your account and investments protected.</p>
+        </div>
+        <div
+          class="p-8 bg-slate-900 rounded-lg shadow-xl border border-white/30 flex flex-col items-center text-center"
+        >
+          <div class="text-tertiary-500 mb-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-rocket"
+            ><path
+                d="M4.5 16.5c-1.5 1.5-2.5 3.0-3.5 4.5 1 1 2 2 3.5 3.5 1.5-1.5 3-2.5 4.5-3.5L12 12l-7.5 4.5zM15 9l-6 6"
+              /><path d="M14 6L18 2l4 4-4 4" /></svg>
+          </div>
+          <h3 class="text-2xl font-semibold text-slate-200 mb-4">Accelerate Your
+            Progress</h3>
+          <p class="text-base text-slate-400">By quickly mastering the platform,
+            you can focus more on your investment strategy and less on how to
+            execute it. This allows you to accelerate your progress towards
+            achieving your passive income and wealth-building objectives.</p>
+        </div>
+      </div>
+    </section>
+
+    <MainCtaBanner title="Ready for a Guided Tour of Financial Freedom?" description="Experience the simplicity and power of AssetFusionX with our comprehensive platform walkthroughs. We're here to ensure your journey to passive income is smooth, confident, and successful from the very first click." button-label="Start Your Guided Experience" />
+  </div>
+</div>
+</template>

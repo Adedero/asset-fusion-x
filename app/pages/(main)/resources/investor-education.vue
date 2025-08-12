@@ -1,0 +1,229 @@
+<script setup lang="ts">
+definePageMeta({
+  layout: "main",
+});
+</script>
+
+<template>
+  <div>
+  <div class="min-h-screen flex flex-col items-center py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <section
+        class="relative w-full h-[600px] overflow-hidden rounded-lg mb-24 flex items-center justify-center text-center"
+      >
+        <NuxtImg
+          placeholder
+          src="https://img.freepik.com/premium-photo/businesswoman-working-desk-using-laptop-check-data-finance-office_34152-1890.jpg"
+          alt="Person studying financial graphs on laptop"
+          class="absolute inset-0 w-full h-full object-cover brightness-50"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"
+        />
+        <div class="relative z-10 p-8">
+          <h1
+            class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-primary-200 leading-tight mb-6 animate-fade-in-up"
+          >Empower Your Financial Journey: Comprehensive Investor Education</h1>
+          <p
+            class="text-base sm:text-lg text-slate-300 max-w-4xl mx-auto mb-8 animate-fade-in-up delay-200"
+          >Knowledge is your most valuable asset. Dive into our extensive
+            educational resources designed to equip you with the insights and
+            confidence needed to build lasting passive income.</p>
+          <div
+            class="mt-8 inline-block bg-slate-800/70 p-4 rounded-lg shadow-xl border border-white/30 backdrop-blur-sm animate-fade-in-up delay-400"
+          >
+            <p class="text-base text-slate-200">From foundational concepts to
+              advanced strategies, we provide the tools to master your financial
+              future.</p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="mb-24 py-16 px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+      >
+        <div>
+          <h2
+            class="text-4xl font-bold text-tertiary-500 mb-8 leading-tight"
+          >Investing in Knowledge: The Foundation of Financial Freedom</h2>
+          <p class="text-base text-slate-300 leading-relaxed mb-6">In the world
+            of investing, the difference between success and stagnation often
+            boils down to one critical factor: education. Without a solid
+            understanding of market principles, asset classes, and risk
+            management, even the most promising opportunities can lead to costly
+            mistakes. Our investor education resources are designed to turn
+            uncertainty into confidence.</p>
+          <p class="text-base text-slate-300 leading-relaxed mb-6">We believe
+            that every investor, regardless of their starting point, deserves
+            access to clear, actionable knowledge. Whether you're just beginning
+            your journey towards passive income or looking to refine
+            sophisticated strategies, our comprehensive guides, interactive
+            tools, and expert-led content will illuminate your path.</p>
+          <ul class="list-disc list-inside text-slate-300 text-base space-y-2">
+            <li><span class="text-primary-500 font-semibold">Reduce Risk:</span>
+              Make informed decisions that mitigate potential losses.</li>
+            <li><span class="text-primary-500 font-semibold">Maximize Returns:</span>
+              Identify and capitalize on opportunities effectively.</li>
+            <li><span class="text-primary-500 font-semibold">Build Confidence:</span>
+              Understand your investments deeply.</li>
+          </ul>
+        </div>
+        <div
+          class="relative w-full h-96 rounded-lg overflow-hidden shadow-xl border border-primary-500"
+        >
+          <NuxtImg
+            placeholder
+            src="https://t3.ftcdn.net/jpg/08/94/93/56/360_F_894935698_TY2gHNuXvIbxNS8vI73NeJIiBlUoDvGf.jpg"
+            alt="Open book with financial charts overlay"
+            class="absolute inset-0 w-full h-full object-cover"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-tl from-slate-900/70 via-transparent to-transparent"
+          />
+        </div>
+      </section>
+
+      <section
+        class="mb-24 py-16 px-8 bg-slate-800 rounded-lg shadow-inner border border-white/30"
+      >
+        <h2 class="text-4xl font-bold text-primary-500 mb-16 text-center">Your
+          Learning Path: Diverse Resources for Every Investor</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div
+            class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+          >
+            <div class="text-tertiary-500 mb-6 flex justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="64"
+                height="64"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-book-open"
+              ><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path
+                  d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"
+                /></svg>
+            </div>
+            <h3
+              class="text-2xl font-semibold text-slate-200 mb-4 text-center"
+            >Foundational Guides & Articles</h3>
+            <p class="text-base text-slate-400 text-center">Start with the
+              basics. Our clear, concise articles explain core concepts like
+              risk tolerance, diversification, compounding, and different asset
+              classes (stocks, bonds, REITs, etc.). Essential for building a
+              strong knowledge base.</p>
+          </div>
+          <div
+            class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+          >
+            <div class="text-tertiary-500 mb-6 flex justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="64"
+                height="64"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-play-circle"
+              ><circle cx="12" cy="12" r="10" /><polygon
+                  points="10 8 16 12 10 16 10 8"
+                /></svg>
+            </div>
+            <h3
+              class="text-2xl font-semibold text-slate-200 mb-4 text-center"
+            >Video Tutorials & Webinars</h3>
+            <p class="text-base text-slate-400 text-center">Prefer visual
+              learning? Our engaging video library covers investment strategies,
+              platform navigation, and market analysis. Participate in live
+              webinars with experts for interactive Q&A sessions.</p>
+          </div>
+          <div
+            class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+          >
+            <div class="text-tertiary-500 mb-6 flex justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="64"
+                height="64"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-edit"
+              ><path
+                  d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                /><path
+                  d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"
+                /></svg>
+            </div>
+            <h3
+              class="text-2xl font-semibold text-slate-200 mb-4 text-center"
+            >Interactive Tools & Quizzes</h3>
+            <p class="text-base text-slate-400 text-center">Test your knowledge
+              and apply concepts with our interactive calculators, portfolio
+              simulators, and quizzes. Learn by doing and track your progress as
+              you master new skills.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-24 py-16 px-8">
+        <h2
+          class="text-4xl font-bold text-tertiary-500 mb-16 text-center"
+        >Tailored Learning Paths: From Beginner to Advanced</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+          <div class="bg-slate-800 p-8 rounded-lg shadow-lg">
+            <h3
+              class="text-2xl font-semibold text-slate-200 mb-4 border-b border-primary-600 pb-3"
+            >Getting Started: Your First Steps</h3>
+            <ul class="list-disc list-inside text-slate-400 space-y-2">
+              <li>Understanding Risk & Return</li>
+              <li>What are Stocks & Bonds?</li>
+              <li>The Power of Diversification</li>
+              <li>Setting Financial Goals</li>
+              <li>Basics of Passive Income</li>
+            </ul>
+          </div>
+          <div class="bg-slate-800 p-8 rounded-lg shadow-lg">
+            <h3
+              class="text-2xl font-semibold text-slate-200 mb-4 border-b border-primary-600 pb-3"
+            >Building Wealth: Intermediate Strategies</h3>
+            <ul class="list-disc list-inside text-slate-400 space-y-2">
+              <li>Exploring ETFs & Mutual Funds</li>
+              <li>Introduction to REITs & Commodities</li>
+              <li>Understanding Market Cycles</li>
+              <li>Compounding & Reinvesting Dividends</li>
+              <li>Tax-Efficient Investing Basics</li>
+            </ul>
+          </div>
+          <div class="bg-slate-800 p-8 rounded-lg shadow-lg">
+            <h3
+              class="text-2xl font-semibold text-slate-200 mb-4 border-b border-primary-600 pb-3"
+            >Advanced Investing: Mastery & Beyond</h3>
+            <ul class="list-disc list-inside text-slate-400 space-y-2">
+              <li>Derivatives & Hedging Strategies</li>
+              <li>Advanced Portfolio Optimization</li>
+              <li>International Market Exposure</li>
+              <li>Behavioral Finance Insights</li>
+              <li>Estate Planning Fundamentals</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <MainCtaBanner color="primary" title="Ready to Master Your Investments with AssetFusionX?" description="At AssetFusionX, we don't just facilitate investments; we educate investors. Access our comprehensive learning hub and pair your newfound knowledge with our smart, passive income solutions." button-label="Start Learning & Investing Today" />
+    </div>
+  </div>
+</div>
+</template>
