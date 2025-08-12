@@ -2,10 +2,8 @@ import { d as defineEventHandler, r as readValidatedBody, c as createError, p as
 import { P as ProfileSchema } from '../../../_/schemas.mjs';
 import 'node:path';
 import 'fs/promises';
-import 'path';
-import 'fs';
-import 'winston';
 import 'axios';
+import 'path';
 import 'node:http';
 import 'node:https';
 import 'node:events';

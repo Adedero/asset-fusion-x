@@ -1,11 +1,9 @@
-import { d as defineEventHandler, p as prisma, c as createError, v as checkUserKycApproval, r as readValidatedBody, w as checkBusinessProfileApproval, x as getJointAccountModApprovals } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, p as prisma, c as createError, u as checkUserKycApproval, r as readValidatedBody, v as checkBusinessProfileApproval, w as getJointAccountModApprovals } from '../../../../nitro/nitro.mjs';
 import z from 'zod';
 import 'node:path';
 import 'fs/promises';
-import 'path';
-import 'fs';
-import 'winston';
 import 'axios';
+import 'path';
 import 'node:http';
 import 'node:https';
 import 'node:events';

@@ -1,7 +1,7 @@
 import { _ as __nuxt_component_14 } from './fetch-error-alert-B3Gd_w4n.mjs';
 import { defineComponent, computed, mergeProps, unref, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrRenderSlot } from 'vue/server-renderer';
-import { a6 as normalizeException } from '../nitro/nitro.mjs';
+import { a5 as normalizeException } from '../nitro/nitro.mjs';
 
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "my-page",

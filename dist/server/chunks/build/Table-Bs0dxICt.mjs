@@ -1,7 +1,7 @@
 import { mergeModels, useSlots, ref, computed, useModel, watch, unref, mergeProps, withCtx, createVNode, createBlock, createCommentVNode, openBlock, renderSlot, createTextVNode, toDisplayString, Fragment, renderList, useSSRContext } from 'vue';
 import { ssrRenderComponent, ssrRenderClass, ssrRenderSlot, ssrInterpolate, ssrRenderList, ssrRenderAttr } from 'vue/server-renderer';
 import { Primitive } from 'reka-ui';
-import { a7 as upperFirst } from '../nitro/nitro.mjs';
+import { a6 as upperFirst } from '../nitro/nitro.mjs';
 import { useVueTable, getExpandedRowModel, getSortedRowModel, getFilteredRowModel, getCoreRowModel, FlexRender } from '@tanstack/vue-table';
 import { reactiveOmit } from '@vueuse/core';
 import { f as useLocale, g as useAppConfig, t as tv } from './server.mjs';

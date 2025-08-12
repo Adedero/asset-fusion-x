@@ -1,5 +1,5 @@
-import { B as Button, L as Layout, i as sendEmail, p as prisma, n as logger } from '../nitro/nitro.mjs';
 import { EventEmitter } from 'node:events';
+import { B as Button, L as Layout, i as sendEmail, p as prisma } from '../nitro/nitro.mjs';
 
 function conditional(condition, returnString) {
   if (condition) return String(returnString.if);
@@ -339,7 +339,7 @@ class NotificationEmitter {
 }
 const notificationEmitter = new NotificationEmitter();
 notificationEmitter.on("error", (err) => {
-  logger.error("Notification Emitter Error", err);
+  console.error("Notification Emitter Error", err);
 });
 notificationEmitter.on("financial-account:create", onFinancialAccountCreate);
 notificationEmitter.on("deposit:create", onDepositCreate);

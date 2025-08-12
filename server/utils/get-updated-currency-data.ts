@@ -37,7 +37,7 @@ export default async function getUpdatedCurrencyData(
 
       return currency;
     } catch (error) {
-      logger.error(
+      console.error(
         `Failed to retrieve new rate for ${currency.name} from Coinbase`,
         error as Error,
       );

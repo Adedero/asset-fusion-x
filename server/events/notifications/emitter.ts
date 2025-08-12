@@ -35,7 +35,7 @@ export const notificationEmitter =
   new NotificationEmitter<NotificationEvents>();
 
 notificationEmitter.on("error", (err) => {
-  logger.error("Notification Emitter Error", err as Error);
+  console.error("Notification Emitter Error", err as Error);
 });
 
 // Financial account

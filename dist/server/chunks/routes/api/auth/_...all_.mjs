@@ -1,10 +1,8 @@
 import { d as defineEventHandler, a as auth, t as toWebRequest } from '../../../nitro/nitro.mjs';
 import 'node:path';
 import 'fs/promises';
-import 'path';
-import 'fs';
-import 'winston';
 import 'axios';
+import 'path';
 import 'node:http';
 import 'node:https';
 import 'node:events';
