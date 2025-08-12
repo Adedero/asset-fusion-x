@@ -1,0 +1,98 @@
+import { b as useRuntimeConfig, d as __nuxt_component_0$1, e as _sfc_main$d } from './server.mjs';
+import { _ as __nuxt_component_1 } from './cta-banner-DdIrk4Vz.mjs';
+import { defineComponent, mergeProps, unref, useSSRContext } from 'vue';
+import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate } from 'vue/server-renderer';
+import '../nitro/nitro.mjs';
+import 'node:path';
+import 'fs/promises';
+import 'path';
+import 'fs';
+import 'winston';
+import 'axios';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:crypto';
+import 'node:url';
+import 'better-auth';
+import 'better-auth/adapters/prisma';
+import 'node:process';
+import '@prisma/client/runtime/library';
+import 'better-auth/plugins';
+import 'nodemailer';
+import '@iconify/utils';
+import 'consola';
+import 'ipx';
+import 'vue-router';
+import 'tailwindcss/colors';
+import '@iconify/vue';
+import 'reka-ui';
+import '@vueuse/core';
+import 'tailwind-variants';
+import '@iconify/utils/lib/css/icon';
+import 'perfect-debounce';
+import '../routes/renderer.mjs';
+import 'vue-bundle-renderer/runtime';
+import 'unhead/server';
+import 'devalue';
+import 'unhead/utils';
+
+const _sfc_main = /* @__PURE__ */ defineComponent({
+  __name: "sustainability",
+  __ssrInlineRender: true,
+  setup(__props) {
+    const { appName } = useRuntimeConfig().public;
+    return (_ctx, _push, _parent, _attrs) => {
+      const _component_NuxtImg = __nuxt_component_0$1;
+      const _component_NuxtIcon = _sfc_main$d;
+      const _component_MainCtaBanner = __nuxt_component_1;
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-screen flex flex-col items-center py-16" }, _attrs))}><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><section class="relative w-full h-[650px] overflow-hidden rounded-lg mb-24 flex items-center justify-center text-center">`);
+      _push(ssrRenderComponent(_component_NuxtImg, {
+        placeholder: "",
+        src: "https://img.freepik.com/premium-photo/green-financial-data-chart-trade-concept_764664-20227.jpg",
+        alt: "Green financial graphs growing, symbolizing sustainable growth and impact",
+        class: "absolute inset-0 w-full h-full object-cover brightness-50"
+      }, null, _parent));
+      _push(`<div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div><div class="relative z-10 p-8"><h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-primary-200 leading-tight mb-6 animate-fade-in-up"> Investing with Purpose: ${ssrInterpolate(unref(appName))}&#39;s Commitment to Sustainability &amp; Ethical Impact </h1><p class="text-base sm:text-lg text-slate-300 max-w-4xl mx-auto mb-8 animate-fade-in-up delay-200"> At ${ssrInterpolate(unref(appName))}, we believe that financial growth and positive global impact can and should go hand-in-hand. Explore our dedication to integrating environmental, social, and governance (ESG) factors into our operations and investment philosophy, building a future that&#39;s prosperous for both you and the planet. </p><div class="mt-8 inline-block bg-slate-800/70 p-4 rounded-lg shadow-xl border border-white/30 backdrop-blur-sm animate-fade-in-up delay-400"><p class="text-base text-slate-200"> Beyond returns, we&#39;re building a more sustainable and responsible financial ecosystem. </p></div></div></section><section class="mb-24 py-16 px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"><div><h2 class="text-4xl font-bold text-tertiary-500 mb-8 leading-tight"> The Future of Finance is Sustainable: Our Vision at ${ssrInterpolate(unref(appName))}</h2><p class="text-base text-slate-300 leading-relaxed mb-6"> In an era where global challenges demand collective action, the financial industry plays a pivotal role in driving positive change. At ${ssrInterpolate(unref(appName))}, our vision extends beyond simply helping you generate passive income; we&#39;re committed to fostering a financial ecosystem where your investments contribute to a more sustainable and equitable future. We believe that companies with strong Environmental, Social, and Governance (ESG) practices are not only responsible but often demonstrate greater resilience and long-term value. </p><p class="text-base text-slate-300 leading-relaxed mb-6"> Our commitment to sustainability is woven into the fabric of our operations, from how we manage our own business to the investment opportunities we highlight for our users. We strive to offer avenues for you to align your financial goals with your values, proving that responsible investing can lead to significant returns and contribute to a better world. This isn&#39;t just a trend; it&#39;s the fundamental shift we believe is necessary for lasting prosperity. </p><ul class="list-disc list-inside text-slate-300 text-base space-y-2"><li><span class="text-primary-500 font-semibold"> Integrate ESG Factors: </span> Consider environmental, social, and governance aspects in our approach. </li><li><span class="text-primary-500 font-semibold"> Long-Term Value Creation: </span> Focus on companies and strategies built for sustainable growth. </li><li><span class="text-primary-500 font-semibold">Ethical Operations:</span> Uphold the highest standards of integrity and responsibility in our own practices. </li><li><span class="text-primary-500 font-semibold">Empower Conscious Investors:</span> Provide tools and insights for values-aligned investing. </li></ul></div><div class="relative w-full h-96 rounded-lg overflow-hidden shadow-xl border border-primary-500">`);
+      _push(ssrRenderComponent(_component_NuxtImg, {
+        placeholder: "",
+        src: "https://media.istockphoto.com/id/1009934102/photo/were-all-responsible-for-creating-a-better-tomorrow.jpg?s=612x612&w=0&k=20&c=ap3hWDhcFsroOWj41CRaaMKDzEofQ9FcYypWDobVwis=",
+        alt: "Hands holding a sapling, symbolizing growth and environmental care",
+        class: "absolute inset-0 w-full h-full object-cover"
+      }, null, _parent));
+      _push(`<div class="absolute inset-0 bg-gradient-to-tl from-slate-900/70 via-transparent to-transparent"></div></div></section><section class="mb-24 py-16 px-8 bg-slate-800 rounded-lg shadow-inner border border-white/30"><h2 class="text-4xl font-bold text-primary-500 mb-16 text-center"> Our Multi-Faceted Approach to Responsible Investing and Impact </h2><p class="text-base text-slate-300 mb-12 text-center max-w-4xl mx-auto"> Our commitment to sustainability is manifested through several key pillars, ensuring that ethical considerations are embedded in both our investment philosophies and our corporate practices. </p><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"><div class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"><div class="text-tertiary-500 text-5xl mb-6 flex justify-center">`);
+      _push(ssrRenderComponent(_component_NuxtIcon, { name: "lucide-leaf" }, null, _parent));
+      _push(`</div><h3 class="text-2xl font-semibold text-slate-200 mb-4 text-center"> Sustainable Investment Options (ESG) </h3><p class="text-base text-slate-400 text-center"> We prioritize offering and highlighting investment bundles and opportunities that focus on companies with strong Environmental, Social, and Governance (ESG) practices. This includes businesses leading in renewable energy, sustainable agriculture, fair labor practices, transparent governance, and other impact-driven sectors. We aim to help you invest in companies that are building a better world. </p></div><div class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"><div class="text-tertiary-500 text-5xl mb-6 flex justify-center">`);
+      _push(ssrRenderComponent(_component_NuxtIcon, { name: "lucide-microscope" }, null, _parent));
+      _push(`</div><h3 class="text-2xl font-semibold text-slate-200 mb-4 text-center"> Transparent Reporting &amp; Due Diligence </h3><p class="text-base text-slate-400 text-center"> We are committed to transparency in how we identify and evaluate sustainable investment opportunities. Our due diligence processes aim to assess the authenticity of ESG claims, ensuring that your investments genuinely contribute to positive outcomes. We strive to provide clear reporting on the sustainability impact of relevant portfolio components, so you can see your money making a difference. </p></div><div class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"><div class="text-tertiary-500 text-5xl mb-6 flex justify-center">`);
+      _push(ssrRenderComponent(_component_NuxtIcon, { name: "lucide-recycle" }, null, _parent));
+      _push(`</div><h3 class="text-2xl font-semibold text-slate-200 mb-4 text-center"> Responsible Corporate Practices </h3><p class="text-base text-slate-400 text-center"> Our commitment to sustainability extends to our own operations. We endeavor to minimize our environmental footprint, promote diversity and inclusion within our workforce, uphold strong governance standards, and engage ethically with all stakeholders. We believe in leading by example, ensuring that ${ssrInterpolate(unref(appName))} itself operates as a responsible corporate citizen. </p></div><div class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"><div class="text-tertiary-500 text-5xl mb-6 flex justify-center">`);
+      _push(ssrRenderComponent(_component_NuxtIcon, { name: "lucide-earth" }, null, _parent));
+      _push(`</div><h3 class="text-2xl font-semibold text-slate-200 mb-4 text-center"> Community Engagement &amp; Local Impact </h3><p class="text-base text-slate-400 text-center"> Beyond global impact, we are dedicated to fostering positive change within our local communities, particularly in Africa. This includes initiatives supporting financial literacy, local entrepreneurship, and community development programs. We aim to contribute to economic empowerment and build stronger, more sustainable societies from the ground up. </p></div><div class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"><div class="text-tertiary-500 text-5xl mb-6 flex justify-center">`);
+      _push(ssrRenderComponent(_component_NuxtIcon, { name: "lucide-clipboard-check" }, null, _parent));
+      _push(`</div><h3 class="text-2xl font-semibold text-slate-200 mb-4 text-center"> Adherence to Ethical Guidelines &amp; Regulations </h3><p class="text-base text-slate-400 text-center"> We adhere strictly to all relevant financial regulations and ethical guidelines in the regions we operate. Our compliance framework is designed to ensure responsible conduct, safeguard client interests, and uphold the integrity of the financial markets. This foundation is critical for sustainable growth and investor confidence. </p></div><div class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"><div class="text-tertiary-500 text-5xl mb-6 flex justify-center">`);
+      _push(ssrRenderComponent(_component_NuxtIcon, { name: "lucide-lightbulb" }, null, _parent));
+      _push(`</div><h3 class="text-2xl font-semibold text-slate-200 mb-4 text-center"> Educating for Impact </h3><p class="text-base text-slate-400 text-center"> We actively educate our users on the principles of sustainable and impact investing. Through our educational resources, we provide insights into how ESG factors influence financial performance and contribute to global well-being, empowering you to make informed decisions that align your investments with your personal values. </p></div></div></section><section class="mb-24 py-16 px-8 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"><div class="relative w-full h-96 rounded-lg overflow-hidden shadow-xl border border-primary-500">`);
+      _push(ssrRenderComponent(_component_NuxtImg, {
+        placeholder: "",
+        src: "https://media.istockphoto.com/id/1777247042/vector/three-pillars-of-sustainable-development-framework-diagram-chart-infographic-banner-with.jpg?s=170667a&w=0&k=20&c=qFgLKkttqu8ebMHeNB9FPNleYifWUPhtUTa6OlvNWss=",
+        alt: "Abstract chart showing growth with sustainable elements integrated",
+        class: "absolute inset-0 w-full h-full object-cover"
+      }, null, _parent));
+      _push(`<div class="absolute inset-0 bg-gradient-to-tr from-slate-900/70 via-transparent to-transparent"></div></div><div><h2 class="text-4xl font-bold text-tertiary-500 mb-8 leading-tight"> The Double Dividend: Financial Returns &amp; Positive Impact </h2><p class="text-base text-slate-300 leading-relaxed mb-6"> Investing sustainably with ${ssrInterpolate(unref(appName))} isn&#39;t just about feeling good; it&#39;s about making smart financial decisions that also contribute to a better world. A growing body of research indicates that companies with strong ESG credentials often demonstrate superior long-term financial performance, lower volatility, and enhanced resilience during market downturns. This means that aligning your investments with your values can potentially lead to a &quot;double dividend&quot; - competitive financial returns alongside measurable positive impact. </p><p class="text-base text-slate-300 leading-relaxed mb-6"> By choosing sustainable investment options through ${ssrInterpolate(unref(appName))}, you&#39;re not only building your passive income but also participating in the global movement towards a more responsible and equitable economy. You become part of the solution, directing capital towards innovations and practices that address pressing environmental and social issues, while simultaneously working towards your personal financial freedom. </p><ul class="list-disc list-inside text-slate-300 text-base space-y-2"><li><span class="text-primary-500 font-semibold">Competitive Returns:</span> Sustainable investments are increasingly showing strong financial performance. </li><li><span class="text-primary-500 font-semibold">Reduced Risk:</span> Companies with strong ESG practices often manage risks better. </li><li><span class="text-primary-500 font-semibold">Future-Proof Portfolios:</span> Invest in industries and companies prepared for future challenges and opportunities. </li><li><span class="text-primary-500 font-semibold">Values Alignment:</span> Grow your wealth in a way that reflects your personal ethics. </li></ul></div></section><div>`);
+      _push(ssrRenderComponent(_component_MainCtaBanner, { color: "neutral" }, null, _parent));
+      _push(`</div></div></div>`);
+    };
+  }
+});
+const _sfc_setup = _sfc_main.setup;
+_sfc_main.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("pages/(main)/impact/sustainability.vue");
+  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
+};
+
+export { _sfc_main as default };
+//# sourceMappingURL=sustainability-DD4gvV4b.mjs.map

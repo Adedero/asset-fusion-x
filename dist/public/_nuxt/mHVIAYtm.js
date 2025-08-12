@@ -1,0 +1,1 @@
+import{du as r}from"./BCrY3s8v.js";function f(){const e=r();function u(t){return typeof t=="string"?e.params?.[t]?.toString()??"":t.map(n=>e.params?.[n]?.toString()??"")}function o(t){return typeof t=="string"?e.query?.[t]?.toString()??"":t.map(n=>e.query?.[n]?.toString()??"")}return{getParams:u,getSearchParams:o,raw:e}}export{f as u};

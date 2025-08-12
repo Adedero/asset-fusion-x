@@ -1,0 +1,96 @@
+import { b as useRuntimeConfig, d as __nuxt_component_0$1 } from './server.mjs';
+import { _ as __nuxt_component_1 } from './cta-banner-DdIrk4Vz.mjs';
+import { defineComponent, mergeProps, unref, useSSRContext } from 'vue';
+import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate } from 'vue/server-renderer';
+import '../nitro/nitro.mjs';
+import 'node:path';
+import 'fs/promises';
+import 'path';
+import 'fs';
+import 'winston';
+import 'axios';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:crypto';
+import 'node:url';
+import 'better-auth';
+import 'better-auth/adapters/prisma';
+import 'node:process';
+import '@prisma/client/runtime/library';
+import 'better-auth/plugins';
+import 'nodemailer';
+import '@iconify/utils';
+import 'consola';
+import 'ipx';
+import 'vue-router';
+import 'tailwindcss/colors';
+import '@iconify/vue';
+import 'reka-ui';
+import '@vueuse/core';
+import 'tailwind-variants';
+import '@iconify/utils/lib/css/icon';
+import 'perfect-debounce';
+import '../routes/renderer.mjs';
+import 'vue-bundle-renderer/runtime';
+import 'unhead/server';
+import 'devalue';
+import 'unhead/utils';
+
+const _sfc_main = /* @__PURE__ */ defineComponent({
+  __name: "market-insights",
+  __ssrInlineRender: true,
+  setup(__props) {
+    const { appName } = useRuntimeConfig().public;
+    return (_ctx, _push, _parent, _attrs) => {
+      const _component_NuxtImg = __nuxt_component_0$1;
+      const _component_MainCtaBanner = __nuxt_component_1;
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-screen flex flex-col items-center py-16" }, _attrs))}><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><section class="relative w-full h-[650px] overflow-hidden rounded-lg mb-24">`);
+      _push(ssrRenderComponent(_component_NuxtImg, {
+        placeholder: "",
+        src: "https://media.istockphoto.com/id/1476727532/photo/digital-marketing-and-data-management-businessman-use-laptops-to-work-marketing-analysis.jpg?s=612x612&w=0&k=20&c=Y4QsFxyEWkcIjmCzcHHOcgm5NaRNDhpO_ZOR9KMmMMU=",
+        alt: "Abstract Financial Data Visualization",
+        class: "absolute inset-0 w-full h-full object-cover brightness-50"
+      }, null, _parent));
+      _push(`<div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div><div class="relative z-10 flex flex-col justify-end h-full p-8 md:p-16 text-left"><h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-primary-200 leading-tight mb-6 animate-fade-in-up">Market Insights: Your Compass in a Dynamic Financial World</h1><p class="text-base sm:text-lg text-slate-300 max-w-3xl mb-8 animate-fade-in-up delay-200">Cut through the noise and gain a clear understanding of global financial trends. Our expert analysis and timely updates empower you to make smarter decisions for your passive income strategy.</p></div></section><section class="mb-24 py-16 px-8"><h2 class="text-4xl font-bold text-tertiary-500 mb-16 text-center">Empowering Your Decisions: The Value of Deep Market Understanding</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-12"><div class="text-center"><div class="text-primary-500 mb-6 flex justify-center"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M10.5766 8.70419C11.2099 7.56806 11.5266 7 12 7C12.4734 7 12.7901 7.56806 13.4234 8.70419L13.5873 8.99812C13.7672 9.32097 13.8572 9.48239 13.9975 9.5889C14.1378 9.69541 14.3126 9.73495 14.6621 9.81402L14.9802 9.88601C16.2101 10.1643 16.825 10.3034 16.9713 10.7739C17.1176 11.2443 16.6984 11.7345 15.86 12.715L15.643 12.9686C15.4048 13.2472 15.2857 13.3865 15.2321 13.5589C15.1785 13.7312 15.1965 13.9171 15.2325 14.2888L15.2653 14.6272C15.3921 15.9353 15.4554 16.5894 15.0724 16.8801C14.6894 17.1709 14.1137 16.9058 12.9622 16.3756L12.6643 16.2384C12.337 16.0878 12.1734 16.0124 12 16.0124C11.8266 16.0124 11.663 16.0878 11.3357 16.2384L11.0378 16.3756C9.88634 16.9058 9.31059 17.1709 8.92757 16.8801C8.54456 16.5894 8.60794 15.9353 8.7347 14.6272L8.76749 14.2888C8.80351 13.9171 8.82152 13.7312 8.76793 13.5589C8.71434 13.3865 8.59521 13.2472 8.35696 12.9686L8.14005 12.715C7.30162 11.7345 6.88241 11.2443 7.02871 10.7739C7.17501 10.3034 7.78993 10.1643 9.01977 9.88601L9.33794 9.81402C9.68743 9.73495 9.86217 9.69541 10.0025 9.5889C10.1428 9.48239 10.2328 9.32097 10.4127 8.99812L10.5766 8.70419Z" stroke="oklch(0.623 0.214 259.815)" stroke-width="1.5"></path> <path d="M12 2V4" stroke="oklch(0.623 0.214 259.815)" stroke-width="1.5" stroke-linecap="round"></path> <path d="M12 20V22" stroke="oklch(0.623 0.214 259.815)" stroke-width="1.5" stroke-linecap="round"></path> <path d="M2 12L4 12" stroke="oklch(0.623 0.214 259.815)" stroke-width="1.5" stroke-linecap="round"></path> <path d="M20 12L22 12" stroke="oklch(0.623 0.214 259.815)" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6 18L6.34305 17.657" stroke="oklch(0.623 0.214 259.815)" stroke-width="1.5" stroke-linecap="round"></path> <path d="M17.6567 6.34326L18 6" stroke="oklch(0.623 0.214 259.815)" stroke-width="1.5" stroke-linecap="round"></path> <path d="M18 18L17.657 17.657" stroke="oklch(0.623 0.214 259.815)" stroke-width="1.5" stroke-linecap="round"></path> <path d="M6.34326 6.34326L6 6" stroke="oklch(0.623 0.214 259.815)" stroke-width="1.5" stroke-linecap="round"></path></g></svg></div><h3 class="text-2xl font-semibold text-slate-200 mb-4">Strategic Clarity</h3><p class="text-base text-slate-400">Gain a crystal-clear perspective on market movements and their potential impact on your investments, helping you align your passive income strategies with global trends.</p></div><div class="text-center"><div class="text-primary-500 mb-6 flex justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></svg></div><h3 class="text-2xl font-semibold text-slate-200 mb-4">Risk Management</h3><p class="text-base text-slate-400">Identify potential risks before they materialize. Our insights help you understand market volatilities and make timely adjustments to protect your capital.</p></div><div class="text-center"><div class="text-primary-500 mb-6 flex justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg></div><h3 class="text-2xl font-semibold text-slate-200 mb-4">Opportunity Detection</h3><p class="text-base text-slate-400">Uncover emerging trends and overlooked opportunities across various asset classes, positioning your portfolio for optimal growth and enhanced returns.</p></div></div></section><section class="mb-24 py-16 px-8"><h2 class="text-4xl font-bold text-primary-500 mb-16 text-center">The Pillars of Our Comprehensive Market Insights</h2><div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20"><div class="relative h-96 w-full rounded-lg overflow-hidden shadow-xl border border-white/30">`);
+      _push(ssrRenderComponent(_component_NuxtImg, {
+        placeholder: "",
+        src: "https://www.visualcapitalist.com/wp-content/uploads/2021/11/Global-GDP-by-Country-2021-V6-Shareable.jpeg",
+        alt: "Global Economic Data Visualization",
+        class: "absolute inset-0 w-full h-full object-cover"
+      }, null, _parent));
+      _push(`<div class="absolute inset-0 bg-gradient-to-tr from-slate-900/70 via-transparent to-transparent"></div></div><div class="space-y-6"><h3 class="text-3xl font-semibold text-slate-200 mb-4">Macroeconomic Analysis</h3><p class="text-base text-slate-300 leading-relaxed">We provide in-depth analysis of global and regional economic trends. This includes scrutinizing GDP growth, inflation rates, employment figures, and central bank policies like interest rate decisions. Understanding these macroeconomic forces is fundamental, as they set the stage for all financial market movements and directly influence the performance of various asset classes within your portfolio.</p><ul class="list-disc list-inside text-slate-300 text-base space-y-2"><li>Monetary &amp; Fiscal Policy Impact</li><li>Global Trade Relations &amp; Tariffs</li><li>Geopolitical Stability Assessments</li></ul></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center flex-row-reverse mb-20"><div class="relative h-96 w-full rounded-lg overflow-hidden shadow-xl border border-white/30">`);
+      _push(ssrRenderComponent(_component_NuxtImg, {
+        placeholder: "",
+        src: "https://miro.medium.com/v2/resize:fit:900/1*uFQ2g4DbfhqW5RFTv-3jJw.jpeg",
+        alt: "Financial Performance Charts",
+        class: "absolute inset-0 w-full h-full object-cover"
+      }, null, _parent));
+      _push(`<div class="absolute inset-0 bg-gradient-to-tl from-slate-900/70 via-transparent to-transparent"></div></div><div class="space-y-6"><h3 class="text-3xl font-semibold text-slate-200 mb-4">Asset Class &amp; Sector Focus</h3><p class="text-base text-slate-300 leading-relaxed">Our insights extend to granular detail across various asset classes (e.g., equities, fixed income, real estate, commodities, cryptocurrencies) and specific industry sectors (e.g., technology, healthcare, renewable energy). We track performance, identify catalysts, and pinpoint potential shifts, allowing you to optimize your asset allocation for maximum passive income generation and capital growth.</p><ul class="list-disc list-inside text-slate-300 text-base space-y-2"><li>Equity Market Trends &amp; Valuations</li><li>Fixed Income Yields &amp; Credit Quality</li><li>Emerging Industry Opportunities</li></ul></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"><div class="relative h-96 w-full rounded-lg overflow-hidden shadow-xl border border-white/30">`);
+      _push(ssrRenderComponent(_component_NuxtImg, {
+        placeholder: "",
+        src: "https://solutionsreview.com/identity-management/files/2018/01/Digital-News-Mod.jpg",
+        alt: "News Headlines and Analytics",
+        class: "absolute inset-0 w-full h-full object-cover"
+      }, null, _parent));
+      _push(`<div class="absolute inset-0 bg-gradient-to-tr from-slate-900/70 via-transparent to-transparent"></div></div><div class="space-y-6"><h3 class="text-3xl font-semibold text-slate-200 mb-4">Event-Driven Analysis</h3><p class="text-base text-slate-300 leading-relaxed">The market reacts instantly to significant events. Our insights provide rapid analysis of breaking news, earnings reports, regulatory changes, and geopolitical developments. We explain the direct and indirect impacts on your investments, helping you understand short-term volatilities and long-term implications, ensuring your passive income strategy is resilient.</p><ul class="list-disc list-inside text-slate-300 text-base space-y-2"><li>Earnings Season Breakdowns</li><li>Regulatory Changes &amp; Their Effects</li><li>Technological Disruptions</li></ul></div></div></section><section class="mb-24 py-16 px-8 bg-slate-800 rounded-lg shadow-inner border border-white/30"><h2 class="text-4xl font-bold text-tertiary-500 mb-16 text-center">How We Deliver Actionable Insights to Your Fingertips</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-12"><div class="flex items-start p-6 bg-slate-900 rounded-lg shadow-md border border-primary-500"><div class="text-primary-500 mr-6"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg></div><div><h3 class="text-2xl font-semibold text-slate-200 mb-3">Concise Reports &amp; Daily Briefs</h3><p class="text-base text-slate-400">Receive easily digestible reports and daily summaries that distill complex market data into key takeaways. Perfect for quick consumption without sacrificing depth.</p></div></div><div class="flex items-start p-6 bg-slate-900 rounded-lg shadow-md border border-primary-500"><div class="text-primary-500 mr-6"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-line-chart"><path d="M3 3v18h18"></path><path d="m18 6-6 6-4-4-3 3"></path></svg></div><div><h3 class="text-2xl font-semibold text-slate-200 mb-3">Interactive Dashboards</h3><p class="text-base text-slate-400">Access personalized dashboards that visualize your portfolio&#39;s performance against market benchmarks, highlighting relevant insights tailored to your investments.</p></div></div><div class="flex items-start p-6 bg-slate-900 rounded-lg shadow-md border border-primary-500"><div class="text-primary-500 mr-6"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-webcam"><circle cx="12" cy="10" r="8"></circle><circle cx="12" cy="10" r="3"></circle><path d="M7 22h10"></path><path d="M12 22v-4"></path></svg></div><div><h3 class="text-2xl font-semibold text-slate-200 mb-3">Webinars &amp; Expert Q&amp;A</h3><p class="text-base text-slate-400">Join live webinars and exclusive Q&amp;A sessions with our financial analysts to deepen your understanding and get direct answers to your investment questions.</p></div></div><div class="flex items-start p-6 bg-slate-900 rounded-lg shadow-md border border-primary-500"><div class="text-primary-500 mr-6"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg></div><div><h3 class="text-2xl font-semibold text-slate-200 mb-3">Personalized Alerts</h3><p class="text-base text-slate-400">Receive custom alerts based on your portfolio holdings and interests, ensuring you&#39;re immediately notified of significant market shifts affecting your investments.</p></div></div></div></section><section class="py-20 px-8 text-center"><h2 class="text-4xl font-bold text-primary-500 mb-8">Elevate Your Passive Income Strategy with ${ssrInterpolate(unref(appName))}</h2><p class="text-base text-slate-300 mb-10 max-w-4xl mx-auto">At ${ssrInterpolate(unref(appName))}, we don&#39;t just give you data; we provide clarity. Our dedicated market insights are crafted to support your passive income journey, ensuring you&#39;re always one step ahead in achieving your financial aspirations.</p>`);
+      _push(ssrRenderComponent(_component_MainCtaBanner, {
+        title: "Ready to Invest Smarter?",
+        description: "oin AssetFusionX today and unlock a world of meticulously researched market insights designed for the modern passive investor. Transform complex market dynamics into confident financial moves.",
+        "button-label": "Discover Your Edge"
+      }, null, _parent));
+      _push(`</section></div></div>`);
+    };
+  }
+});
+const _sfc_setup = _sfc_main.setup;
+_sfc_main.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("pages/(main)/resources/market-insights.vue");
+  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
+};
+
+export { _sfc_main as default };
+//# sourceMappingURL=market-insights-Bgoua9W2.mjs.map
