@@ -38,6 +38,9 @@ export default defineNuxtConfig({
     "nuxt-marquee",
   ],
   nitro: {
+    output: {
+      dir: "dist"
+    },
     rollupConfig: {
       plugins: [vue()],
     },

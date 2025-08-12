@@ -3,6 +3,16 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@font-face {
+  font-family: Poppins;
+  src: url(../fonts/Poppins.ttf);
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url(../fonts/GeistMono.ttf);
+}
+
 @theme static {
   --color-azure-50: oklch(97.88% 0.018 255.83);
   --color-azure-100: oklch(93.45% 0.035 259.89);

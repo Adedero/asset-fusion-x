@@ -1,7 +1,8 @@
 import path from "path";
 import fs from "fs";
 import winston from "winston";
-import "winston-daily-rotate-file";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import  * as DailyRotateFile from  "winston-daily-rotate-file";
 
 class Logger {
   private static instance: Logger;
