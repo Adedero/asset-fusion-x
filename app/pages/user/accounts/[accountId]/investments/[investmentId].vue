@@ -3,22 +3,22 @@ import type { BadgeProps } from "@nuxt/ui";
 import { useDateFormat } from "@vueuse/core";
 
 definePageMeta({
-  layout: "user",
+  layout: "user"
 });
 
 const [accountId, investmentId] = useRouteData().getParams([
   "accountId",
-  "investmentId",
+  "investmentId"
 ]);
 
 const { data, error, refresh } = await useFetch(
-  `/api/user/financial-accounts/${accountId}/investments/${investmentId}`,
+  `/api/user/financial-accounts/${accountId}/investments/${investmentId}`
 );
 
 const investment = computed(() => {
   return {
     ...data.value?.investment,
-    lastProfit: data.value?.investment.transactions[0],
+    lastProfit: data.value?.investment.transactions[0]
   };
 });
 
@@ -65,29 +65,29 @@ const cards = computed(() => {
       description: "Investment capital",
       icon: "lucide:coins",
       badgeColor: "neutral",
-      class: "bg-primary-500 text-white",
+      class: "bg-primary-500 text-white"
     },
     {
       label: "Expected Profit",
       value: toDollar(
         ((investment.value.totalReturn ?? 0) / 100) *
-          (investment.value.deposit ?? 0),
+          (investment.value.deposit ?? 0)
       ),
       description: `${
         (investment.value.totalReturn ?? 0) - 100
       }% total returns`,
       icon: "lucide:coins",
-      badgeColor: "primary",
+      badgeColor: "primary"
     },
     {
       label: "Current Profit",
       value: toDollar(investment.value.totalProfit ?? 0),
       description: `Distributed ${toCase(
         investment.value.profitDistribution ?? "",
-        "lower",
+        "lower"
       )}`,
       icon: "lucide:flower",
-      badgeColor: "success",
+      badgeColor: "success"
     },
     {
       label: "Last Profit",
@@ -95,11 +95,11 @@ const cards = computed(() => {
       description: investment.value.lastProfit?.createdAt
         ? useDateFormat(
             investment.value.lastProfit?.createdAt,
-            "MMM-DD-YYYY, hh:mm aa",
+            "MMM-DD-YYYY, hh:mm aa"
           ).value
         : `No profit yet`,
       icon: "lucide:hand-coins",
-      badgeColor: "error",
+      badgeColor: "error"
     },
     {
       label: "Duration",
@@ -107,21 +107,21 @@ const cards = computed(() => {
       suffix: "days",
       description: "Days completed",
       icon: "lucide:clock",
-      badgeColor: "primary",
+      badgeColor: "primary"
     },
     {
       label: "Status",
       value: toCase(investment.value.status ?? "", "sentence"),
       description: statusDescription,
       icon: "lucide:info",
-      badgeColor: "warning",
-    },
+      badgeColor: "warning"
+    }
   ];
 });
 </script>
 
 <template>
-  <MyPage :error @refresh="refresh()">
+  <MyPage :error @refresh="() => refresh()">
     <div v-if="investment" class="mb-4">
       <header class="flex items-center gap-4 justify-between">
         <div class="space-y-2">
@@ -177,7 +177,7 @@ const cards = computed(() => {
                       {{
                         useDateFormat(
                           investment.createdAt,
-                          "MMM-DD-YYYY, hh:mm aa",
+                          "MMM-DD-YYYY, hh:mm aa"
                         )
                       }}
                     </p>
@@ -190,7 +190,7 @@ const cards = computed(() => {
                         {{
                           useDateFormat(
                             investment.pausedAt,
-                            "MMM-DD-YYYY, hh:mm aa",
+                            "MMM-DD-YYYY, hh:mm aa"
                           )
                         }}
                       </p>
@@ -209,7 +209,7 @@ const cards = computed(() => {
                         {{
                           useDateFormat(
                             investment.closedAt,
-                            "MMM-DD-YYYY, hh:mm aa",
+                            "MMM-DD-YYYY, hh:mm aa"
                           )
                         }}
                       </p>
@@ -228,7 +228,7 @@ const cards = computed(() => {
                         {{
                           useDateFormat(
                             investment.terminatedAt,
-                            "MMM-DD-YYYY, hh:mm aa",
+                            "MMM-DD-YYYY, hh:mm aa"
                           )
                         }}
                       </p>

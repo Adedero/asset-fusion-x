@@ -10,13 +10,13 @@ definePageMeta({
   layout: "user",
   breadcrumb: [
     {
-      label: "Dashboard",
-    },
-  ] as BreadcrumbItem[],
+      label: "Dashboard"
+    }
+  ] as BreadcrumbItem[]
 });
 
 const { data, error, refresh } = await useFetch("/api/user/pages/dashboard", {
-  key: "user-dashboard",
+  key: "user-dashboard"
 });
 
 type Transaction = NonNullable<
@@ -30,36 +30,36 @@ const transactionColumns: TableColumn<Transaction>[] = [
     cell: ({ row }) => {
       const id: string = row.getValue("id") || "";
       return id.length > 5 ? id.slice(0, 5) + "..." : id;
-    },
+    }
   },
   {
     accessorKey: "type",
-    header: "Type",
+    header: "Type"
   },
   {
     accessorKey: "currency",
-    header: "Currency",
+    header: "Currency"
   },
   {
     accessorKey: "USDAmount",
     header: "USD Amount",
-    cell: ({ row }) => toDollar(row.getValue("USDAmount")),
+    cell: ({ row }) => toDollar(row.getValue("USDAmount"))
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: "Status"
   },
   {
     accessorKey: "createdAt",
     header: "Date",
     cell: ({ row }) =>
-      useDateFormat(row.getValue("createdAt"), "MMM/DD/YYYY hh:mm aa").value,
-  },
+      useDateFormat(row.getValue("createdAt"), "MMM/DD/YYYY hh:mm aa").value
+  }
 ];
 </script>
 
 <template>
-  <MyPage :error @refresh="refresh()">
+  <MyPage :error @refresh="() => refresh()">
     <div v-if="data" class="w-full lg:h-full gap-4 lg:flex pb-4">
       <div class="w-full lg:min-w-0 lg:h-full lg:overflow-y-auto lg:flex-grow">
         <div class="w-full max-h-full space-y-4 p-0.5">
@@ -239,7 +239,7 @@ const transactionColumns: TableColumn<Transaction>[] = [
                             {{
                               useDateFormat(
                                 notification.createdAt,
-                                "MMM DD, YYYY",
+                                "MMM DD, YYYY"
                               )
                             }}
                             at

@@ -2,7 +2,7 @@ import { useSlots, computed, unref, mergeProps, withCtx, createVNode, createBloc
 import { ssrRenderComponent, ssrRenderClass, ssrRenderSlot, ssrInterpolate } from 'vue/server-renderer';
 import { useForwardProps, Separator } from 'reka-ui';
 import { reactivePick } from '@vueuse/core';
-import { g as useAppConfig, t as tv, e as _sfc_main$d, j as _sfc_main$a } from './server.mjs';
+import { g as useAppConfig, t as tv, e as _sfc_main$f, j as _sfc_main$c } from './server.mjs';
 
 const theme = {
   "slots": {
@@ -187,12 +187,12 @@ const _sfc_main = {
                 if (__props.label) {
                   _push2(`<span class="${ssrRenderClass(ui.value.label({ class: props.ui?.label }))}"${_scopeId}>${ssrInterpolate(__props.label)}</span>`);
                 } else if (__props.icon) {
-                  _push2(ssrRenderComponent(_sfc_main$d, {
+                  _push2(ssrRenderComponent(_sfc_main$f, {
                     name: __props.icon,
                     class: ui.value.icon({ class: props.ui?.icon })
                   }, null, _parent2, _scopeId));
                 } else if (__props.avatar) {
-                  _push2(ssrRenderComponent(_sfc_main$a, mergeProps({
+                  _push2(ssrRenderComponent(_sfc_main$c, mergeProps({
                     size: props.ui?.avatarSize || ui.value.avatarSize()
                   }, __props.avatar, {
                     class: ui.value.avatar({ class: props.ui?.avatar })
@@ -218,11 +218,11 @@ const _sfc_main = {
                     __props.label ? (openBlock(), createBlock("span", {
                       key: 0,
                       class: ui.value.label({ class: props.ui?.label })
-                    }, toDisplayString(__props.label), 3)) : __props.icon ? (openBlock(), createBlock(_sfc_main$d, {
+                    }, toDisplayString(__props.label), 3)) : __props.icon ? (openBlock(), createBlock(_sfc_main$f, {
                       key: 1,
                       name: __props.icon,
                       class: ui.value.icon({ class: props.ui?.icon })
-                    }, null, 8, ["name", "class"])) : __props.avatar ? (openBlock(), createBlock(_sfc_main$a, mergeProps({
+                    }, null, 8, ["name", "class"])) : __props.avatar ? (openBlock(), createBlock(_sfc_main$c, mergeProps({
                       key: 2,
                       size: props.ui?.avatarSize || ui.value.avatarSize()
                     }, __props.avatar, {

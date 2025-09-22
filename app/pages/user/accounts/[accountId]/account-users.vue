@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "user",
+  layout: "user"
 });
 
 const accountId = useRouteData().getParams("accountId");
@@ -8,13 +8,13 @@ const accountId = useRouteData().getParams("accountId");
 const { data, error, refresh } = await useFetch(
   `/api/user/financial-accounts/${accountId}`,
   {
-    pick: ["id", "name", "type", "ownership", "status"],
-  },
+    pick: ["id", "name", "type", "ownership", "status"]
+  }
 );
 </script>
 
 <template>
-  <MyPage :error @refresh="refresh()">
+  <MyPage :error @refresh="() => refresh()">
     <div class="space-y-8">
       <NuxtCard>
         <template #header>

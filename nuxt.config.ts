@@ -3,13 +3,6 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  appConfig: {
-    ui: {
-      colors: {
-        primary: "azure",
-      },
-    },
-  },
   runtimeConfig: {
     public: {
       appName: process.env.APP_NAME || "AssetFusionX",
@@ -20,11 +13,11 @@ export default defineNuxtConfig({
       maxAccounts: parseInt(process.env.MAX_ACCOUNTS ?? "20"),
       minDepositAmount: parseFloat(process.env.MIN_DEPOSIT_AMOUNT ?? "10"),
       maxDepositAmount: parseFloat(process.env.MAX_DEPOSIT_AMOUNT ?? "100000"),
-      getRequestLimit: parseInt(process.env.GET_REQUEST_LIMIT ?? "20"),
-    },
+      getRequestLimit: parseInt(process.env.GET_REQUEST_LIMIT ?? "20")
+    }
   },
   devServer: {
-    port: 8080,
+    port: 8080
   },
   pages: true,
   compatibilityDate: "2025-07-15",
@@ -42,13 +35,14 @@ export default defineNuxtConfig({
       dir: "dist"
     },
     rollupConfig: {
-      plugins: [vue()],
-    },
+      plugins: [vue()]
+    }
   },
   ui: {
     prefix: "Nuxt",
+    fonts: false
   },
   vite: {
-    plugins: [tailwindcss()],
-  },
+    plugins: [tailwindcss()]
+  }
 });

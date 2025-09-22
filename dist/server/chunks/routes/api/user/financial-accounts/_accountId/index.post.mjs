@@ -1,4 +1,4 @@
-import { d as defineEventHandler, b as getRouterParam, r as readValidatedBody, c as createError, p as prisma } from '../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, f as getRouterParam, r as readValidatedBody, c as createError, p as prisma } from '../../../../../nitro/nitro.mjs';
 import { n as notificationEmitter } from '../../../../../_/emitter.mjs';
 import { I as InvestmentSchema } from '../../../../../_/index.mjs';
 import 'node:path';
@@ -14,8 +14,8 @@ import 'node:crypto';
 import 'node:url';
 import 'better-auth';
 import 'better-auth/adapters/prisma';
-import 'node:process';
-import '@prisma/client/runtime/library';
+import '@prisma/client/runtime/client';
+import '@prisma/adapter-pg';
 import 'better-auth/plugins';
 import 'nodemailer';
 import '@iconify/utils';

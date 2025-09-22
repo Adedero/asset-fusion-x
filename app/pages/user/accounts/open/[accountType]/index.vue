@@ -9,16 +9,16 @@ definePageMeta({
   breadcrumb: [
     {
       label: "Accounts",
-      to: "/user/accounts",
+      to: "/user/accounts"
     },
     {
       label: "Open",
-      to: "/user/accounts/open",
+      to: "/user/accounts/open"
     },
     {
-      label: "Account type",
-    },
-  ] as BreadcrumbItem[],
+      label: "Account type"
+    }
+  ] as BreadcrumbItem[]
 });
 
 onMounted(async () => {
@@ -32,7 +32,7 @@ onMounted(async () => {
 <template>
   <div class="fluid flex-center">
     <div class="flex-col-center gap-4">
-      <h1 class="text-4xl font-semibold">
+      <h1 class="text-3xl font-semibold">
         {{ toCase(accountType ?? "", "sentence") }} Account
       </h1>
       <p class="card-title">Select your account ownership type.</p>

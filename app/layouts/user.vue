@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { BreadcrumbItem } from "@nuxt/ui";
-import { links, secondaryLinks } from "~/data/user-links";
+import { links as userLinks, secondaryLinks } from "~/data/user-links";
+import { links as adminLinks } from "~/data/admin-links";
 import { useAuthStore } from "~/stores/auth.store";
 import { authClient } from "~/lib/auth";
 import normalizeException from "~~/shared/helpers/normalize-exception";
 
 const runtimeConfig = useRuntimeConfig();
-
+const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -24,9 +25,16 @@ const { data, error, pending, refresh } = await useFetch(
   },
 );
 
-const authStore = useAuthStore();
 
 const open = ref<boolean>(false);
+
+function links() {
+  if (authStore.user.value?.role === "admin") {
+    return adminLinks({ signOut: () => (open.value = true) });
+  }
+  return userLinks({ signOut: () => (open.value = true) });
+}
+
 
 const signOutError = ref<Error | null>(null);
 const signOut = async () => {
@@ -45,7 +53,7 @@ const signOut = async () => {
 
 <template>
   <div>
-    <NuxtLoadingIndicator />
+    <NuxtLoadingIndicator color="var(--ui-primary-color)" />
     <NuxtSidebar>
       <template #header>
         <div class="w-full bg-elevated rounded-md px-2 py-4">
@@ -67,7 +75,7 @@ const signOut = async () => {
         <div>
           <NuxtNavigationMenu
             orientation="vertical"
-            :items="links({ signOut: () => (open = true) })"
+            :items="links()"
           />
         </div>
       </template>
@@ -78,11 +86,11 @@ const signOut = async () => {
             secondaryLinks({
               name: authStore.user.value?.name ?? 'Anonymous',
               image: authStore.user.value?.image ?? undefined,
-              signOut: () => (open = true),
+              signOut: () => (open = true)
             })
           "
           :ui="{
-            content: 'w-48',
+            content: 'w-48'
           }"
         >
           <div
@@ -144,11 +152,11 @@ const signOut = async () => {
                 secondaryLinks({
                   name: authStore.user.value?.name ?? 'Anonymous',
                   image: authStore.user.value?.image ?? undefined,
-                  signOut: () => (open = true),
+                  signOut: () => (open = true)
                 })
               "
               :ui="{
-                content: 'w-48',
+                content: 'w-48'
               }"
             >
               <div>

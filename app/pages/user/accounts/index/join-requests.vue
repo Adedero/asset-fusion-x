@@ -5,11 +5,11 @@ import normalizeException from "~~/shared/helpers/normalize-exception";
 const toast = useToast();
 
 const { data, error, refresh } = await useFetch("/api/user/join-requests", {
-  key: "user-join-requests",
+  key: "user-join-requests"
 });
 
 const joinRequests = computed(
-  () => data.value?.map((item) => ({ ...item, loading: false })) ?? [],
+  () => data.value?.map((item) => ({ ...item, loading: false })) ?? []
 );
 
 type JoinRequest = (typeof joinRequests.value)[number];
@@ -18,12 +18,12 @@ const acceptError = ref<Error | null>(null);
 async function acceptRequest(item: JoinRequest, close: () => void) {
   try {
     await $fetch(`/api/user/join-requests/${item.id}/accept`, {
-      method: "post",
+      method: "post"
     });
     toast.add({
       color: "success",
       title: "Success",
-      description: "You are now an account member.",
+      description: "You are now an account member."
     });
     await refresh();
     close();
@@ -37,7 +37,7 @@ const rejectError = ref<Error | null>(null);
 async function rejectRequest(item: JoinRequest, close: () => void) {
   try {
     await $fetch(`/api/user/join-requests/${item.id}`, {
-      method: "delete",
+      method: "delete"
     });
     await refresh();
     close();
@@ -48,7 +48,7 @@ async function rejectRequest(item: JoinRequest, close: () => void) {
 </script>
 
 <template>
-  <MyPage :error @refresh="refresh()">
+  <MyPage :error @refresh="() => refresh()">
     <div v-if="data">
       <div
         v-if="joinRequests.length > 0"
@@ -82,7 +82,7 @@ async function rejectRequest(item: JoinRequest, close: () => void) {
                   {{
                     useDateFormat(
                       item.financialAccount.createdAt,
-                      "MMM DD, YYYY",
+                      "MMM DD, YYYY"
                     )
                   }}
                 </b>

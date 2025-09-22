@@ -3,18 +3,18 @@ import type { Currency } from "~~/server/generated/prisma/client";
 import type { Serialize } from "~~/types";
 
 definePageMeta({
-  layout: "user",
+  layout: "user"
 });
 
 const { data, error, refresh } = await useFetch("/api/settings", {
-  key: "settings",
+  key: "settings"
 });
 
 const selectedCurrency = ref<Serialize<Currency> | null>(null);
 </script>
 
 <template>
-  <MyPage :error @refresh="refresh()">
+  <MyPage :error @refresh="() => refresh()">
     <div v-if="data">
       <div
         v-if="data.allowWithdrawals"

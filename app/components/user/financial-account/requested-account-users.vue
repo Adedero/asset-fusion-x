@@ -11,8 +11,8 @@ const open = ref<boolean>(false);
 const { pending, data, error, refresh } = await useFetch(
   `/api/user/financial-accounts/${accountId}/join-requests`,
   {
-    key: "account-join-requests",
-  },
+    key: "account-join-requests"
+  }
 );
 
 const items = computed(() => {
@@ -24,7 +24,7 @@ const items = computed(() => {
         role: item.role,
         ownership: item.ownership,
         requestedBy: item.creator?.name,
-        requestDate: item.createdAt,
+        requestDate: item.createdAt
       };
     }) ?? []
   );
@@ -35,31 +35,31 @@ type RequestedUser = (typeof items.value)[number];
 const columns: TableColumn<RequestedUser>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: "Name"
   },
   {
     accessorKey: "email",
-    header: "Email",
+    header: "Email"
   },
   {
     accessorKey: "role",
-    header: "Role",
+    header: "Role"
   },
   {
     accessorKey: "ownership",
     header: "Ownership",
-    cell: ({ row }) => `${row.getValue("ownership")}%`,
+    cell: ({ row }) => `${row.getValue("ownership")}%`
   },
   {
     accessorKey: "requestedBy",
-    header: "Requested By",
+    header: "Requested By"
   },
   {
     accessorKey: "requestDate",
     header: "Request Date",
     cell: ({ row }) =>
-      useDateFormat(row.getValue("requestDate"), "MMM DD, YYYY hh:mm aa").value,
-  },
+      useDateFormat(row.getValue("requestDate"), "MMM DD, YYYY hh:mm aa").value
+  }
 ];
 
 type SelectedUser = NonNullable<typeof data.value>[number];
@@ -80,7 +80,7 @@ const cancelError = ref<Error | null>(null);
 async function cancelRequest(userRequest: SelectedUser, close: () => void) {
   try {
     await $fetch(`/api/user/join-requests/${userRequest.id}`, {
-      method: "delete",
+      method: "delete"
     });
     await refresh();
     close();
@@ -93,12 +93,12 @@ const reminderError = ref<Error | null>(null);
 async function sendReminder(userRequest: SelectedUser, close: () => void) {
   try {
     await $fetch(`/api/user/join-requests/${userRequest.id}/send-reminder`, {
-      method: "post",
+      method: "post"
     });
     toast.add({
       color: "success",
       title: "Success",
-      description: "Reminder sent successfully",
+      description: "Reminder sent successfully"
     });
     await refresh();
     close();
@@ -117,7 +117,7 @@ const handleOpen = (value: boolean) => {
 </script>
 
 <template>
-  <MyPage :error @refresh="refresh()">
+  <MyPage :error @refresh="() => refresh()">
     <NuxtTable
       :data="items"
       :columns
@@ -186,7 +186,7 @@ const handleOpen = (value: boolean) => {
                   :value="
                     useDateFormat(
                       selectedUser.createdAt,
-                      'MMM DD, YYYY hh:mm aa',
+                      'MMM DD, YYYY hh:mm aa'
                     ).value
                   "
                   readonly
@@ -214,7 +214,7 @@ const handleOpen = (value: boolean) => {
                     selectedUser.lastReminderAt
                       ? useDateFormat(
                           selectedUser.lastReminderAt,
-                          'MMM DD, YYYY hh:mm aa',
+                          'MMM DD, YYYY hh:mm aa'
                         ).value
                       : 'No reminders sent yet'
                   "

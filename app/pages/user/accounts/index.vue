@@ -6,26 +6,26 @@ definePageMeta({
   layout: "user",
   breadcrumb: [
     {
-      label: "Accounts",
-    },
-  ] as BreadcrumbItem[],
+      label: "Accounts"
+    }
+  ] as BreadcrumbItem[]
 });
 
 const items: NavbarItem[] = [
   {
     label: "Accounts",
-    to: "/user/accounts",
+    to: "/user/accounts"
   },
   {
     label: "Requests",
-    to: "/user/accounts/join-requests",
-  },
+    to: "/user/accounts/join-requests"
+  }
 ];
 </script>
 
 <template>
   <div>
-    <h1 class="text-4xl font-semibold">Accounts</h1>
+    <h1 class="text-3xl font-semibold">Accounts</h1>
 
     <div class="my-4">
       <NuxtNavbar :items />

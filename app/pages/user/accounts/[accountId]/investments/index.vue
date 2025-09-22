@@ -1,5 +1,5 @@
 <template>
-  <MyPage :error="error || accountError" @refresh="refresh()">
+  <MyPage :error="error || accountError" @refresh="() => refresh()">
     <div v-if="account && data" class="flex w-full flex-1 gap-1 overflow-auto">
       <div class="flex-1">
         <NuxtTable
@@ -29,7 +29,7 @@ import { useDateFormat } from "@vueuse/core";
 import { h, resolveComponent } from "vue";
 
 definePageMeta({
-  layout: "user",
+  layout: "user"
 });
 
 const accountId = useRouteData().getParams("accountId");
@@ -40,7 +40,7 @@ const page = computed({
   get: () => Number(route.query.page || 1),
   set: (val) => {
     router.replace({ query: { ...route.query, page: val } });
-  },
+  }
 });
 
 const limit = 20;
@@ -50,15 +50,15 @@ const query = computed(() => ({ page: page.value, limit }));
 const { data: account, error: accountError } = await useFetch(
   `/api/user/financial-accounts/${accountId}`,
   {
-    pick: ["totalInvestments"],
-  },
+    pick: ["totalInvestments"]
+  }
 );
 
 const { pending, data, error, refresh } = await useFetch(
   `/api/user/financial-accounts/${accountId}/investments`,
   {
-    query,
-  },
+    query
+  }
 );
 
 const investments = computed(() => {
@@ -69,7 +69,7 @@ const investments = computed(() => {
       name: investment.investmentName,
       category: investment.category,
       status: investment.status,
-      date: investment.createdAt,
+      date: investment.createdAt
     };
   });
 });
@@ -86,16 +86,16 @@ const columns: TableColumn<Investment>[] = [
       const id: string = row.getValue("id") || "";
       const value = id.length > 8 ? id.slice(0, 8).toUpperCase() + "..." : id;
       return h("div", { title: id }, value);
-    },
+    }
   },
   {
     accessorKey: "deposit",
     header: "Deposit",
-    cell: ({ row }) => toDollar(row.getValue("deposit")),
+    cell: ({ row }) => toDollar(row.getValue("deposit"))
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: "Name"
   },
   {
     accessorKey: "category",
@@ -104,9 +104,9 @@ const columns: TableColumn<Investment>[] = [
       return h(
         "div",
         { class: "capitalize" },
-        toCase(row.getValue("category"), "sentence"),
+        toCase(row.getValue("category"), "sentence")
       );
-    },
+    }
   },
   {
     accessorKey: "status",
@@ -114,16 +114,16 @@ const columns: TableColumn<Investment>[] = [
     cell: ({ row }) => {
       const color = getInvestmentStatusBadgeColor(row.getValue("status"));
       return h(Badge, { variant: "subtle", color }, () =>
-        row.getValue("status"),
+        row.getValue("status")
       );
-    },
+    }
   },
   {
     accessorKey: "date",
     header: "Date",
     cell: ({ row }) =>
-      useDateFormat(row.getValue("date"), "MMM-DD-YYYY, hh:mm aa").value,
-  },
+      useDateFormat(row.getValue("date"), "MMM-DD-YYYY, hh:mm aa").value
+  }
 ];
 
 async function onSelect(row: TableRow<Investment>) {

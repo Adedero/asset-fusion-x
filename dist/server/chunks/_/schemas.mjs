@@ -104,9 +104,10 @@ const TransactionInitSchema = z.object({
   })
 });
 const paginationQuerySchema = z.object({
-  page: z.coerce.number({ message: "Page query must be a number" }).optional(),
-  limit: z.coerce.number({ message: "Limit must be a number" }).optional(),
-  skip: z.coerce.number({ message: "Skip must be a number" }).optional()
+  page: z.coerce.number("Page query must be a number").optional(),
+  limit: z.coerce.number("Limit must be a number").optional(),
+  skip: z.coerce.number("Skip must be a number").optional(),
+  search: z.string().optional()
 });
 
 export { BusinessProfileSchema as B, EmailSchema as E, JointAccountRequestSchema as J, LoginSchema as L, ProfileSchema as P, RegisterSchema as R, TransactionInitSchema as T, PasswordSchema as a, ResetPasswordSchema as b, paginationQuerySchema as p };

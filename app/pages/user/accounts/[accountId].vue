@@ -7,9 +7,9 @@ definePageMeta({
   breadcrumb: [
     {
       label: "Accounts",
-      to: "/user/accounts",
-    },
-  ] as BreadcrumbItem[],
+      to: "/user/accounts"
+    }
+  ] as BreadcrumbItem[]
 });
 
 const accountId = useRouteData().getParams("accountId");
@@ -18,29 +18,29 @@ const { data, error, refresh } = await useFetch(
   `/api/user/financial-accounts/${accountId}`,
   {
     key: () => `user-financial-account-${accountId}-pick`,
-    pick: ["id", "name", "type", "ownership", "status", "businessProfile"],
-  },
+    pick: ["id", "name", "type", "ownership", "status", "businessProfile"]
+  }
 );
 
 const accountName = computed(() => data.value?.name ?? "");
 
 provide("currentAccount", {
   accountName: accountName.value,
-  refreshAccount: refresh,
+  refreshAccount: refresh
 });
 
 const items = computed(() => (data.value ? getNavList(data.value) : []));
 
 const open = ref(
-  data.value?.type === "business" && !data.value?.businessProfile,
+  data.value?.type === "business" && !data.value?.businessProfile
 );
 </script>
 
 <template>
-  <MyPage :error>
+  <MyPage :error @refresh="() => refresh()">
     <div v-if="data" class="h-full">
       <header class="flex flex-wrap gap-x-4 gap-y-1">
-        <h1 class="text-4xl font-semibold">{{ data.name }}</h1>
+        <h1 class="text-3xl font-semibold">{{ data.name }}</h1>
 
         <div class="space-x-2">
           <NuxtBadge variant="soft" :label="data.ownership" />

@@ -6,14 +6,14 @@ const authStore = useAuthStore();
 
 const items = ref<NavbarItem[]>([
   { label: "Overview", to: "/user/profile" },
-  { label: "KYC", to: "/user/profile/kyc" },
+  { label: "KYC", to: "/user/profile/kyc" }
 ]);
 </script>
 
 <template>
   <div class="h-full space-y-4">
     <header>
-      <h1 class="text-4xl font-semibold">
+      <h1 class="text-3xl font-semibold">
         Hi, {{ authStore.user.value?.name.split(" ")[0] }}
       </h1>
     </header>

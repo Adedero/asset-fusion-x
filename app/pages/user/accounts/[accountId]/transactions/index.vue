@@ -2,7 +2,7 @@
 import { useDateFormat } from "@vueuse/core";
 
 definePageMeta({
-  layout: "user",
+  layout: "user"
 });
 
 const accountId = useRouteData().getParams("accountId");
@@ -13,7 +13,7 @@ const page = computed({
   get: () => Number(route.query.page || 1),
   set: (val) => {
     router.replace({ query: { ...route.query, page: val } });
-  },
+  }
 });
 
 const limit = 20;
@@ -23,21 +23,21 @@ const query = computed(() => ({ page: page.value, limit }));
 const { data: account, error: accountError } = await useFetch(
   `/api/user/financial-accounts/${accountId}`,
   {
-    pick: ["totalTransactions"],
-  },
+    pick: ["totalTransactions"]
+  }
 );
 
 const {
   data: transactions,
   error,
-  refresh,
+  refresh
 } = useFetch(`/api/user/financial-accounts/${accountId}/transactions`, {
-  query,
+  query
 });
 </script>
 
 <template>
-  <MyPage :error="error || accountError" @refresh="refresh()">
+  <MyPage :error="error || accountError" @refresh="() => refresh()">
     <div v-if="account && transactions">
       <div v-if="transactions.length" class="mb-4">
         <div class="space-y-4">

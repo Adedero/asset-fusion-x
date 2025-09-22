@@ -1,4 +1,4 @@
-import { d as defineEventHandler, b as getRouterParam, c as createError, p as prisma, r as readValidatedBody, e as removeFileByUrl, s as saveFile } from '../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, f as getRouterParam, c as createError, p as prisma, r as readValidatedBody, h as removeFileByUrl, s as saveFile } from '../../../../../nitro/nitro.mjs';
 import { B as BusinessProfileSchema } from '../../../../../_/schemas.mjs';
 import 'node:path';
 import 'fs/promises';
@@ -13,8 +13,8 @@ import 'node:crypto';
 import 'node:url';
 import 'better-auth';
 import 'better-auth/adapters/prisma';
-import 'node:process';
-import '@prisma/client/runtime/library';
+import '@prisma/client/runtime/client';
+import '@prisma/adapter-pg';
 import 'better-auth/plugins';
 import 'nodemailer';
 import '@iconify/utils';

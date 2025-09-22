@@ -72,7 +72,7 @@ async function onSubmit(event: FormSubmitEvent<LoginSchemaType>) {
       }
 
       if (role === "admin") {
-        console.log(role);
+        await navigateTo("/admin");
         return;
       }
 
@@ -95,8 +95,7 @@ async function onSubmit(event: FormSubmitEvent<LoginSchemaType>) {
       :schema="LoginSchema"
       :state="state"
       class="space-y-4"
-      @submit.prevent="onSubmit"
-    >
+      @submit.prevent="onSubmit">
       <NuxtFormField label="Email" name="email">
         <NuxtInput v-model="state.email" size="lg" class="w-full" />
       </NuxtFormField>
@@ -120,8 +119,7 @@ async function onSubmit(event: FormSubmitEvent<LoginSchemaType>) {
         class="mt-2 w-full flex-center"
         size="lg"
         icon="i-lucide-log-in"
-        loading-auto
-      >
+        loading-auto>
         Submit
       </NuxtButton>
     </NuxtForm>

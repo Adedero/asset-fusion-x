@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { size, fill } = defineProps({
+const { label, size, fill } = defineProps({
   label: { type: String, required: false, default: "" },
   size: { type: String, required: false, default: "120px" },
   fill: { type: String, required: false, default: "currentColor" },

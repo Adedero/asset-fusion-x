@@ -1,4 +1,4 @@
-import { _ as __nuxt_component_0, e as _sfc_main$d } from './server.mjs';
+import { _ as __nuxt_component_0, e as _sfc_main$f } from './server.mjs';
 import { defineComponent, computed, mergeProps, unref, withCtx, createVNode, toDisplayString, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderClass, ssrInterpolate, ssrRenderComponent } from 'vue/server-renderer';
 
@@ -31,7 +31,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_NuxtLink = __nuxt_component_0;
-      const _component_NuxtIcon = _sfc_main$d;
+      const _component_NuxtIcon = _sfc_main$f;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "px-12 pt-4 pb-12" }, _attrs))}><div class="${ssrRenderClass([unref(classes).card, "py-10 px-40 rounded-2xl text-center"])}"><h4 class="text-3xl font-semibold">${ssrInterpolate(_ctx.title || "Ready To Take Control of Your Financial Future?")}</h4><p class="${ssrRenderClass([unref(classes).text, "mt-5"])}">${ssrInterpolate(_ctx.description || "Let us help you achieve your financial goals with personalized strategies and expert advice. Schedule a free consultation today to start your journey toward financial freedom.")}</p><div class="mt-5 grid place-content-center">`);
       _push(ssrRenderComponent(_component_NuxtLink, {
         to: _ctx.buttonHref || "/sign-up"

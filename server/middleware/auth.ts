@@ -7,20 +7,23 @@ export default defineEventHandler(async (event) => {
   const isAdminRoute = requestUrl.pathname.includes("/admin");
 
   if (isUserRoute || isAdminRoute) {
-    const expectedRole = isAdminRoute ? "admin" : "user";
+    const expectedRoles: string[] = isAdminRoute ? ["admin"] : ["admin", "user"];
     const session = await auth.api.getSession(event);
 
     if (!session) {
       throw createError({
         statusCode: 401,
-        message: "You must be logged in to access this resource.",
+        statusMessage: "You must be logged in to access this resource.",
       });
     }
 
-    if (session.user.role !== expectedRole) {
+    const role = session.user.role;
+
+    if (!expectedRoles.includes(role)) {
       throw createError({
         statusCode: 403,
-        message: `Access denied. You must be logged in as a ${expectedRole}.`,
+        statusMessage: "Access denied. You are not authorized to access this page",
+        fatal: true,
       });
     }
 

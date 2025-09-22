@@ -1,4 +1,4 @@
-import { d as defineEventHandler, g as getRequestParam, p as prisma, i as sendEmail } from '../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, e as getRequestParam, p as prisma, i as sendEmail } from '../../../../../nitro/nitro.mjs';
 import { j as jointAccountRequestEmail } from '../../../../../_/joint-account-request-email.mjs';
 import 'node:path';
 import 'fs/promises';
@@ -13,8 +13,8 @@ import 'node:crypto';
 import 'node:url';
 import 'better-auth';
 import 'better-auth/adapters/prisma';
-import 'node:process';
-import '@prisma/client/runtime/library';
+import '@prisma/client/runtime/client';
+import '@prisma/adapter-pg';
 import 'better-auth/plugins';
 import 'nodemailer';
 import '@iconify/utils';

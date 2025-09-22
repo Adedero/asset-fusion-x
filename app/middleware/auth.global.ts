@@ -1,28 +1,33 @@
-/* import { authClient } from "~/lib/auth";
-import { useAuthStore } from "~/stores/auth.store"; */
+import { useAuthStore } from "~/stores/auth.store";
+import { authClient } from "~/lib/auth";
 
-export default defineNuxtRouteMiddleware((to) => {
-  /*   if (import.meta.client) {
-    const { fullPath } = to;
-    const isUserRoute = fullPath.startsWith("/user");
-    const isAdminRoute = fullPath.startsWith("/admin");
+export default defineNuxtRouteMiddleware(async (to) => {
+  if (import.meta.server) {
+    return;
+  }
 
-    if (isUserRoute || isAdminRoute) {
-      const expectedRole = isAdminRoute ? "admin" : "user";
-      const session = authClient.useSession();
+  const { fullPath } = to;
 
-      console.log(session.value.data);
+  const isUserRoute = fullPath.startsWith("/user");
+  const isAdminRoute = fullPath.startsWith("/admin");
 
-      if (!session.value.data) {
-        return navigateTo(`/sign-in?redirect=${encodeURIComponent(fullPath)}`);
-      }
-      if (session.value.data.user.role !== expectedRole) {
-        return navigateTo("/sign-in");
-      }
+  if (isUserRoute || isAdminRoute) {
+    const expectedRoles = isAdminRoute ? ["admin"] : ["admin", "user"];
 
-      const authStore = useAuthStore();
-      authStore.setUser(session.value.data.user);
-      authStore.setSession(session.value.data.session);
+    const { data } = await authClient.getSession();
+
+    if (!data) {
+      return navigateTo(`/sign-in?redirect=${encodeURIComponent(fullPath)}`);
     }
-  } */
+
+    const role = data.user.role;
+
+    if (!expectedRoles.includes(role)) {
+      return navigateTo("/sign-in");
+    }
+
+    const authStore = useAuthStore();
+    authStore.setUser(data.user);
+    authStore.setSession(data.session);
+  }
 });

@@ -16,6 +16,19 @@ export const investmentPlanCategories: Array<{
   { name: "Derivatives", value: "derivatives" },
 ];
 
+export const investmentPlanCategoryMap: Record<
+  InvestmentPlanCategoryType,
+  string
+> = {
+  forex: "Forex",
+  real_estate: "Real Estate",
+  commodities: "Commodities",
+  stocks: "Stocks",
+  bonds: "Bonds",
+  cryptocurrencies: "Cryptocurrencies",
+  derivatives: "Derivatives",
+};
+
 export const profitDistribution: Array<{
   name: string;
   value: ProfitDistributionType;
@@ -23,5 +36,12 @@ export const profitDistribution: Array<{
   { name: "Daily", value: "daily" },
   { name: "Weekly", value: "weekly" },
   { name: "Bi-weekly", value: "bi_weekly" },
-  { name: "monthly", value: "monthly" },
+  { name: "Monthly", value: "monthly" },
 ];
+
+export const profitDistributionMap: Record<ProfitDistributionType, string> = {
+  daily: "Daily",
+  weekly: "Weekly",
+  bi_weekly: "Bi-weekly",
+  monthly: "Monthly",
+};

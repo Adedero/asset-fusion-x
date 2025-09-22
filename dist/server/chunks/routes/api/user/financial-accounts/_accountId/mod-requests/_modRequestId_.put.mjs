@@ -1,4 +1,4 @@
-import { d as defineEventHandler, h as getValidatedQuery, c as createError, f as getRouterParams, p as prisma, j as reverseTransaction } from '../../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, a as getValidatedQuery, c as createError, g as getRouterParams, p as prisma, j as reverseTransaction } from '../../../../../../nitro/nitro.mjs';
 import z from 'zod';
 import 'node:path';
 import 'fs/promises';
@@ -13,8 +13,8 @@ import 'node:crypto';
 import 'node:url';
 import 'better-auth';
 import 'better-auth/adapters/prisma';
-import 'node:process';
-import '@prisma/client/runtime/library';
+import '@prisma/client/runtime/client';
+import '@prisma/adapter-pg';
 import 'better-auth/plugins';
 import 'nodemailer';
 import '@iconify/utils';

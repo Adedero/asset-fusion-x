@@ -267,7 +267,7 @@ z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date()
 });
-z.object({
+const SettingsSchema = z.object({
   id: z.string().uuid(),
   allowWithdrawals: z.boolean()
 });
@@ -14201,5 +14201,5 @@ z.object({
   limit: z.number().optional()
 }).strict();
 
-export { FinancialAccountSchema as F, InvestmentSchema as I };
+export { FinancialAccountSchema as F, InvestmentSchema as I, SettingsSchema as S };
 //# sourceMappingURL=index.mjs.map

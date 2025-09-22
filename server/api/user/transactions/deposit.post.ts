@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 
   const { data, error, success } = await readValidatedBody(
     event,
-    schema.safeParse,
+    schema.safeParse
   );
 
   if (!success) {

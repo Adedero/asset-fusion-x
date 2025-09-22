@@ -8,28 +8,28 @@ definePageMeta({
   layout: "user",
   breadcrumb: [
     {
-      label: "Investment Plans",
-    },
-  ] as BreadcrumbItem[],
+      label: "Investment Plans"
+    }
+  ] as BreadcrumbItem[]
 });
 
 const toast = useToast();
 
 const { data, error, refresh } = await useFetch("/api/investment-plans", {
-  key: "investment-plans",
+  key: "investment-plans"
 });
 
 type InvestmentPlan = NonNullable<(typeof data)["value"]>[number];
 
 const groupByFields: Array<{ label: string; value: keyof InvestmentPlan }> = [
   { label: "Category", value: "category" },
-  { label: "Interest cycle", value: "profitDistribution" },
+  { label: "Interest cycle", value: "profitDistribution" }
 ];
 const sortByFields: Array<{ label: string; value: keyof InvestmentPlan }> = [
   { label: "Name", value: "name" },
   { label: "Duration", value: "duration" },
   { label: "Min. deposit", value: "minimumDeposit" },
-  { label: "Max. deposit", value: "maximumDeposit" },
+  { label: "Max. deposit", value: "maximumDeposit" }
 ];
 const orders: Array<"asc" | "desc"> = ["asc", "desc"];
 
@@ -42,7 +42,7 @@ const formattedInvestmentPlans = computed(() => {
   const grouped = groupBy(data.value, selectedGroupByField.value);
   const sortedGroups = Object.entries(grouped).map(([groupName, plans]) => ({
     group: groupName,
-    items: sortBy(plans, selectedSortByField.value, selectedOrder.value),
+    items: sortBy(plans, selectedSortByField.value, selectedOrder.value)
   }));
   return sortedGroups;
 });
@@ -53,17 +53,17 @@ const {
   pending: loadingAccounts,
   data: accounts,
   error: accountsError,
-  execute: getAccounts,
+  execute: getAccounts
 } = useFetch("/api/user/financial-accounts", {
   key: "user-financial-accounts-non-immediate",
-  immediate: false,
+  immediate: false
 });
 
 const financialAccounts = computed(() =>
   accounts.value?.financialAccounts?.map((account) => ({
     label: account.name,
-    value: account.id,
-  })),
+    value: account.id
+  }))
 );
 
 const open = ref<boolean>(false);
@@ -87,8 +87,8 @@ const schema = computed(() => {
       .number({ message: "Amount is required" })
       .min(min, { message: `Amount must be at least ${toDollar(min)}` })
       .max(max, {
-        message: `Amount must be not be more than ${toDollar(max)}`,
-      }),
+        message: `Amount must be not be more than ${toDollar(max)}`
+      })
   });
 });
 
@@ -96,7 +96,7 @@ type Schema = z.infer<(typeof schema)["value"]>;
 
 const state = reactive<Schema>({
   accountId: "",
-  amount: 0.0,
+  amount: 0.0
 });
 
 const reset = () => {
@@ -106,8 +106,8 @@ const reset = () => {
 
 const selectedAccount = computed(() =>
   accounts.value?.financialAccounts?.find(
-    (account) => state.accountId === account.id,
-  ),
+    (account) => state.accountId === account.id
+  )
 );
 
 const handleModalClose = () => {
@@ -150,7 +150,7 @@ const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
     terminatedAt: null,
     terminatedReason: null,
     createdAt: new Date(),
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 
   try {
@@ -158,16 +158,16 @@ const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
       `/api/user/financial-accounts/${accountId}/investments`,
       {
         method: "post",
-        body,
-      },
+        body
+      }
     );
     toast.add({
       color: "success",
       title: "Success",
-      description: message,
+      description: message
     });
     await navigateTo(
-      `/user/accounts/${investment.financialAccountId}/investments/${investment.id}`,
+      `/user/accounts/${investment.financialAccountId}/investments/${investment.id}`
     );
   } catch (error) {
     investmentError.value = normalizeException(error);
@@ -176,7 +176,7 @@ const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
 </script>
 
 <template>
-  <MyPage :error @refresh="refresh()">
+  <MyPage :error @refresh="() => refresh()">
     <div v-if="data">
       <header class="flex items-center justify-end flex-wrap gap-x-4 gap-y-2">
         <div class="space-y-1">
@@ -383,7 +383,7 @@ const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
                     style: 'currency',
                     currency: 'USD',
                     minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
+                    maximumFractionDigits: 2
                   }"
                   class="w-full"
                 />

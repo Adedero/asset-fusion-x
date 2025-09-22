@@ -1,5 +1,7 @@
 import { createAuthClient } from "better-auth/vue";
-import { adminClient } from "better-auth/client/plugins";
+import { adminClient, inferAdditionalFields } from "better-auth/client/plugins";
+import type { auth } from "~~/server/lib/auth";
+
 
 export const authClient = createAuthClient({
   fetchOptions: {
@@ -16,7 +18,7 @@ export const authClient = createAuthClient({
       }
     },
   },
-  plugins: [adminClient()],
+  plugins: [adminClient(), inferAdditionalFields<typeof auth>()],
 });
 
 export type BetterAuthSession = typeof authClient.$Infer.Session.session;

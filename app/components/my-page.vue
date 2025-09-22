@@ -21,7 +21,7 @@ const formattedError = computed(() => normalizeException(error));
         <FetchErrorAlert
           class="max-w-[28rem]"
           show-retry
-          :title="formattedError.name"
+          :title="formattedError.name || 'Error'"
           :message="formattedError.message"
           @retry="() => emit('refresh')"
         />

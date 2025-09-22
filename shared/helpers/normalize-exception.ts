@@ -1,45 +1,37 @@
-export default function normalizeException(exception: unknown): Error {
-  let normalizedException: Error;
+import { FetchError } from "ofetch";
 
-  if (exception instanceof Error) {
-    normalizedException = exception;
+export default function normalizeException(exception: unknown): Error {
+  let message: string = "";
+
+  if (exception instanceof FetchError) {
+    if (exception.data) {
+      if (exception.data.statusMessage) {
+        message = exception.data.statusMessage as string;
+      } else if (exception.data.message) {
+        message = exception.data.message as string;
+      }
+    } else if (exception.statusMessage) {
+      message = exception.statusMessage;
+    } else if (exception.message) {
+      message = exception.message;
+    } else if (exception.statusText) {
+      message = exception.statusText;
+    }
+  } else if (exception instanceof Error) {
+    message = exception.message;
+  } else if (typeof exception === "string") {
+    message = exception;
   } else if (
     typeof exception === "object" &&
     exception !== null &&
-    !Array.isArray(exception)
+    !Array.isArray(exception) &&
+    "message" in exception &&
+    typeof exception.message === "string"
   ) {
-    if ("data" in exception) {
-      normalizedException = new Error((exception.data as Record<string, string>).statusMessage);
-    } else if ("message" in exception && typeof exception.message === "string") {
-      normalizedException = new Error(exception.message);
-    } else if (
-      "statusMessage" in exception &&
-      typeof exception.statusMessage === "string"
-    ) {
-      normalizedException = new Error(exception.statusMessage);
-    } else if (
-      "statusText" in exception &&
-      typeof exception.statusText === "string"
-    ) {
-      normalizedException = new Error(exception.statusText);
-    } else {
-      try {
-        normalizedException = new Error(JSON.stringify(exception));
-      } catch {
-        normalizedException = new Error(
-          `Unserializable error object of type: ${Object.prototype.toString.call(
-            exception,
-          )}`,
-        );
-      }
-    }
-
-    if ("stack" in exception && typeof exception.stack === "string") {
-      normalizedException.stack = exception.stack;
-    }
+    message = exception.message;
   } else {
-    normalizedException = new Error(String(exception));
+    message = String(exception);
   }
 
-  return normalizedException;
+  return new Error(message);
 }

@@ -7,8 +7,8 @@ const accountId = useRouteData().getParams("accountId");
 const { pending, data, error, refresh } = await useFetch(
   `/api/user/financial-accounts/${accountId}/account-users`,
   {
-    key: "account-current-users",
-  },
+    key: "account-current-users"
+  }
 );
 
 const items = computed(() => {
@@ -19,7 +19,7 @@ const items = computed(() => {
         name: item.user?.name,
         email: item.user?.email,
         role: item.role,
-        ownership: item.ownership,
+        ownership: item.ownership
       };
     }) ?? []
   );
@@ -37,26 +37,26 @@ const columns: TableColumn<AccountUser>[] = [
       const name = row.getValue("name");
       const image = row.getValue("image");
       return h(Avatar, { size: "lg", alt: name, src: image });
-    },
+    }
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: "Name"
   },
   {
     accessorKey: "email",
-    header: "Email",
+    header: "Email"
   },
   {
     accessorKey: "role",
     header: "Role",
-    cell: ({ row }) => toCase(row.getValue("role"), "sentence"),
+    cell: ({ row }) => toCase(row.getValue("role"), "sentence")
   },
   {
     accessorKey: "ownership",
     header: "Ownership",
-    cell: ({ row }) => `${row.getValue("ownership")}%`,
-  },
+    cell: ({ row }) => `${row.getValue("ownership")}%`
+  }
 ];
 type SelectedUser = NonNullable<typeof data.value>[number];
 
@@ -77,7 +77,7 @@ const removeUser = async (accountUserId: string, close: () => void) => {
   try {
     await $fetch(
       `/api/user/financial-accounts/${accountId}/account-user/${accountUserId}`,
-      { method: "delete" },
+      { method: "delete" }
     );
     await refresh();
     close();
@@ -88,7 +88,7 @@ const removeUser = async (accountUserId: string, close: () => void) => {
 </script>
 
 <template>
-  <MyPage :error @refresh="refresh()">
+  <MyPage :error @refresh="() => refresh()">
     <NuxtTable
       :data="items"
       :columns

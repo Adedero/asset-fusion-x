@@ -6,18 +6,18 @@ const runtimeConfig = useRuntimeConfig();
 
 const [accountId, transactionId] = useRouteData().getParams([
   "accountId",
-  "transactionId",
+  "transactionId"
 ]);
 
 const {
   data: transaction,
   error,
-  refresh,
+  refresh
 } = await useFetch(
   `/api/user/financial-accounts/${accountId}/transactions/${transactionId}`,
   {
-    key: () => `transaction-${transactionId}`,
-  },
+    key: () => `transaction-${transactionId}`
+  }
 );
 
 const receipt = useTemplateRef("receipt");
@@ -49,7 +49,7 @@ async function download(type: "pdf" | "img" = "img") {
 </script>
 
 <template>
-  <MyPage :error @refresh="refresh()">
+  <MyPage :error @refresh="() => refresh()">
     <div v-if="transaction">
       <div class="flex flex-col items-center px-0 py-4 md:p-4 gap-4">
         <div

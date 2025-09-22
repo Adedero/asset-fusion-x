@@ -1,5 +1,6 @@
 import { d as defineEventHandler, p as prisma, c as createError, u as checkUserKycApproval, r as readValidatedBody, v as checkBusinessProfileApproval, w as getJointAccountModApprovals } from '../../../../nitro/nitro.mjs';
 import z from 'zod';
+import { r as round } from '../../../../_/round.mjs';
 import 'node:path';
 import 'fs/promises';
 import 'axios';
@@ -13,19 +14,13 @@ import 'node:crypto';
 import 'node:url';
 import 'better-auth';
 import 'better-auth/adapters/prisma';
-import 'node:process';
-import '@prisma/client/runtime/library';
+import '@prisma/client/runtime/client';
+import '@prisma/adapter-pg';
 import 'better-auth/plugins';
 import 'nodemailer';
 import '@iconify/utils';
 import 'consola';
 import 'ipx';
-
-function round(value, decimals = 0) {
-  if (!Number.isFinite(value)) return NaN;
-  const factor = 10 ** decimals;
-  return Math.round((value + Number.EPSILON) * factor) / factor;
-}
 
 const DUPLICATE_TRANSACTION_CHECK_TIME = 3 * 60 * 1e3;
 const withdrawal_post = defineEventHandler(async (event) => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({
+/* useHead({
   script: [
     {
       type: 'text/javascript',
@@ -18,13 +18,14 @@ useHead({
       tagPosition: "bodyOpen"
     }
   ]
-})
+}) */
 </script>
 
 <template>
   <div>
     <NuxtRouteAnnouncer />
     <NuxtApp>
+      <NuxtConfirmDialog />
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>

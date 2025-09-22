@@ -1,4 +1,4 @@
-import { d as defineEventHandler, p as prisma, c as createError, h as getValidatedQuery, q as getUpdatedCurrencyData } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, p as prisma, c as createError, a as getValidatedQuery, q as getUpdatedCurrencyData } from '../../../../nitro/nitro.mjs';
 import { T as TransactionInitSchema } from '../../../../_/schemas.mjs';
 import 'node:path';
 import 'fs/promises';
@@ -13,8 +13,8 @@ import 'node:crypto';
 import 'node:url';
 import 'better-auth';
 import 'better-auth/adapters/prisma';
-import 'node:process';
-import '@prisma/client/runtime/library';
+import '@prisma/client/runtime/client';
+import '@prisma/adapter-pg';
 import 'better-auth/plugins';
 import 'nodemailer';
 import '@iconify/utils';

@@ -2,7 +2,7 @@ import { useSlots, computed, unref, mergeProps, withCtx, renderSlot, createVNode
 import { ssrRenderComponent, ssrRenderSlot, ssrRenderList } from 'vue/server-renderer';
 import { useForwardPropsEmits, PaginationRoot, PaginationList, PaginationFirst, PaginationPrev, PaginationListItem, PaginationEllipsis, PaginationNext, PaginationLast } from 'reka-ui';
 import { reactivePick } from '@vueuse/core';
-import { f as useLocale, g as useAppConfig, t as tv, c as _sfc_main$7 } from './server.mjs';
+import { f as useLocale, g as useAppConfig, t as tv, c as _sfc_main$9 } from './server.mjs';
 
 const theme = {
   "slots": {
@@ -76,7 +76,7 @@ const _sfc_main = {
                       default: withCtx((_, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
                           ssrRenderSlot(_ctx.$slots, "first", {}, () => {
-                            _push4(ssrRenderComponent(_sfc_main$7, {
+                            _push4(ssrRenderComponent(_sfc_main$9, {
                               color: __props.color,
                               variant: __props.variant,
                               size: __props.size,
@@ -87,7 +87,7 @@ const _sfc_main = {
                         } else {
                           return [
                             renderSlot(_ctx.$slots, "first", {}, () => [
-                              createVNode(_sfc_main$7, {
+                              createVNode(_sfc_main$9, {
                                 color: __props.color,
                                 variant: __props.variant,
                                 size: __props.size,
@@ -111,7 +111,7 @@ const _sfc_main = {
                       default: withCtx((_, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
                           ssrRenderSlot(_ctx.$slots, "prev", {}, () => {
-                            _push4(ssrRenderComponent(_sfc_main$7, {
+                            _push4(ssrRenderComponent(_sfc_main$9, {
                               color: __props.color,
                               variant: __props.variant,
                               size: __props.size,
@@ -122,7 +122,7 @@ const _sfc_main = {
                         } else {
                           return [
                             renderSlot(_ctx.$slots, "prev", {}, () => [
-                              createVNode(_sfc_main$7, {
+                              createVNode(_sfc_main$9, {
                                 color: __props.color,
                                 variant: __props.variant,
                                 size: __props.size,
@@ -151,7 +151,7 @@ const _sfc_main = {
                         default: withCtx((_, _push4, _parent4, _scopeId3) => {
                           if (_push4) {
                             ssrRenderSlot(_ctx.$slots, "item", mergeProps({ ref_for: true }, { item, index, page, pageCount }), () => {
-                              _push4(ssrRenderComponent(_sfc_main$7, {
+                              _push4(ssrRenderComponent(_sfc_main$9, {
                                 color: page === item.value ? __props.activeColor : __props.color,
                                 variant: page === item.value ? __props.activeVariant : __props.variant,
                                 size: __props.size,
@@ -164,7 +164,7 @@ const _sfc_main = {
                           } else {
                             return [
                               renderSlot(_ctx.$slots, "item", mergeProps({ ref_for: true }, { item, index, page, pageCount }), () => [
-                                createVNode(_sfc_main$7, {
+                                createVNode(_sfc_main$9, {
                                   color: page === item.value ? __props.activeColor : __props.color,
                                   variant: page === item.value ? __props.activeVariant : __props.variant,
                                   size: __props.size,
@@ -189,7 +189,7 @@ const _sfc_main = {
                         default: withCtx((_, _push4, _parent4, _scopeId3) => {
                           if (_push4) {
                             ssrRenderSlot(_ctx.$slots, "ellipsis", {}, () => {
-                              _push4(ssrRenderComponent(_sfc_main$7, {
+                              _push4(ssrRenderComponent(_sfc_main$9, {
                                 color: __props.color,
                                 variant: __props.variant,
                                 size: __props.size,
@@ -199,7 +199,7 @@ const _sfc_main = {
                           } else {
                             return [
                               renderSlot(_ctx.$slots, "ellipsis", {}, () => [
-                                createVNode(_sfc_main$7, {
+                                createVNode(_sfc_main$9, {
                                   color: __props.color,
                                   variant: __props.variant,
                                   size: __props.size,
@@ -223,7 +223,7 @@ const _sfc_main = {
                       default: withCtx((_, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
                           ssrRenderSlot(_ctx.$slots, "next", {}, () => {
-                            _push4(ssrRenderComponent(_sfc_main$7, {
+                            _push4(ssrRenderComponent(_sfc_main$9, {
                               color: __props.color,
                               variant: __props.variant,
                               size: __props.size,
@@ -234,7 +234,7 @@ const _sfc_main = {
                         } else {
                           return [
                             renderSlot(_ctx.$slots, "next", {}, () => [
-                              createVNode(_sfc_main$7, {
+                              createVNode(_sfc_main$9, {
                                 color: __props.color,
                                 variant: __props.variant,
                                 size: __props.size,
@@ -258,7 +258,7 @@ const _sfc_main = {
                       default: withCtx((_, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
                           ssrRenderSlot(_ctx.$slots, "last", {}, () => {
-                            _push4(ssrRenderComponent(_sfc_main$7, {
+                            _push4(ssrRenderComponent(_sfc_main$9, {
                               color: __props.color,
                               variant: __props.variant,
                               size: __props.size,
@@ -269,7 +269,7 @@ const _sfc_main = {
                         } else {
                           return [
                             renderSlot(_ctx.$slots, "last", {}, () => [
-                              createVNode(_sfc_main$7, {
+                              createVNode(_sfc_main$9, {
                                 color: __props.color,
                                 variant: __props.variant,
                                 size: __props.size,
@@ -294,7 +294,7 @@ const _sfc_main = {
                     }, {
                       default: withCtx(() => [
                         renderSlot(_ctx.$slots, "first", {}, () => [
-                          createVNode(_sfc_main$7, {
+                          createVNode(_sfc_main$9, {
                             color: __props.color,
                             variant: __props.variant,
                             size: __props.size,
@@ -312,7 +312,7 @@ const _sfc_main = {
                     }, {
                       default: withCtx(() => [
                         renderSlot(_ctx.$slots, "prev", {}, () => [
-                          createVNode(_sfc_main$7, {
+                          createVNode(_sfc_main$9, {
                             color: __props.color,
                             variant: __props.variant,
                             size: __props.size,
@@ -333,7 +333,7 @@ const _sfc_main = {
                         }, {
                           default: withCtx(() => [
                             renderSlot(_ctx.$slots, "item", mergeProps({ ref_for: true }, { item, index, page, pageCount }), () => [
-                              createVNode(_sfc_main$7, {
+                              createVNode(_sfc_main$9, {
                                 color: page === item.value ? __props.activeColor : __props.color,
                                 variant: page === item.value ? __props.activeVariant : __props.variant,
                                 size: __props.size,
@@ -353,7 +353,7 @@ const _sfc_main = {
                         }, {
                           default: withCtx(() => [
                             renderSlot(_ctx.$slots, "ellipsis", {}, () => [
-                              createVNode(_sfc_main$7, {
+                              createVNode(_sfc_main$9, {
                                 color: __props.color,
                                 variant: __props.variant,
                                 size: __props.size,
@@ -372,7 +372,7 @@ const _sfc_main = {
                     }, {
                       default: withCtx(() => [
                         renderSlot(_ctx.$slots, "next", {}, () => [
-                          createVNode(_sfc_main$7, {
+                          createVNode(_sfc_main$9, {
                             color: __props.color,
                             variant: __props.variant,
                             size: __props.size,
@@ -390,7 +390,7 @@ const _sfc_main = {
                     }, {
                       default: withCtx(() => [
                         renderSlot(_ctx.$slots, "last", {}, () => [
-                          createVNode(_sfc_main$7, {
+                          createVNode(_sfc_main$9, {
                             color: __props.color,
                             variant: __props.variant,
                             size: __props.size,
@@ -419,7 +419,7 @@ const _sfc_main = {
                   }, {
                     default: withCtx(() => [
                       renderSlot(_ctx.$slots, "first", {}, () => [
-                        createVNode(_sfc_main$7, {
+                        createVNode(_sfc_main$9, {
                           color: __props.color,
                           variant: __props.variant,
                           size: __props.size,
@@ -437,7 +437,7 @@ const _sfc_main = {
                   }, {
                     default: withCtx(() => [
                       renderSlot(_ctx.$slots, "prev", {}, () => [
-                        createVNode(_sfc_main$7, {
+                        createVNode(_sfc_main$9, {
                           color: __props.color,
                           variant: __props.variant,
                           size: __props.size,
@@ -458,7 +458,7 @@ const _sfc_main = {
                       }, {
                         default: withCtx(() => [
                           renderSlot(_ctx.$slots, "item", mergeProps({ ref_for: true }, { item, index, page, pageCount }), () => [
-                            createVNode(_sfc_main$7, {
+                            createVNode(_sfc_main$9, {
                               color: page === item.value ? __props.activeColor : __props.color,
                               variant: page === item.value ? __props.activeVariant : __props.variant,
                               size: __props.size,
@@ -478,7 +478,7 @@ const _sfc_main = {
                       }, {
                         default: withCtx(() => [
                           renderSlot(_ctx.$slots, "ellipsis", {}, () => [
-                            createVNode(_sfc_main$7, {
+                            createVNode(_sfc_main$9, {
                               color: __props.color,
                               variant: __props.variant,
                               size: __props.size,
@@ -497,7 +497,7 @@ const _sfc_main = {
                   }, {
                     default: withCtx(() => [
                       renderSlot(_ctx.$slots, "next", {}, () => [
-                        createVNode(_sfc_main$7, {
+                        createVNode(_sfc_main$9, {
                           color: __props.color,
                           variant: __props.variant,
                           size: __props.size,
@@ -515,7 +515,7 @@ const _sfc_main = {
                   }, {
                     default: withCtx(() => [
                       renderSlot(_ctx.$slots, "last", {}, () => [
-                        createVNode(_sfc_main$7, {
+                        createVNode(_sfc_main$9, {
                           color: __props.color,
                           variant: __props.variant,
                           size: __props.size,

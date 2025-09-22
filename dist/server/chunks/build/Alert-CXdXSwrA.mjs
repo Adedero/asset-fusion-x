@@ -1,7 +1,7 @@
 import { useSlots, computed, unref, mergeProps, withCtx, renderSlot, createVNode, createBlock, createCommentVNode, openBlock, createTextVNode, toDisplayString, Fragment, renderList, useSSRContext } from 'vue';
 import { ssrRenderComponent, ssrRenderSlot, ssrRenderClass, ssrInterpolate, ssrRenderList } from 'vue/server-renderer';
 import { Primitive } from 'reka-ui';
-import { f as useLocale, g as useAppConfig, t as tv, j as _sfc_main$a, e as _sfc_main$d, c as _sfc_main$7 } from './server.mjs';
+import { f as useLocale, g as useAppConfig, t as tv, j as _sfc_main$c, e as _sfc_main$f, c as _sfc_main$9 } from './server.mjs';
 
 const theme = {
   "slots": {
@@ -291,13 +291,13 @@ const _sfc_main = {
           if (_push2) {
             ssrRenderSlot(_ctx.$slots, "leading", {}, () => {
               if (__props.avatar) {
-                _push2(ssrRenderComponent(_sfc_main$a, mergeProps({
+                _push2(ssrRenderComponent(_sfc_main$c, mergeProps({
                   size: props.ui?.avatarSize || ui.value.avatarSize()
                 }, __props.avatar, {
                   class: ui.value.avatar({ class: props.ui?.avatar })
                 }), null, _parent2, _scopeId));
               } else if (__props.icon) {
-                _push2(ssrRenderComponent(_sfc_main$d, {
+                _push2(ssrRenderComponent(_sfc_main$f, {
                   name: __props.icon,
                   class: ui.value.icon({ class: props.ui?.icon })
                 }, null, _parent2, _scopeId));
@@ -329,7 +329,7 @@ const _sfc_main = {
               ssrRenderSlot(_ctx.$slots, "actions", {}, () => {
                 _push2(`<!--[-->`);
                 ssrRenderList(__props.actions, (action, index) => {
-                  _push2(ssrRenderComponent(_sfc_main$7, mergeProps({
+                  _push2(ssrRenderComponent(_sfc_main$9, mergeProps({
                     key: index,
                     size: "xs"
                   }, { ref_for: true }, action), null, _parent2, _scopeId));
@@ -347,7 +347,7 @@ const _sfc_main = {
                 ssrRenderSlot(_ctx.$slots, "actions", {}, () => {
                   _push2(`<!--[-->`);
                   ssrRenderList(__props.actions, (action, index) => {
-                    _push2(ssrRenderComponent(_sfc_main$7, mergeProps({
+                    _push2(ssrRenderComponent(_sfc_main$9, mergeProps({
                       key: index,
                       size: "xs"
                     }, { ref_for: true }, action), null, _parent2, _scopeId));
@@ -359,7 +359,7 @@ const _sfc_main = {
               }
               ssrRenderSlot(_ctx.$slots, "close", { ui: ui.value }, () => {
                 if (__props.close) {
-                  _push2(ssrRenderComponent(_sfc_main$7, mergeProps({
+                  _push2(ssrRenderComponent(_sfc_main$9, mergeProps({
                     icon: __props.closeIcon || unref(appConfig).ui.icons.close,
                     color: "neutral",
                     variant: "link",
@@ -379,12 +379,12 @@ const _sfc_main = {
           } else {
             return [
               renderSlot(_ctx.$slots, "leading", {}, () => [
-                __props.avatar ? (openBlock(), createBlock(_sfc_main$a, mergeProps({
+                __props.avatar ? (openBlock(), createBlock(_sfc_main$c, mergeProps({
                   key: 0,
                   size: props.ui?.avatarSize || ui.value.avatarSize()
                 }, __props.avatar, {
                   class: ui.value.avatar({ class: props.ui?.avatar })
-                }), null, 16, ["size", "class"])) : __props.icon ? (openBlock(), createBlock(_sfc_main$d, {
+                }), null, 16, ["size", "class"])) : __props.icon ? (openBlock(), createBlock(_sfc_main$f, {
                   key: 1,
                   name: __props.icon,
                   class: ui.value.icon({ class: props.ui?.icon })
@@ -415,7 +415,7 @@ const _sfc_main = {
                 }, [
                   renderSlot(_ctx.$slots, "actions", {}, () => [
                     (openBlock(true), createBlock(Fragment, null, renderList(__props.actions, (action, index) => {
-                      return openBlock(), createBlock(_sfc_main$7, mergeProps({
+                      return openBlock(), createBlock(_sfc_main$9, mergeProps({
                         key: index,
                         size: "xs"
                       }, { ref_for: true }, action), null, 16);
@@ -429,14 +429,14 @@ const _sfc_main = {
               }, [
                 __props.orientation === "horizontal" && (__props.actions?.length || !!slots.actions) ? renderSlot(_ctx.$slots, "actions", { key: 0 }, () => [
                   (openBlock(true), createBlock(Fragment, null, renderList(__props.actions, (action, index) => {
-                    return openBlock(), createBlock(_sfc_main$7, mergeProps({
+                    return openBlock(), createBlock(_sfc_main$9, mergeProps({
                       key: index,
                       size: "xs"
                     }, { ref_for: true }, action), null, 16);
                   }), 128))
                 ]) : createCommentVNode("", true),
                 renderSlot(_ctx.$slots, "close", { ui: ui.value }, () => [
-                  __props.close ? (openBlock(), createBlock(_sfc_main$7, mergeProps({
+                  __props.close ? (openBlock(), createBlock(_sfc_main$9, mergeProps({
                     key: 0,
                     icon: __props.closeIcon || unref(appConfig).ui.icons.close,
                     color: "neutral",
