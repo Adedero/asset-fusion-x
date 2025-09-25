@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import winston from "winston";
-import "winston-daily-rotate-file";
+import * as wdlrf from "winston-daily-rotate-file";
 
 class Logger {
   private static instance: Logger;

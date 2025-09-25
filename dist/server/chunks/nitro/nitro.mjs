@@ -13,6 +13,7 @@ import { CronJob } from 'cron';
 import { Decimal } from 'decimal.js';
 import fs from 'fs';
 import winston from 'winston';
+import * as wdrf from 'winston-daily-rotate-file'
 import { fileURLToPath } from 'node:url';
 import * as runtime from '@prisma/client/runtime/client';
 import { PrismaPg } from '@prisma/adapter-pg';
