@@ -36,7 +36,7 @@ export const JointAccountModRequestApprovalScalarFieldEnumSchema = z.enum(['id',
 
 export const InvestmentPlanScalarFieldEnumSchema = z.enum(['id','name','category','minimumDeposit','maximumDeposit','duration','profitDistribution','percentageTotalReturn','percentagePeriodicReturn','terminationFee','createdAt','updatedAt']);
 
-export const InvestmentScalarFieldEnumSchema = z.enum(['id','financialAccountId','investorId','deposit','investmentName','totalProfit','profitCount','status','pausedAt','pausedReason','closedAt','closedReason','terminatedAt','terminatedReason','category','daysCompleted','duration','totalReturn','periodicReturn','profitDistribution','terminationFee','createdAt','updatedAt']);
+export const InvestmentScalarFieldEnumSchema = z.enum(['id','financialAccountId','investorId','deposit','investmentName','totalProfit','profitCount','status','pausedAt','pausedReason','closedAt','closedReason','terminatedAt','terminatedReason','category','daysCompleted','duration','totalReturn','periodicReturn','profitDistribution','terminationFee','lastProfitDistributedAt','createdAt','updatedAt']);
 
 export const TransactionScalarFieldEnumSchema = z.enum(['id','amount','currency','USDAmount','rate','charges','financialAccountId','type','initiatorAccountId','recipientAccountId','investmentId','status','parentTransactionId','approvedAt','failedAt','failReason','depositWalletAddress','depositWalletAddressNetwork','withdrawalWalletAddress','withdrawalWalletAddressNetwork','bank','bankAccount','description','createdAt','updatedAt']);
 
@@ -382,6 +382,7 @@ export const InvestmentSchema = z.object({
   totalReturn: z.number(),
   periodicReturn: z.number(),
   terminationFee: z.number(),
+  lastProfitDistributedAt: z.coerce.date().nullable(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 })
@@ -929,6 +930,7 @@ export const InvestmentSelectSchema: z.ZodType<Prisma.InvestmentSelect> = z.obje
   periodicReturn: z.boolean().optional(),
   profitDistribution: z.boolean().optional(),
   terminationFee: z.boolean().optional(),
+  lastProfitDistributedAt: z.boolean().optional(),
   createdAt: z.boolean().optional(),
   updatedAt: z.boolean().optional(),
   investor: z.union([z.boolean(),z.lazy(() => AccountUserArgsSchema)]).optional(),
@@ -2165,11 +2167,21 @@ export const InvestmentPlanOrderByWithRelationInputSchema: z.ZodType<Prisma.Inve
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const InvestmentPlanWhereUniqueInputSchema: z.ZodType<Prisma.InvestmentPlanWhereUniqueInput> = z.object({
-  id: z.string().uuid()
-})
+export const InvestmentPlanWhereUniqueInputSchema: z.ZodType<Prisma.InvestmentPlanWhereUniqueInput> = z.union([
+  z.object({
+    id: z.string().uuid(),
+    category_name: z.lazy(() => InvestmentPlanCategoryNameCompoundUniqueInputSchema)
+  }),
+  z.object({
+    id: z.string().uuid(),
+  }),
+  z.object({
+    category_name: z.lazy(() => InvestmentPlanCategoryNameCompoundUniqueInputSchema),
+  }),
+])
 .and(z.object({
   id: z.string().uuid().optional(),
+  category_name: z.lazy(() => InvestmentPlanCategoryNameCompoundUniqueInputSchema).optional(),
   AND: z.union([ z.lazy(() => InvestmentPlanWhereInputSchema),z.lazy(() => InvestmentPlanWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => InvestmentPlanWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => InvestmentPlanWhereInputSchema),z.lazy(() => InvestmentPlanWhereInputSchema).array() ]).optional(),
@@ -2249,6 +2261,7 @@ export const InvestmentWhereInputSchema: z.ZodType<Prisma.InvestmentWhereInput> 
   periodicReturn: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
   profitDistribution: z.union([ z.lazy(() => EnumProfitDistributionFilterSchema),z.lazy(() => ProfitDistributionSchema) ]).optional(),
   terminationFee: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
+  lastProfitDistributedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   investor: z.union([ z.lazy(() => AccountUserScalarRelationFilterSchema),z.lazy(() => AccountUserWhereInputSchema) ]).optional(),
@@ -2278,6 +2291,7 @@ export const InvestmentOrderByWithRelationInputSchema: z.ZodType<Prisma.Investme
   periodicReturn: z.lazy(() => SortOrderSchema).optional(),
   profitDistribution: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
+  lastProfitDistributedAt: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   investor: z.lazy(() => AccountUserOrderByWithRelationInputSchema).optional(),
@@ -2313,6 +2327,7 @@ export const InvestmentWhereUniqueInputSchema: z.ZodType<Prisma.InvestmentWhereU
   periodicReturn: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
   profitDistribution: z.union([ z.lazy(() => EnumProfitDistributionFilterSchema),z.lazy(() => ProfitDistributionSchema) ]).optional(),
   terminationFee: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
+  lastProfitDistributedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   investor: z.union([ z.lazy(() => AccountUserScalarRelationFilterSchema),z.lazy(() => AccountUserWhereInputSchema) ]).optional(),
@@ -2342,6 +2357,7 @@ export const InvestmentOrderByWithAggregationInputSchema: z.ZodType<Prisma.Inves
   periodicReturn: z.lazy(() => SortOrderSchema).optional(),
   profitDistribution: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
+  lastProfitDistributedAt: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => InvestmentCountOrderByAggregateInputSchema).optional(),
@@ -2376,6 +2392,7 @@ export const InvestmentScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.In
   periodicReturn: z.union([ z.lazy(() => FloatWithAggregatesFilterSchema),z.number() ]).optional(),
   profitDistribution: z.union([ z.lazy(() => EnumProfitDistributionWithAggregatesFilterSchema),z.lazy(() => ProfitDistributionSchema) ]).optional(),
   terminationFee: z.union([ z.lazy(() => FloatWithAggregatesFilterSchema),z.number() ]).optional(),
+  lastProfitDistributedAt: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
 }).strict();
@@ -4022,6 +4039,7 @@ export const InvestmentCreateInputSchema: z.ZodType<Prisma.InvestmentCreateInput
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
@@ -4051,6 +4069,7 @@ export const InvestmentUncheckedCreateInputSchema: z.ZodType<Prisma.InvestmentUn
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
@@ -4076,6 +4095,7 @@ export const InvestmentUpdateInputSchema: z.ZodType<Prisma.InvestmentUpdateInput
   periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
   terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
@@ -4105,6 +4125,7 @@ export const InvestmentUncheckedUpdateInputSchema: z.ZodType<Prisma.InvestmentUn
   periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
   terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
@@ -4132,6 +4153,7 @@ export const InvestmentCreateManyInputSchema: z.ZodType<Prisma.InvestmentCreateM
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
@@ -4156,6 +4178,7 @@ export const InvestmentUpdateManyMutationInputSchema: z.ZodType<Prisma.Investmen
   periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
   terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -4182,6 +4205,7 @@ export const InvestmentUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Investme
   periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
   terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -5634,6 +5658,11 @@ export const EnumProfitDistributionFilterSchema: z.ZodType<Prisma.EnumProfitDist
   not: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => NestedEnumProfitDistributionFilterSchema) ]).optional(),
 }).strict();
 
+export const InvestmentPlanCategoryNameCompoundUniqueInputSchema: z.ZodType<Prisma.InvestmentPlanCategoryNameCompoundUniqueInput> = z.object({
+  category: z.lazy(() => InvestmentPlanCategorySchema),
+  name: z.string()
+}).strict();
+
 export const InvestmentPlanCountOrderByAggregateInputSchema: z.ZodType<Prisma.InvestmentPlanCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
@@ -5751,6 +5780,7 @@ export const InvestmentCountOrderByAggregateInputSchema: z.ZodType<Prisma.Invest
   periodicReturn: z.lazy(() => SortOrderSchema).optional(),
   profitDistribution: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
+  lastProfitDistributedAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -5788,6 +5818,7 @@ export const InvestmentMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Investme
   periodicReturn: z.lazy(() => SortOrderSchema).optional(),
   profitDistribution: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
+  lastProfitDistributedAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -5814,6 +5845,7 @@ export const InvestmentMinOrderByAggregateInputSchema: z.ZodType<Prisma.Investme
   periodicReturn: z.lazy(() => SortOrderSchema).optional(),
   profitDistribution: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
+  lastProfitDistributedAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -9560,6 +9592,7 @@ export const InvestmentCreateWithoutFinancialAccountInputSchema: z.ZodType<Prism
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
@@ -9587,6 +9620,7 @@ export const InvestmentUncheckedCreateWithoutFinancialAccountInputSchema: z.ZodT
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
@@ -9866,6 +9900,7 @@ export const InvestmentScalarWhereInputSchema: z.ZodType<Prisma.InvestmentScalar
   periodicReturn: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
   profitDistribution: z.union([ z.lazy(() => EnumProfitDistributionFilterSchema),z.lazy(() => ProfitDistributionSchema) ]).optional(),
   terminationFee: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
+  lastProfitDistributedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
 }).strict();
@@ -10066,6 +10101,7 @@ export const InvestmentCreateWithoutInvestorInputSchema: z.ZodType<Prisma.Invest
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutInvestmentInputSchema).optional(),
@@ -10093,6 +10129,7 @@ export const InvestmentUncheckedCreateWithoutInvestorInputSchema: z.ZodType<Pris
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
@@ -11597,6 +11634,7 @@ export const InvestmentCreateWithoutTransactionsInputSchema: z.ZodType<Prisma.In
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
@@ -11625,6 +11663,7 @@ export const InvestmentUncheckedCreateWithoutTransactionsInputSchema: z.ZodType<
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
@@ -11989,6 +12028,7 @@ export const InvestmentUpdateWithoutTransactionsInputSchema: z.ZodType<Prisma.In
   periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
   terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
@@ -12017,6 +12057,7 @@ export const InvestmentUncheckedUpdateWithoutTransactionsInputSchema: z.ZodType<
   periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
   terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -12959,6 +13000,7 @@ export const InvestmentCreateManyFinancialAccountInputSchema: z.ZodType<Prisma.I
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
@@ -13303,6 +13345,7 @@ export const InvestmentUpdateWithoutFinancialAccountInputSchema: z.ZodType<Prism
   periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
   terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
@@ -13330,6 +13373,7 @@ export const InvestmentUncheckedUpdateWithoutFinancialAccountInputSchema: z.ZodT
   periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
   terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
@@ -13356,6 +13400,7 @@ export const InvestmentUncheckedUpdateManyWithoutFinancialAccountInputSchema: z.
   periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
   terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -13408,6 +13453,7 @@ export const InvestmentCreateManyInvestorInputSchema: z.ZodType<Prisma.Investmen
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
@@ -13517,6 +13563,7 @@ export const InvestmentUpdateWithoutInvestorInputSchema: z.ZodType<Prisma.Invest
   periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
   terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   transactions: z.lazy(() => TransactionUpdateManyWithoutInvestmentNestedInputSchema).optional(),
@@ -13544,6 +13591,7 @@ export const InvestmentUncheckedUpdateWithoutInvestorInputSchema: z.ZodType<Pris
   periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
   terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
@@ -13570,6 +13618,7 @@ export const InvestmentUncheckedUpdateManyWithoutInvestorInputSchema: z.ZodType<
   periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
   terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();

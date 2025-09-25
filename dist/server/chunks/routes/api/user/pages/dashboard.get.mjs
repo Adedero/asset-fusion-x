@@ -9,13 +9,17 @@ import 'node:events';
 import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
+import 'cron';
+import 'decimal.js';
+import 'fs';
+import 'winston';
 import 'node:url';
-import 'better-auth';
-import 'better-auth/adapters/prisma';
 import '@prisma/client/runtime/client';
 import '@prisma/adapter-pg';
-import 'better-auth/plugins';
 import 'nodemailer';
+import 'better-auth';
+import 'better-auth/adapters/prisma';
+import 'better-auth/plugins';
 import '@iconify/utils';
 import 'consola';
 import 'ipx';
@@ -59,7 +63,7 @@ const dashboard_get = defineEventHandler(async (event) => {
     prisma.transaction.findMany({
       where: { financialAccountId: { in: accountIds } },
       orderBy: { createdAt: "desc" },
-      take: 10,
+      take: 15,
       select: {
         id: true,
         USDAmount: true,
@@ -74,7 +78,7 @@ const dashboard_get = defineEventHandler(async (event) => {
         OR: [{ userId: user.id }, { financialAccountId: { in: accountIds } }]
       },
       orderBy: { createdAt: "desc" },
-      take: 10
+      take: 5
     })
   ]);
   const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);

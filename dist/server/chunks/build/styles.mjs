@@ -6,7 +6,9 @@ const styles = {
   "../node_modules/nuxt/dist/app/components/error-500.vue?vue&type=style&index=0&scoped=d08fec65&lang.css": () => import('./error-500-styles.D_atcFgn.mjs').then(interopDefault),
   "components/nuxt/password.vue": () => import('./password-styles.CfmirJQH.mjs').then(interopDefault),
   "components/nuxt/password.vue?vue&type=style&index=0&lang.css": () => import('./password-styles.BwJ6_GpL.mjs').then(interopDefault),
-  "../node_modules/nuxt-marquee/dist/runtime/components/NuxtMarquee.vue": () => import('./NuxtMarquee-styles.Be_QXtmv.mjs').then(interopDefault)
+  "../node_modules/nuxt-marquee/dist/runtime/components/NuxtMarquee.vue": () => import('./NuxtMarquee-styles.Be_QXtmv.mjs').then(interopDefault),
+  "components/v-table/v-table-loader.vue": () => import('./v-table-loader-styles.DM9NQ-XX.mjs').then(interopDefault),
+  "components/v-table/v-table-loader.vue?vue&type=style&index=0&scoped=f640a5ef&lang.css": () => import('./v-table-loader-styles.JStMTdho.mjs').then(interopDefault)
 };
 
 export { styles as default };

@@ -10,13 +10,17 @@ import 'node:events';
 import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
+import 'cron';
+import 'decimal.js';
+import 'fs';
+import 'winston';
 import 'node:url';
-import 'better-auth';
-import 'better-auth/adapters/prisma';
 import '@prisma/client/runtime/client';
 import '@prisma/adapter-pg';
-import 'better-auth/plugins';
 import 'nodemailer';
+import 'better-auth';
+import 'better-auth/adapters/prisma';
+import 'better-auth/plugins';
 import '@iconify/utils';
 import 'consola';
 import 'ipx';
@@ -31,42 +35,36 @@ const index_get = defineEventHandler(async (event) => {
     });
   }
   const { search = "", page = 0, limit, skip } = query.data;
-  const profiles = await prisma.profile.findMany({
+  const accounts = await prisma.financialAccount.findMany({
     where: {
       OR: [
-        { user: { name: { contains: search, mode: "insensitive" } } },
-        { user: { email: { contains: search, mode: "insensitive" } } }
+        { creator: { name: { contains: search, mode: "insensitive" } } },
+        { creator: { email: { contains: search, mode: "insensitive" } } },
+        { name: { contains: search, mode: "insensitive" } }
       ]
     },
     select: {
       id: true,
-      kycStatus: true,
-      governmentIdType: true,
-      governmentId: true,
-      governmentIdExt: true,
-      user: {
+      name: true,
+      status: true,
+      type: true,
+      balance: true,
+      createdAt: true,
+      ownership: true,
+      creator: {
         select: {
-          id: true,
           name: true,
-          email: true,
-          image: true
+          email: true
         }
       }
     },
     skip: skip != null ? skip : page * (limit != null ? limit : 0),
     take: limit,
     orderBy: {
-      updatedAt: "desc"
+      createdAt: "desc"
     }
   });
-  return profiles.map((profile) => ({
-    ...profile,
-    userId: profile.user.id,
-    fullName: profile.user.name,
-    email: profile.user.email,
-    image: profile.user.image,
-    user: void 0
-  }));
+  return accounts;
 });
 
 export { index_get as default };

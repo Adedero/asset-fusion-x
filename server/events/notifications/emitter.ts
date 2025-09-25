@@ -5,6 +5,8 @@ import { onFinancialAccountCreate } from "./handlers/on-financial-account-create
 import { onDepositCreate } from "./handlers/on-deposit-create";
 import { onWithdrawalCreate } from "./handlers/on-withdrawal-create";
 import { onInvestmentCreate } from "./handlers/on-investment-create";
+import { onTransactionStatusUpdate } from "./handlers/on-transaction-status-update";
+import { onInvestmentStatusUpdate } from "./handlers/on-investment-status-update";
 
 class NotificationEmitter<TEvents extends Record<string, any>> {
   private emitter = new EventEmitter();
@@ -44,6 +46,8 @@ notificationEmitter.on("financial-account:create", onFinancialAccountCreate);
 // Transactions
 notificationEmitter.on("deposit:create", onDepositCreate);
 notificationEmitter.on("withdrawal:create", onWithdrawalCreate);
+notificationEmitter.on("transaction-status:update", onTransactionStatusUpdate);
 
 // Investment
 notificationEmitter.on("investment:create", onInvestmentCreate);
+notificationEmitter.on("investment-status:update", onInvestmentStatusUpdate)

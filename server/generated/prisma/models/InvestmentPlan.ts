@@ -312,6 +312,7 @@ export type InvestmentPlanOrderByWithRelationInput = {
 
 export type InvestmentPlanWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  category_name?: Prisma.InvestmentPlanCategoryNameCompoundUniqueInput
   AND?: Prisma.InvestmentPlanWhereInput | Prisma.InvestmentPlanWhereInput[]
   OR?: Prisma.InvestmentPlanWhereInput[]
   NOT?: Prisma.InvestmentPlanWhereInput | Prisma.InvestmentPlanWhereInput[]
@@ -326,7 +327,7 @@ export type InvestmentPlanWhereUniqueInput = Prisma.AtLeast<{
   terminationFee?: Prisma.FloatFilter<"InvestmentPlan"> | number
   createdAt?: Prisma.DateTimeFilter<"InvestmentPlan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"InvestmentPlan"> | Date | string
-}, "id">
+}, "id" | "category_name">
 
 export type InvestmentPlanOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -469,6 +470,11 @@ export type InvestmentPlanUncheckedUpdateManyInput = {
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type InvestmentPlanCategoryNameCompoundUniqueInput = {
+  category: $Enums.InvestmentPlanCategory
+  name: string
 }
 
 export type InvestmentPlanCountOrderByAggregateInput = {

@@ -24,7 +24,7 @@ export type NotificationEvents = {
   ]; // done
   "transaction-status:update": [
     EventData<{ transaction: Transaction; account: FinancialAccount }>,
-  ];
+  ]; // done
 
   // investment notifications
   "investment:create": [

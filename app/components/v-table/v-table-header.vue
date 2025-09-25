@@ -13,7 +13,7 @@ onMounted(() => {
 <template>
   <thead
     v-if="props"
-    class="border-b-2 border-b-default [&_th]:py-4 [&_th]:px-4"
+    class="relative border-b-2 border-b-default [&_th]:py-4 [&_th]:px-4"
     :class="props.stickyHeader ? 'sticky top-0' : ''"
   >
     <slot />

@@ -13,7 +13,7 @@ const JointAccountRequestScalarFieldEnumSchema = z.enum(["id", "creatorId", "rec
 const JointAccountModRequestScalarFieldEnumSchema = z.enum(["id", "creatorId", "financialAccountId", "type", "transactionId", "description", "createdAt", "updatedAt"]);
 const JointAccountModRequestApprovalScalarFieldEnumSchema = z.enum(["id", "jointAccountModRequestId", "approverId", "status", "createdAt", "updatedAt"]);
 const InvestmentPlanScalarFieldEnumSchema = z.enum(["id", "name", "category", "minimumDeposit", "maximumDeposit", "duration", "profitDistribution", "percentageTotalReturn", "percentagePeriodicReturn", "terminationFee", "createdAt", "updatedAt"]);
-const InvestmentScalarFieldEnumSchema = z.enum(["id", "financialAccountId", "investorId", "deposit", "investmentName", "totalProfit", "profitCount", "status", "pausedAt", "pausedReason", "closedAt", "closedReason", "terminatedAt", "terminatedReason", "category", "daysCompleted", "duration", "totalReturn", "periodicReturn", "profitDistribution", "terminationFee", "createdAt", "updatedAt"]);
+const InvestmentScalarFieldEnumSchema = z.enum(["id", "financialAccountId", "investorId", "deposit", "investmentName", "totalProfit", "profitCount", "status", "pausedAt", "pausedReason", "closedAt", "closedReason", "terminatedAt", "terminatedReason", "category", "daysCompleted", "duration", "totalReturn", "periodicReturn", "profitDistribution", "terminationFee", "lastProfitDistributedAt", "createdAt", "updatedAt"]);
 const TransactionScalarFieldEnumSchema = z.enum(["id", "amount", "currency", "USDAmount", "rate", "charges", "financialAccountId", "type", "initiatorAccountId", "recipientAccountId", "investmentId", "status", "parentTransactionId", "approvedAt", "failedAt", "failReason", "depositWalletAddress", "depositWalletAddressNetwork", "withdrawalWalletAddress", "withdrawalWalletAddressNetwork", "bank", "bankAccount", "description", "createdAt", "updatedAt"]);
 const NotificationScalarFieldEnumSchema = z.enum(["id", "title", "body", "bodyType", "userId", "financialAccountId", "link", "isRead", "createdAt", "updatedAt"]);
 const CurrencyScalarFieldEnumSchema = z.enum(["id", "name", "symbol", "image", "rate", "rateUpdatedAt", "walletAddress", "walletAddressNetwork", "allowWithdrawal", "withdrawalCharge", "createdAt", "updatedAt"]);
@@ -211,6 +211,7 @@ const InvestmentSchema = z.object({
   totalReturn: z.number(),
   periodicReturn: z.number(),
   terminationFee: z.number(),
+  lastProfitDistributedAt: z.coerce.date().nullable(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date()
 });
@@ -640,6 +641,7 @@ const InvestmentSelectSchema = z.object({
   periodicReturn: z.boolean().optional(),
   profitDistribution: z.boolean().optional(),
   terminationFee: z.boolean().optional(),
+  lastProfitDistributedAt: z.boolean().optional(),
   createdAt: z.boolean().optional(),
   updatedAt: z.boolean().optional(),
   investor: z.union([z.boolean(), z.lazy(() => AccountUserArgsSchema)]).optional(),
@@ -1780,10 +1782,20 @@ const InvestmentPlanOrderByWithRelationInputSchema = z.object({
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
-const InvestmentPlanWhereUniqueInputSchema = z.object({
-  id: z.string().uuid()
-}).and(z.object({
+const InvestmentPlanWhereUniqueInputSchema = z.union([
+  z.object({
+    id: z.string().uuid(),
+    category_name: z.lazy(() => InvestmentPlanCategoryNameCompoundUniqueInputSchema)
+  }),
+  z.object({
+    id: z.string().uuid()
+  }),
+  z.object({
+    category_name: z.lazy(() => InvestmentPlanCategoryNameCompoundUniqueInputSchema)
+  })
+]).and(z.object({
   id: z.string().uuid().optional(),
+  category_name: z.lazy(() => InvestmentPlanCategoryNameCompoundUniqueInputSchema).optional(),
   AND: z.union([z.lazy(() => InvestmentPlanWhereInputSchema), z.lazy(() => InvestmentPlanWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => InvestmentPlanWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => InvestmentPlanWhereInputSchema), z.lazy(() => InvestmentPlanWhereInputSchema).array()]).optional(),
@@ -1860,6 +1872,7 @@ const InvestmentWhereInputSchema = z.object({
   periodicReturn: z.union([z.lazy(() => FloatFilterSchema), z.number()]).optional(),
   profitDistribution: z.union([z.lazy(() => EnumProfitDistributionFilterSchema), z.lazy(() => ProfitDistributionSchema)]).optional(),
   terminationFee: z.union([z.lazy(() => FloatFilterSchema), z.number()]).optional(),
+  lastProfitDistributedAt: z.union([z.lazy(() => DateTimeNullableFilterSchema), z.coerce.date()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   investor: z.union([z.lazy(() => AccountUserScalarRelationFilterSchema), z.lazy(() => AccountUserWhereInputSchema)]).optional(),
@@ -1888,6 +1901,7 @@ const InvestmentOrderByWithRelationInputSchema = z.object({
   periodicReturn: z.lazy(() => SortOrderSchema).optional(),
   profitDistribution: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
+  lastProfitDistributedAt: z.union([z.lazy(() => SortOrderSchema), z.lazy(() => SortOrderInputSchema)]).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   investor: z.lazy(() => AccountUserOrderByWithRelationInputSchema).optional(),
@@ -1921,6 +1935,7 @@ const InvestmentWhereUniqueInputSchema = z.object({
   periodicReturn: z.union([z.lazy(() => FloatFilterSchema), z.number()]).optional(),
   profitDistribution: z.union([z.lazy(() => EnumProfitDistributionFilterSchema), z.lazy(() => ProfitDistributionSchema)]).optional(),
   terminationFee: z.union([z.lazy(() => FloatFilterSchema), z.number()]).optional(),
+  lastProfitDistributedAt: z.union([z.lazy(() => DateTimeNullableFilterSchema), z.coerce.date()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   investor: z.union([z.lazy(() => AccountUserScalarRelationFilterSchema), z.lazy(() => AccountUserWhereInputSchema)]).optional(),
@@ -1949,6 +1964,7 @@ const InvestmentOrderByWithAggregationInputSchema = z.object({
   periodicReturn: z.lazy(() => SortOrderSchema).optional(),
   profitDistribution: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
+  lastProfitDistributedAt: z.union([z.lazy(() => SortOrderSchema), z.lazy(() => SortOrderInputSchema)]).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => InvestmentCountOrderByAggregateInputSchema).optional(),
@@ -1982,6 +1998,7 @@ const InvestmentScalarWhereWithAggregatesInputSchema = z.object({
   periodicReturn: z.union([z.lazy(() => FloatWithAggregatesFilterSchema), z.number()]).optional(),
   profitDistribution: z.union([z.lazy(() => EnumProfitDistributionWithAggregatesFilterSchema), z.lazy(() => ProfitDistributionSchema)]).optional(),
   terminationFee: z.union([z.lazy(() => FloatWithAggregatesFilterSchema), z.number()]).optional(),
+  lastProfitDistributedAt: z.union([z.lazy(() => DateTimeNullableWithAggregatesFilterSchema), z.coerce.date()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
 }).strict();
@@ -3519,6 +3536,7 @@ const InvestmentCreateInputSchema = z.object({
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
@@ -3547,6 +3565,7 @@ const InvestmentUncheckedCreateInputSchema = z.object({
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
@@ -3571,6 +3590,7 @@ const InvestmentUpdateInputSchema = z.object({
   periodicReturn: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   profitDistribution: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema)]).optional(),
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
+  lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
@@ -3599,6 +3619,7 @@ const InvestmentUncheckedUpdateInputSchema = z.object({
   periodicReturn: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   profitDistribution: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema)]).optional(),
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
+  lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
@@ -3625,6 +3646,7 @@ const InvestmentCreateManyInputSchema = z.object({
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
@@ -3648,6 +3670,7 @@ const InvestmentUpdateManyMutationInputSchema = z.object({
   periodicReturn: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   profitDistribution: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema)]).optional(),
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
+  lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
 }).strict();
@@ -3673,6 +3696,7 @@ const InvestmentUncheckedUpdateManyInputSchema = z.object({
   periodicReturn: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   profitDistribution: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema)]).optional(),
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
+  lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
 }).strict();
@@ -4988,6 +5012,10 @@ const EnumProfitDistributionFilterSchema = z.object({
   notIn: z.lazy(() => ProfitDistributionSchema).array().optional(),
   not: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => NestedEnumProfitDistributionFilterSchema)]).optional()
 }).strict();
+const InvestmentPlanCategoryNameCompoundUniqueInputSchema = z.object({
+  category: z.lazy(() => InvestmentPlanCategorySchema),
+  name: z.string()
+}).strict();
 const InvestmentPlanCountOrderByAggregateInputSchema = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
@@ -5096,6 +5124,7 @@ const InvestmentCountOrderByAggregateInputSchema = z.object({
   periodicReturn: z.lazy(() => SortOrderSchema).optional(),
   profitDistribution: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
+  lastProfitDistributedAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -5131,6 +5160,7 @@ const InvestmentMaxOrderByAggregateInputSchema = z.object({
   periodicReturn: z.lazy(() => SortOrderSchema).optional(),
   profitDistribution: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
+  lastProfitDistributedAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -5156,6 +5186,7 @@ const InvestmentMinOrderByAggregateInputSchema = z.object({
   periodicReturn: z.lazy(() => SortOrderSchema).optional(),
   profitDistribution: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
+  lastProfitDistributedAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -8522,6 +8553,7 @@ const InvestmentCreateWithoutFinancialAccountInputSchema = z.object({
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
@@ -8548,6 +8580,7 @@ const InvestmentUncheckedCreateWithoutFinancialAccountInputSchema = z.object({
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
@@ -8794,6 +8827,7 @@ const InvestmentScalarWhereInputSchema = z.object({
   periodicReturn: z.union([z.lazy(() => FloatFilterSchema), z.number()]).optional(),
   profitDistribution: z.union([z.lazy(() => EnumProfitDistributionFilterSchema), z.lazy(() => ProfitDistributionSchema)]).optional(),
   terminationFee: z.union([z.lazy(() => FloatFilterSchema), z.number()]).optional(),
+  lastProfitDistributedAt: z.union([z.lazy(() => DateTimeNullableFilterSchema), z.coerce.date()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
 }).strict();
@@ -8983,6 +9017,7 @@ const InvestmentCreateWithoutInvestorInputSchema = z.object({
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutInvestmentInputSchema).optional(),
@@ -9009,6 +9044,7 @@ const InvestmentUncheckedCreateWithoutInvestorInputSchema = z.object({
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
@@ -10403,6 +10439,7 @@ const InvestmentCreateWithoutTransactionsInputSchema = z.object({
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
@@ -10430,6 +10467,7 @@ const InvestmentUncheckedCreateWithoutTransactionsInputSchema = z.object({
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
@@ -10767,6 +10805,7 @@ const InvestmentUpdateWithoutTransactionsInputSchema = z.object({
   periodicReturn: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   profitDistribution: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema)]).optional(),
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
+  lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
@@ -10794,6 +10833,7 @@ const InvestmentUncheckedUpdateWithoutTransactionsInputSchema = z.object({
   periodicReturn: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   profitDistribution: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema)]).optional(),
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
+  lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
 }).strict();
@@ -11669,6 +11709,7 @@ const InvestmentCreateManyFinancialAccountInputSchema = z.object({
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
@@ -11994,6 +12035,7 @@ const InvestmentUpdateWithoutFinancialAccountInputSchema = z.object({
   periodicReturn: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   profitDistribution: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema)]).optional(),
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
+  lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
@@ -12020,6 +12062,7 @@ const InvestmentUncheckedUpdateWithoutFinancialAccountInputSchema = z.object({
   periodicReturn: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   profitDistribution: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema)]).optional(),
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
+  lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
@@ -12045,6 +12088,7 @@ const InvestmentUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.object
   periodicReturn: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   profitDistribution: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema)]).optional(),
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
+  lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
 }).strict();
@@ -12095,6 +12139,7 @@ const InvestmentCreateManyInvestorInputSchema = z.object({
   periodicReturn: z.number(),
   profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
   terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
@@ -12200,6 +12245,7 @@ const InvestmentUpdateWithoutInvestorInputSchema = z.object({
   periodicReturn: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   profitDistribution: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema)]).optional(),
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
+  lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionUpdateManyWithoutInvestmentNestedInputSchema).optional(),
@@ -12226,6 +12272,7 @@ const InvestmentUncheckedUpdateWithoutInvestorInputSchema = z.object({
   periodicReturn: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   profitDistribution: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema)]).optional(),
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
+  lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
@@ -12251,6 +12298,7 @@ const InvestmentUncheckedUpdateManyWithoutInvestorInputSchema = z.object({
   periodicReturn: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   profitDistribution: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema)]).optional(),
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
+  lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
 }).strict();

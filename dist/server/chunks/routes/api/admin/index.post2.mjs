@@ -10,13 +10,17 @@ import 'node:events';
 import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
+import 'cron';
+import 'decimal.js';
+import 'fs';
+import 'winston';
 import 'node:url';
-import 'better-auth';
-import 'better-auth/adapters/prisma';
 import '@prisma/client/runtime/client';
 import '@prisma/adapter-pg';
-import 'better-auth/plugins';
 import 'nodemailer';
+import 'better-auth';
+import 'better-auth/adapters/prisma';
+import 'better-auth/plugins';
 import '@iconify/utils';
 import 'consola';
 import 'ipx';
@@ -31,6 +35,21 @@ const index_post = defineEventHandler(async (event) => {
     });
   }
   const { data } = body;
+  const existingPlan = await prisma.investmentPlan.findFirst({
+    where: {
+      category: data.category,
+      name: data.name
+    },
+    select: {
+      id: true
+    }
+  });
+  if (existingPlan) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: `An investment plan with the name ${data.name} already exists in the ${data.category} category`
+    });
+  }
   await prisma.investmentPlan.create({
     data
   });

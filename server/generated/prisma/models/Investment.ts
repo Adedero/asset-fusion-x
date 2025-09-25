@@ -71,6 +71,7 @@ export type InvestmentMinAggregateOutputType = {
   periodicReturn: number | null
   profitDistribution: $Enums.ProfitDistribution | null
   terminationFee: number | null
+  lastProfitDistributedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -97,6 +98,7 @@ export type InvestmentMaxAggregateOutputType = {
   periodicReturn: number | null
   profitDistribution: $Enums.ProfitDistribution | null
   terminationFee: number | null
+  lastProfitDistributedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -123,6 +125,7 @@ export type InvestmentCountAggregateOutputType = {
   periodicReturn: number
   profitDistribution: number
   terminationFee: number
+  lastProfitDistributedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -173,6 +176,7 @@ export type InvestmentMinAggregateInputType = {
   periodicReturn?: true
   profitDistribution?: true
   terminationFee?: true
+  lastProfitDistributedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -199,6 +203,7 @@ export type InvestmentMaxAggregateInputType = {
   periodicReturn?: true
   profitDistribution?: true
   terminationFee?: true
+  lastProfitDistributedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -225,6 +230,7 @@ export type InvestmentCountAggregateInputType = {
   periodicReturn?: true
   profitDistribution?: true
   terminationFee?: true
+  lastProfitDistributedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -338,6 +344,7 @@ export type InvestmentGroupByOutputType = {
   periodicReturn: number
   profitDistribution: $Enums.ProfitDistribution
   terminationFee: number
+  lastProfitDistributedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: InvestmentCountAggregateOutputType | null
@@ -387,6 +394,7 @@ export type InvestmentWhereInput = {
   periodicReturn?: Prisma.FloatFilter<"Investment"> | number
   profitDistribution?: Prisma.EnumProfitDistributionFilter<"Investment"> | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFilter<"Investment"> | number
+  lastProfitDistributedAt?: Prisma.DateTimeNullableFilter<"Investment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Investment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Investment"> | Date | string
   investor?: Prisma.XOR<Prisma.AccountUserScalarRelationFilter, Prisma.AccountUserWhereInput>
@@ -416,6 +424,7 @@ export type InvestmentOrderByWithRelationInput = {
   periodicReturn?: Prisma.SortOrder
   profitDistribution?: Prisma.SortOrder
   terminationFee?: Prisma.SortOrder
+  lastProfitDistributedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   investor?: Prisma.AccountUserOrderByWithRelationInput
@@ -448,6 +457,7 @@ export type InvestmentWhereUniqueInput = Prisma.AtLeast<{
   periodicReturn?: Prisma.FloatFilter<"Investment"> | number
   profitDistribution?: Prisma.EnumProfitDistributionFilter<"Investment"> | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFilter<"Investment"> | number
+  lastProfitDistributedAt?: Prisma.DateTimeNullableFilter<"Investment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Investment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Investment"> | Date | string
   investor?: Prisma.XOR<Prisma.AccountUserScalarRelationFilter, Prisma.AccountUserWhereInput>
@@ -477,6 +487,7 @@ export type InvestmentOrderByWithAggregationInput = {
   periodicReturn?: Prisma.SortOrder
   profitDistribution?: Prisma.SortOrder
   terminationFee?: Prisma.SortOrder
+  lastProfitDistributedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.InvestmentCountOrderByAggregateInput
@@ -511,6 +522,7 @@ export type InvestmentScalarWhereWithAggregatesInput = {
   periodicReturn?: Prisma.FloatWithAggregatesFilter<"Investment"> | number
   profitDistribution?: Prisma.EnumProfitDistributionWithAggregatesFilter<"Investment"> | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatWithAggregatesFilter<"Investment"> | number
+  lastProfitDistributedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Investment"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Investment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Investment"> | Date | string
 }
@@ -535,6 +547,7 @@ export type InvestmentCreateInput = {
   periodicReturn: number
   profitDistribution?: $Enums.ProfitDistribution
   terminationFee?: number
+  lastProfitDistributedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   investor: Prisma.AccountUserCreateNestedOneWithoutInvestmentsInput
@@ -564,6 +577,7 @@ export type InvestmentUncheckedCreateInput = {
   periodicReturn: number
   profitDistribution?: $Enums.ProfitDistribution
   terminationFee?: number
+  lastProfitDistributedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutInvestmentInput
@@ -589,6 +603,7 @@ export type InvestmentUpdateInput = {
   periodicReturn?: Prisma.FloatFieldUpdateOperationsInput | number
   profitDistribution?: Prisma.EnumProfitDistributionFieldUpdateOperationsInput | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastProfitDistributedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   investor?: Prisma.AccountUserUpdateOneRequiredWithoutInvestmentsNestedInput
@@ -618,6 +633,7 @@ export type InvestmentUncheckedUpdateInput = {
   periodicReturn?: Prisma.FloatFieldUpdateOperationsInput | number
   profitDistribution?: Prisma.EnumProfitDistributionFieldUpdateOperationsInput | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastProfitDistributedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutInvestmentNestedInput
@@ -645,6 +661,7 @@ export type InvestmentCreateManyInput = {
   periodicReturn: number
   profitDistribution?: $Enums.ProfitDistribution
   terminationFee?: number
+  lastProfitDistributedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -669,6 +686,7 @@ export type InvestmentUpdateManyMutationInput = {
   periodicReturn?: Prisma.FloatFieldUpdateOperationsInput | number
   profitDistribution?: Prisma.EnumProfitDistributionFieldUpdateOperationsInput | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastProfitDistributedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -695,6 +713,7 @@ export type InvestmentUncheckedUpdateManyInput = {
   periodicReturn?: Prisma.FloatFieldUpdateOperationsInput | number
   profitDistribution?: Prisma.EnumProfitDistributionFieldUpdateOperationsInput | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastProfitDistributedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -731,6 +750,7 @@ export type InvestmentCountOrderByAggregateInput = {
   periodicReturn?: Prisma.SortOrder
   profitDistribution?: Prisma.SortOrder
   terminationFee?: Prisma.SortOrder
+  lastProfitDistributedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -768,6 +788,7 @@ export type InvestmentMaxOrderByAggregateInput = {
   periodicReturn?: Prisma.SortOrder
   profitDistribution?: Prisma.SortOrder
   terminationFee?: Prisma.SortOrder
+  lastProfitDistributedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -794,6 +815,7 @@ export type InvestmentMinOrderByAggregateInput = {
   periodicReturn?: Prisma.SortOrder
   profitDistribution?: Prisma.SortOrder
   terminationFee?: Prisma.SortOrder
+  lastProfitDistributedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -938,6 +960,7 @@ export type InvestmentCreateWithoutFinancialAccountInput = {
   periodicReturn: number
   profitDistribution?: $Enums.ProfitDistribution
   terminationFee?: number
+  lastProfitDistributedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   investor: Prisma.AccountUserCreateNestedOneWithoutInvestmentsInput
@@ -965,6 +988,7 @@ export type InvestmentUncheckedCreateWithoutFinancialAccountInput = {
   periodicReturn: number
   profitDistribution?: $Enums.ProfitDistribution
   terminationFee?: number
+  lastProfitDistributedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutInvestmentInput
@@ -1021,6 +1045,7 @@ export type InvestmentScalarWhereInput = {
   periodicReturn?: Prisma.FloatFilter<"Investment"> | number
   profitDistribution?: Prisma.EnumProfitDistributionFilter<"Investment"> | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFilter<"Investment"> | number
+  lastProfitDistributedAt?: Prisma.DateTimeNullableFilter<"Investment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Investment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Investment"> | Date | string
 }
@@ -1045,6 +1070,7 @@ export type InvestmentCreateWithoutInvestorInput = {
   periodicReturn: number
   profitDistribution?: $Enums.ProfitDistribution
   terminationFee?: number
+  lastProfitDistributedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.TransactionCreateNestedManyWithoutInvestmentInput
@@ -1072,6 +1098,7 @@ export type InvestmentUncheckedCreateWithoutInvestorInput = {
   periodicReturn: number
   profitDistribution?: $Enums.ProfitDistribution
   terminationFee?: number
+  lastProfitDistributedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutInvestmentInput
@@ -1123,6 +1150,7 @@ export type InvestmentCreateWithoutTransactionsInput = {
   periodicReturn: number
   profitDistribution?: $Enums.ProfitDistribution
   terminationFee?: number
+  lastProfitDistributedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   investor: Prisma.AccountUserCreateNestedOneWithoutInvestmentsInput
@@ -1151,6 +1179,7 @@ export type InvestmentUncheckedCreateWithoutTransactionsInput = {
   periodicReturn: number
   profitDistribution?: $Enums.ProfitDistribution
   terminationFee?: number
+  lastProfitDistributedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1191,6 +1220,7 @@ export type InvestmentUpdateWithoutTransactionsInput = {
   periodicReturn?: Prisma.FloatFieldUpdateOperationsInput | number
   profitDistribution?: Prisma.EnumProfitDistributionFieldUpdateOperationsInput | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastProfitDistributedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   investor?: Prisma.AccountUserUpdateOneRequiredWithoutInvestmentsNestedInput
@@ -1219,6 +1249,7 @@ export type InvestmentUncheckedUpdateWithoutTransactionsInput = {
   periodicReturn?: Prisma.FloatFieldUpdateOperationsInput | number
   profitDistribution?: Prisma.EnumProfitDistributionFieldUpdateOperationsInput | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastProfitDistributedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1244,6 +1275,7 @@ export type InvestmentCreateManyFinancialAccountInput = {
   periodicReturn: number
   profitDistribution?: $Enums.ProfitDistribution
   terminationFee?: number
+  lastProfitDistributedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1268,6 +1300,7 @@ export type InvestmentUpdateWithoutFinancialAccountInput = {
   periodicReturn?: Prisma.FloatFieldUpdateOperationsInput | number
   profitDistribution?: Prisma.EnumProfitDistributionFieldUpdateOperationsInput | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastProfitDistributedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   investor?: Prisma.AccountUserUpdateOneRequiredWithoutInvestmentsNestedInput
@@ -1295,6 +1328,7 @@ export type InvestmentUncheckedUpdateWithoutFinancialAccountInput = {
   periodicReturn?: Prisma.FloatFieldUpdateOperationsInput | number
   profitDistribution?: Prisma.EnumProfitDistributionFieldUpdateOperationsInput | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastProfitDistributedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutInvestmentNestedInput
@@ -1321,6 +1355,7 @@ export type InvestmentUncheckedUpdateManyWithoutFinancialAccountInput = {
   periodicReturn?: Prisma.FloatFieldUpdateOperationsInput | number
   profitDistribution?: Prisma.EnumProfitDistributionFieldUpdateOperationsInput | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastProfitDistributedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1346,6 +1381,7 @@ export type InvestmentCreateManyInvestorInput = {
   periodicReturn: number
   profitDistribution?: $Enums.ProfitDistribution
   terminationFee?: number
+  lastProfitDistributedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1370,6 +1406,7 @@ export type InvestmentUpdateWithoutInvestorInput = {
   periodicReturn?: Prisma.FloatFieldUpdateOperationsInput | number
   profitDistribution?: Prisma.EnumProfitDistributionFieldUpdateOperationsInput | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastProfitDistributedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUpdateManyWithoutInvestmentNestedInput
@@ -1397,6 +1434,7 @@ export type InvestmentUncheckedUpdateWithoutInvestorInput = {
   periodicReturn?: Prisma.FloatFieldUpdateOperationsInput | number
   profitDistribution?: Prisma.EnumProfitDistributionFieldUpdateOperationsInput | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastProfitDistributedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutInvestmentNestedInput
@@ -1423,6 +1461,7 @@ export type InvestmentUncheckedUpdateManyWithoutInvestorInput = {
   periodicReturn?: Prisma.FloatFieldUpdateOperationsInput | number
   profitDistribution?: Prisma.EnumProfitDistributionFieldUpdateOperationsInput | $Enums.ProfitDistribution
   terminationFee?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastProfitDistributedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1480,6 +1519,7 @@ export type InvestmentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   periodicReturn?: boolean
   profitDistribution?: boolean
   terminationFee?: boolean
+  lastProfitDistributedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   investor?: boolean | Prisma.AccountUserDefaultArgs<ExtArgs>
@@ -1510,6 +1550,7 @@ export type InvestmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   periodicReturn?: boolean
   profitDistribution?: boolean
   terminationFee?: boolean
+  lastProfitDistributedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   investor?: boolean | Prisma.AccountUserDefaultArgs<ExtArgs>
@@ -1538,6 +1579,7 @@ export type InvestmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   periodicReturn?: boolean
   profitDistribution?: boolean
   terminationFee?: boolean
+  lastProfitDistributedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   investor?: boolean | Prisma.AccountUserDefaultArgs<ExtArgs>
@@ -1566,11 +1608,12 @@ export type InvestmentSelectScalar = {
   periodicReturn?: boolean
   profitDistribution?: boolean
   terminationFee?: boolean
+  lastProfitDistributedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type InvestmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "financialAccountId" | "investorId" | "deposit" | "investmentName" | "totalProfit" | "profitCount" | "status" | "pausedAt" | "pausedReason" | "closedAt" | "closedReason" | "terminatedAt" | "terminatedReason" | "category" | "daysCompleted" | "duration" | "totalReturn" | "periodicReturn" | "profitDistribution" | "terminationFee" | "createdAt" | "updatedAt", ExtArgs["result"]["investment"]>
+export type InvestmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "financialAccountId" | "investorId" | "deposit" | "investmentName" | "totalProfit" | "profitCount" | "status" | "pausedAt" | "pausedReason" | "closedAt" | "closedReason" | "terminatedAt" | "terminatedReason" | "category" | "daysCompleted" | "duration" | "totalReturn" | "periodicReturn" | "profitDistribution" | "terminationFee" | "lastProfitDistributedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["investment"]>
 export type InvestmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   investor?: boolean | Prisma.AccountUserDefaultArgs<ExtArgs>
   transactions?: boolean | Prisma.Investment$transactionsArgs<ExtArgs>
@@ -1615,6 +1658,7 @@ export type $InvestmentPayload<ExtArgs extends runtime.Types.Extensions.Internal
     periodicReturn: number
     profitDistribution: $Enums.ProfitDistribution
     terminationFee: number
+    lastProfitDistributedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["investment"]>
@@ -2064,6 +2108,7 @@ export interface InvestmentFieldRefs {
   readonly periodicReturn: Prisma.FieldRef<"Investment", 'Float'>
   readonly profitDistribution: Prisma.FieldRef<"Investment", 'ProfitDistribution'>
   readonly terminationFee: Prisma.FieldRef<"Investment", 'Float'>
+  readonly lastProfitDistributedAt: Prisma.FieldRef<"Investment", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Investment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Investment", 'DateTime'>
 }

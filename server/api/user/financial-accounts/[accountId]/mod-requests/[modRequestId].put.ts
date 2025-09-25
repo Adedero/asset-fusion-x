@@ -7,8 +7,8 @@ export default defineEventHandler(async (event) => {
   const schema = z.object({
     approvalId: z.string({ message: "Approval ID is required" }),
     status: z.enum(["accepted", "rejected"], {
-      message: "Status must either be 'accepted' or 'rejected'",
-    }),
+      message: "Status must either be 'accepted' or 'rejected'"
+    })
   });
 
   const query = await getValidatedQuery(event, schema.safeParse);
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   if (!query.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: query.error.issues[0].message,
+      statusMessage: query.error.issues[0].message
     });
   }
 
@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
   if (!accountId || !modRequestId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "No account or request ID found",
+      statusMessage: "No account or request ID found"
     });
   }
 
@@ -36,8 +36,8 @@ export default defineEventHandler(async (event) => {
 
   const request = await prisma.jointAccountModRequest.findUniqueOrThrow({
     where: {
-      id: modRequestId,
-    },
+      id: modRequestId
+    }
   });
 
   const updated = await prisma.jointAccountModRequestApproval.update({
@@ -46,23 +46,28 @@ export default defineEventHandler(async (event) => {
       approverId: user.id,
       jointAccountModRequestId: modRequestId,
       request: {
-        financialAccountId: accountId,
-      },
+        financialAccountId: accountId
+      }
     },
     data: {
-      status,
-    },
+      status
+    }
   });
 
   if (status === "rejected" && request.transactionId) {
-    await reverseTransaction(accountId, request.transactionId, "reversed");
+    await reverseTransaction(
+      accountId,
+      request.transactionId,
+      "failed",
+      `Transaction request rejected by ${user.name}`
+    );
     await prisma.jointAccountModRequest.delete({
-      where: { id: modRequestId },
+      where: { id: modRequestId }
     });
   }
 
   return {
     approval: updated,
-    message: "Status updated successfully",
+    message: "Status updated successfully"
   };
 });

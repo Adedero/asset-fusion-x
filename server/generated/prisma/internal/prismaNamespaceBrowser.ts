@@ -275,6 +275,7 @@ export const InvestmentScalarFieldEnum = {
   periodicReturn: 'periodicReturn',
   profitDistribution: 'profitDistribution',
   terminationFee: 'terminationFee',
+  lastProfitDistributedAt: 'lastProfitDistributedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

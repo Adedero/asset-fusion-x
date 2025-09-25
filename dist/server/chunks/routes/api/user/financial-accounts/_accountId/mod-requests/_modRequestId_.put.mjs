@@ -10,13 +10,17 @@ import 'node:events';
 import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
+import 'cron';
+import 'decimal.js';
+import 'fs';
+import 'winston';
 import 'node:url';
-import 'better-auth';
-import 'better-auth/adapters/prisma';
 import '@prisma/client/runtime/client';
 import '@prisma/adapter-pg';
-import 'better-auth/plugins';
 import 'nodemailer';
+import 'better-auth';
+import 'better-auth/adapters/prisma';
+import 'better-auth/plugins';
 import '@iconify/utils';
 import 'consola';
 import 'ipx';
@@ -63,7 +67,12 @@ const _modRequestId__put = defineEventHandler(async (event) => {
     }
   });
   if (status === "rejected" && request.transactionId) {
-    await reverseTransaction(accountId, request.transactionId, "reversed");
+    await reverseTransaction(
+      accountId,
+      request.transactionId,
+      "failed",
+      `Transaction request rejected by ${user.name}`
+    );
     await prisma.jointAccountModRequest.delete({
       where: { id: modRequestId }
     });

@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
     prisma.transaction.findMany({
       where: { financialAccountId: { in: accountIds } },
       orderBy: { createdAt: "desc" },
-      take: 10,
+      take: 15,
       select: {
         id: true,
         USDAmount: true,
@@ -64,7 +64,7 @@ export default defineEventHandler(async (event) => {
         OR: [{ userId: user.id }, { financialAccountId: { in: accountIds } }],
       },
       orderBy: { createdAt: "desc" },
-      take: 10,
+      take: 5,
     }),
   ]);
 

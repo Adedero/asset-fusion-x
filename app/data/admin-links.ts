@@ -39,7 +39,8 @@ export const links = ({
     },
     {
       label: "Users",
-      icon: "lucide:users"
+      icon: "lucide:users",
+      to: "/admin/users"
     },
     {
       label: "Transactions",
@@ -48,7 +49,8 @@ export const links = ({
     },
     {
       label: "Manage Accounts",
-      icon: "lucide:square-user"
+      icon: "lucide:square-user",
+      to: "/admin/financial-accounts"
     },
     {
       label: "KYC Requests",

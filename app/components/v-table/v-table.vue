@@ -3,22 +3,28 @@ export interface VTableProps {
   size?: "sm" | "md" | "lg";
   hover?: boolean;
   stickyHeader?: boolean;
+  loading?: boolean;
+  loaderType?: "spinner" | "carousel";
 }
 
 const {
   size = "sm",
   hover = false,
-  stickyHeader = false
+  stickyHeader = false,
+  loading = false,
+  loaderType = "carousel"
 } = defineProps<VTableProps>();
 
 provide("v-table-props", {
   size,
   hover,
-  stickyHeader
+  stickyHeader,
+  loading,
+  loaderType
 });
 
 const tableClass = computed(() => {
-  const base = "w-full whitespace-nowrap";
+  const base = "w-full whitespace-nowrap relative";
   const sizeClass = {
     sm: "text-sm",
     md: "text-base",
@@ -30,9 +36,12 @@ const tableClass = computed(() => {
 </script>
 
 <template>
-  <div class="overflow-auto relative">
-    <table border="collapse" :class="tableClass" v-bind="$attrs">
-      <slot />
-    </table>
+  <div class="relative">
+    <VTableLoader />
+    <div class="overflow-auto">
+      <table border="collapse" :class="tableClass" v-bind="$attrs">
+        <slot />
+      </table>
+    </div>
   </div>
 </template>

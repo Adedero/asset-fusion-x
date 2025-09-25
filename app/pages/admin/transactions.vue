@@ -22,11 +22,11 @@ const types = [
   "all",
   "deposit",
   "withdrawal",
-  "transfer",
+  //"transfer",
   "investment",
   "profit"
 ];
-const statuses = ["all", "pending", "successfull", "reversed", "failed"];
+const statuses = ["all", "pending", "successfull", "failed" /* "reversed" */];
 const query = computed(() => {
   const params = new URLSearchParams();
   params.set("limit", limit.value.toString());
@@ -43,10 +43,13 @@ const query = computed(() => {
 const {
   data: transactions,
   error,
+  status,
   refresh
 } = await useFetch("/api/admin/transactions", { query });
 
-const allLoaded = computed(() => {
+export type TransactionItem = NonNullable<typeof transactions.value>[number];
+
+const allLoaded = computed<boolean>(() => {
   return transactions.value ? transactions.value.length < limit.value : false;
 });
 
@@ -61,21 +64,17 @@ const headers = [
   "Amount (CUR)",
   "Rate (USD)",
   "Charges (USD)",
-  "Date"
+  "Date",
+  "Actions"
 ];
 
-/*  initiator: string;
-    financialAccountName: string;
-    financialAccount: undefined;
-    id: string;
-    amount: number;
-    currency: string;
-    USDAmount: number;
-    rate: number;
-    charges: number;
-    type: TransactionType;
-    status: TransactionStatus;
-    createdAt: Date; */
+const open = ref<boolean>(false);
+const selected = ref<TransactionItem | null>(null);
+
+const handleItemSelect = (txn: TransactionItem) => {
+  selected.value = txn;
+  open.value = true;
+};
 </script>
 
 <template>
@@ -109,7 +108,15 @@ const headers = [
       </div>
 
       <section v-if="transactions">
-        <VTable>
+        <div v-if="selected">
+          <AdminTransactionManager
+            v-model:open="open"
+            :transaction="selected"
+            @done="() => refresh()"
+          />
+        </div>
+
+        <VTable :loading="status === 'pending'">
           <VTableHeader>
             <VTableRow>
               <VTableHead v-for="header in headers" :key="header">
@@ -146,6 +153,75 @@ const headers = [
               <VTableCell>{{ txn.charges }}</VTableCell>
               <VTableCell>
                 {{ useDateFormat(txn.createdAt, "YYYY-MMM-DD hh:mm aa") }}
+              </VTableCell>
+              <VTableCell class="flex items-center gap-2">
+                <NuxtPopover :ui="{ content: 'max-h-96 overflow-y-auto' }">
+                  <NuxtButton
+                    label="More"
+                    icon="lucide:ellipsis-vertical"
+                    color="neutral"
+                    variant="outline"
+                    size="sm"
+                  />
+
+                  <template #content>
+                    <div>
+                      <header class="p-5 w-72">
+                        <h2 class="font-semibold">More</h2>
+                      </header>
+                      <NuxtSeparator />
+                      <div class="p-5 space-y-2.5">
+                        <NuxtFormField v-if="txn.description" label="Description">
+                          <NuxtTextarea :value="txn.description" :rows="3" disabled class="resize-none w-full" />
+                        </NuxtFormField>
+
+                        <NuxtFormField v-if="txn.depositWalletAddress" label="Deposit Wallet Address">
+                          <NuxtInput :value="txn.depositWalletAddress" disabled class="w-full" />
+                        </NuxtFormField>
+
+                        <NuxtFormField v-if="txn.depositWalletAddressNetwork" label="Deposit Wallet Address Network">
+                          <NuxtInput :value="txn.depositWalletAddressNetwork" disabled class="w-full" />
+                        </NuxtFormField>
+
+                        <NuxtFormField v-if="txn.withdrawalWalletAddress" label="Withdrawal Wallet Address">
+                          <NuxtInput :value="txn.withdrawalWalletAddress" disabled class="w-full" />
+                        </NuxtFormField>
+
+                        <NuxtFormField v-if="txn.withdrawalWalletAddressNetwork" label="Withdrawal Wallet Address Network">
+                          <NuxtInput :value="txn.withdrawalWalletAddressNetwork" disabled class="w-full" />
+                        </NuxtFormField>
+
+                        <NuxtFormField v-if="txn.bank" label="Bank Name">
+                          <NuxtInput :value="txn.bank" disabled class="w-full" />
+                        </NuxtFormField>
+
+                        <NuxtFormField v-if="txn.bankAccount" label="Bank Account Number">
+                          <NuxtInput :value="txn.bankAccount" disabled class="w-full" />
+                        </NuxtFormField>
+
+                        <NuxtFormField v-if="txn.approvedAt" label="Approved At">
+                          <NuxtInput :value="useDateFormat(txn.approvedAt, 'YYYY-MMM-DD hh:mm aa').value" disabled class="w-full" />
+                        </NuxtFormField>
+
+                        <NuxtFormField v-if="txn.failedAt" label="Failed At">
+                          <NuxtInput :value="useDateFormat(txn.failedAt, 'YYYY-MMM-DD hh:mm aa').value" disabled class="w-full" />
+                        </NuxtFormField>
+                        
+                        <NuxtFormField v-if="txn.failReason" label="Reason for failure">
+                          <NuxtTextarea :value="txn.failReason" :rows="3" disabled class="resize-none w-full" />
+                        </NuxtFormField>
+                      </div>
+                    </div>
+                  </template>
+                </NuxtPopover>
+
+                <NuxtButton
+                  label="Edit"
+                  icon="lucide:file-edit"
+                  variant="soft"
+                  size="sm"
+                  @click="handleItemSelect(txn)"
+                />
               </VTableCell>
             </VTableRow>
           </VTableBody>

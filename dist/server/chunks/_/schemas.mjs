@@ -31,7 +31,7 @@ const accountRoles = [
 
 var _a, _b;
 const EmailSchema = z.email({ message: "Invalid email" });
-const PasswordSchema = z.string().min(MIN_PASSWORD_LENGTH, {
+const PasswordSchema = z.string("Invalid password").min(MIN_PASSWORD_LENGTH, {
   message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`
 }).refine((val) => /[a-z]/.test(val), {
   message: "Password must contain at least one lowercase letter"

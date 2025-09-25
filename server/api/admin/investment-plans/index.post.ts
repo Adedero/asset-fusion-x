@@ -12,6 +12,22 @@ export default defineEventHandler(async (event) => {
 
   const { data } = body;
 
+  const existingPlan = await prisma.investmentPlan.findFirst({
+    where: {
+      category: data.category,
+      name: data.name
+    },
+    select: {
+      id: true
+    }
+  });
+
+  if (existingPlan) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: `An investment plan with the name ${data.name} already exists in the ${data.category} category`
+    });
+  }
 
   await prisma.investmentPlan.create({
     data

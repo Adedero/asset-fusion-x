@@ -24,7 +24,8 @@ export default defineEventHandler(async (event) => {
   const transactions = await prisma.transaction.findMany({
     where: {
       AND: [type ? { type } : {}, status ? { status } : {}],
-      jointAccountModRequests: { none: {} }
+      jointAccountModRequests: { none: {} },
+      parentTransactionId: null
     },
     select: {
       id: true,
@@ -49,6 +50,17 @@ export default defineEventHandler(async (event) => {
       },
       type: true,
       status: true,
+      parentTransactionId: true,
+      approvedAt: true,
+      failedAt: true,
+      failReason: true,
+      depositWalletAddress: true,
+      depositWalletAddressNetwork: true,
+      withdrawalWalletAddress: true,
+      withdrawalWalletAddressNetwork: true,
+      bank: true,
+      bankAccount: true,
+      description: true,
       createdAt: true
     },
     skip: page * (limit ?? 0),

@@ -6,7 +6,7 @@ import { accountRoles } from "../app/data/account";
 export const EmailSchema = z.email({ message: "Invalid email" });
 
 export const PasswordSchema = z
-  .string()
+  .string("Invalid password")
   .min(MIN_PASSWORD_LENGTH, {
     message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`
   })

@@ -1,7 +1,7 @@
 generator client {
-  provider      = "prisma-client"
-  output        = "../server/generated/prisma"
-  engineType    = "client" 
+  provider   = "prisma-client"
+  output     = "../server/generated/prisma"
+  engineType = "client"
 }
 
 datasource db {
@@ -341,6 +341,7 @@ model InvestmentPlan {
   createdAt                DateTime               @default(now())
   updatedAt                DateTime               @updatedAt
 
+  @@unique([category, name])
   @@map("investment_plan")
 }
 
@@ -352,29 +353,30 @@ enum InvestmentStatus {
 }
 
 model Investment {
-  id                 String                 @id @default(uuid())
-  financialAccountId String
-  investorId         String
-  deposit            Float
-  investmentName     String
-  totalProfit        Float                  @default(0)
-  profitCount        Int                    @default(0)
-  status             InvestmentStatus       @default(open)
-  pausedAt           DateTime?
-  pausedReason       String?
-  closedAt           DateTime?
-  closedReason       String?
-  terminatedAt       DateTime?
-  terminatedReason   String?
-  category           InvestmentPlanCategory
-  daysCompleted      Int                    @default(0)
-  duration           Int
-  totalReturn        Float
-  periodicReturn     Float
-  profitDistribution ProfitDistribution     @default(daily)
-  terminationFee     Float                  @default(0)
-  createdAt          DateTime               @default(now())
-  updatedAt          DateTime               @updatedAt
+  id                      String                 @id @default(uuid())
+  financialAccountId      String
+  investorId              String
+  deposit                 Float
+  investmentName          String
+  totalProfit             Float                  @default(0)
+  profitCount             Int                    @default(0)
+  status                  InvestmentStatus       @default(open)
+  pausedAt                DateTime?
+  pausedReason            String?
+  closedAt                DateTime?
+  closedReason            String?
+  terminatedAt            DateTime?
+  terminatedReason        String?
+  category                InvestmentPlanCategory
+  daysCompleted           Int                    @default(0)
+  duration                Int
+  totalReturn             Float
+  periodicReturn          Float
+  profitDistribution      ProfitDistribution     @default(daily)
+  terminationFee          Float                  @default(0)
+  lastProfitDistributedAt DateTime?
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
 
   // Relation
   investor         AccountUser      @relation(fields: [investorId], references: [id], onDelete: Cascade)

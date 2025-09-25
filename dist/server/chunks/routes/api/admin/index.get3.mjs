@@ -1,6 +1,5 @@
 import { d as defineEventHandler, a as getValidatedQuery, c as createError, p as prisma } from '../../../nitro/nitro.mjs';
 import { p as paginationQuerySchema } from '../../../_/schemas.mjs';
-import { z } from 'zod';
 import 'node:path';
 import 'fs/promises';
 import 'axios';
@@ -11,72 +10,66 @@ import 'node:events';
 import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
+import 'cron';
+import 'decimal.js';
+import 'fs';
+import 'winston';
 import 'node:url';
-import 'better-auth';
-import 'better-auth/adapters/prisma';
 import '@prisma/client/runtime/client';
 import '@prisma/adapter-pg';
-import 'better-auth/plugins';
 import 'nodemailer';
+import 'better-auth';
+import 'better-auth/adapters/prisma';
+import 'better-auth/plugins';
 import '@iconify/utils';
 import 'consola';
 import 'ipx';
+import 'zod';
 
 const index_get = defineEventHandler(async (event) => {
-  const schema = z.object({
-    ...paginationQuerySchema.shape,
-    type: z.enum(["deposit", "withdrawal", "transfer", "investment", "profit"]).optional(),
-    status: z.enum(["pending", "successfull", "reversed", "failed"]).optional()
-  });
-  const query = await getValidatedQuery(event, schema.safeParse);
+  const query = await getValidatedQuery(event, paginationQuerySchema.safeParse);
   if (!query.success) {
     throw createError({
       statusCode: 400,
       statusMessage: query.error.issues[0].message
     });
   }
-  const { type, status, page = 0, limit } = query.data;
-  const transactions = await prisma.transaction.findMany({
+  const { search = "", page = 0, limit, skip } = query.data;
+  const profiles = await prisma.profile.findMany({
     where: {
-      AND: [type ? { type } : {}, status ? { status } : {}],
-      jointAccountModRequests: { none: {} }
+      OR: [
+        { user: { name: { contains: search, mode: "insensitive" } } },
+        { user: { email: { contains: search, mode: "insensitive" } } }
+      ]
     },
     select: {
       id: true,
-      USDAmount: true,
-      amount: true,
-      currency: true,
-      rate: true,
-      charges: true,
-      initiator: {
+      kycStatus: true,
+      governmentIdType: true,
+      governmentId: true,
+      governmentIdExt: true,
+      user: {
         select: {
-          user: {
-            select: {
-              name: true
-            }
-          }
+          id: true,
+          name: true,
+          email: true,
+          image: true
         }
-      },
-      financialAccount: {
-        select: {
-          name: true
-        }
-      },
-      type: true,
-      status: true,
-      createdAt: true
+      }
     },
-    skip: page * (limit != null ? limit : 0),
+    skip: skip != null ? skip : page * (limit != null ? limit : 0),
     take: limit,
     orderBy: {
-      createdAt: "desc"
+      updatedAt: "desc"
     }
   });
-  return transactions.map((txn) => ({
-    ...txn,
-    initiator: txn.initiator.user.name,
-    financialAccountName: txn.financialAccount.name,
-    financialAccount: void 0
+  return profiles.map((profile) => ({
+    ...profile,
+    userId: profile.user.id,
+    fullName: profile.user.name,
+    email: profile.user.email,
+    image: profile.user.image,
+    user: void 0
   }));
 });
 
