@@ -1,36 +1,36 @@
 import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
 
 export const links = ({
-  signOut,
+  signOut
 }: {
   signOut: () => void;
 }): NavigationMenuItem[][] => [
   [
     {
       label: "Home",
-      type: "label",
+      type: "label"
     },
     {
       label: "Dashboard",
       icon: "i-lucide-house",
-      to: "/user",
-    },
+      to: "/user"
+    }
   ],
   [
     {
       label: "Finances",
-      type: "label",
+      type: "label"
     },
     {
       label: "Accounts",
       icon: "i-lucide-book-user",
-      to: "/user/accounts",
+      to: "/user/accounts"
     },
     {
       label: "Investment Plans",
       icon: "i-lucide-circle-dollar-sign",
-      to: "/user/investment-plans",
-    },
+      to: "/user/investment-plans"
+    }
     /* {
       label: "Investment Advisor",
       icon: "i-lucide-hand-coins",
@@ -39,39 +39,39 @@ export const links = ({
   [
     {
       label: "Security",
-      type: "label",
+      type: "label"
     },
     {
       label: "Forgot Password",
       icon: "i-lucide-lock-open",
-      to: "/forgot-password",
+      to: "/forgot-password"
     },
     {
       label: "Change Password",
       icon: "i-lucide-lock",
-      to: "/user/change-password",
+      to: "/user/change-password"
     },
     {
       label: "Change Email",
       icon: "i-lucide-mail-warning",
-      to: "/user/change-email",
-    },
+      to: "/user/change-email"
+    }
   ],
   [
     {
       label: "User",
-      type: "label",
+      type: "label"
     },
     {
       label: "Profile",
       icon: "i-lucide-circle-user-round",
-      to: "/user/profile",
+      to: "/user/profile"
     },
     {
       label: "Notifications",
       icon: "i-lucide-bell",
-      to: "/user/notifications",
-    },
+      to: "/user/notifications"
+    }
     /*   {
       label: "Settings",
       icon: "i-lucide-settings",
@@ -81,15 +81,15 @@ export const links = ({
     {
       label: "Sign out",
       icon: "i-lucide-log-out",
-      onSelect: () => signOut(),
-    },
-  ],
+      onSelect: () => signOut()
+    }
+  ]
 ];
 
 export const secondaryLinks = ({
   name,
   image,
-  signOut,
+  signOut
 }: {
   name: string;
   image: string | undefined;
@@ -102,33 +102,33 @@ export const secondaryLinks = ({
         avatar: {
           src: image,
           size: "xl",
-          alt: name,
+          alt: name
         },
-        type: "label",
-      },
+        type: "label"
+      }
     ],
     [
       {
         label: "Accounts",
         icon: "i-lucide-book-user",
-        to: "/user/accounts",
+        to: "/user/accounts"
       },
       {
         label: "Profile",
         icon: "i-lucide-circle-user-round",
-        to: "/user/profile",
-      },
+        to: "/user/profile"
+      }
     ],
     [
-     /*  {
+      /*  {
         label: "Investment Advisor",
         icon: "i-lucide-hand-coins",
       }, */
       {
         label: "Sign out",
         icon: "i-lucide-log-out",
-        onSelect: () => signOut(),
-      },
-    ],
+        onSelect: () => signOut()
+      }
+    ]
   ];
 };

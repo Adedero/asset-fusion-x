@@ -5,23 +5,23 @@ export default defineEventHandler(async (event) => {
   const { accountId } = getRouterParams(event);
   const { data, error, success } = await readValidatedBody(
     event,
-    FinancialAccountSchema.partial().safeParse,
+    FinancialAccountSchema.partial().safeParse
   );
 
   if (!success) {
     throw createError({
       statusCode: 400,
-      statusMessage: error.issues[0].message,
+      statusMessage: error.issues[0].message
     });
   }
 
   const updated = await prisma.financialAccount.update({
     where: {
-      id: accountId,
+      id: accountId
     },
     data: {
-      ...data,
-    },
+      ...data
+    }
   });
 
   return updated;

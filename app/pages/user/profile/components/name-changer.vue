@@ -11,13 +11,13 @@ const open = ref<boolean>(false);
 const user = computed(() => authStore.user.value);
 
 const schema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string().min(1, "Name is required")
 });
 
 type Schema = z.infer<typeof schema>;
 
 const state = reactive<Schema>({
-  name: "",
+  name: ""
 });
 function reset() {
   state.name = "";
@@ -32,8 +32,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       method: "PUT",
       body: JSON.stringify({ name: event.data.name }),
       headers: {
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     });
     reset();
     authStore.setUser({ ...authStore.user.value!, name: data.name });
@@ -43,7 +43,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     toast.add({
       title: "Error",
       description: error.value.message || "Failed to update name",
-      color: "error",
+      color: "error"
     });
   }
 }
@@ -63,7 +63,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         trailing-icon="i-lucide-chevron-down"
         :ui="{
           trailingIcon:
-            'group-data-[state=open]:rotate-180 transition-transform duration-200',
+            'group-data-[state=open]:rotate-180 transition-transform duration-200'
         }"
         block
       />

@@ -2,7 +2,7 @@
 import SignInForm from "./sign-in-form.vue";
 
 definePageMeta({
-  layout: "auth",
+  layout: "auth"
 });
 
 const runtimeConfig = useRuntimeConfig();

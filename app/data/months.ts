@@ -10,5 +10,5 @@ export default [
   { long: "September", short: "Sep", number: 8 },
   { long: "October", short: "Oct", number: 9 },
   { long: "November", short: "Nov", number: 10 },
-  { long: "December", short: "Dec", number: 11 },
+  { long: "December", short: "Dec", number: 11 }
 ];

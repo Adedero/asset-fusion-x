@@ -9,24 +9,24 @@ export default defineEventHandler(async (event) => {
       recipientEmail: user.email,
       financialAccount: {
         ownership: "joint",
-        status: "active",
-      },
+        status: "active"
+      }
     },
     include: {
       creator: {
         select: {
           name: true,
           email: true,
-          image: true,
-        },
+          image: true
+        }
       },
       financialAccount: {
         select: {
           name: true,
-          createdAt: true,
-        },
-      },
-    },
+          createdAt: true
+        }
+      }
+    }
   });
 
   return joinRequests;

@@ -5,21 +5,21 @@ import { prisma } from "../lib/prisma";
 export async function getJointAccountModApprovals(
   financialAccountId: string,
   creatorId: string,
-  tx?: TransactionClient,
+  tx?: TransactionClient
 ): Promise<{ approverId: string; status: JointAccountRequestStatus }[]> {
   const client = tx ?? prisma;
 
   const accountUsers = await client.accountUser.findMany({
     where: {
-      financialAccountId,
+      financialAccountId
     },
     include: {
       user: {
         select: {
-          id: true,
-        },
-      },
-    },
+          id: true
+        }
+      }
+    }
   });
 
   return accountUsers.map((accountUser) => {
@@ -27,9 +27,7 @@ export async function getJointAccountModApprovals(
     return {
       approverId: user.id,
       status:
-        !!accountUser.autosign || user.id === creatorId
-          ? "accepted"
-          : "pending",
+        !!accountUser.autosign || user.id === creatorId ? "accepted" : "pending"
     };
   });
 }

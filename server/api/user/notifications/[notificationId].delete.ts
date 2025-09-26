@@ -5,11 +5,11 @@ export default defineEventHandler(async (event) => {
 
   const deleted = await prisma.notification.delete({
     where: {
-      id: notificationId,
-    },
+      id: notificationId
+    }
   });
 
   return {
-    notification: deleted,
+    notification: deleted
   };
 });

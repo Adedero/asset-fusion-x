@@ -6,25 +6,25 @@ export default defineEventHandler(async (event) => {
   const transaction = await prisma.transaction.findUnique({
     where: {
       id: transactionId,
-      financialAccountId: accountId,
+      financialAccountId: accountId
     },
     include: {
       initiator: {
         select: {
           user: {
             select: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
+              name: true
+            }
+          }
+        }
+      }
+    }
   });
 
   if (!transaction) {
     throw createError({
       statusCode: 404,
-      statusText: "Transaction not found",
+      statusText: "Transaction not found"
     });
   }
 

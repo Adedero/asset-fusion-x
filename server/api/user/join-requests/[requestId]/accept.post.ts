@@ -9,24 +9,24 @@ export default defineEventHandler(async (event) => {
 
   const joinRequest = await prisma.jointAccountRequest.findUnique({
     where: {
-      id: requestId,
+      id: requestId
     },
     include: {
-      financialAccount: true,
-    },
+      financialAccount: true
+    }
   });
 
   if (!joinRequest) {
     throw createError({
       statusCode: 404,
-      statusMessage: "Account request does not exist or may have been revoked.",
+      statusMessage: "Account request does not exist or may have been revoked."
     });
   }
 
   if (user.email !== joinRequest.recipientEmail) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Not allowed",
+      statusMessage: "Not allowed"
     });
   }
 
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 400,
       statusMessage:
-        "This account is either inactive or does not accept multiple members.",
+        "This account is either inactive or does not accept multiple members."
     });
   }
 
@@ -49,11 +49,11 @@ export default defineEventHandler(async (event) => {
         userId: user.id,
         financialAccountId: financialAccount.id,
         role: joinRequest.role,
-        ownership: joinRequest.ownership,
-      },
+        ownership: joinRequest.ownership
+      }
     }),
 
-    await prisma.jointAccountRequest.delete({ where: { id: joinRequest.id } }),
+    await prisma.jointAccountRequest.delete({ where: { id: joinRequest.id } })
   ]);
 
   // send email and notifications

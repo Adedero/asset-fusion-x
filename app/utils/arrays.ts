@@ -6,7 +6,7 @@
  */
 export function groupBy<T, K extends keyof T>(
   items: T[],
-  key: K,
+  key: K
 ): Record<T[K] & PropertyKey, T[]> {
   return items.reduce(
     (acc, item) => {
@@ -15,7 +15,7 @@ export function groupBy<T, K extends keyof T>(
       acc[groupKey].push(item);
       return acc;
     },
-    {} as Record<T[K] & PropertyKey, T[]>,
+    {} as Record<T[K] & PropertyKey, T[]>
   );
 }
 
@@ -29,7 +29,7 @@ export function groupBy<T, K extends keyof T>(
 export function sortBy<T, K extends keyof T>(
   items: T[],
   key: K,
-  order: "asc" | "desc" = "asc",
+  order: "asc" | "desc" = "asc"
 ): T[] {
   return [...items].sort((a, b) => {
     const aValue = a[key];

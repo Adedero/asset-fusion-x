@@ -4,7 +4,7 @@ import Layout from "./components/layout";
 export default function emailChangeTemplate({
   user,
   url,
-  subject,
+  subject
 }: {
   user: EventContextUser;
   url: string;

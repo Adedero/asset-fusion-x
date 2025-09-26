@@ -5,7 +5,7 @@ import { removeUserImage, saveUserImage } from "~~/server/utils/user-image";
 export default defineEventHandler(async (event) => {
   const schema = z.object({
     name: z.string().min(1, "Name is required").optional(),
-    image: z.string().nullish(),
+    image: z.string().nullish()
   });
 
   const body = await readValidatedBody(event, schema.safeParse);
@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   if (!body.success) {
     throw createError({
       statusCode: 400,
-      message: body.error.issues[0].message,
+      message: body.error.issues[0].message
     });
   }
 
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
       if (!success) {
         throw createError({
           statusCode: 500,
-          statusMessage: error?.message || "Failed to remove old user image",
+          statusMessage: error?.message || "Failed to remove old user image"
         });
       }
     }
@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
     if (error) {
       throw createError({
         statusCode: 500,
-        statusMessage: error.message,
+        statusMessage: error.message
       });
     }
 
@@ -58,7 +58,7 @@ export default defineEventHandler(async (event) => {
     if (!success) {
       throw createError({
         statusCode: 500,
-        statusMessage: error?.message || "Failed to remove user image",
+        statusMessage: error?.message || "Failed to remove user image"
       });
     }
     savedImage = null;
@@ -68,12 +68,12 @@ export default defineEventHandler(async (event) => {
     where: { id: user.id },
     data: {
       name: name ?? user.name,
-      image: savedImage,
-    },
+      image: savedImage
+    }
   });
 
   return {
     name: updatedUser.name,
-    image: updatedUser.image || null,
+    image: updatedUser.image || null
   };
 });

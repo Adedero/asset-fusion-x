@@ -42,12 +42,12 @@ export default function investmentStatusUpdateEmail(
     <section>
       <p>
         Thank your for using ${process.env.APP_NAME}. ${conditional(
-    role === "user",
-    {
-      if: "If this is not your investment, please contact us immediately and reset your password.",
-      else: ""
-    }
-  )} 
+          role === "user",
+          {
+            if: "If this is not your investment, please contact us immediately and reset your password.",
+            else: ""
+          }
+        )} 
       </p>
     </section>
 </section>`;

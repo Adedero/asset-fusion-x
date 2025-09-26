@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "main",
+  layout: "main"
 });
 
 const { appName } = useRuntimeConfig().public;
@@ -12,7 +12,8 @@ const { appName } = useRuntimeConfig().public;
       <MainPageHero
         heading="Forex Trading"
         subheading="The world's most liquid and fast-moving market. With AssetFusionX, access professional-grade forex strategies and global currency exposure—without needing to become a trader yourself."
-        bg-image="/img/pages/investments/forex.jpg" />
+        bg-image="/img/pages/investments/forex.jpg"
+      />
     </div>
 
     <section class="mt-24 mb-24 px-16 grid grid-cols-2 gap-16 items-center">
@@ -32,11 +33,11 @@ const { appName } = useRuntimeConfig().public;
         </p>
       </div>
       <div>
-        <NuxtImg
-          placeholder
+        <img
           src="/img/pages/investments/understanding-forex.jpg"
           alt="Understanding Forex"
-          class="rounded-xl shadow-lg" />
+          class="rounded-xl shadow-lg"
+        />
       </div>
     </section>
 
@@ -101,7 +102,7 @@ const { appName } = useRuntimeConfig().public;
           </ul>
         </div>
         <!--  <div class="relative w-full h-80 rounded-lg overflow-hidden shadow-lg">
-              <NuxtImg placeholder src="/img/pages/investments/foreign-currencies.jpg" alt="Currency Exchange Concept" class="absolute inset-0 w-full h-full object-cover" />
+              <img  src="/img/pages/investments/foreign-currencies.jpg" alt="Currency Exchange Concept" class="absolute inset-0 w-full h-full object-cover" />
               <div class="absolute inset-0 bg-gradient-to-tr from-slate-900 via-transparent to-transparent opacity-70" />
           </div> -->
       </div>
@@ -113,13 +114,14 @@ const { appName } = useRuntimeConfig().public;
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
         <div
-          class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300">
+          class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300"
+        >
           <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-            <NuxtImg
-              placeholder
+            <img
               src="/img/pages/investments/clock-tower.jpg"
               alt="Global Clock Tower"
-              class="absolute inset-0 w-full h-full object-cover object-top" />
+              class="absolute inset-0 w-full h-full object-cover object-top"
+            />
           </div>
           <h3 class="text-xl font-semibold text-slate-200 mb-4">
             24/5 Market Access
@@ -133,13 +135,14 @@ const { appName } = useRuntimeConfig().public;
           </p>
         </div>
         <div
-          class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300">
+          class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300"
+        >
           <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-            <NuxtImg
-              placeholder
+            <img
               src="/img/pages/investments/high-liquidity.jpg"
               alt="Graph Showing High Liquidity"
-              class="absolute inset-0 w-full h-full object-cover" />
+              class="absolute inset-0 w-full h-full object-cover"
+            />
           </div>
           <h3 class="text-xl font-semibold text-slate-200 mb-4">
             Unmatched Liquidity
@@ -153,13 +156,14 @@ const { appName } = useRuntimeConfig().public;
           </p>
         </div>
         <div
-          class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300">
+          class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300"
+        >
           <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-            <NuxtImg
-              placeholder
+            <img
               src="/img/pages/investments/leverage-scale.jpg"
               alt="Leverage Scale"
-              class="absolute inset-0 w-full h-full object-cover" />
+              class="absolute inset-0 w-full h-full object-cover"
+            />
           </div>
           <h3 class="text-xl font-semibold text-slate-200 mb-4">
             Leverage Opportunities
@@ -230,13 +234,14 @@ const { appName } = useRuntimeConfig().public;
           </div>
         </div>
         <div class="relative w-full h-96 rounded-lg overflow-hidden shadow-lg">
-          <NuxtImg
-            placeholder
+          <img
             src="/img/pages/investments/global-economic-data.jpg"
             alt="Global Economic Data on Screens"
-            class="absolute inset-0 w-full h-full object-cover" />
+            class="absolute inset-0 w-full h-full object-cover"
+          />
           <div
-            class="absolute inset-0 bg-gradient-to-l from-slate-900 via-transparent to-transparent opacity-80" />
+            class="absolute inset-0 bg-gradient-to-l from-slate-900 via-transparent to-transparent opacity-80"
+          />
         </div>
       </div>
     </section>
@@ -254,7 +259,8 @@ const { appName } = useRuntimeConfig().public;
       </p>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
         <div
-          class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300 flex flex-col items-center text-center">
+          class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300 flex flex-col items-center text-center"
+        >
           <h3 class="text-2xl font-semibold text-slate-200 mb-4">
             Automated Trading Systems (EAs)
           </h3>
@@ -267,7 +273,8 @@ const { appName } = useRuntimeConfig().public;
           </p>
         </div>
         <div
-          class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300 flex flex-col items-center text-center">
+          class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300 flex flex-col items-center text-center"
+        >
           <h3 class="text-2xl font-semibold text-slate-200 mb-4">
             Managed Forex Accounts
           </h3>
@@ -308,11 +315,11 @@ const { appName } = useRuntimeConfig().public;
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
         <div class="flex flex-col items-center">
-          <NuxtImg
-            placeholder
+          <img
             src="/img/pages/investments/expert-analyzing-data.jpg"
             alt="Expert Trader Analyzing Data"
-            class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500" />
+            class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500"
+          />
           <h3 class="text-2xl font-semibold text-slate-200 mb-4">
             Expertly Curated Strategies
           </h3>
@@ -326,11 +333,11 @@ const { appName } = useRuntimeConfig().public;
           </p>
         </div>
         <div class="flex flex-col items-center">
-          <NuxtImg
-            placeholder
+          <img
             src="/img/pages/investments/secure-transaction.jpg"
             alt="Secure Digital Transaction"
-            class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500" />
+            class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500"
+          />
           <h3 class="text-2xl font-semibold text-slate-200 mb-4">
             Seamless & Secure Investment
           </h3>

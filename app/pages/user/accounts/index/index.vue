@@ -2,8 +2,8 @@
 const { data, error, refresh } = await useFetch(
   "/api/user/financial-accounts",
   {
-    key: "user-financial-accounts",
-  },
+    key: "user-financial-accounts"
+  }
 );
 
 const maxAvatarGroup = 3;

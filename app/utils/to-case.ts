@@ -1,6 +1,6 @@
 export default function toCase(
   input: string,
-  style: "sentence" | "upper" | "lower" | "pascal" | "snake",
+  style: "sentence" | "upper" | "lower" | "pascal" | "snake"
 ): string {
   const words = input
     .replace(/([a-z])([A-Z])/g, "$1 $2")

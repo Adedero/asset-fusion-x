@@ -2,12 +2,12 @@ import type { EventHandlerRequest, H3Event } from "h3";
 
 function getRequestParam(
   event: H3Event<EventHandlerRequest>,
-  name: string,
+  name: string
 ): string;
 function getRequestParam(
   event: H3Event<EventHandlerRequest>,
   name: string,
-  force?: boolean,
+  force?: boolean
 ): string | undefined {
   const param = getRouterParam(event, name);
   const shouldForce = force !== false;
@@ -15,7 +15,7 @@ function getRequestParam(
   if (!param) {
     throw createError({
       statusCode: 400,
-      statusMessage: `Missing required param: ${name}`,
+      statusMessage: `Missing required param: ${name}`
     });
   }
   return param;

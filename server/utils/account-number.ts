@@ -4,12 +4,12 @@ type Ownership = "single" | "joint";
 function getPrefix(accountType: AccountType, ownership: Ownership): string {
   const typeMap: Record<AccountType, string> = {
     personal: "1",
-    business: "2",
+    business: "2"
   };
 
   const ownershipMap: Record<Ownership, string> = {
     single: "3",
-    joint: "4",
+    joint: "4"
   };
 
   return typeMap[accountType] + ownershipMap[ownership];
@@ -27,7 +27,7 @@ function generateSecureRandomDigits(length: number): string {
 export function generateAccountNumber(
   accountType: AccountType,
   ownership: Ownership,
-  totalLength = 10,
+  totalLength = 10
 ): string {
   const prefix = getPrefix(accountType, ownership);
   const randomLength = totalLength - prefix.length;

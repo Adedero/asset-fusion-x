@@ -3,7 +3,7 @@ import type { Currency } from "~~/server/generated/prisma/client";
 import type { Serialize } from "~~/types";
 
 definePageMeta({
-  layout: "user",
+  layout: "user"
 });
 
 const selectedCurrency = ref<Serialize<Currency> | null>(null);

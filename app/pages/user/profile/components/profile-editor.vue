@@ -9,7 +9,7 @@ const toast = useToast();
 const open = ref<boolean>(false);
 
 const { data, error, refresh } = await useFetch("/api/user/profile", {
-  key: "user-profile",
+  key: "user-profile"
 });
 
 const state = reactive<ProfileSchemaType>({
@@ -17,7 +17,7 @@ const state = reactive<ProfileSchemaType>({
   postalCode: data.value?.profile?.postalCode || "",
   city: data.value?.profile?.city || "",
   state: data.value?.profile?.state || "",
-  country: data.value?.profile?.country || "United States",
+  country: data.value?.profile?.country || "United States"
 });
 
 const initialState = ref<string>(JSON.stringify(state));
@@ -32,8 +32,8 @@ async function onSubmit(event: FormSubmitEvent<ProfileSchemaType>) {
       method: "PUT",
       body: event.data,
       headers: {
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     });
 
     state.address = data.profile.address ?? "";
@@ -54,7 +54,7 @@ async function onSubmit(event: FormSubmitEvent<ProfileSchemaType>) {
     toast.add({
       title: "Error",
       description: error.value.message || "Failed to update profile",
-      color: "error",
+      color: "error"
     });
   }
 }

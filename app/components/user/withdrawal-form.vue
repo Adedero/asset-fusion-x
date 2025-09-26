@@ -19,12 +19,12 @@ const schema = z.object({
     .optional(),
   accountNumber: z.string({ message: "Invalid account number" }).optional(),
   bank: z.string({ message: "Invalid bank" }).optional(),
-  description: z.string({ message: "Invalid description" }).optional(),
+  description: z.string({ message: "Invalid description" }).optional()
 });
 type Schema = z.infer<typeof schema>;
 
 const state = reactive<Schema>({
-  amount: 0,
+  amount: 0
 });
 
 const hasEnoughBalance = computed<boolean>(() => {
@@ -89,7 +89,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
       charges: currency.withdrawalCharge ?? 0,
       bank: state.bank,
       accountNumber: state.accountNumber,
-      description: state.description,
+      description: state.description
     };
     open.value = true;
     return;
@@ -97,7 +97,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
 
   try {
     const data = await $fetch("/api/user/transactions/init-withdrawal", {
-      query: { symbol: currency.symbol, amount },
+      query: { symbol: currency.symbol, amount }
     });
     transaction.value = {
       financialAccountId: accountId,
@@ -109,7 +109,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
       charges: currency.withdrawalCharge,
       withdrawalWalletAddress: state.walletAddress,
       withdrawalWalletAddressNetwork: state.walletAddressNetwork,
-      description: state.description,
+      description: state.description
     };
     open.value = true;
     reset();
@@ -150,7 +150,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
             label="Enter the deposit amount"
             required
             :description="`Charges: ${toDollar(
-              currency.withdrawalCharge ?? 0,
+              currency.withdrawalCharge ?? 0
             )}`"
             class="md:col-span-2"
           >
@@ -162,7 +162,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
                 currencyDisplay: 'symbol',
                 currencySign: 'standard',
                 minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
+                maximumFractionDigits: 2
               }"
               size="lg"
               class="w-full"
@@ -399,7 +399,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
                 :button-props="{
                   size: 'lg',
                   label: 'Proceed',
-                  trailingIcon: 'i-lucide-circle-arrow-right',
+                  trailingIcon: 'i-lucide-circle-arrow-right'
                 }"
               />
             </div>

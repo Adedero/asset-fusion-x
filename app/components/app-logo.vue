@@ -10,7 +10,7 @@ interface Props {
 const {
   size = "28",
   width = undefined,
-  height = undefined,
+  height = undefined
 } = defineProps<Props>();
 </script>
 

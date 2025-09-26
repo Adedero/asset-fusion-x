@@ -5,13 +5,13 @@ import conditional from "./utils/conditional";
 import Button from "./components/button";
 
 export default function financialAccountCreateEmail(
-  params: EmailTemplateParams<{ account: FinancialAccount }>,
+  params: EmailTemplateParams<{ account: FinancialAccount }>
 ) {
   const { user, data, subject, role = "user" } = params ?? {};
 
   const accountLink = conditional(role === "user", {
     if: `${process.env.BASE_URL}/user/accounts/${data.account.id}`,
-    else: `${process.env.BASE_URL}/users/${user.id}/accounts/${data.account.id}`,
+    else: `${process.env.BASE_URL}/users/${user.id}/accounts/${data.account.id}`
   });
   const body = `<section>
   <section>
@@ -23,7 +23,7 @@ export default function financialAccountCreateEmail(
       You are receiving this email because  
       ${conditional(role === "user", {
         if: "you",
-        else: user.name,
+        else: user.name
       })} opened a new account.
     </p>
   </section>
@@ -44,8 +44,8 @@ export default function financialAccountCreateEmail(
         role === "user",
         {
           if: "If you did not open an account, please contact us immediately and reset your password.",
-          else: "",
-        },
+          else: ""
+        }
       )} 
     </p>
   </section>

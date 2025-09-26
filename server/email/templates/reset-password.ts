@@ -4,7 +4,7 @@ import Layout from "./components/layout";
 export default function resetPasswordTemplate({
   user,
   url,
-  subject,
+  subject
 }: {
   user: EventContextUser;
   url: string;

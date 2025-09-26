@@ -26,6 +26,6 @@ export default function useRouteData() {
   return {
     getParams,
     getSearchParams,
-    raw: route,
+    raw: route
   };
 }

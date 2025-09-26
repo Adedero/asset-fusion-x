@@ -9,9 +9,9 @@ definePageMeta({
   layout: "user",
   breadcrumb: [
     {
-      label: "Notifications",
-    },
-  ] as BreadcrumbItem[],
+      label: "Notifications"
+    }
+  ] as BreadcrumbItem[]
 });
 
 const toast = useToast();
@@ -20,21 +20,21 @@ const items = ref<DropdownMenuItem[][]>([
   [
     {
       label: "All",
-      onSelect: () => selectItems("All"),
+      onSelect: () => selectItems("All")
     },
     {
       label: "Read",
-      onSelect: () => selectItems("Read"),
+      onSelect: () => selectItems("Read")
     },
     {
       label: "Unread",
-      onSelect: () => selectItems("Unread"),
-    },
-  ],
+      onSelect: () => selectItems("Unread")
+    }
+  ]
 ]);
 
 const notifications = ref<Serialize<Notification & { checked?: boolean }>[]>(
-  [],
+  []
 );
 const checkedNotificationIds = computed(() => {
   return notifications.value.filter((n) => n.checked === true).map((n) => n.id);
@@ -60,8 +60,8 @@ async function getNotifications() {
     const data = await $fetch<Serialize<Notification>[]>(
       "/api/user/notifications",
       {
-        params: { skip: skip.value, limit },
-      },
+        params: { skip: skip.value, limit }
+      }
     );
 
     notifications.value = [...notifications.value, ...data];
@@ -84,8 +84,8 @@ const { reset: resetScroll } = useInfiniteScroll(
   },
   {
     distance: 20,
-    canLoadMore: () => hasFinished.value,
-  },
+    canLoadMore: () => hasFinished.value
+  }
 );
 
 async function refresh() {
@@ -99,28 +99,28 @@ const hasSelected = ref<boolean>(false);
 
 watch(
   checkedNotificationIds,
-  () => (hasSelected.value = checkedNotificationIds.value.length > 0),
+  () => (hasSelected.value = checkedNotificationIds.value.length > 0)
 );
 
 function selectItems(value: "All" | "Read" | "Unread") {
   if (value === "All") {
     notifications.value = notifications.value.map((n) => ({
       ...n,
-      checked: true,
+      checked: true
     }));
   }
 
   if (value === "Read") {
     notifications.value = notifications.value.map((n) => ({
       ...n,
-      checked: n.isRead,
+      checked: n.isRead
     }));
   }
 
   if (value === "Unread") {
     notifications.value = notifications.value.map((n) => ({
       ...n,
-      checked: !n.isRead,
+      checked: !n.isRead
     }));
   }
 }
@@ -129,7 +129,7 @@ const handleUpdated = (id: string, value: boolean) => {
   notifications.value = notifications.value.map((n) => {
     return {
       ...n,
-      checked: n.id === id ? value : n.checked,
+      checked: n.id === id ? value : n.checked
     };
   });
 };
@@ -138,7 +138,7 @@ function deselectItems() {
   hasSelected.value = false;
   notifications.value = notifications.value.map((n) => ({
     ...n,
-    checked: false,
+    checked: false
   }));
 }
 
@@ -175,7 +175,7 @@ async function markAllAsRead() {
   try {
     await $fetch("/api/user/notifications", {
       method: "put",
-      body: { notifications: readNotificationIds.value },
+      body: { notifications: readNotificationIds.value }
     });
   } catch (error) {
     console.error(error);
@@ -196,10 +196,10 @@ async function deleteCheckedNotifications() {
   try {
     await $fetch("/api/user/notifications", {
       method: "patch",
-      body: { notifications: checkedNotificationIds.value },
+      body: { notifications: checkedNotificationIds.value }
     });
     notifications.value = notifications.value.filter(
-      (n) => !checkedNotificationIds.value.includes(n.id),
+      (n) => !checkedNotificationIds.value.includes(n.id)
     );
 
     refresh();
@@ -207,7 +207,7 @@ async function deleteCheckedNotifications() {
     toast.add({
       color: "error",
       title: "Error",
-      description: normalizeException(error).message,
+      description: normalizeException(error).message
     });
   } finally {
     deleting.value = false;

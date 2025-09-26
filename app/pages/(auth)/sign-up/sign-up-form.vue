@@ -9,7 +9,7 @@ const state = reactive<RegisterSchemaType>({
   name: "",
   email: "",
   password: "",
-  confirmPassword: "",
+  confirmPassword: ""
 });
 
 function reset() {
@@ -36,10 +36,10 @@ async function onSubmit(event: FormSubmitEvent<RegisterSchemaType>) {
         reset();
         navigateTo({
           name: "email-verification",
-          query: { email: btoa(email) },
+          query: { email: btoa(email) }
         });
-      },
-    },
+      }
+    }
   );
 }
 </script>

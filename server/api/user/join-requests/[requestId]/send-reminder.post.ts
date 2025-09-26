@@ -8,14 +8,14 @@ export default defineEventHandler(async (event) => {
 
   const joinRequest = await prisma.jointAccountRequest.findUniqueOrThrow({
     where: {
-      id: requestId,
-    },
+      id: requestId
+    }
   });
 
   const financialAccount = await prisma.financialAccount.findUniqueOrThrow({
     where: {
-      id: joinRequest.financialAccountId,
-    },
+      id: joinRequest.financialAccountId
+    }
   });
 
   const subject = `Reminder: Request from ${user.name}`;
@@ -24,26 +24,26 @@ export default defineEventHandler(async (event) => {
     sendEmail({
       to: {
         name: joinRequest.recipientName,
-        address: joinRequest.recipientEmail,
+        address: joinRequest.recipientEmail
       },
       subject,
       html: jointAccountRequestEmail({
         subject,
         user,
-        data: { account: financialAccount, request: joinRequest },
-      }),
+        data: { account: financialAccount, request: joinRequest }
+      })
     }),
     prisma.jointAccountRequest.update({
       where: {
-        id: joinRequest.id,
+        id: joinRequest.id
       },
       data: {
         reminderCount: {
-          increment: 1,
+          increment: 1
         },
-        lastReminderAt: new Date(Date.now()),
-      },
-    }),
+        lastReminderAt: new Date(Date.now())
+      }
+    })
   ]);
 
   return updated;

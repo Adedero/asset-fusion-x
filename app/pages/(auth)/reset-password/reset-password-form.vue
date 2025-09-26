@@ -11,7 +11,7 @@ const token = route.query.token?.toString();
 
 const state = reactive<ResetPasswordSchemaType>({
   password: "",
-  confirmPassword: "",
+  confirmPassword: ""
 });
 
 function reset() {
@@ -34,7 +34,7 @@ async function onSubmit(event: FormSubmitEvent<ResetPasswordSchemaType>) {
   await authClient.resetPassword(
     {
       newPassword: password,
-      token,
+      token
     },
     {
       onError(ctx) {
@@ -43,8 +43,8 @@ async function onSubmit(event: FormSubmitEvent<ResetPasswordSchemaType>) {
       onSuccess() {
         reset();
         open.value = true;
-      },
-    },
+      }
+    }
   );
 }
 </script>

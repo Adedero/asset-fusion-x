@@ -1,6 +1,6 @@
 import type {
   FinancialAccount,
-  Investment,
+  Investment
 } from "~~/server/generated/prisma/client";
 import type { EmailTemplateParams } from "./types";
 import conditional from "./utils/conditional";
@@ -10,7 +10,7 @@ export default function ivestmentCreateEmail(
   params: EmailTemplateParams<{
     investment: Investment;
     account: FinancialAccount;
-  }>,
+  }>
 ) {
   const { user, data, subject, role = "user" } = params ?? {};
 
@@ -24,7 +24,7 @@ export default function ivestmentCreateEmail(
       You are receiving this email because 
       ${conditional(role === "user", {
         if: "you",
-        else: user.name,
+        else: user.name
       })} started a new investment.
     </p>
   </section>
@@ -42,8 +42,8 @@ export default function ivestmentCreateEmail(
           role === "user",
           {
             if: "If you did not start this investment, please contact us immediately and reset your password.",
-            else: "",
-          },
+            else: ""
+          }
         )} 
       </p>
     </section>

@@ -4,7 +4,7 @@ export const useAuthStore = () => {
   const user = useState<BetterAuthUser | null>("auth-user", () => null);
   const session = useState<BetterAuthSession | null>(
     "auth-session",
-    () => null,
+    () => null
   );
 
   // Load from sessionStorage on client only
@@ -42,6 +42,6 @@ export const useAuthStore = () => {
     user,
     setUser,
     session,
-    setSession,
+    setSession
   };
 };

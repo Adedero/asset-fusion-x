@@ -11,11 +11,11 @@ interface Props {
 const { onlyWithdrawalCurrencies = false } = defineProps<Props>();
 
 const { pending, data, error, refresh } = await useFetch("/api/currencies", {
-  key: "currencies",
+  key: "currencies"
 });
 
 const err = computed(() =>
-  error.value ? normalizeException(error.value) : null,
+  error.value ? normalizeException(error.value) : null
 );
 
 const items = computed<RadioGroupItem[]>(() => {
@@ -27,7 +27,7 @@ const items = computed<RadioGroupItem[]>(() => {
     ? filter.map((currency) => ({
         label: currency.symbol,
         value: currency.symbol,
-        description: currency.name,
+        description: currency.name
       }))
     : [];
 

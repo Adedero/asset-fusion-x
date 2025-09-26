@@ -6,7 +6,7 @@ import { authClient } from "~/lib/auth";
 import normalizeException from "~~/shared/helpers/normalize-exception";
 
 definePageMeta({
-  layout: "auth",
+  layout: "auth"
 });
 
 const runtimeConfig = useRuntimeConfig();
@@ -32,7 +32,7 @@ async function onSubmit(event: FormSubmitEvent<SchemaType>) {
   await authClient.requestPasswordReset(
     {
       email: event.data.email,
-      redirectTo: "/reset-password",
+      redirectTo: "/reset-password"
     },
     {
       onError(ctx) {
@@ -41,8 +41,8 @@ async function onSubmit(event: FormSubmitEvent<SchemaType>) {
       onSuccess() {
         reset();
         open.value = true;
-      },
-    },
+      }
+    }
   );
 }
 </script>
@@ -102,7 +102,7 @@ async function onSubmit(event: FormSubmitEvent<SchemaType>) {
             color="info"
             icon="i-lucide-triangle-alert"
             :ui="{
-              description: 'text-[0.8rem]',
+              description: 'text-[0.8rem]'
             }"
             :description="`If you do not see an email, you may not have an ${runtimeConfig.public.appName} account.`"
           />

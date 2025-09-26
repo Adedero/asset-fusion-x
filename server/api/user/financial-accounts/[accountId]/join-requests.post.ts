@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   if (!accountId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Account ID is required",
+      statusMessage: "Account ID is required"
     });
   }
 
@@ -18,19 +18,19 @@ export default defineEventHandler(async (event) => {
 
   const isAccountMember = await prisma.accountUser.findFirst({
     where: { userId: user.id, financialAccountId: accountId },
-    select: { id: true },
+    select: { id: true }
   });
 
   if (!isAccountMember) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Not allowed",
+      statusMessage: "Not allowed"
     });
   }
 
   // Get request body
   const schema = JointAccountRequestSchema.extend({
-    role: z.string(),
+    role: z.string()
   });
 
   const body = await readValidatedBody(event, schema.safeParse);
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
   if (!body.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: body.error.issues[0].message,
+      statusMessage: body.error.issues[0].message
     });
   }
 
@@ -53,23 +53,23 @@ export default defineEventHandler(async (event) => {
           id: true,
           user: {
             select: {
-              email: true,
-            },
-          },
-        },
+              email: true
+            }
+          }
+        }
       },
       jointAccountRequests: {
         select: {
-          recipientEmail: true,
-        },
-      },
-    },
+          recipientEmail: true
+        }
+      }
+    }
   });
 
   if (!financialAccount) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Account not found or inactive.",
+      statusMessage: "Account not found or inactive."
     });
   }
 
@@ -79,36 +79,36 @@ export default defineEventHandler(async (event) => {
   if (financialAccount.accountUsers.length === MAX_JOINT_PARTNERS) {
     throw createError({
       statusCode: 400,
-      statusMessage: `Account may not have more than ${MAX_JOINT_PARTNERS} partners`,
+      statusMessage: `Account may not have more than ${MAX_JOINT_PARTNERS} partners`
     });
   }
 
   // Ensure the requested user is not already a partner and has not already been requested
   const isPreviousMember = financialAccount.accountUsers.find(
-    (member) => member.user.email === data.recipientEmail,
+    (member) => member.user.email === data.recipientEmail
   );
 
   if (isPreviousMember) {
     throw createError({
       statusCode: 400,
-      statusMessage: "The requested user is already an account partner",
+      statusMessage: "The requested user is already an account partner"
     });
   }
 
   const hasBeenRequested = financialAccount.jointAccountRequests.find(
-    (request) => request.recipientEmail === data.recipientEmail,
+    (request) => request.recipientEmail === data.recipientEmail
   );
 
   if (hasBeenRequested) {
     throw createError({
       statusCode: 400,
       statusMessage:
-        "The user has already been sent a request. You can send a reminder instead.",
+        "The user has already been sent a request. You can send a reminder instead."
     });
   }
 
   const requestedUser = await prisma.user.findUnique({
-    where: { email: data.recipientEmail },
+    where: { email: data.recipientEmail }
   });
 
   const request = await prisma.jointAccountRequest.create({
@@ -120,8 +120,8 @@ export default defineEventHandler(async (event) => {
       ownership: data.ownership,
       recipientId: requestedUser?.id ?? null,
       financialAccountId: financialAccount.id,
-      description: data.description,
-    },
+      description: data.description
+    }
   });
 
   const subject = `Request from ${user.name}`;
@@ -129,14 +129,14 @@ export default defineEventHandler(async (event) => {
   await sendEmail({
     to: {
       name: request.recipientName,
-      address: request.recipientEmail,
+      address: request.recipientEmail
     },
     subject,
     html: jointAccountRequestEmail({
       subject,
       user,
-      data: { account: financialAccount, request },
-    }),
+      data: { account: financialAccount, request }
+    })
   });
 
   if (requestedUser) {
@@ -145,8 +145,8 @@ export default defineEventHandler(async (event) => {
       data: {
         userId: requestedUser.id,
         title: subject,
-        body: `${user.name} wants you to join their account ${financialAccount.name} as ${request.role}`,
-      },
+        body: `${user.name} wants you to join their account ${financialAccount.name} as ${request.role}`
+      }
     });
   }
 

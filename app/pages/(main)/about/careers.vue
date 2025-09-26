@@ -3,7 +3,7 @@ import type { BadgeProps } from "@nuxt/ui";
 import careers from "~/data/main/careers";
 
 definePageMeta({
-  layout: "main",
+  layout: "main"
 });
 
 const { appName } = useRuntimeConfig().public;
@@ -31,8 +31,7 @@ const randomColor = (): BadgeProps["color"] => {
       </div>
 
       <div class="h-96">
-        <NuxtImg
-          placeholder
+        <img
           src="/img/pages/about/careers.jpg"
           class="h-full w-full object-cover"
         />

@@ -7,7 +7,8 @@ type Item = (typeof investmentPlanCategories)[number];
 const modelValue = defineModel<InvestmentPlanCategory>();
 
 const selected = ref<Item | undefined>(
-  investmentPlanCategories.find((item) => item.value === modelValue.value) ?? undefined
+  investmentPlanCategories.find((item) => item.value === modelValue.value) ??
+    undefined
 );
 
 watch(

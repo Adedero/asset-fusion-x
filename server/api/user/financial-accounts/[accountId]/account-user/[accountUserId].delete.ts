@@ -9,22 +9,22 @@ export default defineEventHandler(async (event) => {
   const [financialAccount, accountUser] = await Promise.all([
     prisma.financialAccount.findUniqueOrThrow({
       where: {
-        id: accountId,
-      },
+        id: accountId
+      }
     }),
 
     await prisma.accountUser.findUniqueOrThrow({
       where: {
         id: accountUserId,
-        financialAccountId: accountId,
-      },
-    }),
+        financialAccountId: accountId
+      }
+    })
   ]);
 
   if (financialAccount.creatorId !== user.id) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Not allowed",
+      statusMessage: "Not allowed"
     });
   }
 
@@ -32,15 +32,15 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 400,
       statusMessage:
-        "You cannot remove yourself from an account. Ask the account cretaor to remove you.",
+        "You cannot remove yourself from an account. Ask the account cretaor to remove you."
     });
   }
 
   const deleted = await prisma.accountUser.delete({
     where: {
       id: accountUser.id,
-      financialAccountId: financialAccount.id,
-    },
+      financialAccountId: financialAccount.id
+    }
   });
 
   return deleted;

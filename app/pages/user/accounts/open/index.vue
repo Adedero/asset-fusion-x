@@ -6,12 +6,12 @@ definePageMeta({
   breadcrumb: [
     {
       label: "Accounts",
-      to: "/user/accounts",
+      to: "/user/accounts"
     },
     {
-      label: "Open",
-    },
-  ] as BreadcrumbItem[],
+      label: "Open"
+    }
+  ] as BreadcrumbItem[]
 });
 </script>
 

@@ -8,9 +8,9 @@ definePageMeta({
   layout: "user",
   breadcrumb: [
     {
-      label: "Change password",
-    },
-  ] as BreadcrumbItem[],
+      label: "Change password"
+    }
+  ] as BreadcrumbItem[]
 });
 
 const toast = useToast();
@@ -21,11 +21,11 @@ const schema = z
       .string({ message: "Enter your old password" })
       .nonempty({ message: "Password is required" }),
     password: PasswordSchema,
-    confirmPassword: z.string({ message: "Confirm your password" }),
+    confirmPassword: z.string({ message: "Confirm your password" })
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
-    path: ["confirmPassword"],
+    path: ["confirmPassword"]
   });
 
 type Schema = z.infer<typeof schema>;
@@ -33,7 +33,7 @@ type Schema = z.infer<typeof schema>;
 const state = reactive<Schema>({
   currentPassword: "",
   password: "",
-  confirmPassword: "",
+  confirmPassword: ""
 });
 
 const errorMessage = ref<string>("");
@@ -45,7 +45,7 @@ const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
     {
       newPassword: password,
       currentPassword,
-      revokeOtherSessions: true,
+      revokeOtherSessions: true
     },
     {
       onError: (ctx) => {
@@ -55,12 +55,12 @@ const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
         toast.add({
           color: "success",
           title: "Success",
-          description: "Password changed successfully",
+          description: "Password changed successfully"
         });
 
         navigateTo("/sign-in");
-      },
-    },
+      }
+    }
   );
 };
 </script>

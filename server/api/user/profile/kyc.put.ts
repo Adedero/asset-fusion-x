@@ -10,10 +10,10 @@ export default defineEventHandler(async (event) => {
     governmentIdType: z.enum(
       ["international_passport", "driving_license", "national_id"],
       {
-        message: "Select a valid ID type",
+        message: "Select a valid ID type"
       }
     ),
-    governmentIdExt: z.string().min(1, "File extension is required"),
+    governmentIdExt: z.string().min(1, "File extension is required")
   });
 
   const body = await readValidatedBody(event, schema.safeParse);
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
   if (!body.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: body.error.issues[0].message,
+      statusMessage: body.error.issues[0].message
     });
   }
 
@@ -29,13 +29,13 @@ export default defineEventHandler(async (event) => {
 
   const existingProfile = await prisma.profile.findUnique({
     where: { userId: user.id },
-    select: { governmentId: true },
+    select: { governmentId: true }
   });
 
   if (!existingProfile) {
     throw createError({
       statusCode: 404,
-      statusMessage: "Profile not found",
+      statusMessage: "Profile not found"
     });
   }
 
@@ -49,13 +49,13 @@ export default defineEventHandler(async (event) => {
     id: user.id,
     base64Data: governmentId,
     extension: governmentIdExt,
-    outputDir: `public/uploads/documents/users`,
+    outputDir: `public/uploads/documents/users`
   });
 
   if (error) {
     throw createError({
       statusCode: 400,
-      statusMessage: error.message,
+      statusMessage: error.message
     });
   }
 
@@ -66,12 +66,12 @@ export default defineEventHandler(async (event) => {
       governmentId: data?.url,
       governmentIdType,
       governmentIdExt,
-      kycStatus: "pending",
-    },
+      kycStatus: "pending"
+    }
   });
 
   return {
     message: "Government ID uploaded successfully",
-    profile: updatedProfile,
+    profile: updatedProfile
   };
 });

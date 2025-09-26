@@ -18,7 +18,7 @@ const page = computed({
   get: () => Number(route.query.page || 1),
   set: (val) => {
     router.replace({ query: { ...route.query, page: val } });
-  },
+  }
 });
 
 const limit = 20;
@@ -28,8 +28,8 @@ const query = computed(() => ({ page: page.value, limit }));
 const { pending, data, error, refresh } = useFetch(
   `/api/user/financial-accounts/${accountId}/investments/${investmentId}/profits`,
   {
-    query,
-  },
+    query
+  }
 );
 
 const profits = computed(() => {
@@ -39,7 +39,7 @@ const profits = computed(() => {
         id: txn.id,
         amount: txn.USDAmount,
         status: txn.status,
-        date: txn.createdAt,
+        date: txn.createdAt
       };
     }) ?? []
   );
@@ -56,12 +56,12 @@ const columns: TableColumn<Profit>[] = [
     cell: ({ row }) => {
       const id: string = row.getValue("id") || "";
       return id.length > 12 ? id.slice(0, 12).toUpperCase() + "..." : id;
-    },
+    }
   },
   {
     accessorKey: "amount",
     header: "Amount",
-    cell: ({ row }) => toDollar(row.getValue("amount")),
+    cell: ({ row }) => toDollar(row.getValue("amount"))
   },
   {
     accessorKey: "status",
@@ -69,16 +69,15 @@ const columns: TableColumn<Profit>[] = [
     cell: ({ row }) => {
       const color = getTransactionBadgeColor(row.getValue("status"));
       return h(Badge, { variant: "subtle", color }, () =>
-        row.getValue("status"),
+        row.getValue("status")
       );
-    },
+    }
   },
   {
     accessorKey: "date",
     header: "Date",
-    cell: ({ row }) =>
-      useDateFormat(row.getValue("date"), "MMM DD, YYYY").value,
-  },
+    cell: ({ row }) => useDateFormat(row.getValue("date"), "MMM DD, YYYY").value
+  }
 ];
 
 async function onSelect(row: TableRow<Profit>) {

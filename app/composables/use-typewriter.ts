@@ -7,13 +7,13 @@ export interface TypewriterOptions {
 
 export function useTypewriter(
   elementRef: Ref<HTMLElement | null>,
-  options: TypewriterOptions = {},
+  options: TypewriterOptions = {}
 ) {
   const defaultOptions: Required<TypewriterOptions> = {
     speed: 50,
     loop: undefined as unknown as number,
     pause: 2000,
-    textPause: 2000,
+    textPause: 2000
   };
   const mergedOptions = { ...defaultOptions, ...options };
 
@@ -51,7 +51,7 @@ export function useTypewriter(
       el.innerHTML += text.charAt(i);
       timeoutId = setTimeout(
         () => typeText(el, text, i + 1),
-        mergedOptions.speed,
+        mergedOptions.speed
       );
     } else {
       handleNextText(el);
@@ -99,7 +99,7 @@ export function useTypewriter(
     el._typewriterState = {
       currentLoop: 0,
       currentTextIndex: 0,
-      texts,
+      texts
     };
 
     typeText(el, texts[0] || "", 0);
@@ -126,7 +126,7 @@ export function useTypewriter(
 
   return {
     restart,
-    stop,
+    stop
   };
 }
 

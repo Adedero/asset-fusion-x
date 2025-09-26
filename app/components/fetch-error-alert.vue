@@ -12,7 +12,7 @@ interface Props {
 const {
   title = "Error",
   message = "",
-  showRetry = false,
+  showRetry = false
 } = defineProps<Props>();
 </script>
 
@@ -33,8 +33,8 @@ const {
               icon: 'lucide-refresh-cw',
               onClick: () => emit('retry'),
               color: 'error',
-              class: 'py-2',
-            },
+              class: 'py-2'
+            }
           ]
     "
   />

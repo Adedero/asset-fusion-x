@@ -7,18 +7,18 @@ definePageMeta({
   breadcrumb: [
     {
       label: "Profile",
-      to: "/user/profile",
+      to: "/user/profile"
     },
     {
-      label: "KYC",
-    },
-  ] as BreadcrumbItem[],
+      label: "KYC"
+    }
+  ] as BreadcrumbItem[]
 });
 
 const toast = useToast();
 
 const { data, error, refresh } = await useFetch("/api/user/profile", {
-  key: "user-profile",
+  key: "user-profile"
 });
 
 const idTypes = ["International passport", "National ID", "Driving license"];
@@ -26,7 +26,7 @@ const idTypes = ["International passport", "National ID", "Driving license"];
 const state = reactive({
   governmentId: "",
   governmentIdType: "",
-  governmentIdExt: "",
+  governmentIdExt: ""
 });
 
 const uploadError = ref<Error | null>(null);
@@ -35,7 +35,7 @@ const uploading = ref<boolean>(false);
 async function updateKyc() {
   // Validate all fields are non-empty
   const emptyKey = Object.keys(state).find(
-    (key) => !(state as Record<string, string>)[key]?.length,
+    (key) => !(state as Record<string, string>)[key]?.length
   );
 
   if (emptyKey) {
@@ -56,8 +56,8 @@ async function updateKyc() {
       method: "PUT",
       body: { ...state, governmentIdType },
       headers: {
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     });
 
     await refresh();
@@ -77,7 +77,7 @@ function onFileChange(event: Event) {
     toast.add({
       title: "Invalid file type",
       description: "Please select an image or a PDF file.",
-      color: "error",
+      color: "error"
     });
     return;
   }
@@ -87,7 +87,7 @@ function onFileChange(event: Event) {
     toast.add({
       title: "File too large",
       description: "Please select an image file smaller than 2MB.",
-      color: "error",
+      color: "error"
     });
     return;
   }
@@ -126,7 +126,7 @@ function downloadDocument() {
             class="md:w-[30rem]"
             variant="subtle"
             :ui="{
-              actions: 'justify-end',
+              actions: 'justify-end'
             }"
             :actions="[
               {
@@ -134,8 +134,8 @@ function downloadDocument() {
                 size: 'md',
                 onClick: () => {
                   navigateTo('/user/profile');
-                },
-              },
+                }
+              }
             ]"
           />
         </NuxtCard>
@@ -202,7 +202,7 @@ function downloadDocument() {
             icon="i-lucide-alert-circle"
             variant="subtle"
             :ui="{
-              actions: 'justify-end',
+              actions: 'justify-end'
             }"
             :actions="[
               {
@@ -210,8 +210,8 @@ function downloadDocument() {
                 size: 'md',
                 onClick: () => {
                   downloadDocument();
-                },
-              },
+                }
+              }
             ]"
           />
         </NuxtCard>
@@ -229,7 +229,7 @@ function downloadDocument() {
             color="error"
             variant="subtle"
             :ui="{
-              actions: 'justify-end',
+              actions: 'justify-end'
             }"
             :actions="[
               {
@@ -238,8 +238,8 @@ function downloadDocument() {
                 color: 'error',
                 onClick: () => {
                   navigateTo('/user/contact');
-                },
-              },
+                }
+              }
             ]"
           />
         </NuxtCard>
@@ -319,7 +319,7 @@ function downloadDocument() {
             icon="i-lucide-alert-circle"
             variant="subtle"
             :ui="{
-              actions: 'justify-end',
+              actions: 'justify-end'
             }"
             :actions="[
               {
@@ -327,8 +327,8 @@ function downloadDocument() {
                 size: 'md',
                 onClick: () => {
                   downloadDocument();
-                },
-              },
+                }
+              }
             ]"
           />
         </NuxtCard>

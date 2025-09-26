@@ -8,9 +8,9 @@ const {
   pending,
   data: transactions,
   error,
-  refresh,
+  refresh
 } = useFetch(`/api/user/financial-accounts/${accountId}/transactions`, {
-  query: { limit: 100 },
+  query: { limit: 100 }
 });
 
 const categories = {
@@ -18,7 +18,7 @@ const categories = {
   withdrawal: { name: "Withdrawals", color: "#ef4444" },
   // transfer: { name: "Transfers", color: "#f59e0b" },
   investment: { name: "Investments", color: "#8b5cf6" },
-  profit: { name: "Profits", color: "#10b981" },
+  profit: { name: "Profits", color: "#10b981" }
 };
 
 const chartData = computed(() => {
@@ -30,7 +30,7 @@ const chartData = computed(() => {
     const dayName = useDateFormat(txn.createdAt, "ddd").value; // e.g., Tue
     return {
       ...txn,
-      weekDayKey: `W${weekNum}: ${dayName}`,
+      weekDayKey: `W${weekNum}: ${dayName}`
     };
   });
 
@@ -41,7 +41,7 @@ const chartData = computed(() => {
       acc[txn.weekDayKey]?.push(txn);
       return acc;
     },
-    {},
+    {}
   );
 
   // Step 3: Aggregate totals per category

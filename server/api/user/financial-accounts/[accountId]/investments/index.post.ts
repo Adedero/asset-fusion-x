@@ -8,20 +8,20 @@ export default defineEventHandler(async (event) => {
 
   const { success, error, data } = await readValidatedBody(
     event,
-    InvestmentSchema.safeParse,
+    InvestmentSchema.safeParse
   );
 
   if (!success) {
     throw createError({
       statusCode: 400,
-      statusMessage: error.issues[0].message,
+      statusMessage: error.issues[0].message
     });
   }
 
   if (accountId !== data.financialAccountId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Not allowed",
+      statusMessage: "Not allowed"
     });
   }
 
@@ -29,16 +29,16 @@ export default defineEventHandler(async (event) => {
     prisma.investment.create({ data }),
     prisma.financialAccount.update({
       where: {
-        id: data.financialAccountId,
+        id: data.financialAccountId
       },
       data: {
         balance: {
-          decrement: data.deposit,
+          decrement: data.deposit
         },
         totalInvestments: {
-          increment: 1,
-        },
-      },
+          increment: 1
+        }
+      }
     }),
     prisma.transaction.create({
       data: {
@@ -53,21 +53,21 @@ export default defineEventHandler(async (event) => {
         initiatorAccountId: data.investorId,
         status: "successfull",
         approvedAt: new Date(),
-        description: `Investment deposit for ${data.investmentName} (${data.category})`,
-      },
-    }),
+        description: `Investment deposit for ${data.investmentName} (${data.category})`
+      }
+    })
   ]);
 
   notificationEmitter.emit("investment:create", {
     user,
     data: {
       investment,
-      account: financialAccount,
-    },
+      account: financialAccount
+    }
   });
 
   return {
     message: "Investment created",
-    investment,
+    investment
   };
 });

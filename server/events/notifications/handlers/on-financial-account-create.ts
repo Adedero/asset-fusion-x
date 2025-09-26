@@ -5,7 +5,7 @@ import { prisma } from "~~/server/lib/prisma";
 import type { EventData } from "../types";
 
 export const onFinancialAccountCreate = (
-  ctx: EventData<{ account: FinancialAccount }>,
+  ctx: EventData<{ account: FinancialAccount }>
 ) => {
   const subject = "Financial Account Creation";
 
@@ -13,27 +13,27 @@ export const onFinancialAccountCreate = (
     role: "user",
     subject,
     user: ctx.user,
-    data: ctx.data,
+    data: ctx.data
   });
 
   const adminEmail = financialAccountCreateEmail({
     role: "admin",
     subject,
     user: ctx.user,
-    data: ctx.data,
+    data: ctx.data
   });
 
   Promise.all([
     sendEmail({
       to: ctx.user.email,
       subject,
-      html: userEmail,
+      html: userEmail
     }),
 
     sendEmail({
       to: process.env.ADMIN_EMAL ?? process.env.EMAIL_USER,
       subject,
-      html: adminEmail,
+      html: adminEmail
     }),
 
     prisma.notification.create({
@@ -41,8 +41,8 @@ export const onFinancialAccountCreate = (
         userId: ctx.user.id,
         title: subject,
         bodyType: "string",
-        body: `You created a new account: ${ctx.data.account.name}`,
-      },
-    }),
+        body: `You created a new account: ${ctx.data.account.name}`
+      }
+    })
   ]);
 };

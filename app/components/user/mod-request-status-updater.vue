@@ -27,7 +27,7 @@ const {
   buttonLabel = "Accept",
   buttonColor = "primary",
   buttonVariant = "solid",
-  buttonSize = "sm",
+  buttonSize = "sm"
 } = defineProps<Props>();
 
 const { error, data, execute } = useFetch(
@@ -37,9 +37,9 @@ const { error, data, execute } = useFetch(
     immediate: false,
     query: {
       status,
-      approvalId,
-    },
-  },
+      approvalId
+    }
+  }
 );
 
 const update = async (close: () => void) => {
@@ -47,7 +47,7 @@ const update = async (close: () => void) => {
   if (data.value) {
     toast.add({
       color: "success",
-      description: data.value.message,
+      description: data.value.message
     });
 
     close();
@@ -58,7 +58,7 @@ const update = async (close: () => void) => {
   if (error.value) {
     toast.add({
       color: "error",
-      description: normalizeException(error.value).message,
+      description: normalizeException(error.value).message
     });
 
     emit("done", false);

@@ -9,9 +9,9 @@ definePageMeta({
   name: "",
   breadcrumb: [
     {
-      label: "Profile",
-    },
-  ] as BreadcrumbItem[],
+      label: "Profile"
+    }
+  ] as BreadcrumbItem[]
 });
 </script>
 

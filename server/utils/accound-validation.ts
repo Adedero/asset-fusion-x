@@ -19,10 +19,10 @@ export type ValidationError = {
 };
 
 export async function checkUserKycApproval(
-  userId: string,
+  userId: string
 ): Promise<ValidationResult<Profile>> {
   const profile = await prisma.profile.findUnique({
-    where: { userId },
+    where: { userId }
   });
 
   if (!profile) {
@@ -31,9 +31,9 @@ export async function checkUserKycApproval(
       error: {
         statusCode: 400,
         statusMessage:
-          "This action could not be completed because your profile information is incomplete.",
+          "This action could not be completed because your profile information is incomplete."
       },
-      success: false,
+      success: false
     };
   }
 
@@ -44,8 +44,8 @@ export async function checkUserKycApproval(
       error: {
         statusCode: 400,
         statusMessage:
-          "You must verify your identity to continue. Go to 'profile' > 'KYC' to begin verification.",
-      },
+          "You must verify your identity to continue. Go to 'profile' > 'KYC' to begin verification."
+      }
     };
   }
 
@@ -56,8 +56,8 @@ export async function checkUserKycApproval(
       error: {
         statusCode: 400,
         statusMessage:
-          "Your KYC verification is still pending. Please try again later. ",
-      },
+          "Your KYC verification is still pending. Please try again later. "
+      }
     };
   }
 
@@ -68,23 +68,23 @@ export async function checkUserKycApproval(
       error: {
         statusCode: 400,
         statusMessage:
-          "Your KYC verification has been rejected. Please, contact the admin.",
-      },
+          "Your KYC verification has been rejected. Please, contact the admin."
+      }
     };
   }
 
   return {
     success: true,
     data: profile,
-    error: null,
+    error: null
   };
 }
 
 export async function checkBusinessProfileApproval(
-  accountId: string,
+  accountId: string
 ): Promise<ValidationResult<BusinessProfile>> {
   const businessProfile = await prisma.businessProfile.findUnique({
-    where: { financialAccountId: accountId },
+    where: { financialAccountId: accountId }
   });
 
   if (!businessProfile) {
@@ -94,8 +94,8 @@ export async function checkBusinessProfileApproval(
       error: {
         statusCode: 400,
         statusMessage:
-          "This action could not be completed because your business profile information is incomplete.",
-      },
+          "This action could not be completed because your business profile information is incomplete."
+      }
     };
   }
 
@@ -106,14 +106,14 @@ export async function checkBusinessProfileApproval(
       error: {
         statusCode: 400,
         statusMessage:
-          "Your business profile has not yet been approved. Please, try again later.",
-      },
+          "Your business profile has not yet been approved. Please, try again later."
+      }
     };
   }
 
   return {
     success: true,
     data: businessProfile,
-    error: null,
+    error: null
   };
 }

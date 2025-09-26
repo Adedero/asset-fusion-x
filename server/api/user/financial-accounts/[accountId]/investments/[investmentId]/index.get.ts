@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const investment = await prisma.investment.findUniqueOrThrow({
     where: {
       id: investmentId,
-      financialAccountId: accountId,
+      financialAccountId: accountId
     },
     include: {
       investor: {
@@ -15,24 +15,24 @@ export default defineEventHandler(async (event) => {
             select: {
               id: true,
               name: true,
-              image: true,
-            },
-          },
-        },
+              image: true
+            }
+          }
+        }
       },
       transactions: {
         where: {
-          type: "profit",
+          type: "profit"
         },
         take: 1,
         orderBy: {
-          createdAt: "desc",
-        },
-      },
-    },
+          createdAt: "desc"
+        }
+      }
+    }
   });
 
   return {
-    investment,
+    investment
   };
 });

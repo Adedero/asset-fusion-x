@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "main",
+  layout: "main"
 });
 
 const { appName } = useRuntimeConfig().public;
@@ -12,8 +12,7 @@ const { appName } = useRuntimeConfig().public;
       <section
         class="relative w-full h-[650px] overflow-hidden rounded-lg mb-24 flex items-center justify-center text-center"
       >
-        <NuxtImg
-          placeholder
+        <img
           src="https://media.istockphoto.com/id/1480574526/photo/happy-multigenerational-people-having-fun-sitting-on-grass-in-a-public-park.jpg?s=612x612&w=0&k=20&c=iIzSiY2FK9mWTCmV8Ip8zpvXma7f1Qbd-UuKXNJodPg="
           alt="Diverse group of happy people, symbolizing a community built on trust"
           class="absolute inset-0 w-full h-full object-cover brightness-50"
@@ -104,8 +103,7 @@ const { appName } = useRuntimeConfig().public;
         <div
           class="relative w-full h-96 rounded-lg overflow-hidden shadow-xl border border-primary-500"
         >
-          <NuxtImg
-            placeholder
+          <img
             src="https://blog.wei.com/hubfs/network.jpg"
             alt="Abstract digital network representing interconnected users and feedback"
             class="absolute inset-0 w-full h-full object-cover"
@@ -141,8 +139,7 @@ const { appName } = useRuntimeConfig().public;
             <div
               class="flex items-center mt-8 pt-4 border-t border-slate-700 relative z-10"
             >
-              <NuxtImg
-                placeholder
+              <img
                 src="https://randomuser.me/api/portraits/men/32.jpg"
                 alt="Avatar of a satisfied user"
                 class="w-16 h-16 rounded-full mr-4 border-2 border-primary-500"
@@ -174,8 +171,7 @@ const { appName } = useRuntimeConfig().public;
             <div
               class="flex items-center mt-8 pt-4 border-t border-slate-700 relative z-10"
             >
-              <NuxtImg
-                placeholder
+              <img
                 src="https://randomuser.me/api/portraits/women/44.jpg"
                 alt="Avatar of a satisfied user"
                 class="w-16 h-16 rounded-full mr-4 border-2 border-primary-500"
@@ -417,8 +413,7 @@ const { appName } = useRuntimeConfig().public;
         <div
           class="relative w-full h-96 rounded-lg overflow-hidden shadow-xl border border-primary-500"
         >
-          <NuxtImg
-            placeholder
+          <img
             src="https://img.freepik.com/free-photo/side-view-people-discussing-work_23-2149739375.jpg?semt=ais_hybrid&w=740"
             alt="Two people having a discussion, symbolizing active listening and collaboration"
             class="absolute inset-0 w-full h-full object-cover"

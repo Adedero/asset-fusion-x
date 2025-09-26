@@ -13,14 +13,14 @@ const toast = useToast();
 const { data, error, refresh } = await useFetch(
   `/api/user/financial-accounts/${accountId}/business-profile`,
   {
-    key: "financial-account-business-profile",
-  },
+    key: "financial-account-business-profile"
+  }
 );
 
 const state = reactive<BusinessProfileSchemaType>({
   address: data.value?.profile?.address ?? "",
   creationMonth: data.value?.profile?.creationMonth ?? "January",
-  creationYear: data.value?.profile?.creationYear ?? new Date().getFullYear(),
+  creationYear: data.value?.profile?.creationYear ?? new Date().getFullYear()
 });
 
 const documents = reactive<{
@@ -28,11 +28,11 @@ const documents = reactive<{
   certificate: CustomFile[];
 }>({
   proofOfAddress: [],
-  certificate: [],
+  certificate: []
 });
 
 const handleSubmit = async (
-  event: FormSubmitEvent<BusinessProfileSchemaType>,
+  event: FormSubmitEvent<BusinessProfileSchemaType>
 ) => {
   await upload(event.data);
 };
@@ -51,14 +51,14 @@ async function upload(validatedData?: BusinessProfileSchemaType) {
     certificate:
       data.value?.profile?.certificate || documents.certificate[0]?.url,
     certificateExt:
-      data.value?.profile?.certificateExt || documents.certificate[0]?.ext,
+      data.value?.profile?.certificateExt || documents.certificate[0]?.ext
   };
   uploadError.value = null;
   uploading.value = true;
   try {
     await $fetch(`/api/user/financial-accounts/${accountId}/business-profile`, {
       method: "PUT",
-      body: payload,
+      body: payload
     });
 
     refresh();
@@ -69,7 +69,7 @@ async function upload(validatedData?: BusinessProfileSchemaType) {
     toast.add({
       color: "success",
       title: "Success",
-      description: "Business profile updated successfully.",
+      description: "Business profile updated successfully."
     });
   } catch (err) {
     uploadError.value = normalizeException(err);
@@ -149,7 +149,7 @@ async function uploadDocuments() {
               :min="1000"
               :max="new Date().getFullYear()"
               :format-options="{
-                useGrouping: false,
+                useGrouping: false
               }"
               size="lg"
               class="w-full"

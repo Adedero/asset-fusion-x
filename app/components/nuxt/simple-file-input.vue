@@ -22,7 +22,7 @@ const {
   size = "lg",
   multiple = false,
   inputClass = undefined,
-  forceConstraints = false,
+  forceConstraints = false
 } = defineProps<Props>();
 
 export interface CustomFile {
@@ -56,7 +56,7 @@ const handleInputChange = async (event: Event) => {
     // Validate size
     if (maxFileSize && file.size > maxFileSize) {
       fileErrors.push(
-        `"${file.name}" exceeds max size of ${formatBytes(maxFileSize)}.`,
+        `"${file.name}" exceeds max size of ${formatBytes(maxFileSize)}.`
       );
     }
 
@@ -89,7 +89,7 @@ const handleInputChange = async (event: Event) => {
       id: uuid(),
       url: await createDataURL(file),
       blob: file,
-      ext: fileExtension,
+      ext: fileExtension
     });
   }
 

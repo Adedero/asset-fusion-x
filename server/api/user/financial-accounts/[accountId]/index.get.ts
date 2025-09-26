@@ -7,14 +7,14 @@ export default defineEventHandler(async (event) => {
   if (!accountId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Account ID is required",
+      statusMessage: "Account ID is required"
     });
   }
 
   // Authorization check — is the user part of the account?
   const isMember = await prisma.accountUser.findFirst({
     where: { userId: user.id, financialAccountId: accountId },
-    select: { id: true },
+    select: { id: true }
   });
 
   if (!isMember) {
@@ -27,15 +27,15 @@ export default defineEventHandler(async (event) => {
     include: {
       accountUsers: {
         include: {
-          user: { select: { id: true, name: true, image: true } },
+          user: { select: { id: true, name: true, image: true } }
         },
         orderBy: { createdAt: "asc" },
-        take: 5,
+        take: 5
       },
       creator: { select: { name: true } },
       businessProfile: true,
-      _count: { select: { accountUsers: true } },
-    },
+      _count: { select: { accountUsers: true } }
+    }
   });
 
   if (!account) {
@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
     id: au.user.id,
     accountUserId: au.id,
     name: au.user.name,
-    image: au.user.image ?? null,
+    image: au.user.image ?? null
   }));
 
   const primaryUser = users.find((u) => u.id === user.id) ?? null;
@@ -57,27 +57,27 @@ export default defineEventHandler(async (event) => {
   const [lastTransaction, lastProfit, activeInvestments] = await Promise.all([
     prisma.transaction.findFirst({
       where: { financialAccountId: account.id },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: "desc" }
     }),
 
     prisma.transaction.findFirst({
       where: {
         type: "profit",
         financialAccountId: account.id,
-        investment: { status: "open" },
+        investment: { status: "open" }
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: "desc" }
     }),
 
     prisma.investment.findMany({
       where: { financialAccountId: account.id, status: "open" },
-      select: { totalProfit: true },
-    }),
+      select: { totalProfit: true }
+    })
   ]);
 
   const totalProfit = activeInvestments.reduce(
     (sum, inv) => sum + inv.totalProfit,
-    0,
+    0
   );
 
   const { accountUsers, _count, ...cleanAccount } = account;
@@ -90,6 +90,6 @@ export default defineEventHandler(async (event) => {
     lastTransaction,
     lastProfit,
     totalProfit,
-    activeInvestmentCount: activeInvestments.length,
+    activeInvestmentCount: activeInvestments.length
   };
 });

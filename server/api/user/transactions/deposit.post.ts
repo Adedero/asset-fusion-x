@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     USDAmount: z.number(),
     rate: z.number(),
     type: z.literal("deposit"),
-    financialAccountId: z.string(),
+    financialAccountId: z.string()
   });
 
   const { data, error, success } = await readValidatedBody(
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
   if (!success) {
     throw createError({
       statusCode: 400,
-      statusMessage: error.issues[0].message,
+      statusMessage: error.issues[0].message
     });
   }
 
@@ -32,13 +32,13 @@ export default defineEventHandler(async (event) => {
   const { amount, currency, USDAmount, rate, type, financialAccountId } = data;
 
   const accountUser = await prisma.accountUser.findFirst({
-    where: { userId: user.id, financialAccountId },
+    where: { userId: user.id, financialAccountId }
   });
 
   if (!accountUser) {
     throw createError({
       statusCode: 403,
-      statusMessage: "You do not permission to make this deposit",
+      statusMessage: "You do not permission to make this deposit"
     });
   }
 
@@ -49,16 +49,16 @@ export default defineEventHandler(async (event) => {
       status: "pending",
       USDAmount,
       createdAt: {
-        gte: new Date(Date.now() - DUPLICATE_TRANSACTION_CHECK_TIME),
-      },
-    },
+        gte: new Date(Date.now() - DUPLICATE_TRANSACTION_CHECK_TIME)
+      }
+    }
   });
 
   if (lastDepositRequest) {
     throw createError({
       statusCode: 400,
       statusMessage:
-        "Possible duplicate deposit request detected. Please, wait a little before trying again.",
+        "Possible duplicate deposit request detected. Please, wait a little before trying again."
     });
   }
 
@@ -68,19 +68,19 @@ export default defineEventHandler(async (event) => {
       name: true,
       symbol: true,
       walletAddress: true,
-      walletAddressNetwork: true,
-    },
+      walletAddressNetwork: true
+    }
   });
 
   if (!selectedCurrency) {
     throw createError({
       statusCode: 404,
-      statusMessage: "Currency not found",
+      statusMessage: "Currency not found"
     });
   }
 
   const financialAccount = await prisma.financialAccount.findUniqueOrThrow({
-    where: { id: financialAccountId },
+    where: { id: financialAccountId }
   });
 
   const transaction = await prisma.transaction.create({
@@ -95,19 +95,19 @@ export default defineEventHandler(async (event) => {
       status: "pending",
       depositWalletAddress: selectedCurrency.walletAddress,
       depositWalletAddressNetwork: selectedCurrency.walletAddressNetwork,
-      description: `Deposit to ${financialAccount.name} account`,
-    },
+      description: `Deposit to ${financialAccount.name} account`
+    }
   });
 
   await prisma.financialAccount.update({
     where: { id: financialAccount.id },
     data: {
       totalTransactions: {
-        increment: 1,
+        increment: 1
       },
       firstTransactionAt: financialAccount.firstTransactionAt ?? new Date(),
-      lastTransactionAt: new Date(),
-    },
+      lastTransactionAt: new Date()
+    }
   });
 
   setResponseStatus(event, 201);
@@ -116,12 +116,12 @@ export default defineEventHandler(async (event) => {
     user,
     data: {
       transaction,
-      account: financialAccount,
-    },
+      account: financialAccount
+    }
   });
 
   return {
     message: "Deposit request transaction created",
-    transaction,
+    transaction
   };
 });

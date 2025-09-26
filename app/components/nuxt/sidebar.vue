@@ -47,7 +47,7 @@ onUnmounted(() => {
         class="hidden overflow-hidden lg:flex lg:flex-col overlay flex-shrink-0 h-screen border-r border-r-default bg-muted/50 transition-[width] duration-200"
         :class="{
           'w-[19rem] *:opacity-100': openLarge,
-          'w-0 *:opacity-0': !openLarge,
+          'w-0 *:opacity-0': !openLarge
         }"
       >
         <header class="gap-1.5 p-4 sm:px-6 min-h-16">

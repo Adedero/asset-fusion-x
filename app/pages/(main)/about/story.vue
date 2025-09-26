@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "main",
+  layout: "main"
 });
 
 const { appName } = useRuntimeConfig().public;
@@ -24,8 +24,7 @@ const { appName } = useRuntimeConfig().public;
         </div>
       </div>
       <div class="h-96">
-        <NuxtImg
-          placeholder
+        <img
           src="/img/pages/about/about-us.jpg"
           class="h-full w-full object-cover"
         />
@@ -38,8 +37,7 @@ const { appName } = useRuntimeConfig().public;
           investing and make smart asset management accessible to everyone,
           regardless of financial background or expertise.
         </p>
-        <NuxtImg
-          placeholder
+        <img
           src="/img/pages/about/our-journey.jpg"
           alt="Founders collaborating in early days"
           class="w-full rounded-lg shadow-lg"
@@ -176,8 +174,7 @@ const { appName } = useRuntimeConfig().public;
             <li>24/7 customer support and dedicated account management</li>
           </ul>
         </div>
-        <NuxtImg
-          placeholder
+        <img
           src="/img/pages/about/team-at-work.jpg"
           alt="Team at work"
           class="w-full rounded-lg shadow-xl mt-8"

@@ -14,32 +14,32 @@ export default defineEventHandler(async (event) => {
                 select: {
                   id: true,
                   name: true,
-                  image: true,
-                },
-              },
+                  image: true
+                }
+              }
             },
             orderBy: { createdAt: "asc" },
-            take: 5,
+            take: 5
           },
           investments: {
             where: { status: "open" },
-            select: { totalProfit: true },
+            select: { totalProfit: true }
           },
           _count: {
             select: {
-              accountUsers: true,
-            },
-          },
-        },
-      },
-    },
+              accountUsers: true
+            }
+          }
+        }
+      }
+    }
   });
 
   const financialAccounts = accountUsers.map(({ financialAccount }) => {
     const { accountUsers, _count, ...rest } = financialAccount;
 
     const primaryUserAccount = accountUsers.find(
-      (au) => au.user.id === user.id,
+      (au) => au.user.id === user.id
     );
 
     const otherUsers = accountUsers
@@ -48,7 +48,7 @@ export default defineEventHandler(async (event) => {
         id: au.user.id,
         name: au.user?.name ?? "",
         image: au.user?.image ?? null,
-        accountUserId: au.id,
+        accountUserId: au.id
       }));
 
     return {
@@ -59,14 +59,14 @@ export default defineEventHandler(async (event) => {
             id: primaryUserAccount.user.id,
             name: primaryUserAccount.user.name,
             image: primaryUserAccount.user.image,
-            accountUserId: primaryUserAccount.id,
+            accountUserId: primaryUserAccount.id
           }
         : null,
       users: otherUsers,
       totalProfit: financialAccount.investments.reduce(
         (acc, inv) => (acc += inv.totalProfit),
-        0,
-      ),
+        0
+      )
     };
   });
 

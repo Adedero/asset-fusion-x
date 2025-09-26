@@ -171,44 +171,120 @@ const handleItemSelect = (txn: TransactionItem) => {
                       </header>
                       <NuxtSeparator />
                       <div class="p-5 space-y-2.5">
-                        <NuxtFormField v-if="txn.description" label="Description">
-                          <NuxtTextarea :value="txn.description" :rows="3" disabled class="resize-none w-full" />
+                        <NuxtFormField
+                          v-if="txn.description"
+                          label="Description"
+                        >
+                          <NuxtTextarea
+                            :value="txn.description"
+                            :rows="3"
+                            disabled
+                            class="resize-none w-full"
+                          />
                         </NuxtFormField>
 
-                        <NuxtFormField v-if="txn.depositWalletAddress" label="Deposit Wallet Address">
-                          <NuxtInput :value="txn.depositWalletAddress" disabled class="w-full" />
+                        <NuxtFormField
+                          v-if="txn.depositWalletAddress"
+                          label="Deposit Wallet Address"
+                        >
+                          <NuxtInput
+                            :value="txn.depositWalletAddress"
+                            disabled
+                            class="w-full"
+                          />
                         </NuxtFormField>
 
-                        <NuxtFormField v-if="txn.depositWalletAddressNetwork" label="Deposit Wallet Address Network">
-                          <NuxtInput :value="txn.depositWalletAddressNetwork" disabled class="w-full" />
+                        <NuxtFormField
+                          v-if="txn.depositWalletAddressNetwork"
+                          label="Deposit Wallet Address Network"
+                        >
+                          <NuxtInput
+                            :value="txn.depositWalletAddressNetwork"
+                            disabled
+                            class="w-full"
+                          />
                         </NuxtFormField>
 
-                        <NuxtFormField v-if="txn.withdrawalWalletAddress" label="Withdrawal Wallet Address">
-                          <NuxtInput :value="txn.withdrawalWalletAddress" disabled class="w-full" />
+                        <NuxtFormField
+                          v-if="txn.withdrawalWalletAddress"
+                          label="Withdrawal Wallet Address"
+                        >
+                          <NuxtInput
+                            :value="txn.withdrawalWalletAddress"
+                            disabled
+                            class="w-full"
+                          />
                         </NuxtFormField>
 
-                        <NuxtFormField v-if="txn.withdrawalWalletAddressNetwork" label="Withdrawal Wallet Address Network">
-                          <NuxtInput :value="txn.withdrawalWalletAddressNetwork" disabled class="w-full" />
+                        <NuxtFormField
+                          v-if="txn.withdrawalWalletAddressNetwork"
+                          label="Withdrawal Wallet Address Network"
+                        >
+                          <NuxtInput
+                            :value="txn.withdrawalWalletAddressNetwork"
+                            disabled
+                            class="w-full"
+                          />
                         </NuxtFormField>
 
                         <NuxtFormField v-if="txn.bank" label="Bank Name">
-                          <NuxtInput :value="txn.bank" disabled class="w-full" />
+                          <NuxtInput
+                            :value="txn.bank"
+                            disabled
+                            class="w-full"
+                          />
                         </NuxtFormField>
 
-                        <NuxtFormField v-if="txn.bankAccount" label="Bank Account Number">
-                          <NuxtInput :value="txn.bankAccount" disabled class="w-full" />
+                        <NuxtFormField
+                          v-if="txn.bankAccount"
+                          label="Bank Account Number"
+                        >
+                          <NuxtInput
+                            :value="txn.bankAccount"
+                            disabled
+                            class="w-full"
+                          />
                         </NuxtFormField>
 
-                        <NuxtFormField v-if="txn.approvedAt" label="Approved At">
-                          <NuxtInput :value="useDateFormat(txn.approvedAt, 'YYYY-MMM-DD hh:mm aa').value" disabled class="w-full" />
+                        <NuxtFormField
+                          v-if="txn.approvedAt"
+                          label="Approved At"
+                        >
+                          <NuxtInput
+                            :value="
+                              useDateFormat(
+                                txn.approvedAt,
+                                'YYYY-MMM-DD hh:mm aa'
+                              ).value
+                            "
+                            disabled
+                            class="w-full"
+                          />
                         </NuxtFormField>
 
                         <NuxtFormField v-if="txn.failedAt" label="Failed At">
-                          <NuxtInput :value="useDateFormat(txn.failedAt, 'YYYY-MMM-DD hh:mm aa').value" disabled class="w-full" />
+                          <NuxtInput
+                            :value="
+                              useDateFormat(
+                                txn.failedAt,
+                                'YYYY-MMM-DD hh:mm aa'
+                              ).value
+                            "
+                            disabled
+                            class="w-full"
+                          />
                         </NuxtFormField>
-                        
-                        <NuxtFormField v-if="txn.failReason" label="Reason for failure">
-                          <NuxtTextarea :value="txn.failReason" :rows="3" disabled class="resize-none w-full" />
+
+                        <NuxtFormField
+                          v-if="txn.failReason"
+                          label="Reason for failure"
+                        >
+                          <NuxtTextarea
+                            :value="txn.failReason"
+                            :rows="3"
+                            disabled
+                            class="resize-none w-full"
+                          />
                         </NuxtFormField>
                       </div>
                     </div>

@@ -8,6 +8,5 @@ const adapter = new PrismaBetterSQLite3({
 
 import { PrismaClient } from "../generated/prisma/client";
 
-
 //export const prisma = new PrismaClient({ adapter });
 export const prisma = new PrismaClient();

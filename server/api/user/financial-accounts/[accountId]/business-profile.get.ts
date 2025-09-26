@@ -5,12 +5,12 @@ export default defineEventHandler(async (event) => {
   if (!accountId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Account ID is required",
+      statusMessage: "Account ID is required"
     });
   }
 
   const businessProfile = await prisma.businessProfile.findUnique({
-    where: { financialAccountId: accountId, account: { type: "business" } },
+    where: { financialAccountId: accountId, account: { type: "business" } }
   });
 
   return { profile: businessProfile };

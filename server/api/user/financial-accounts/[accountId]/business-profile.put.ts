@@ -9,20 +9,20 @@ export default defineEventHandler(async (event) => {
   if (!accountId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Account ID is required",
+      statusMessage: "Account ID is required"
     });
   }
 
   const user = event.context.user as EventContextUser;
 
   const isAccountMember = await prisma.accountUser.findFirst({
-    where: { userId: user.id, financialAccountId: accountId },
+    where: { userId: user.id, financialAccountId: accountId }
   });
 
   if (!isAccountMember) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Not allowed",
+      statusMessage: "Not allowed"
     });
   }
 
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
   if (!body.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: body.error.issues[0].message,
+      statusMessage: body.error.issues[0].message
     });
   }
 
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     body.data;
 
   const existingBusinessProfile = await prisma.businessProfile.findFirst({
-    where: { financialAccountId: accountId },
+    where: { financialAccountId: accountId }
   });
 
   let uploadedProofOfAddress: string = "";
@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
       id: accountId,
       base64Data: proofOfAddress,
       extension: proofOfAddressExt!,
-      outputDir: `public/uploads/documents/business-profiles/${accountId}`,
+      outputDir: `public/uploads/documents/business-profiles/${accountId}`
     });
 
     if (!data || error) {
@@ -61,7 +61,7 @@ export default defineEventHandler(async (event) => {
 
       throw createError({
         statusCode: 400,
-        statusMessage: "Failed to upload proof of address",
+        statusMessage: "Failed to upload proof of address"
       });
     }
 
@@ -76,13 +76,13 @@ export default defineEventHandler(async (event) => {
       id: accountId,
       base64Data: certificate,
       extension: certificateExt!,
-      outputDir: `public/documents/business-profile/${accountId}`,
+      outputDir: `public/documents/business-profile/${accountId}`
     });
 
     if (!data || error) {
       throw createError({
         statusCode: 400,
-        statusMessage: "Failed to upload business certificate",
+        statusMessage: "Failed to upload business certificate"
       });
     }
 
@@ -97,7 +97,7 @@ export default defineEventHandler(async (event) => {
       proofOfAddressExt: proofOfAddressExt || null,
       certificate: uploadedCertificate || null,
       certificateExt: certificateExt || null,
-      approved: false,
+      approved: false
     },
     create: {
       financialAccountId: accountId,
@@ -106,8 +106,8 @@ export default defineEventHandler(async (event) => {
       proofOfAddressExt: proofOfAddressExt || null,
       certificate: uploadedCertificate || null,
       certificateExt: certificateExt || null,
-      approved: false,
-    },
+      approved: false
+    }
   });
 
   return businessProfile;

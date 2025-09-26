@@ -1,5 +1,5 @@
 export const wire = {
-  id: "91c65c14-b541-491b-b5d6-132056b47fde",
+  id: "91c65c14-b541-491b-b5d6-132056b47fde"
 };
 
 /*   id                   String   @id @default(uuid())

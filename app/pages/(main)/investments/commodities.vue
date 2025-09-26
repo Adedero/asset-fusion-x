@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "main",
+  layout: "main"
 });
 
 const { appName } = useRuntimeConfig().public;
@@ -12,10 +12,12 @@ const { appName } = useRuntimeConfig().public;
       <MainPageHero
         heading="Commodities"
         subheading="Explore the fundamental building blocks of the global economy and discover how investing in commodities can diversify your portfolio and offer unique opportunities for growth"
-        bg-image="/img/pages/investments/commodities.webp" />
+        bg-image="/img/pages/investments/commodities.webp"
+      />
     </div>
     <div
-      class="min-h-screen flex flex-col justify-center items-center py-16 px-4">
+      class="min-h-screen flex flex-col justify-center items-center py-16 px-4"
+    >
       <div class="mx-auto">
         <section class="px-16 mb-20 text-center">
           <p class="text-base mb-10">
@@ -29,13 +31,14 @@ const { appName } = useRuntimeConfig().public;
           </p>
 
           <div class="relative w-full h-[38rem] overflow-hidden mb-12">
-            <NuxtImg
-              placeholder
+            <img
               src="/img/pages/investments/commodity-types.svg"
               alt="Various Commodities"
-              class="absolute inset-0 w-full h-full object-cover" />
+              class="absolute inset-0 w-full h-full object-cover"
+            />
             <div
-              class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-90" />
+              class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-90"
+            />
             <div class="absolute inset-0 flex items-end justify-center pb-8">
               <p class="text-slate-200 text-base">
                 From the food on our tables to the energy that powers our world,
@@ -67,7 +70,8 @@ const { appName } = useRuntimeConfig().public;
                 in global trade and investment.
               </p>
               <ul
-                class="list-disc list-inside text-slate-300 text-base space-y-2">
+                class="list-disc list-inside text-slate-300 text-base space-y-2"
+              >
                 <li>
                   <span class="text-primary-500 font-semibold"
                     >Tangible Assets:</span
@@ -92,14 +96,16 @@ const { appName } = useRuntimeConfig().public;
               </ul>
             </div>
             <div
-              class="relative w-full h-[30rem] rounded-lg overflow-hidden shadow-lg">
-              <NuxtImg
-                placeholder
+              class="relative w-full h-[30rem] rounded-lg overflow-hidden shadow-lg"
+            >
+              <img
                 src="/img/pages/investments/grains.jpg"
                 alt="Gold Bars and Grains"
-                class="absolute inset-0 w-full h-full object-cover" />
+                class="absolute inset-0 w-full h-full object-cover"
+              />
               <div
-                class="absolute inset-0 bg-gradient-to-tr from-slate-900 via-transparent to-transparent opacity-70" />
+                class="absolute inset-0 bg-gradient-to-tr from-slate-900 via-transparent to-transparent opacity-70"
+              />
             </div>
           </div>
         </section>
@@ -110,7 +116,8 @@ const { appName } = useRuntimeConfig().public;
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div
-              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300">
+              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300"
+            >
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Portfolio Diversification
               </h3>
@@ -123,7 +130,8 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300">
+              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300"
+            >
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Inflation Hedge
               </h3>
@@ -136,7 +144,8 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300">
+              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300"
+            >
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Demand-Supply Dynamics
               </h3>
@@ -156,7 +165,8 @@ const { appName } = useRuntimeConfig().public;
             Exploring Key Commodity Categories
           </h2>
           <p
-            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto">
+            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto"
+          >
             The commodities market is vast and varied, offering exposure to
             different sectors of the global economy. Here are some of the most
             commonly traded categories:
@@ -208,14 +218,16 @@ const { appName } = useRuntimeConfig().public;
               </div>
             </div>
             <div
-              class="relative w-full h-[38rem] rounded-lg overflow-hidden shadow-lg">
-              <NuxtImg
-                placeholder
+              class="relative w-full h-[38rem] rounded-lg overflow-hidden shadow-lg"
+            >
+              <img
                 src="/img/pages/investments/commodity-types.jpg"
                 alt="Various Commodity Samples"
-                class="absolute inset-0 w-full h-full object-cover" />
+                class="absolute inset-0 w-full h-full object-cover"
+              />
               <div
-                class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80" />
+                class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80"
+              />
             </div>
           </div>
         </section>
@@ -225,20 +237,22 @@ const { appName } = useRuntimeConfig().public;
             Generating Passive Income from Commodities
           </h2>
           <p
-            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto">
+            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto"
+          >
             While direct commodity trading can be complex, there are accessible
             avenues to gain passive exposure and potentially generate income
             from these essential assets without deep market expertise.
           </p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div
-              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300 flex flex-col items-center text-center">
+              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300 flex flex-col items-center text-center"
+            >
               <div class="relative w-full h-72 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="/img/pages/investments/commodity-etfs.webp"
                   alt="Commodity Exchange Traded Funds"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Commodity ETFs and ETNs
@@ -253,13 +267,14 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300 flex flex-col items-center text-center">
+              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300 flex flex-col items-center text-center"
+            >
               <div class="relative w-full h-72 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="/img/pages/investments/mining-commodity.jpg"
                   alt="Mining Company Stocks"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Commodity-Related Stocks
@@ -281,18 +296,18 @@ const { appName } = useRuntimeConfig().public;
             Navigating the Commodity Markets with {{ appName }}
           </h2>
           <p class="text-base text-slate-300 mb-10 max-w-4xl mx-auto">
-            At {{ appName }}, we recognize the unique advantages commodities
-            can bring to a well-rounded investment portfolio. We simplify access
-            to this often-complex market, helping you harness its potential for
+            At {{ appName }}, we recognize the unique advantages commodities can
+            bring to a well-rounded investment portfolio. We simplify access to
+            this often-complex market, helping you harness its potential for
             passive income generation.
           </p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
             <div class="flex flex-col items-center">
-              <NuxtImg
-                placeholder
+              <img
                 src="/img/pages/investments/investment-analyst.png"
                 alt="Investment Analyst"
-                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500" />
+                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500"
+              />
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Strategic Commodity Exposure
               </h3>
@@ -306,11 +321,11 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div class="flex flex-col items-center">
-              <NuxtImg
-                placeholder
+              <img
                 src="/img/pages/investments/automated-investment-platform.jpg"
                 alt="Automated Investment Platform"
-                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500" />
+                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500"
+              />
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Effortless Portfolio Integration
               </h3>

@@ -18,5 +18,5 @@ export default defineEventHandler(async (event) => {
 
   return {
     message: "Settings updated successfully"
-  }
+  };
 });

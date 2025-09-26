@@ -29,8 +29,8 @@ export default function transactionStatusUpdateEmail(
         if: "your",
         else: `${user.name}'s`
       })} ${data.transaction.type} request on the account ${
-    data.account.name
-  } has been marked as ${data.transaction.status}.
+        data.account.name
+      } has been marked as ${data.transaction.status}.
     </p>
     <p>
       ${

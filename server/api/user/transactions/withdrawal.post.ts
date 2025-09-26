@@ -3,7 +3,7 @@ import type { Transaction } from "~~/server/generated/prisma/client";
 import { prisma } from "~~/server/lib/prisma";
 import {
   checkBusinessProfileApproval,
-  checkUserKycApproval,
+  checkUserKycApproval
 } from "~~/server/utils/accound-validation";
 import type { EventContextUser } from "~~/shared/types/user.types";
 import round from "~~/shared/helpers/round";
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 500,
       statusMessage:
-        "Withdrawals are not allowed at this time. Please, try again later.",
+        "Withdrawals are not allowed at this time. Please, try again later."
     });
   }
 
@@ -41,18 +41,18 @@ export default defineEventHandler(async (event) => {
     withdrawalWalletAddressNetwork: z.string().optional(),
     bank: z.string().optional(),
     accountNumber: z.string().optional(),
-    description: z.string().optional(),
+    description: z.string().optional()
   });
 
   const { data, error, success } = await readValidatedBody(
     event,
-    schema.safeParse,
+    schema.safeParse
   );
 
   if (!success) {
     throw createError({
       statusCode: 400,
-      statusMessage: error.issues[0].message,
+      statusMessage: error.issues[0].message
     });
   }
 
@@ -65,26 +65,26 @@ export default defineEventHandler(async (event) => {
       status: "pending",
       USDAmount,
       createdAt: {
-        gte: new Date(Date.now() - DUPLICATE_TRANSACTION_CHECK_TIME),
-      },
-    },
+        gte: new Date(Date.now() - DUPLICATE_TRANSACTION_CHECK_TIME)
+      }
+    }
   });
 
   if (lastDepositRequest) {
     throw createError({
       statusCode: 400,
       statusMessage:
-        "Possible duplicate deposit request detected. Please, wait a little before trying again.",
+        "Possible duplicate deposit request detected. Please, wait a little before trying again."
     });
   }
 
   const [financialAccount, accountUser] = await Promise.all([
     prisma.financialAccount.findUniqueOrThrow({
-      where: { id: financialAccountId },
+      where: { id: financialAccountId }
     }),
     prisma.accountUser.findFirstOrThrow({
-      where: { userId: user.id, financialAccountId },
-    }),
+      where: { userId: user.id, financialAccountId }
+    })
   ]);
 
   if (financialAccount.type === "business") {
@@ -123,8 +123,8 @@ export default defineEventHandler(async (event) => {
         bank: data.bank,
         bankAccount: data.accountNumber,
         financialAccountId,
-        initiatorAccountId: accountUser.id,
-      },
+        initiatorAccountId: accountUser.id
+      }
     });
 
     increment += 1;
@@ -143,8 +143,8 @@ export default defineEventHandler(async (event) => {
           description: "Withdrawal charge",
           financialAccountId,
           initiatorAccountId: accountUser.id,
-          parentTransactionId: withdrawal.id,
-        },
+          parentTransactionId: withdrawal.id
+        }
       });
 
       increment += 1;
@@ -155,13 +155,13 @@ export default defineEventHandler(async (event) => {
       where: { id: financialAccountId },
       data: {
         balance: {
-          decrement: totalAmountDeducted,
+          decrement: totalAmountDeducted
         },
         totalTransactions: {
-          increment,
+          increment
         },
-        lastTransactionAt: new Date(),
-      },
+        lastTransactionAt: new Date()
+      }
     });
 
     // 4. If joint, create mod request
@@ -180,25 +180,25 @@ export default defineEventHandler(async (event) => {
               data: await getJointAccountModApprovals(
                 financialAccountId,
                 user.id,
-                tx,
+                tx
               ),
-              skipDuplicates: true,
-            },
-          },
-        },
+              skipDuplicates: true
+            }
+          }
+        }
       });
     }
 
     return {
       withdrawal,
       chargeTx,
-      updated,
+      updated
     };
   });
 
   return {
     message: "Withdrawal request created successfully",
     transaction: transactionResult.withdrawal,
-    chargeTransaction: transactionResult.chargeTx,
+    chargeTransaction: transactionResult.chargeTx
   };
 });

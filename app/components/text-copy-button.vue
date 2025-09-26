@@ -18,7 +18,7 @@ const {
   variant = "soft",
   size = "lg",
   icon = "lucide:clipboard",
-  label = undefined,
+  label = undefined
 } = defineProps<Props>();
 
 const buttonIcon = ref<string>(icon);

@@ -17,7 +17,7 @@ export async function saveUserIdDocument(
   userId: string,
   base64Data: string,
   extension: string,
-  outputDir = resolve("public/documents/users"),
+  outputDir = resolve("public/documents/users")
 ): Promise<{ data: SaveUserIdDocumentResult | null; error: Error | null }> {
   const base64 = base64Data.replace(/^data:.*;base64,/, "");
 
@@ -33,19 +33,19 @@ export async function saveUserIdDocument(
 
     return {
       data: { filepath, filename, documentUrl },
-      error: null,
+      error: null
     };
   } catch (error) {
     return {
       data: null,
-      error: normalizeException(error),
+      error: normalizeException(error)
     };
   }
 }
 
 export async function removeUserIdDocument(
   documentUrl: string,
-  outputDir = resolve("public/documents/users"),
+  outputDir = resolve("public/documents/users")
 ): Promise<RemoveUserIdDocumentResult> {
   try {
     const filename = documentUrl.split("/").pop();

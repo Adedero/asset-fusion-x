@@ -5,7 +5,7 @@ import { accountRoles } from "~/data/account";
 import normalizeException from "~~/shared/helpers/normalize-exception";
 
 definePageMeta({
-  layout: "user",
+  layout: "user"
 });
 const route = useRoute();
 const accountType = route.params?.accountType?.toString();
@@ -18,13 +18,13 @@ const schema = z.object({
     .number()
     .nonnegative({ message: "Ownership cannot be negative" })
     .max(100, { message: "Ownership cannot be more than 100%" })
-    .optional(),
+    .optional()
 });
 
 type Schema = z.infer<typeof schema>;
 
 const state = reactive<Schema>({
-  accountName: "",
+  accountName: ""
 });
 
 function reset() {
@@ -38,7 +38,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     await $fetch("/api/user/financial-accounts", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
       body: {
         ...event.data,
@@ -46,8 +46,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           ? toCase(event.data.jointOwnershipRole, "snake")
           : undefined,
         accountType,
-        accountOwnership,
-      },
+        accountOwnership
+      }
     });
     reset();
     await navigateTo("/user/accounts");

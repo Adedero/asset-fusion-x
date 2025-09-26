@@ -13,7 +13,7 @@ const authStore = useAuthStore();
 const state = reactive<LoginSchemaType>({
   email: "",
   password: "",
-  rememberMe: true,
+  rememberMe: true
 });
 
 function reset() {
@@ -41,7 +41,7 @@ async function onSubmit(event: FormSubmitEvent<LoginSchemaType>) {
         throw createError({
           status: 500,
           statusMessage: runtimeConfig.public.defaultErrorMsg,
-          fatal: true,
+          fatal: true
         });
       }
 
@@ -58,7 +58,7 @@ async function onSubmit(event: FormSubmitEvent<LoginSchemaType>) {
       if (!sessionData.data?.user.emailVerified) {
         await navigateTo({
           name: "email-verification",
-          query: { email: encodedEmail },
+          query: { email: encodedEmail }
         });
         return;
       }
@@ -67,7 +67,7 @@ async function onSubmit(event: FormSubmitEvent<LoginSchemaType>) {
         throw createError({
           status: 500,
           statusMessage: runtimeConfig.public.defaultErrorMsg,
-          fatal: true,
+          fatal: true
         });
       }
 
@@ -80,7 +80,7 @@ async function onSubmit(event: FormSubmitEvent<LoginSchemaType>) {
         await navigateTo("/user");
         return;
       }
-    },
+    }
   });
 }
 </script>
@@ -95,7 +95,8 @@ async function onSubmit(event: FormSubmitEvent<LoginSchemaType>) {
       :schema="LoginSchema"
       :state="state"
       class="space-y-4"
-      @submit.prevent="onSubmit">
+      @submit.prevent="onSubmit"
+    >
       <NuxtFormField label="Email" name="email">
         <NuxtInput v-model="state.email" size="lg" class="w-full" />
       </NuxtFormField>
@@ -119,7 +120,8 @@ async function onSubmit(event: FormSubmitEvent<LoginSchemaType>) {
         class="mt-2 w-full flex-center"
         size="lg"
         icon="i-lucide-log-in"
-        loading-auto>
+        loading-auto
+      >
         Submit
       </NuxtButton>
     </NuxtForm>

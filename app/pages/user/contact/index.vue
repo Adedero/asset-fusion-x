@@ -5,9 +5,9 @@ definePageMeta({
   layout: "user",
   breadcrumb: [
     {
-      label: "Get An Advisor",
-    },
-  ] as BreadcrumbItem[],
+      label: "Get An Advisor"
+    }
+  ] as BreadcrumbItem[]
 });
 </script>
 

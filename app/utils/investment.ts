@@ -5,7 +5,7 @@ export const getInvestmentStatusBadgeColor = (status: string) => {
     open: "success",
     closed: "primary",
     terminated: "error",
-    paused: "warning",
+    paused: "warning"
   };
 
   return map[status];
@@ -16,7 +16,7 @@ export const getInvestmentStatusIcon = (status: string) => {
     open: "lucide-circle-check",
     closed: "lucide-circle-x",
     terminated: "lucide-info",
-    paused: "lucide-circle-pause",
+    paused: "lucide-circle-pause"
   };
 
   return map[status];

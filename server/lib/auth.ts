@@ -9,7 +9,7 @@ import emailChangeTemplate from "../email/templates/email-change";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "sqlite" }),
-  
+
   logger: {
     disabled: process.env.NODE_ENV === "production"
   },
@@ -17,8 +17,8 @@ export const auth = betterAuth({
   session: {
     cookieCache: {
       enabled: true,
-      maxAge: 5 * 60,
-    },
+      maxAge: 5 * 60
+    }
   },
 
   user: {
@@ -26,22 +26,22 @@ export const auth = betterAuth({
       enabled: true,
       sendChangeEmailVerification: async ({
         user,
-        /* newEmail, */ url /* token */,
+        /* newEmail, */ url /* token */
       }) => {
         const subject = "Approve email change";
 
         await sendEmail({
           to: user.email,
           subject,
-          html: emailChangeTemplate({ user, url, subject }),
+          html: emailChangeTemplate({ user, url, subject })
         });
-      },
+      }
     },
     additionalFields: {
       role: {
-        type: "string",
-      },
-    },
+        type: "string"
+      }
+    }
   },
 
   emailAndPassword: {
@@ -53,11 +53,11 @@ export const auth = betterAuth({
       const { error } = await sendEmail({
         to: user.email,
         subject,
-        html: resetPasswordTemplate({ user, url, subject }),
+        html: resetPasswordTemplate({ user, url, subject })
       });
 
       if (error) throw error;
-    },
+    }
   },
 
   emailVerification: {
@@ -66,12 +66,12 @@ export const auth = betterAuth({
       const { error } = await sendEmail({
         to: user.email,
         subject,
-        html: emailVerificationTemplate({ user, url, subject }),
+        html: emailVerificationTemplate({ user, url, subject })
       });
 
       if (error) throw error;
-    },
+    }
   },
 
-  plugins: [admin()],
+  plugins: [admin()]
 });

@@ -4,7 +4,7 @@ import { LoaderInitial, LoaderRouter } from "#components";
 
 useHead({
   meta: [{ name: "viewport", content: "" }],
-  htmlAttrs: { class: "dark" },
+  htmlAttrs: { class: "dark" }
 });
 
 const nuxtApp = useNuxtApp();
@@ -26,7 +26,6 @@ nuxtApp.hook("page:finish", () => {
     hasSeenLoader.value = true;
   }, 2000);
 });
-
 </script>
 
 <template>

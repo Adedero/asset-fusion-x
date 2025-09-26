@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "main",
+  layout: "main"
 });
 
 const { appName } = useRuntimeConfig().public;
@@ -11,17 +11,20 @@ const { appName } = useRuntimeConfig().public;
     <div class="min-h-screen flex flex-col items-center py-16">
       <div class="max-w-6xl mx-auto px-4">
         <section class="relative h-[550px] w-full mb-20 overflow-hidden">
-          <NuxtImg
-            placeholder
+          <img
             src="https://www.shutterstock.com/image-illustration/financial-data-document-graph-chart-600nw-1987973402.jpg"
             alt="Abstract Financial Data Visualization"
-            class="absolute inset-0 w-full h-full object-cover brightness-75" />
+            class="absolute inset-0 w-full h-full object-cover brightness-75"
+          />
           <div
-            class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
+            class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"
+          />
           <div
-            class="relative z-10 flex flex-col items-center justify-center h-full text-center px-8">
+            class="relative z-10 flex flex-col items-center justify-center h-full text-center px-8"
+          >
             <h1
-              class="text-4xl font-extrabold text-tertiary-500 mb-6 leading-tight">
+              class="text-4xl font-extrabold text-tertiary-500 mb-6 leading-tight"
+            >
               Unlocking Potential: Navigating the World of Derivatives for
               Advanced Strategies
             </h1>
@@ -32,7 +35,8 @@ const { appName } = useRuntimeConfig().public;
               speculation, and amplifying investment returns.
             </p>
             <div
-              class="mt-8 p-4 bg-slate-800/70 rounded-lg shadow-xl border border-white/30 backdrop-blur-sm">
+              class="mt-8 p-4 bg-slate-800/70 rounded-lg shadow-xl border border-white/30 backdrop-blur-sm"
+            >
               <p class="text-base text-slate-200">
                 Derivatives offer powerful tools to manage risk and enhance
                 returns, but they require a clear understanding of their
@@ -67,7 +71,8 @@ const { appName } = useRuntimeConfig().public;
                 advanced financial strategies.
               </p>
               <ul
-                class="list-disc list-inside text-slate-300 text-base space-y-2">
+                class="list-disc list-inside text-slate-300 text-base space-y-2"
+              >
                 <li>
                   <span class="text-primary-500 font-semibold"
                     >Value from Underlying:</span
@@ -92,14 +97,16 @@ const { appName } = useRuntimeConfig().public;
               </ul>
             </div>
             <div
-              class="relative w-full h-96 rounded-lg overflow-hidden shadow-lg border border-primary-500">
-              <NuxtImg
-                placeholder
+              class="relative w-full h-96 rounded-lg overflow-hidden shadow-lg border border-primary-500"
+            >
+              <img
                 src="https://miro.medium.com/v2/resize:fit:1400/1*ooREk5UYGQIehxars_bWHw.jpeg"
                 alt="Interconnected Financial Concepts"
-                class="absolute inset-0 w-full h-full object-cover" />
+                class="absolute inset-0 w-full h-full object-cover"
+              />
               <div
-                class="absolute inset-0 bg-gradient-to-bl from-slate-900 via-transparent to-transparent opacity-70" />
+                class="absolute inset-0 bg-gradient-to-bl from-slate-900 via-transparent to-transparent opacity-70"
+              />
             </div>
           </div>
         </section>
@@ -109,20 +116,22 @@ const { appName } = useRuntimeConfig().public;
             Key Types of Derivatives in Financial Markets
           </h2>
           <p
-            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto">
+            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto"
+          >
             The world of derivatives is diverse, with several common types
             catering to different strategic needs. Each has unique
             characteristics and applications.
           </p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div
-              class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105">
+              class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+            >
               <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw4Iy11idRZIFZyspaFaBRAqKViXJlUVtzYw&s"
                   alt="Futures Contract"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Futures Contracts
@@ -137,13 +146,14 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105">
+              class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+            >
               <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://wfe-live.lon1.cdn.digitaloceanspaces.com/org_focus/storage/media/uploaded-files/1689848039253.png"
                   alt="Stock Options Chart"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Options Contracts
@@ -158,13 +168,14 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105">
+              class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+            >
               <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://cdn.corporatefinanceinstitute.com/assets/currency-swap-contract.png"
                   alt="Swap Agreement Concept"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">Swaps</h3>
               <p class="text-base text-slate-400">
@@ -177,13 +188,14 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105">
+              class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
+            >
               <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://globalfintechseries.com/wp-content/uploads/SolidusX-Trading-Platform-2023-Review-Reinventing-online-trading.jpg"
                   alt="Digital Trading Interface"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Forwards
@@ -205,7 +217,8 @@ const { appName } = useRuntimeConfig().public;
             Strategic Applications of Derivatives
           </h2>
           <p
-            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto">
+            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto"
+          >
             Beyond their complexity, derivatives serve crucial roles in modern
             finance, enabling sophisticated strategies for risk management and
             profit generation.
@@ -260,14 +273,16 @@ const { appName } = useRuntimeConfig().public;
               </div>
             </div>
             <div
-              class="relative w-full h-96 rounded-lg overflow-hidden shadow-lg border border-primary-500">
-              <NuxtImg
-                placeholder
+              class="relative w-full h-96 rounded-lg overflow-hidden shadow-lg border border-primary-500"
+            >
+              <img
                 src="https://img.freepik.com/premium-photo/complex-financial-data-displayed-digital-graphs-charts_975188-115907.jpg"
                 alt="Complex Financial Charts"
-                class="absolute inset-0 w-full h-full object-cover" />
+                class="absolute inset-0 w-full h-full object-cover"
+              />
               <div
-                class="absolute inset-0 bg-gradient-to-l from-slate-900 via-transparent to-transparent opacity-80" />
+                class="absolute inset-0 bg-gradient-to-l from-slate-900 via-transparent to-transparent opacity-80"
+              />
             </div>
           </div>
         </section>
@@ -277,20 +292,22 @@ const { appName } = useRuntimeConfig().public;
             Derivatives for Advanced Passive Income Strategies
           </h2>
           <p
-            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto">
+            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto"
+          >
             While derivatives are often associated with active trading, certain
             strategies can be employed to generate passive income, albeit with a
             higher level of sophistication and risk management.
           </p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div
-              class="p-8 bg-slate-900 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105 flex flex-col items-center text-center">
+              class="p-8 bg-slate-900 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105 flex flex-col items-center text-center"
+            >
               <div class="relative w-full h-60 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://www.shutterstock.com/image-vector/market-trade-binary-option-trading-600nw-583229821.jpg"
                   alt="Option Trading Screen"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Covered Call Strategies
@@ -305,13 +322,14 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="p-8 bg-slate-900 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105 flex flex-col items-center text-center">
+              class="p-8 bg-slate-900 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105 flex flex-col items-center text-center"
+            >
               <div class="relative w-full h-60 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://a.c-dn.net/c/content/dam/publicsites/igcom/uk/images/Rebrand/Hero/Pro_real_time-mobile.jpg/jcr:content/renditions/original-size.webp"
                   alt="Algorithmic Trading Software"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Automated Derivative Trading
@@ -340,11 +358,11 @@ const { appName } = useRuntimeConfig().public;
           </p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
             <div class="flex flex-col items-center">
-              <NuxtImg
-                placeholder
+              <img
                 src="https://design4users.com/wp-content/uploads/2020/02/finance-tracking-dashboard.png"
                 alt="Financial Software Interface"
-                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500" />
+                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500"
+              />
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Sophisticated Strategy Implementation
               </h3>
@@ -358,11 +376,11 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div class="flex flex-col items-center">
-              <NuxtImg
-                placeholder
+              <img
                 src="https://businessconsultancy.al/wp-content/uploads/2021/11/11.jpg"
                 alt="Expert Consultation"
-                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500" />
+                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500"
+              />
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Managed Exposure to Advanced Markets
               </h3>

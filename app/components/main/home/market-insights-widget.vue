@@ -32,7 +32,7 @@ onMounted(() => {
       withdateranges: false,
       compareSymbols: [],
       studies: [],
-      autosize: true,
+      autosize: true
     });
 
     widget.value.appendChild(script);

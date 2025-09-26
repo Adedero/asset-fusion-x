@@ -11,8 +11,8 @@ const emit = defineEmits<{
 const { pending, data, error, refresh } = useFetch(
   `/api/user/financial-accounts/${accountId}`,
   {
-    pick: ["balance"],
-  },
+    pick: ["balance"]
+  }
 );
 
 const update = async () => {

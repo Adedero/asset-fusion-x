@@ -35,11 +35,7 @@ const { appName } = useRuntimeConfig().public;
           <div
             class="w-full h-full saturate-0 group-hover:saturate-100 duration-300 transition-all"
           >
-            <NuxtImg
-              :src="customer.image"
-              placeholder
-              class="h-full w-full object-cover"
-            />
+            <img :src="customer.image" class="h-full w-full object-cover" />
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
 
   const unreadNotification = await prisma.notification.findFirst({
     where: { userId: user.id, isRead: false },
-    select: { id: true },
+    select: { id: true }
   });
 
   return { hasUnreadNotifications: !!unreadNotification };

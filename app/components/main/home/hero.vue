@@ -53,7 +53,7 @@ useTypewriter(typewriter);
     </div>
 
     <div class="grid">
-      <NuxtImg placeholder src="/img/buildings.gif" class="rounded-2xl" />
+      <img src="/img/buildings.gif" class="rounded-2xl" />
     </div>
   </div>
 </template>

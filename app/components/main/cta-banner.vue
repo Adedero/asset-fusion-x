@@ -14,7 +14,7 @@ const {
   description = "",
   buttonHref = "",
   buttonLabel = "",
-  buttonIcon = "",
+  buttonIcon = ""
 } = defineProps<Props>();
 
 const classes = computed(() => {
@@ -22,14 +22,14 @@ const classes = computed(() => {
     primary: {
       card: "bg-gradient-to-br from-tertiary-400 to-primary-700",
       text: "",
-      button: "bg-white text-primary-500 hover:bg-slate-100",
+      button: "bg-white text-primary-500 hover:bg-slate-100"
     },
 
     neutral: {
       card: "bg-slate-800/50 border border-slate-700 bg-gradient-t-b from-primary/50",
       text: "text-muted",
-      button: "bg-primary-500 hover:bg-primary-600",
-    },
+      button: "bg-primary-500 hover:bg-primary-600"
+    }
   };
 
   return map[color];

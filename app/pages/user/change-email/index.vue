@@ -7,19 +7,19 @@ definePageMeta({
   layout: "user",
   breadcrumb: [
     {
-      label: "Change email",
-    },
-  ] as BreadcrumbItem[],
+      label: "Change email"
+    }
+  ] as BreadcrumbItem[]
 });
 
 const schema = z.object({
-  email: z.email({ message: "Invalid email" }),
+  email: z.email({ message: "Invalid email" })
 });
 
 type Schema = z.infer<typeof schema>;
 
 const state = reactive<Schema>({
-  email: "",
+  email: ""
 });
 
 const errorMessage = ref<string>();
@@ -33,7 +33,7 @@ const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
   await authClient.changeEmail(
     {
       newEmail: email,
-      callbackURL: "/change-email/verification",
+      callbackURL: "/change-email/verification"
     },
     {
       onError: (ctx) => {
@@ -42,8 +42,8 @@ const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
       onSuccess: () => {
         successMessage.value =
           "A link has been sent to your current email. Click on the link to continue.";
-      },
-    },
+      }
+    }
   );
 };
 </script>

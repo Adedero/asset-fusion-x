@@ -41,11 +41,7 @@ import investmentOptions from "~/data/main/investment-options";
       </div>
 
       <div class="mt-6">
-        <NuxtImg
-          src="/img/investment.gif"
-          placeholder
-          class="rounded-xl h-48 object-cover"
-        />
+        <img src="/img/investment.gif" class="rounded-xl h-48 object-cover" />
       </div>
     </div>
   </div>

@@ -3,7 +3,7 @@ import { NuxtLink } from "#components";
 import SignUpForm from "./sign-up-form.vue";
 
 definePageMeta({
-  layout: "auth",
+  layout: "auth"
 });
 
 const runtimeConfig = useRuntimeConfig();

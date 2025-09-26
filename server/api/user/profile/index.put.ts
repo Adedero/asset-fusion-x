@@ -10,27 +10,27 @@ export default defineEventHandler(async (event) => {
   if (!result.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: result.error.issues[0].message,
+      statusMessage: result.error.issues[0].message
     });
   }
 
   const profile = await prisma.profile.upsert({
     create: {
       userId: user.id,
-      ...result.data,
+      ...result.data
     },
     update: {
-      ...result.data,
+      ...result.data
     },
     where: {
-      userId: user.id,
-    },
+      userId: user.id
+    }
   });
 
   if (!profile) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Failed to update profile",
+      statusMessage: "Failed to update profile"
     });
   }
 

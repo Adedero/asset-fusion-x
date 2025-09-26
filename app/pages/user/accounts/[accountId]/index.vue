@@ -6,8 +6,8 @@ const accountId = useRouteData().getParams("accountId");
 const { data, error } = await useFetch(
   `/api/user/financial-accounts/${accountId}`,
   {
-    key: `user-financial-account-${accountId}`,
-  },
+    key: `user-financial-account-${accountId}`
+  }
 );
 </script>
 
@@ -79,7 +79,7 @@ const { data, error } = await useFetch(
               {{
                 useDateFormat(
                   data.lastProfit.createdAt,
-                  "MMM DD, YYYY | hh:mm aa",
+                  "MMM DD, YYYY | hh:mm aa"
                 )
               }}
             </small>
@@ -115,7 +115,7 @@ const { data, error } = await useFetch(
               {{
                 toCase(
                   data.lastTransaction?.type ?? "not available",
-                  "sentence",
+                  "sentence"
                 )
               }}
             </small>

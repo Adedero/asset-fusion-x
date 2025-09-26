@@ -2,7 +2,6 @@ import { createAuthClient } from "better-auth/vue";
 import { adminClient, inferAdditionalFields } from "better-auth/client/plugins";
 import type { auth } from "~~/server/lib/auth";
 
-
 export const authClient = createAuthClient({
   fetchOptions: {
     onError: async (context) => {
@@ -13,12 +12,12 @@ export const authClient = createAuthClient({
         createError({
           statusCode: response.status,
           statusMessage: `Too many tries. Retry after ${retryAfter} seconds`,
-          fatal: true,
+          fatal: true
         });
       }
-    },
+    }
   },
-  plugins: [adminClient(), inferAdditionalFields<typeof auth>()],
+  plugins: [adminClient(), inferAdditionalFields<typeof auth>()]
 });
 
 export type BetterAuthSession = typeof authClient.$Infer.Session.session;

@@ -3,7 +3,7 @@ import { useAsyncState } from "@vueuse/core";
 import { authClient } from "~/lib/auth";
 
 definePageMeta({
-  layout: "auth",
+  layout: "auth"
 });
 
 const runtimeConfig = useRuntimeConfig();
@@ -17,17 +17,17 @@ const { state, executeImmediate: sendEmail } = useAsyncState(async function () {
   return await authClient.sendVerificationEmail(
     {
       email: decodedEmail.value,
-      callbackURL: "/token-validation",
+      callbackURL: "/token-validation"
     },
     {
       onSuccess: () => {
         toast.add({
           color: "success",
           title: "Success",
-          description: "Email sent successfully",
+          description: "Email sent successfully"
         });
-      },
-    },
+      }
+    }
   );
 }, null);
 
@@ -37,7 +37,7 @@ onMounted(() => {
       statusCode: 400,
       statusMessage:
         "We could not verifiy your email due to incomplete data. Try signing up again.",
-      fatal: true,
+      fatal: true
     });
   }
 });

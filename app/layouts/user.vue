@@ -21,10 +21,9 @@ router.beforeEach((to, from, next) => {
 const { data, error, pending, refresh } = await useFetch(
   "/api/user/notifications/unread/check",
   {
-    key: "user-unread-notifications-check",
-  },
+    key: "user-unread-notifications-check"
+  }
 );
-
 
 const open = ref<boolean>(false);
 
@@ -35,7 +34,6 @@ function links() {
   return userLinks({ signOut: () => (open.value = true) });
 }
 
-
 const signOutError = ref<Error | null>(null);
 const signOut = async () => {
   await authClient.signOut({
@@ -45,8 +43,8 @@ const signOut = async () => {
       },
       onError: (ctx) => {
         signOutError.value = normalizeException(ctx.error);
-      },
-    },
+      }
+    }
   });
 };
 </script>
@@ -73,10 +71,7 @@ const signOut = async () => {
 
       <template #content>
         <div>
-          <NuxtNavigationMenu
-            orientation="vertical"
-            :items="links()"
-          />
+          <NuxtNavigationMenu orientation="vertical" :items="links()" />
         </div>
       </template>
 

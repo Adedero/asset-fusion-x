@@ -1,7 +1,7 @@
 import type {
   FinancialAccount,
   Investment,
-  Transaction,
+  Transaction
 } from "~~/server/generated/prisma/client";
 import type { EventContextUser } from "~~/shared/types/user.types";
 
@@ -17,20 +17,20 @@ export type NotificationEvents = {
 
   // transaction notifications
   "deposit:create": [
-    EventData<{ transaction: Transaction; account: FinancialAccount }>,
+    EventData<{ transaction: Transaction; account: FinancialAccount }>
   ]; // done
   "withdrawal:create": [
-    EventData<{ transaction: Transaction; account: FinancialAccount }>,
+    EventData<{ transaction: Transaction; account: FinancialAccount }>
   ]; // done
   "transaction-status:update": [
-    EventData<{ transaction: Transaction; account: FinancialAccount }>,
+    EventData<{ transaction: Transaction; account: FinancialAccount }>
   ]; // done
 
   // investment notifications
   "investment:create": [
-    EventData<{ investment: Investment; account: FinancialAccount }>,
+    EventData<{ investment: Investment; account: FinancialAccount }>
   ]; // done
   "investment-status:update": [
-    EventData<{ investment: Investment; account: FinancialAccount }>,
+    EventData<{ investment: Investment; account: FinancialAccount }>
   ];
 };

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "main",
+  layout: "main"
 });
 
 const { appName } = useRuntimeConfig().public;
@@ -12,11 +12,13 @@ const { appName } = useRuntimeConfig().public;
       <MainPageHero
         heading="Bonds (Fixed Income)"
         subheading="Discover the foundational role of bonds in investment portfolios, offering predictability and a reliable source of passive income. Learn how these debt instruments can fortify your financial future."
-        bg-image="/img/pages/investments/bonds.jpg" />
+        bg-image="/img/pages/investments/bonds.jpg"
+      />
     </div>
 
     <div
-      class="min-h-screen flex flex-col justify-center items-center py-16 px-4">
+      class="min-h-screen flex flex-col justify-center items-center py-16 px-4"
+    >
       <div class="max-w-6xl mx-auto">
         <section class="mb-20 text-center px-16">
           <p class="text-base">
@@ -30,13 +32,14 @@ const { appName } = useRuntimeConfig().public;
           </p>
 
           <div class="relative w-full h-96 overflow-hidden mt-16">
-            <NuxtImg
-              placeholder
+            <img
               src="/img/pages/investments/bond-certificate.jpg"
               alt="Bond Certificates and Financial Charts"
-              class="absolute inset-0 w-full h-full object-cover" />
+              class="absolute inset-0 w-full h-full object-cover"
+            />
             <div
-              class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-90" />
+              class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-90"
+            />
             <div class="absolute inset-0 flex items-end justify-center pb-8">
               <p class="text-slate-200 text-base">
                 Bonds are a cornerstone of stable investing, providing
@@ -69,7 +72,8 @@ const { appName } = useRuntimeConfig().public;
                 evaluating a bond's potential return and risk.
               </p>
               <ul
-                class="list-disc list-inside text-slate-300 text-base space-y-2">
+                class="list-disc list-inside text-slate-300 text-base space-y-2"
+              >
                 <li>
                   <span class="text-primary-500 font-semibold"
                     >Fixed Income:</span
@@ -95,14 +99,16 @@ const { appName } = useRuntimeConfig().public;
               </ul>
             </div>
             <div
-              class="relative w-full h-80 rounded-lg overflow-hidden shadow-lg">
-              <NuxtImg
-                placeholder
+              class="relative w-full h-80 rounded-lg overflow-hidden shadow-lg"
+            >
+              <img
                 src="/img/pages/investments/financial-documents-and-calculator.jpg"
                 alt="Financial Documents and Calculator"
-                class="absolute inset-0 w-full h-full object-cover" />
+                class="absolute inset-0 w-full h-full object-cover"
+              />
               <div
-                class="absolute inset-0 bg-gradient-to-tr from-slate-900 via-transparent to-transparent opacity-70" />
+                class="absolute inset-0 bg-gradient-to-tr from-slate-900 via-transparent to-transparent opacity-70"
+              />
             </div>
           </div>
         </section>
@@ -113,13 +119,14 @@ const { appName } = useRuntimeConfig().public;
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div
-              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300">
+              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300"
+            >
               <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="/img/pages/investments/steady-income-flow.jpg"
                   alt="Steady Flow of Income"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Consistent Income Stream
@@ -133,13 +140,14 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300">
+              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300"
+            >
               <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="/img/pages/investments/diversified-portfolio.jpg"
                   alt="Portfolio Diversification Chart"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Risk Mitigation & Diversification
@@ -153,13 +161,14 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300">
+              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300"
+            >
               <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="/img/pages/investments/financial-stability.jpg"
                   alt="Financial Stability Concept"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Capital Preservation
@@ -180,7 +189,8 @@ const { appName } = useRuntimeConfig().public;
             Navigating the Diverse World of Bonds
           </h2>
           <p
-            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto">
+            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto"
+          >
             The bond market offers a variety of instruments, each with its own
             characteristics, risks, and potential returns. Understanding the
             different types helps in making informed investment decisions.
@@ -233,14 +243,16 @@ const { appName } = useRuntimeConfig().public;
               </div>
             </div>
             <div
-              class="relative w-full h-96 rounded-lg overflow-hidden shadow-lg">
-              <NuxtImg
-                placeholder
+              class="relative w-full h-96 rounded-lg overflow-hidden shadow-lg"
+            >
+              <img
                 src="https://img.freepik.com/premium-photo/dynamic-financial-charts-graphs-blue-grid-3d-rendering_670147-69830.jpg"
                 alt="Diverse Financial Graphs"
-                class="absolute inset-0 w-full h-full object-cover" />
+                class="absolute inset-0 w-full h-full object-cover"
+              />
               <div
-                class="absolute inset-0 bg-gradient-to-l from-slate-900 via-transparent to-transparent opacity-80" />
+                class="absolute inset-0 bg-gradient-to-l from-slate-900 via-transparent to-transparent opacity-80"
+              />
             </div>
           </div>
         </section>
@@ -250,7 +262,8 @@ const { appName } = useRuntimeConfig().public;
             Building Passive Income Through Bond Investments
           </h2>
           <p
-            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto">
+            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto"
+          >
             While direct bond purchases are an option, several accessible
             investment vehicles allow you to generate passive income from bonds
             without the need for extensive market knowledge or direct
@@ -258,13 +271,14 @@ const { appName } = useRuntimeConfig().public;
           </p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div
-              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300 flex flex-col items-center text-center">
+              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300 flex flex-col items-center text-center"
+            >
               <div class="relative w-full h-60 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://get.ycharts.com/wp-content/uploads/2021/12/SP-500-vs-Bloomberg-Bond-Aggregate-vs-10-Year.png"
                   alt="Bond ETF Chart"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Bond ETFs and Mutual Funds
@@ -279,13 +293,14 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300 flex flex-col items-center text-center">
+              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 hover:scale-105 transition-transform duration-300 flex flex-col items-center text-center"
+            >
               <div class="relative w-full h-60 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://www.idfcfirstbank.com/content/dam/idfcfirstbank/images/blog/finance/what-is-portfolio-management-717x404.jpg"
                   alt="Professional Portfolio Management"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Managed Bond Portfolios
@@ -313,11 +328,11 @@ const { appName } = useRuntimeConfig().public;
           </p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
             <div class="flex flex-col items-center">
-              <NuxtImg
-                placeholder
+              <img
                 src="https://cdn.corporatefinanceinstitute.com/assets/financial-advisor.jpg"
                 alt="Financial Advisor Discussing Bonds"
-                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500" />
+                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500"
+              />
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Optimized Bond Portfolio Creation
               </h3>
@@ -331,11 +346,11 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div class="flex flex-col items-center">
-              <NuxtImg
-                placeholder
+              <img
                 src="https://thumbs.dreamstime.com/b/explore-concept-passive-income-which-allows-individuals-to-earn-money-regularly-minimal-involvement-understand-how-373589819.jpg"
                 alt="Secure Digital Platform"
-                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500" />
+                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500"
+              />
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Effortless Passive Income Generation
               </h3>

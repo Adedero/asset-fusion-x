@@ -18,8 +18,18 @@ export default function useConfirm() {
   const require = (opts: ConfirmConfig = {}) => {
     config.value = {
       showCloseIcon: false,
-      acceptProps: { color: "primary", variant: "solid", label: "Proceed", ...opts.acceptProps },
-      rejectProps: { color: "neutral", variant: "soft", label: "Cancel", ...opts.rejectProps },
+      acceptProps: {
+        color: "primary",
+        variant: "solid",
+        label: "Proceed",
+        ...opts.acceptProps
+      },
+      rejectProps: {
+        color: "neutral",
+        variant: "soft",
+        label: "Cancel",
+        ...opts.rejectProps
+      },
       ...opts
     };
     open.value = true;

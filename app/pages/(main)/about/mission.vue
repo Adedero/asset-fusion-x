@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "main",
+  layout: "main"
 });
 
 const { appName } = useRuntimeConfig().public;
@@ -26,8 +26,7 @@ const { appName } = useRuntimeConfig().public;
       </div>
 
       <div class="h-96">
-        <NuxtImg
-          placeholder
+        <img
           src="/img/pages/about/mission.jpg"
           class="h-full w-full object-cover brightness-50"
         />

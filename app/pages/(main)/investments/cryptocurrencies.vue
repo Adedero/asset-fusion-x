@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "main",
+  layout: "main"
 });
 
 const { appName } = useRuntimeConfig().public;
@@ -12,7 +12,8 @@ const { appName } = useRuntimeConfig().public;
       <MainPageHero
         heading="Cryptocurrencies"
         subheading="Tap into the decentralized financial revolution. Understand how crypto works, how it's evolving, and how AssetFusionX simplifies your path into this exciting world."
-        bg-image="/img/pages/investments/cryptocurrencies.jpg" />
+        bg-image="/img/pages/investments/cryptocurrencies.jpg"
+      />
     </div>
 
     <!-- INTRODUCTION TO CRYPTO -->
@@ -35,11 +36,11 @@ const { appName } = useRuntimeConfig().public;
             cases, from programmable contracts to decentralized finance (DeFi).
           </p>
         </div>
-        <NuxtImg
-          placeholder
+        <img
           src="/img/pages/investments/what-is-cryptocurrency.png"
           alt="Explaining Crypto"
-          class="block rounded-xl shadow-lg" />
+          class="block rounded-xl shadow-lg"
+        />
       </div>
     </section>
 
@@ -52,7 +53,8 @@ const { appName } = useRuntimeConfig().public;
         <ol class="relative border-l border-slate-700">
           <li class="mb-10 ml-6 relative">
             <span
-              class="absolute w-4 h-4 bg-tertiary-500 rounded-full -left-8 top-2" />
+              class="absolute w-4 h-4 bg-tertiary-500 rounded-full -left-8 top-2"
+            />
             <h3 class="text-lg font-semibold text-slate-100">
               2009 - Bitcoin is Born
             </h3>
@@ -63,7 +65,8 @@ const { appName } = useRuntimeConfig().public;
           </li>
           <li class="mb-10 ml-6 relative">
             <span
-              class="absolute w-4 h-4 bg-tertiary-500 rounded-full -left-8 top-2" />
+              class="absolute w-4 h-4 bg-tertiary-500 rounded-full -left-8 top-2"
+            />
             <h3 class="text-lg font-semibold text-slate-100">
               2015 - Ethereum Launches
             </h3>
@@ -74,7 +77,8 @@ const { appName } = useRuntimeConfig().public;
           </li>
           <li class="mb-10 ml-6 relative">
             <span
-              class="absolute w-4 h-4 bg-tertiary-500 rounded-full -left-8 top-2" />
+              class="absolute w-4 h-4 bg-tertiary-500 rounded-full -left-8 top-2"
+            />
             <h3 class="text-lg font-semibold text-slate-100">
               2020+ - DeFi & NFT Boom
             </h3>
@@ -110,7 +114,8 @@ const { appName } = useRuntimeConfig().public;
             <div class="flex items-center justify-center mb-4">
               <NuxtIcon
                 name="lucide:lock-keyhole"
-                class="text-3xl text-tertiary-500" />
+                class="text-3xl text-tertiary-500"
+              />
             </div>
             <h3 class="text-xl font-medium text-slate-100 mb-2">Security</h3>
             <p class="text-slate-400">
@@ -122,7 +127,8 @@ const { appName } = useRuntimeConfig().public;
             <div class="flex items-center justify-center mb-4">
               <NuxtIcon
                 name="lucide:person-standing"
-                class="text-3xl text-tertiary-500" />
+                class="text-3xl text-tertiary-500"
+              />
             </div>
             <h3 class="text-xl font-medium text-slate-100 mb-2">
               Accessibility
@@ -155,11 +161,11 @@ const { appName } = useRuntimeConfig().public;
             real-time analytics.
           </p>
         </div>
-        <NuxtImg
-          placeholder
+        <img
           src="/img/pages/investments/crypto-dashboard.png"
           :alt="`${appName} Crypto Dashboard`"
-          class="rounded-l-xl shadow-lg h-96 object-cover object-top-right" />
+          class="rounded-l-xl shadow-lg h-96 object-cover object-top-right"
+        />
       </div>
     </section>
 

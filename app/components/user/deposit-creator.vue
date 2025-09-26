@@ -12,8 +12,8 @@ const {
   transaction,
   buttonProps = {
     size: "lg",
-    label: "Submit",
-  },
+    label: "Submit"
+  }
 } = defineProps<Props>();
 
 const toast = useToast();
@@ -28,16 +28,16 @@ const createTransaction = async () => {
   try {
     const data = await $fetch("/api/user/transactions/deposit", {
       method: "POST",
-      body: transaction,
+      body: transaction
     });
     toast.add({
       color: "success",
       title: "Success",
-      description: data.message,
+      description: data.message
     });
     setTimeout(() => {
       navigateTo(
-        `/user/accounts/${transaction.financialAccountId}/transactions`,
+        `/user/accounts/${transaction.financialAccountId}/transactions`
       );
     }, 2000);
   } catch (err) {
@@ -45,7 +45,7 @@ const createTransaction = async () => {
     toast.add({
       color: "error",
       title: error.value.name ?? "Eror",
-      description: error.value.message,
+      description: error.value.message
     });
   } finally {
     loading.value = false;

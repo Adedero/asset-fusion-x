@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 500,
       statusMessage:
-        "Withdrawals are not allowed at this time. Please, try again later.",
+        "Withdrawals are not allowed at this time. Please, try again later."
     });
   }
 
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   if (!query.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: query.error.issues[0].message,
+      statusMessage: query.error.issues[0].message
     });
   }
 
@@ -26,18 +26,18 @@ export default defineEventHandler(async (event) => {
   if (symbol === "WIRE") {
     throw createError({
       statusCode: 400,
-      statusMessage: "Validation is not required for Wire Transfer withdrawals",
+      statusMessage: "Validation is not required for Wire Transfer withdrawals"
     });
   }
 
   const currency = await prisma.currency.findUnique({
-    where: { symbol },
+    where: { symbol }
   });
 
   if (!currency) {
     throw createError({
       statusCode: 404,
-      statusMessage: "Withdrawal currency not found",
+      statusMessage: "Withdrawal currency not found"
     });
   }
 
@@ -48,9 +48,9 @@ export default defineEventHandler(async (event) => {
   return {
     request: {
       amount,
-      symbol,
+      symbol
     },
     currency: updatedCurrency,
-    currencyDepositAmount,
+    currencyDepositAmount
   };
 });

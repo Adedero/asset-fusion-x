@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   if (!accountId) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Account ID is required",
+      statusMessage: "Account ID is required"
     });
   }
 
@@ -14,13 +14,13 @@ export default defineEventHandler(async (event) => {
 
   const isAccountMember = await prisma.accountUser.findFirst({
     where: { userId: user.id, financialAccountId: accountId },
-    select: { id: true },
+    select: { id: true }
   });
 
   if (!isAccountMember) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Not allowed",
+      statusMessage: "Not allowed"
     });
   }
 
@@ -31,17 +31,17 @@ export default defineEventHandler(async (event) => {
         select: {
           id: true,
           name: true,
-          image: true,
-        },
+          image: true
+        }
       },
       recipient: {
         select: {
           id: true,
           name: true,
-          image: true,
-        },
-      },
-    },
+          image: true
+        }
+      }
+    }
   });
 
   return joinRequests;

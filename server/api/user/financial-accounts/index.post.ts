@@ -8,10 +8,10 @@ export default defineEventHandler(async (event) => {
   const schema = z.object({
     accountName: z.string().min(3, { message: "Account name is required." }),
     accountType: z.enum(["personal", "business"], {
-      message: "Account type must either be personal or business",
+      message: "Account type must either be personal or business"
     }),
     accountOwnership: z.enum(["single", "joint"], {
-      message: "Account ownership must either be single or joint",
+      message: "Account ownership must either be single or joint"
     }),
     jointOwnershipRole: z
       .enum([
@@ -23,14 +23,14 @@ export default defineEventHandler(async (event) => {
         "investor",
         "contributor",
         "legal_guardian",
-        "signatory",
+        "signatory"
       ])
       .optional(),
     jointOwnership: z
       .number()
       .nonnegative({ message: "Ownership cannot be negative" })
       .max(100, { message: "Ownership cannot be more than 100%" })
-      .optional(),
+      .optional()
   });
 
   const body = await readValidatedBody(event, schema.safeParse);
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
   if (!body.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: body.error.issues[0].message,
+      statusMessage: body.error.issues[0].message
     });
   }
 
@@ -48,13 +48,13 @@ export default defineEventHandler(async (event) => {
 
   //Check if user has 20 account already
   const accountMemberships = await prisma.accountUser.count({
-    where: { userId: user.id },
+    where: { userId: user.id }
   });
 
   if (accountMemberships === MAX_ACCOUNTS) {
     throw createError({
       statusCode: 400,
-      statusMessage: `You cannot create more than ${MAX_ACCOUNTS} accounts.`,
+      statusMessage: `You cannot create more than ${MAX_ACCOUNTS} accounts.`
     });
   }
 
@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
     accountOwnership,
     accountType,
     jointOwnership,
-    jointOwnershipRole,
+    jointOwnershipRole
   } = body.data;
 
   const financialAccount = await prisma.financialAccount.create({
@@ -73,8 +73,8 @@ export default defineEventHandler(async (event) => {
       number: generateAccountNumber(accountType, accountOwnership),
       status: "active",
       type: accountType,
-      ownership: accountOwnership,
-    },
+      ownership: accountOwnership
+    }
   });
 
   await prisma.accountUser.create({
@@ -82,19 +82,19 @@ export default defineEventHandler(async (event) => {
       userId: user.id,
       financialAccountId: financialAccount.id,
       role: accountOwnership === "single" ? "owner" : jointOwnershipRole,
-      ownership: accountOwnership === "single" ? 100 : jointOwnership,
-    },
+      ownership: accountOwnership === "single" ? 100 : jointOwnership
+    }
   });
 
   notificationEmitter.emit("financial-account:create", {
     user,
     data: {
-      account: financialAccount,
-    },
+      account: financialAccount
+    }
   });
 
   return {
     success: true,
-    statusMessage: "Account created successfully",
+    statusMessage: "Account created successfully"
   };
 });

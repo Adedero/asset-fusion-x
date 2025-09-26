@@ -1,7 +1,7 @@
 export default function Button({
   label,
   href,
-  centered = true,
+  centered = true
 }: {
   label: string;
   href: string;

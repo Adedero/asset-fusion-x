@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   if (!query.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: query.error.issues[0].message,
+      statusMessage: query.error.issues[0].message
     });
   }
 
@@ -21,13 +21,13 @@ export default defineEventHandler(async (event) => {
     where: {
       financialAccountId: accountId,
       investmentId,
-      type: "profit",
+      type: "profit"
     },
     take: limit,
     skip: Math.max(page - 1, 0) * limit,
     orderBy: {
-      createdAt: "desc",
-    },
+      createdAt: "desc"
+    }
   });
 
   return profits;

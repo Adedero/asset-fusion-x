@@ -6,12 +6,12 @@ definePageMeta({
   breadcrumb: [
     {
       label: "Change email",
-      to: "/change-email",
+      to: "/change-email"
     },
     {
-      label: "Verification",
-    },
-  ] as BreadcrumbItem[],
+      label: "Verification"
+    }
+  ] as BreadcrumbItem[]
 });
 
 const route = useRoute();
@@ -48,8 +48,8 @@ const error = route.query.error?.toString();
                     navigateTo({ name: 'user-change-email' });
                   },
                   color: 'error',
-                  class: 'py-2',
-                },
+                  class: 'py-2'
+                }
               ]"
             />
           </div>
@@ -68,8 +68,8 @@ const error = route.query.error?.toString();
                   onClick: () => {
                     navigateTo({ name: 'sign-in' });
                   },
-                  class: 'py-2',
-                },
+                  class: 'py-2'
+                }
               ]"
             />
           </div>

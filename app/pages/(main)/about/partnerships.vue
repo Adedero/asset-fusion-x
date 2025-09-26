@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "main",
+  layout: "main"
 });
 </script>
 
@@ -20,8 +20,7 @@ definePageMeta({
       </div>
 
       <div class="h-96">
-        <NuxtImg
-          placeholder
+        <img
           src="/img/pages/about/partnerships.jpg"
           class="h-full w-full object-cover"
         />

@@ -64,8 +64,8 @@ const transactionColumns: TableColumn<Transaction>[] = [
       <div class="w-full lg:min-w-0 lg:h-full lg:overflow-y-auto lg:flex-grow">
         <div class="w-full max-h-full space-y-4 p-0.5">
           <!-- Site overview -->
-           <AdminSiteOverview />
-           
+          <AdminSiteOverview />
+
           <!-- Dashboard Cards -->
           <div>
             <p class="text-sm text-muted font-semibold mb-2">Your Account</p>

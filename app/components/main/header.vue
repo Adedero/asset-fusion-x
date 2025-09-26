@@ -12,12 +12,12 @@ const classes = computed(() => {
   if (y.value >= targetScrollHeight) {
     return {
       header: "bg-slate-700/40 backdrop-blur-xl border border-slate-200/30",
-      wrapper: "gap-x-12",
+      wrapper: "gap-x-12"
     };
   } else {
     return {
       header: "bg-slate-800 backdrop-blur-none border border-transparent",
-      wrapper: "gap-x-40",
+      wrapper: "gap-x-40"
     };
   }
 });

@@ -20,14 +20,14 @@ class NotificationEmitter<TEvents extends Record<string, any>> {
 
   on<TEventName extends keyof TEvents & string>(
     eventName: TEventName,
-    handler: (...eventArg: TEvents[TEventName]) => void,
+    handler: (...eventArg: TEvents[TEventName]) => void
   ) {
     this.emitter.on(eventName, handler as any);
   }
 
   off<TEventName extends keyof TEvents & string>(
     eventName: TEventName,
-    handler: (...eventArg: TEvents[TEventName]) => void,
+    handler: (...eventArg: TEvents[TEventName]) => void
   ) {
     this.emitter.off(eventName, handler as any);
   }
@@ -50,4 +50,4 @@ notificationEmitter.on("transaction-status:update", onTransactionStatusUpdate);
 
 // Investment
 notificationEmitter.on("investment:create", onInvestmentCreate);
-notificationEmitter.on("investment-status:update", onInvestmentStatusUpdate)
+notificationEmitter.on("investment-status:update", onInvestmentStatusUpdate);

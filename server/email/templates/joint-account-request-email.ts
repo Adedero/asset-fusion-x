@@ -1,6 +1,6 @@
 import type {
   FinancialAccount,
-  JointAccountRequest,
+  JointAccountRequest
 } from "~~/server/generated/prisma/client";
 import type { EmailTemplateParams } from "./types";
 import Layout from "./components/layout";
@@ -10,7 +10,7 @@ export default function jointAccountRequestEmail(
   params: EmailTemplateParams<{
     account: FinancialAccount;
     request: JointAccountRequest;
-  }>,
+  }>
 ) {
   const { user, data, subject } = params ?? {};
 

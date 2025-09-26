@@ -6,5 +6,10 @@ const profitCycle = defineModel<ProfitDistribution>();
 </script>
 
 <template>
-  <NuxtSelect v-model="profitCycle" :items="profitDistribution" label-key="name" v-bind="$attrs" />
+  <NuxtSelect
+    v-model="profitCycle"
+    :items="profitDistribution"
+    label-key="name"
+    v-bind="$attrs"
+  />
 </template>

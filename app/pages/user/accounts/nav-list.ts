@@ -12,37 +12,37 @@ export const getNavList = (params: GetNavListAccountData) => {
       label: "Overview",
       to: `/user/accounts/${id}`,
       requiresActiveAccount: false,
-      requiresBusinessAccount: false,
+      requiresBusinessAccount: false
     },
     {
       label: "Users",
       to: `/user/accounts/${id}/account-users`,
       requiresActiveAccount: false,
-      requiresBusinessAccount: false,
+      requiresBusinessAccount: false
     },
     {
       label: "Requests",
       to: `/user/accounts/${id}/requests`,
       requiresActiveAccount: false,
-      requiresJointAccount: true,
+      requiresJointAccount: true
     },
     {
       label: "Profile",
       to: `/user/accounts/${id}/business-profile`,
       requiresActiveAccount: true,
-      requiresBusinessAccount: true,
+      requiresBusinessAccount: true
     },
     {
       label: "Deposit",
       to: `/user/accounts/${id}/deposit`,
       requiresActiveAccount: true,
-      requiresBusinessAccount: false,
+      requiresBusinessAccount: false
     },
     {
       label: "Withdraw",
       to: `/user/accounts/${id}/withdraw`,
       requiresActiveAccount: true,
-      requiresBusinessAccount: false,
+      requiresBusinessAccount: false
     },
     /*  {
       label: "Transfer",
@@ -54,26 +54,26 @@ export const getNavList = (params: GetNavListAccountData) => {
       label: "Transactions",
       to: `/user/accounts/${id}/transactions`,
       requiresActiveAccount: false,
-      requiresBusinessAccount: false,
+      requiresBusinessAccount: false
     },
     {
       label: "Investments",
       to: `/user/accounts/${id}/investments`,
       requiresActiveAccount: false,
-      requiresBusinessAccount: false,
+      requiresBusinessAccount: false
     },
     {
       label: "Notifications",
       to: `/user/accounts/${id}/notifications`,
       requiresActiveAccount: false,
-      requiresBusinessAccount: false,
+      requiresBusinessAccount: false
     },
     {
       label: "Settings",
       to: `/user/accounts/${id}/settings`,
       requiresActiveAccount: true,
-      requiresBusinessAccount: false,
-    },
+      requiresBusinessAccount: false
+    }
   ];
 
   // Only show items that match account status/type

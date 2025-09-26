@@ -24,7 +24,7 @@ const checked = ref<boolean>(false);
 
 watch(
   () => props.notification,
-  () => (checked.value = props.notification.checked ?? false),
+  () => (checked.value = props.notification.checked ?? false)
 );
 const handleUpdate = (value: boolean | "indeterminate") => {
   if (typeof value === "boolean") {
@@ -43,8 +43,8 @@ const { stop } = useIntersectionObserver(
     }
   },
   {
-    threshold: 0.5,
-  },
+    threshold: 0.5
+  }
 );
 
 // deleting a notification
@@ -53,19 +53,19 @@ async function deleteNotification() {
   deleting.value = true;
   try {
     await $fetch(`/api/user/notifications/${props.notification.id}`, {
-      method: "delete",
+      method: "delete"
     });
     emit("deleted", props.notification.id);
     toast.add({
       color: "success",
       title: "Done",
-      description: "Notification deleted successfully",
+      description: "Notification deleted successfully"
     });
   } catch (error) {
     toast.add({
       color: "error",
       title: "Error",
-      description: normalizeException(error).message,
+      description: normalizeException(error).message
     });
   } finally {
     deleting.value = false;

@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   // 1. Get all account IDs where user is a member
   const accountMemberships = await prisma.accountUser.findMany({
     where: { userId: user.id },
-    select: { financialAccountId: true },
+    select: { financialAccountId: true }
   });
 
   const accountIds = accountMemberships.map((m) => m.financialAccountId);
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
       totalProfit: 0,
       lastTransaction: null,
       recentTransactions: [],
-      notifications: [],
+      notifications: []
     };
   }
 
@@ -29,20 +29,20 @@ export default defineEventHandler(async (event) => {
     profitAgg,
     investmentCount,
     recentTransactions,
-    notifications,
+    notifications
   ] = await Promise.all([
     prisma.financialAccount.findMany({
       where: { id: { in: accountIds }, status: "active" },
-      select: { balance: true },
+      select: { balance: true }
     }),
 
     prisma.investment.aggregate({
       where: { status: "open", financialAccountId: { in: accountIds } },
-      _sum: { totalProfit: true },
+      _sum: { totalProfit: true }
     }),
 
     prisma.investment.count({
-      where: { status: "open", financialAccountId: { in: accountIds } },
+      where: { status: "open", financialAccountId: { in: accountIds } }
     }),
 
     prisma.transaction.findMany({
@@ -55,17 +55,17 @@ export default defineEventHandler(async (event) => {
         type: true,
         status: true,
         currency: true,
-        createdAt: true,
-      },
+        createdAt: true
+      }
     }),
 
     prisma.notification.findMany({
       where: {
-        OR: [{ userId: user.id }, { financialAccountId: { in: accountIds } }],
+        OR: [{ userId: user.id }, { financialAccountId: { in: accountIds } }]
       },
       orderBy: { createdAt: "desc" },
-      take: 5,
-    }),
+      take: 5
+    })
   ]);
 
   // 3. Compute total balance and return
@@ -80,6 +80,6 @@ export default defineEventHandler(async (event) => {
     totalProfit,
     lastTransaction,
     recentTransactions,
-    notifications,
+    notifications
   };
 });

@@ -6,7 +6,7 @@ const COINLAYER_API = process.env.COINLAYER_API;
 const COINLAYER_API_KEY = process.env.COINLAYER_API_KEY;
 
 export default async function getUpdatedCurrencyData(
-  currency: Currency,
+  currency: Currency
 ): Promise<Currency> {
   const ONE_DAY_AGO = new Date().getTime() - 24 * 60 * 60 * 1000;
   const updatedAt = currency.rateUpdatedAt
@@ -27,8 +27,8 @@ export default async function getUpdatedCurrencyData(
             where: { id: currency.id },
             data: {
               rate: coinbaseRate,
-              rateUpdatedAt: new Date(),
-            },
+              rateUpdatedAt: new Date()
+            }
           });
           return updatedCurrency;
         }
@@ -39,7 +39,7 @@ export default async function getUpdatedCurrencyData(
     } catch (error) {
       console.error(
         `Failed to retrieve new rate for ${currency.name} from Coinbase`,
-        error as Error,
+        error as Error
       );
       return currency;
     }

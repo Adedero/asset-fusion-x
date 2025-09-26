@@ -1,7 +1,7 @@
 import type { BadgeProps } from "@nuxt/ui";
 
 export const getInvestmentPlanCategoryBadgeColor = (
-  investmentPlanCategory: string,
+  investmentPlanCategory: string
 ): BadgeProps["color"] => {
   switch (investmentPlanCategory) {
     case "forex":

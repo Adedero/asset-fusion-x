@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     "@nuxt/eslint",
-    "@nuxt/image",
+    //"@nuxt/image",
     "@nuxt/ui",
     "nuxt-charts",
     "nuxt-marquee",

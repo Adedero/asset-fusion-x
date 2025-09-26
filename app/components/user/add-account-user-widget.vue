@@ -16,8 +16,8 @@ const {
     icon: "i-lucide-user-round-plus",
     label: "Add partner",
     color: "neutral",
-    variant: "outline",
-  },
+    variant: "outline"
+  }
 } = defineProps<Props>();
 
 const open = ref<boolean>(false);
@@ -26,7 +26,7 @@ const state = reactive<JointAccountRequestSchemaType>({
   recipientName: "",
   recipientEmail: "",
   role: "co-owner",
-  ownership: 0,
+  ownership: 0
 });
 
 const reset = () => {
@@ -39,19 +39,19 @@ const reset = () => {
 const { refresh } = useFetch(
   `/api/user/financial-accounts/${accountId}/join-requests`,
   {
-    key: "account-join-requests",
-  },
+    key: "account-join-requests"
+  }
 );
 
 const loading = ref<boolean>(false);
 const error = ref<Error | null>(null);
 
 const handleSubmit = async (
-  event: FormSubmitEvent<JointAccountRequestSchemaType>,
+  event: FormSubmitEvent<JointAccountRequestSchemaType>
 ) => {
   const body = {
     ...event.data,
-    role: toCase(event.data.role, "snake"),
+    role: toCase(event.data.role, "snake")
   };
 
   error.value = null;
@@ -60,7 +60,7 @@ const handleSubmit = async (
   try {
     await $fetch(`/api/user/financial-accounts/${accountId}/join-requests`, {
       method: "post",
-      body,
+      body
     });
     await refresh();
     reset();

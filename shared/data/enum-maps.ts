@@ -1,6 +1,6 @@
 import type {
   InvestmentPlanCategoryType,
-  ProfitDistributionType,
+  ProfitDistributionType
 } from "../zod";
 
 export const investmentPlanCategories: Array<{
@@ -13,7 +13,7 @@ export const investmentPlanCategories: Array<{
   { name: "Stocks", value: "stocks" },
   { name: "Bonds", value: "bonds" },
   { name: "Cryptocurrencies", value: "cryptocurrencies" },
-  { name: "Derivatives", value: "derivatives" },
+  { name: "Derivatives", value: "derivatives" }
 ];
 
 export const investmentPlanCategoryMap: Record<
@@ -26,7 +26,7 @@ export const investmentPlanCategoryMap: Record<
   stocks: "Stocks",
   bonds: "Bonds",
   cryptocurrencies: "Cryptocurrencies",
-  derivatives: "Derivatives",
+  derivatives: "Derivatives"
 };
 
 export const profitDistribution: Array<{
@@ -36,12 +36,12 @@ export const profitDistribution: Array<{
   { name: "Daily", value: "daily" },
   { name: "Weekly", value: "weekly" },
   { name: "Bi-weekly", value: "bi_weekly" },
-  { name: "Monthly", value: "monthly" },
+  { name: "Monthly", value: "monthly" }
 ];
 
 export const profitDistributionMap: Record<ProfitDistributionType, string> = {
   daily: "Daily",
   weekly: "Weekly",
   bi_weekly: "Bi-weekly",
-  monthly: "Monthly",
+  monthly: "Monthly"
 };

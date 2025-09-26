@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   if (!query.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: query.error.issues[0].message,
+      statusMessage: query.error.issues[0].message
     });
   }
 
@@ -16,18 +16,18 @@ export default defineEventHandler(async (event) => {
   if (symbol === "WIRE") {
     throw createError({
       statusCode: 400,
-      statusMessage: "Validation is not required for Wire Transfer deposits",
+      statusMessage: "Validation is not required for Wire Transfer deposits"
     });
   }
 
   const currency = await prisma.currency.findUnique({
-    where: { symbol },
+    where: { symbol }
   });
 
   if (!currency) {
     throw createError({
       statusCode: 404,
-      statusMessage: "Deposit currency not found",
+      statusMessage: "Deposit currency not found"
     });
   }
 
@@ -38,9 +38,9 @@ export default defineEventHandler(async (event) => {
   return {
     request: {
       amount,
-      symbol,
+      symbol
     },
     currency: updatedCurrency,
-    currencyDepositAmount,
+    currencyDepositAmount
   };
 });

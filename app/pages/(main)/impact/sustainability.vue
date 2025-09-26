@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "main",
+  layout: "main"
 });
 
 const { appName } = useRuntimeConfig().public;
@@ -12,8 +12,7 @@ const { appName } = useRuntimeConfig().public;
       <section
         class="relative w-full h-[650px] overflow-hidden rounded-lg mb-24 flex items-center justify-center text-center"
       >
-        <NuxtImg
-          placeholder
+        <img
           src="https://img.freepik.com/premium-photo/green-financial-data-chart-trade-concept_764664-20227.jpg"
           alt="Green financial graphs growing, symbolizing sustainable growth and impact"
           class="absolute inset-0 w-full h-full object-cover brightness-50"
@@ -107,8 +106,7 @@ const { appName } = useRuntimeConfig().public;
         <div
           class="relative w-full h-96 rounded-lg overflow-hidden shadow-xl border border-primary-500"
         >
-          <NuxtImg 
-            placeholder
+          <img
             src="https://media.istockphoto.com/id/1009934102/photo/were-all-responsible-for-creating-a-better-tomorrow.jpg?s=612x612&w=0&k=20&c=ap3hWDhcFsroOWj41CRaaMKDzEofQ9FcYypWDobVwis="
             alt="Hands holding a sapling, symbolizing growth and environmental care"
             class="absolute inset-0 w-full h-full object-cover"
@@ -135,7 +133,7 @@ const { appName } = useRuntimeConfig().public;
             class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
           >
             <div class="text-tertiary-500 text-5xl mb-6 flex justify-center">
-              <NuxtIcon name="lucide-leaf"/>
+              <NuxtIcon name="lucide-leaf" />
             </div>
             <h3 class="text-2xl font-semibold text-slate-200 mb-4 text-center">
               Sustainable Investment Options (ESG)
@@ -154,7 +152,7 @@ const { appName } = useRuntimeConfig().public;
             class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
           >
             <div class="text-tertiary-500 text-5xl mb-6 flex justify-center">
-              <NuxtIcon name="lucide-microscope"/>
+              <NuxtIcon name="lucide-microscope" />
             </div>
             <h3 class="text-2xl font-semibold text-slate-200 mb-4 text-center">
               Transparent Reporting & Due Diligence
@@ -173,7 +171,7 @@ const { appName } = useRuntimeConfig().public;
             class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
           >
             <div class="text-tertiary-500 text-5xl mb-6 flex justify-center">
-              <NuxtIcon name="lucide-recycle"/>
+              <NuxtIcon name="lucide-recycle" />
             </div>
             <h3 class="text-2xl font-semibold text-slate-200 mb-4 text-center">
               Responsible Corporate Practices
@@ -192,7 +190,7 @@ const { appName } = useRuntimeConfig().public;
             class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
           >
             <div class="text-tertiary-500 text-5xl mb-6 flex justify-center">
-              <NuxtIcon name="lucide-earth"/>
+              <NuxtIcon name="lucide-earth" />
             </div>
             <h3 class="text-2xl font-semibold text-slate-200 mb-4 text-center">
               Community Engagement & Local Impact
@@ -210,7 +208,7 @@ const { appName } = useRuntimeConfig().public;
             class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
           >
             <div class="text-tertiary-500 text-5xl mb-6 flex justify-center">
-              <NuxtIcon name="lucide-clipboard-check"/>
+              <NuxtIcon name="lucide-clipboard-check" />
             </div>
             <h3 class="text-2xl font-semibold text-slate-200 mb-4 text-center">
               Adherence to Ethical Guidelines & Regulations
@@ -228,7 +226,7 @@ const { appName } = useRuntimeConfig().public;
             class="p-8 bg-slate-900 rounded-lg shadow-xl border border-primary-500 transition-transform duration-300 hover:scale-105"
           >
             <div class="text-tertiary-500 text-5xl mb-6 flex justify-center">
-              <NuxtIcon name="lucide-lightbulb"/>
+              <NuxtIcon name="lucide-lightbulb" />
             </div>
             <h3 class="text-2xl font-semibold text-slate-200 mb-4 text-center">
               Educating for Impact
@@ -250,8 +248,7 @@ const { appName } = useRuntimeConfig().public;
         <div
           class="relative w-full h-96 rounded-lg overflow-hidden shadow-xl border border-primary-500"
         >
-          <NuxtImg 
-            placeholder
+          <img
             src="https://media.istockphoto.com/id/1777247042/vector/three-pillars-of-sustainable-development-framework-diagram-chart-infographic-banner-with.jpg?s=170667a&w=0&k=20&c=qFgLKkttqu8ebMHeNB9FPNleYifWUPhtUTa6OlvNWss="
             alt="Abstract chart showing growth with sustainable elements integrated"
             class="absolute inset-0 w-full h-full object-cover"

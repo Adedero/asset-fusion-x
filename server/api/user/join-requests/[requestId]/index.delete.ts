@@ -9,21 +9,21 @@ export default defineEventHandler(async (event) => {
 
   const joinRequest = await prisma.jointAccountRequest.findUnique({
     where: {
-      id: requestId,
+      id: requestId
     },
     include: {
       creator: {
         select: {
-          email: true,
-        },
-      },
-    },
+          email: true
+        }
+      }
+    }
   });
 
   if (!joinRequest) {
     throw createError({
       statusCode: 404,
-      statusMessage: "Not found",
+      statusMessage: "Not found"
     });
   }
 
@@ -33,12 +33,12 @@ export default defineEventHandler(async (event) => {
   ) {
     throw createError({
       statusCode: 403,
-      statusMessage: "Not allowed",
+      statusMessage: "Not allowed"
     });
   }
 
   const deleted = await prisma.jointAccountRequest.delete({
-    where: { id: requestId },
+    where: { id: requestId }
   });
 
   return deleted;

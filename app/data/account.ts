@@ -7,5 +7,5 @@ export const accountRoles = [
   "investor",
   "contributor",
   "legal guardian",
-  "signatory",
+  "signatory"
 ];

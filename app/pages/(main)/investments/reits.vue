@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "main",
+  layout: "main"
 });
 
 const { appName } = useRuntimeConfig().public;
@@ -12,22 +12,26 @@ const { appName } = useRuntimeConfig().public;
       <MainPageHero
         heading="Real Estate Investment Trusts"
         subheading="Real Estate Investment Trusts"
-        bg-image="https://media.licdn.com/dms/image/v2/D4E12AQEVjYE_Sjn80Q/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1718720950634?e=2147483647&v=beta&t=YxEtG9gm6Jd8YlMads3DBQD8bM84b_J6ON_crAPgfTM" />
+        bg-image="https://media.licdn.com/dms/image/v2/D4E12AQEVjYE_Sjn80Q/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1718720950634?e=2147483647&v=beta&t=YxEtG9gm6Jd8YlMads3DBQD8bM84b_J6ON_crAPgfTM"
+      />
     </div>
 
     <div class="min-h-screen flex flex-col items-center py-16">
       <div class="max-w-6xl mx-auto px-4">
         <section
-          class="relative h-[600px] w-full rounded-xl overflow-hidden mb-20 shadow-2xl">
-          <NuxtImg
-            placeholder
+          class="relative h-[600px] w-full rounded-xl overflow-hidden mb-20 shadow-2xl"
+        >
+          <img
             src="https://i.redd.it/etdaqu8j2gw31.jpg"
             alt="Modern City Skyline"
-            class="absolute inset-0 w-full h-full object-cover brightness-75" />
+            class="absolute inset-0 w-full h-full object-cover brightness-75"
+          />
           <div
-            class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
+            class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent"
+          />
           <div
-            class="relative z-10 flex flex-col items-center justify-center h-full text-center px-8">
+            class="relative z-10 flex flex-col items-center justify-center h-full text-center px-8"
+          >
             <h1 class="text-4xl font-extrabold text-white mb-6 leading-tight">
               Investing in Bricks and Mortar, Without the Hassle: Welcome to
               REITs
@@ -39,7 +43,8 @@ const { appName } = useRuntimeConfig().public;
               portfolio diversification.
             </p>
             <div
-              class="mt-8 p-4 bg-slate-800/70 rounded-lg shadow-xl border border-white/30 backdrop-blur-sm">
+              class="mt-8 p-4 bg-slate-800/70 rounded-lg shadow-xl border border-white/30 backdrop-blur-sm"
+            >
               <p class="text-base text-slate-200">
                 REITs are companies that own, operate, or finance
                 income-generating real estate. They allow anyone to invest in
@@ -72,7 +77,8 @@ const { appName } = useRuntimeConfig().public;
                 for passive income generation.
               </p>
               <ul
-                class="list-disc list-inside text-slate-300 text-base space-y-2">
+                class="list-disc list-inside text-slate-300 text-base space-y-2"
+              >
                 <li>
                   <span class="text-primary-500 font-semibold"
                     >Accessibility:</span
@@ -95,14 +101,16 @@ const { appName } = useRuntimeConfig().public;
               </ul>
             </div>
             <div
-              class="relative w-full h-96 rounded-lg overflow-hidden shadow-lg border border-primary-500">
-              <NuxtImg
-                placeholder
+              class="relative w-full h-96 rounded-lg overflow-hidden shadow-lg border border-primary-500"
+            >
+              <img
                 src="/img/pages/investments/property-types.jpg"
                 alt="Diverse Property Types in a City"
-                class="absolute inset-0 w-full h-full object-cover" />
+                class="absolute inset-0 w-full h-full object-cover"
+              />
               <div
-                class="absolute inset-0 bg-gradient-to-bl from-slate-900 via-transparent to-transparent opacity-70" />
+                class="absolute inset-0 bg-gradient-to-bl from-slate-900 via-transparent to-transparent opacity-70"
+              />
             </div>
           </div>
         </section>
@@ -113,13 +121,14 @@ const { appName } = useRuntimeConfig().public;
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             <div
-              class="p-8 bg-slate-800 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105">
+              class="p-8 bg-slate-800 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105"
+            >
               <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://static.vecteezy.com/system/resources/thumbnails/046/434/272/large/a-man-in-business-clothes-with-dollars-cash-in-hands-profits-savings-stack-of-dollars-dollars-in-man-s-hands-success-motivation-financial-flows-wealth-stack-of-dollars-video.jpg"
                   alt="Flowing Cash into Hand"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 High Dividend Yields
@@ -133,13 +142,14 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="p-8 bg-slate-800 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105">
+              class="p-8 bg-slate-800 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105"
+            >
               <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://media.privateequityinternational.com/uploads/2023/05/GettyImages-1399211832.jpg"
                   alt="Diversified Investment Portfolio"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Portfolio Diversification
@@ -153,13 +163,14 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="p-8 bg-slate-800 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105">
+              class="p-8 bg-slate-800 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105"
+            >
               <div class="relative w-full h-48 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://static.vecteezy.com/system/resources/previews/047/072/105/non_2x/an-illustration-depicting-financial-growth-with-a-colorful-bar-graph-that-ascends-upward-symbolizing-profitability-and-success-free-vector.jpg"
                   alt="Financial Growth Chart"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Long-Term Growth Potential
@@ -180,14 +191,16 @@ const { appName } = useRuntimeConfig().public;
             Exploring the Diverse Landscape of REITs
           </h2>
           <p
-            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto">
+            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto"
+          >
             REITs specialize in various types of real estate, each offering
             exposure to different sectors of the economy and unique market
             dynamics.
           </p>
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div
-              class="flex items-start bg-slate-900 p-6 rounded-lg shadow-md border border-primary-500">
+              class="flex items-start bg-slate-900 p-6 rounded-lg shadow-md border border-primary-500"
+            >
               <span class="text-5xl text-tertiary-500 mr-4">&#127970;</span>
               <div>
                 <h3 class="text-2xl font-semibold text-slate-200 mb-2">
@@ -203,7 +216,8 @@ const { appName } = useRuntimeConfig().public;
               </div>
             </div>
             <div
-              class="flex items-start bg-slate-900 p-6 rounded-lg shadow-md border border-primary-500">
+              class="flex items-start bg-slate-900 p-6 rounded-lg shadow-md border border-primary-500"
+            >
               <span class="text-5xl text-tertiary-500 mr-4">&#128176;</span>
               <div>
                 <h3 class="text-2xl font-semibold text-slate-200 mb-2">
@@ -219,7 +233,8 @@ const { appName } = useRuntimeConfig().public;
               </div>
             </div>
             <div
-              class="flex items-start bg-slate-900 p-6 rounded-lg shadow-md border border-primary-500">
+              class="flex items-start bg-slate-900 p-6 rounded-lg shadow-md border border-primary-500"
+            >
               <span class="text-5xl text-tertiary-500 mr-4">&#127757;</span>
               <div>
                 <h3 class="text-2xl font-semibold text-slate-200 mb-2">
@@ -235,7 +250,8 @@ const { appName } = useRuntimeConfig().public;
               </div>
             </div>
             <div
-              class="flex items-start bg-slate-900 p-6 rounded-lg shadow-md border border-primary-500">
+              class="flex items-start bg-slate-900 p-6 rounded-lg shadow-md border border-primary-500"
+            >
               <span class="text-5xl text-tertiary-500 mr-4">&#128221;</span>
               <div>
                 <h3 class="text-2xl font-semibold text-slate-200 mb-2">
@@ -257,20 +273,22 @@ const { appName } = useRuntimeConfig().public;
             Effortless Real Estate Income through REITs
           </h2>
           <p
-            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto">
+            class="text-base text-slate-300 mb-8 text-center max-w-4xl mx-auto"
+          >
             The primary appeal of REITs for passive income lies in their
             mandatory dividend distributions and ease of investment. They offer
             a hands-off approach to benefiting from real estate.
           </p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div
-              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105 flex flex-col items-center text-center">
+              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105 flex flex-col items-center text-center"
+            >
               <div class="relative w-full h-60 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://media.ycharts.com/charts/5d736df38b7799ac03ce90651946ab17.png"
                   alt="Dividend Payment Chart"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Consistent Dividend Payouts
@@ -283,13 +301,14 @@ const { appName } = useRuntimeConfig().public;
               </p>
             </div>
             <div
-              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105 flex flex-col items-center text-center">
+              class="bg-slate-800 p-8 rounded-lg shadow-xl border border-white/30 transition-transform duration-300 hover:scale-105 flex flex-col items-center text-center"
+            >
               <div class="relative w-full h-60 rounded-md overflow-hidden mb-6">
-                <NuxtImg
-                  placeholder
+                <img
                   src="https://imageio.forbes.com/specials-images/imageserve/602d905bdf32d435107355f1/Stock-market/960x0.jpg?height=473&width=711&fit=bounds"
                   alt="Automated Investment Strategy"
-                  class="absolute inset-0 w-full h-full object-cover" />
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
               </div>
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Liquidity & Professional Management
@@ -317,29 +336,29 @@ const { appName } = useRuntimeConfig().public;
           </p>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
             <div class="flex flex-col items-center">
-              <NuxtImg
-                placeholder
+              <img
                 src="https://firaallreviews.com/wp-content/uploads/2023/01/REIT-Analyst-1024x457.png"
                 alt="Financial Analyst Reviewing REITs"
-                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500" />
+                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500"
+              />
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Curated REIT Portfolios
               </h3>
               <p class="text-base text-slate-400">
-                {{ appName }} identifies and selects top-performing REITs
-                across diverse sectors and geographies. Our expertly curated
-                portfolios are designed to maximize dividend income and capital
+                {{ appName }} identifies and selects top-performing REITs across
+                diverse sectors and geographies. Our expertly curated portfolios
+                are designed to maximize dividend income and capital
                 appreciation, providing you with optimized exposure to the
                 dynamic real estate market without the need for extensive
                 research.
               </p>
             </div>
             <div class="flex flex-col items-center">
-              <NuxtImg
-                placeholder
+              <img
                 src="https://cdn.corporatefinanceinstitute.com/assets/trading-platform.jpg"
                 alt="Seamless Online Investment Platform"
-                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500" />
+                class="w-full h-64 object-cover rounded-lg mb-6 shadow-md border border-primary-500"
+              />
               <h3 class="text-2xl font-semibold text-slate-200 mb-4">
                 Streamlined Real Estate Income
               </h3>

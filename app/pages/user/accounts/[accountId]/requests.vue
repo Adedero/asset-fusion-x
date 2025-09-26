@@ -6,7 +6,7 @@ const accountId = useRouteData().getParams("accountId");
 
 const { data, error, refresh } = await useFetch(
   `/api/user/financial-accounts/${accountId}/mod-requests`,
-  { key: "account-mod-requests" },
+  { key: "account-mod-requests" }
 );
 const store = useAuthStore();
 
@@ -16,7 +16,7 @@ type RequestItem = NonNullable<
 
 function ownApproval(request: RequestItem) {
   const approval = request.approvals.find(
-    (approval) => approval.approver.id === store.user.value?.id,
+    (approval) => approval.approver.id === store.user.value?.id
   );
   return approval;
 }
@@ -42,7 +42,7 @@ function ownApproval(request: RequestItem) {
                     request.description ??
                     `${request.creator.name} initiated a ${toCase(
                       request.type,
-                      "lower",
+                      "lower"
                     )} request ${
                       request.transaction
                         ? `of ${toDollar(request.transaction.USDAmount)}`
@@ -126,7 +126,7 @@ function ownApproval(request: RequestItem) {
                     request.description ??
                     `${request.creator.name} initiated a ${toCase(
                       request.type,
-                      "lower",
+                      "lower"
                     )} request ${
                       request.transaction
                         ? `of ${toDollar(request.transaction.USDAmount)}`

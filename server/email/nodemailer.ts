@@ -6,9 +6,9 @@ const nodemailerConfig: SMTPTransport.Options = {
   host: process.env.EMAIL_HOST,
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
+    pass: process.env.EMAIL_PASSWORD
   },
-  service: process.env.EMAIL_SERVICE,
+  service: process.env.EMAIL_SERVICE
 };
 
 export const transporter = nodemailer.createTransport(nodemailerConfig);
@@ -19,12 +19,12 @@ export type SendEmailReturnType = {
 };
 
 export const sendEmail = async (
-  mailOptions: nodemailer.SendMailOptions,
+  mailOptions: nodemailer.SendMailOptions
 ): Promise<SendEmailReturnType> => {
   try {
     const info = await transporter.sendMail({
       from: { name: "AssetFusionX", address: process.env.USER_EMAIL ?? "" },
-      ...mailOptions,
+      ...mailOptions
     });
     return { data: info, error: null };
   } catch (error) {

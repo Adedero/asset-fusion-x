@@ -11,7 +11,7 @@ const open = ref<boolean>(false);
 
 const { data, error, pending, execute } = useFetch("/api/user/profile", {
   key: "user-profile",
-  immediate: false,
+  immediate: false
 });
 
 async function openAccount() {
@@ -44,14 +44,16 @@ async function openAccount() {
           icon="i-lucide-plus"
           color="neutral"
           variant="outline"
-          :loading="pending" />
+          :loading="pending"
+        />
       </slot>
     </div>
 
     <NuxtModal
       v-model:open="open"
       title="Account Opening Request"
-      class="max-w-[28rem]">
+      class="max-w-[28rem]"
+    >
       <template #body>
         <div>
           <div v-if="error">
@@ -59,7 +61,8 @@ async function openAccount() {
               :title="error?.name"
               :message="error?.message"
               should-retry
-              @retry="execute()" />
+              @retry="execute()"
+            />
           </div>
 
           <div v-else-if="!data?.profile" class="space-y-4">
@@ -69,7 +72,8 @@ async function openAccount() {
                 to="/user/profile"
                 label="Update profile"
                 color="neutral"
-                variant="outline" />
+                variant="outline"
+              />
             </div>
           </div>
 
@@ -85,7 +89,8 @@ async function openAccount() {
                   to="/user/profile/kyc"
                   label="Submit KYC data"
                   color="neutral"
-                  variant="outline" />
+                  variant="outline"
+                />
               </div>
             </div>
 
@@ -96,7 +101,8 @@ async function openAccount() {
 
             <div
               v-else-if="data.profile.kycStatus === 'rejected'"
-              class="space-y-4">
+              class="space-y-4"
+            >
               <p>
                 Sorry, you cannot open an account at this time because your KYC
                 data has been rejected. Please contact us to know more.
@@ -107,13 +113,15 @@ async function openAccount() {
                   to="/user/contact"
                   label="Contact us"
                   color="neutral"
-                  variant="outline" />
+                  variant="outline"
+                />
               </div>
             </div>
 
             <div
               v-else-if="data.profile.kycStatus === 'resubmit'"
-              class="space-y-4">
+              class="space-y-4"
+            >
               <p>
                 Sorry, you cannot open an account at this time because your KYC
                 data needs to be resubmitted.
@@ -124,7 +132,8 @@ async function openAccount() {
                   to="/user/profile/kyc"
                   label="Resubmit KYC data"
                   color="neutral"
-                  variant="outline" />
+                  variant="outline"
+                />
               </div>
             </div>
           </div>

@@ -28,11 +28,7 @@ const { data, error, refresh, pending } = useFetch("/api/admin/overview");
         </div>
 
         <footer class="mt-2">
-          <NuxtBadge
-            variant="soft"
-            class="mr-2"
-            icon="lucide:user"
-          />
+          <NuxtBadge variant="soft" class="mr-2" icon="lucide:user" />
         </footer>
       </NuxtCard>
 

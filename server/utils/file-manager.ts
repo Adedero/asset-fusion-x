@@ -23,7 +23,7 @@ export interface SaveFileOptions {
 // outputDir: format public/<path>/<path>
 
 export async function saveFile(
-  options: SaveFileOptions,
+  options: SaveFileOptions
 ): Promise<SaveFileResult> {
   const { id, base64Data, extension, outputDir } = options;
 
@@ -50,12 +50,12 @@ export async function saveFile(
 
     return {
       data: { path: filepath, name: filename, url: documentUrl },
-      error: null,
+      error: null
     };
   } catch (error) {
     return {
       data: null,
-      error: normalizeException(error),
+      error: normalizeException(error)
     };
   }
 }
@@ -70,12 +70,12 @@ export async function removeFile(filePath: string): Promise<RemoveFileResult> {
     await unlink(filePath);
     return {
       success: true,
-      error: null,
+      error: null
     };
   } catch (error) {
     return {
       success: false,
-      error: normalizeException(error),
+      error: normalizeException(error)
     };
   }
 }
@@ -90,12 +90,12 @@ export async function removeFileByUrl(url: string): Promise<RemoveFileResult> {
 
     return {
       success: true,
-      error: null,
+      error: null
     };
   } catch (error) {
     return {
       success: false,
-      error: normalizeException(error),
+      error: normalizeException(error)
     };
   }
 }

@@ -9,16 +9,16 @@ definePageMeta({
   breadcrumb: [
     {
       label: "Accounts",
-      to: "/user/accounts",
+      to: "/user/accounts"
     },
     {
       label: accountName,
-      to: `/user/accounts/${accountId.value}`,
+      to: `/user/accounts/${accountId.value}`
     },
     {
-      label: "Documents",
-    },
-  ] as BreadcrumbItem[],
+      label: "Documents"
+    }
+  ] as BreadcrumbItem[]
 });
 </script>
 

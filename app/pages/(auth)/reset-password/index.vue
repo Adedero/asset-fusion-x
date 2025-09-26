@@ -2,7 +2,7 @@
 import ResetPasswordForm from "./reset-password-form.vue";
 
 definePageMeta({
-  layout: "auth",
+  layout: "auth"
 });
 </script>
 

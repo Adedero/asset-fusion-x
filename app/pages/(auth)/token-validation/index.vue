@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: "auth",
+  layout: "auth"
 });
 
 const route = useRoute();
@@ -29,8 +29,8 @@ const error = route.query.error?.toString();
                 navigateTo({ name: 'sign-in' });
               },
               color: 'error',
-              class: 'py-2',
-            },
+              class: 'py-2'
+            }
           ]"
         />
       </div>
@@ -49,8 +49,8 @@ const error = route.query.error?.toString();
               onClick: () => {
                 navigateTo({ name: 'sign-in' });
               },
-              class: 'py-2',
-            },
+              class: 'py-2'
+            }
           ]"
         />
       </div>

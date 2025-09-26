@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   if (!query.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: query.error.issues[0].message,
+      statusMessage: query.error.issues[0].message
     });
   }
 
@@ -19,13 +19,13 @@ export default defineEventHandler(async (event) => {
 
   const notifications = await prisma.notification.findMany({
     where: {
-      financialAccountId: accountId,
+      financialAccountId: accountId
     },
     take: limit,
     skip,
     orderBy: {
-      createdAt: "desc",
-    },
+      createdAt: "desc"
+    }
   });
 
   return notifications;

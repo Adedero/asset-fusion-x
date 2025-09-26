@@ -18,7 +18,7 @@ onMounted(() => {
       isTransparent: false,
       locale: "en",
       width: "100%",
-      height: 500,
+      height: 500
     });
 
     widget.value.appendChild(script);
