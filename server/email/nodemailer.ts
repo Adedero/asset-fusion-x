@@ -8,7 +8,8 @@ const nodemailerConfig: SMTPTransport.Options = {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD
   },
-  service: process.env.EMAIL_SERVICE
+  service: process.env.EMAIL_SERVICE,
+  port: parseInt(process.env.EMAIL_PORT ?? "587")
 };
 
 export const transporter = nodemailer.createTransport(nodemailerConfig);

@@ -5004,7 +5004,8 @@ const nodemailerConfig = {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD
   },
-  service: process.env.EMAIL_SERVICE
+  service: process.env.EMAIL_SERVICE,
+  port: parseInt(process.env.EMAIL_PORT ?? "587")
 };
 const transporter = nodemailer.createTransport(nodemailerConfig);
 const sendEmail = async (mailOptions) => {
