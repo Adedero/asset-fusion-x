@@ -22,12 +22,12 @@ const items = computed<DropdownMenuItem[][]>(() => {
     dropdownItems[0]!.push({ label: "Remove image", onSelect: removeImage });
     dropdownItems[0]!.push({
       label: "Change image",
-      onSelect: () => (open.value = true),
+      onSelect: () => (open.value = true)
     });
   } else {
     dropdownItems[0]!.push({
       label: "Add image",
-      onSelect: () => (open.value = true),
+      onSelect: () => (open.value = true)
     });
   }
   return dropdownItems;
@@ -45,8 +45,8 @@ async function addImage() {
       method: "PUT",
       body: JSON.stringify({ image: newImage.value }),
       headers: {
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     });
     authStore.setUser({ ...authStore.user.value!, image: data.image });
     newImage.value = null;
@@ -56,7 +56,7 @@ async function addImage() {
     toast.add({
       title: "Error",
       description: "Failed to update image",
-      color: "error",
+      color: "error"
     });
   } finally {
     pending.value = false;
@@ -75,7 +75,7 @@ async function onFileChange(event: Event) {
     toast.add({
       title: "Invalid file type",
       description: "Please select an image file.",
-      color: "error",
+      color: "error"
     });
     return;
   }
@@ -84,7 +84,7 @@ async function onFileChange(event: Event) {
     toast.add({
       title: "File too large",
       description: "Please select an image file smaller than 2MB.",
-      color: "error",
+      color: "error"
     });
     return;
   }
@@ -100,17 +100,17 @@ async function onFileChange(event: Event) {
 const res = useFetch("/api/user", {
   body: { image: null },
   method: "PUT",
-  immediate: false,
+  immediate: false
 });
 
 async function removeImage() {
   await res.execute();
   if (res.error.value || !res.data.value) {
-    console.log(res.error.value);
+    //console.log(res.error.value);
     toast.add({
       title: "Error",
       description: "Failed to remove image",
-      color: "error",
+      color: "error"
     });
     return;
   }
@@ -118,7 +118,7 @@ async function removeImage() {
   toast.add({
     title: "Success",
     description: "Image removed successfully",
-    color: "success",
+    color: "success"
   });
 }
 </script>
@@ -168,7 +168,7 @@ async function removeImage() {
           </div>
 
           <div>
-            <NuxtButtonGroup class="w-full">
+            <NuxtFieldGroup class="w-full">
               <NuxtInput
                 type="file"
                 accept="image/*"
@@ -190,7 +190,7 @@ async function removeImage() {
                 :loading="pending"
                 @click="addImage"
               />
-            </NuxtButtonGroup>
+            </NuxtFieldGroup>
           </div>
         </div>
       </template>

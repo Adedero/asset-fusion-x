@@ -60,14 +60,14 @@ const headers = ["#", "", "Name", "Email", "KYC Status", "ID Type", "Actions"];
       <div class="flex items-end justify-between gap-5 flex-wrap">
         <h1 class="text-3xl font-semibold">KYC Data</h1>
         <div>
-          <NuxtButtonGroup>
+          <NuxtFieldGroup>
             <NuxtButton
               icon="lucide:search"
               color="neutral"
               variant="outline"
             />
             <NuxtInput v-model="search" placeholder="Search..." />
-          </NuxtButtonGroup>
+          </NuxtFieldGroup>
         </div>
       </div>
 

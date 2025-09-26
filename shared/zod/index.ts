@@ -10,7 +10,7 @@ import type { Prisma } from '@prisma/client';
 // ENUMS
 /////////////////////////////////////////
 
-export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
+export const TransactionIsolationLevelSchema = z.enum(['Serializable']);
 
 export const UserScalarFieldEnumSchema = z.enum(['id','name','email','emailVerified','image','role','banned','banReason','banExpires','createdAt','updatedAt']);
 
@@ -42,13 +42,11 @@ export const TransactionScalarFieldEnumSchema = z.enum(['id','amount','currency'
 
 export const NotificationScalarFieldEnumSchema = z.enum(['id','title','body','bodyType','userId','financialAccountId','link','isRead','createdAt','updatedAt']);
 
-export const CurrencyScalarFieldEnumSchema = z.enum(['id','name','symbol','image','rate','rateUpdatedAt','walletAddress','walletAddressNetwork','allowWithdrawal','withdrawalCharge','createdAt','updatedAt']);
+export const CurrencyScalarFieldEnumSchema = z.enum(['id','name','symbol','image','rate','rateUpdatedAt','walletAddress','walletAddressNetwork','wireTransferDepositBankName','wireTransferDepositBankAccountNumber','allowWithdrawal','withdrawalCharge','createdAt','updatedAt']);
 
 export const SettingsScalarFieldEnumSchema = z.enum(['id','allowWithdrawals']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
-
-export const QueryModeSchema = z.enum(['default','insensitive']);
 
 export const NullsOrderSchema = z.enum(['first','last']);
 
@@ -455,6 +453,8 @@ export const CurrencySchema = z.object({
   rateUpdatedAt: z.coerce.date().nullable(),
   walletAddress: z.string().nullable(),
   walletAddressNetwork: z.string().nullable(),
+  wireTransferDepositBankName: z.string().nullable(),
+  wireTransferDepositBankAccountNumber: z.string().nullable(),
   allowWithdrawal: z.boolean(),
   withdrawalCharge: z.number(),
   createdAt: z.coerce.date(),
@@ -1043,6 +1043,8 @@ export const CurrencySelectSchema: z.ZodType<Prisma.CurrencySelect> = z.object({
   rateUpdatedAt: z.boolean().optional(),
   walletAddress: z.boolean().optional(),
   walletAddressNetwork: z.boolean().optional(),
+  wireTransferDepositBankName: z.boolean().optional(),
+  wireTransferDepositBankAccountNumber: z.boolean().optional(),
   allowWithdrawal: z.boolean().optional(),
   withdrawalCharge: z.boolean().optional(),
   createdAt: z.boolean().optional(),
@@ -2673,6 +2675,8 @@ export const CurrencyWhereInputSchema: z.ZodType<Prisma.CurrencyWhereInput> = z.
   rateUpdatedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   walletAddress: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   walletAddressNetwork: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  wireTransferDepositBankName: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  wireTransferDepositBankAccountNumber: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   allowWithdrawal: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   withdrawalCharge: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -2688,6 +2692,8 @@ export const CurrencyOrderByWithRelationInputSchema: z.ZodType<Prisma.CurrencyOr
   rateUpdatedAt: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   walletAddress: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   walletAddressNetwork: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  wireTransferDepositBankName: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  wireTransferDepositBankAccountNumber: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   allowWithdrawal: z.lazy(() => SortOrderSchema).optional(),
   withdrawalCharge: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
@@ -2718,6 +2724,8 @@ export const CurrencyWhereUniqueInputSchema: z.ZodType<Prisma.CurrencyWhereUniqu
   rateUpdatedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   walletAddress: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   walletAddressNetwork: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  wireTransferDepositBankName: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  wireTransferDepositBankAccountNumber: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   allowWithdrawal: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   withdrawalCharge: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -2733,6 +2741,8 @@ export const CurrencyOrderByWithAggregationInputSchema: z.ZodType<Prisma.Currenc
   rateUpdatedAt: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   walletAddress: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   walletAddressNetwork: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  wireTransferDepositBankName: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  wireTransferDepositBankAccountNumber: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   allowWithdrawal: z.lazy(() => SortOrderSchema).optional(),
   withdrawalCharge: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
@@ -2756,6 +2766,8 @@ export const CurrencyScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Curr
   rateUpdatedAt: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
   walletAddress: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   walletAddressNetwork: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  wireTransferDepositBankName: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  wireTransferDepositBankAccountNumber: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   allowWithdrawal: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   withdrawalCharge: z.union([ z.lazy(() => FloatWithAggregatesFilterSchema),z.number() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
@@ -4507,6 +4519,8 @@ export const CurrencyCreateInputSchema: z.ZodType<Prisma.CurrencyCreateInput> = 
   rateUpdatedAt: z.coerce.date().optional().nullable(),
   walletAddress: z.string().optional().nullable(),
   walletAddressNetwork: z.string().optional().nullable(),
+  wireTransferDepositBankName: z.string().optional().nullable(),
+  wireTransferDepositBankAccountNumber: z.string().optional().nullable(),
   allowWithdrawal: z.boolean().optional(),
   withdrawalCharge: z.number().optional(),
   createdAt: z.coerce.date().optional(),
@@ -4522,6 +4536,8 @@ export const CurrencyUncheckedCreateInputSchema: z.ZodType<Prisma.CurrencyUnchec
   rateUpdatedAt: z.coerce.date().optional().nullable(),
   walletAddress: z.string().optional().nullable(),
   walletAddressNetwork: z.string().optional().nullable(),
+  wireTransferDepositBankName: z.string().optional().nullable(),
+  wireTransferDepositBankAccountNumber: z.string().optional().nullable(),
   allowWithdrawal: z.boolean().optional(),
   withdrawalCharge: z.number().optional(),
   createdAt: z.coerce.date().optional(),
@@ -4537,6 +4553,8 @@ export const CurrencyUpdateInputSchema: z.ZodType<Prisma.CurrencyUpdateInput> = 
   rateUpdatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   walletAddress: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   walletAddressNetwork: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  wireTransferDepositBankName: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  wireTransferDepositBankAccountNumber: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   allowWithdrawal: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   withdrawalCharge: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4552,6 +4570,8 @@ export const CurrencyUncheckedUpdateInputSchema: z.ZodType<Prisma.CurrencyUnchec
   rateUpdatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   walletAddress: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   walletAddressNetwork: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  wireTransferDepositBankName: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  wireTransferDepositBankAccountNumber: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   allowWithdrawal: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   withdrawalCharge: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4567,6 +4587,8 @@ export const CurrencyCreateManyInputSchema: z.ZodType<Prisma.CurrencyCreateManyI
   rateUpdatedAt: z.coerce.date().optional().nullable(),
   walletAddress: z.string().optional().nullable(),
   walletAddressNetwork: z.string().optional().nullable(),
+  wireTransferDepositBankName: z.string().optional().nullable(),
+  wireTransferDepositBankAccountNumber: z.string().optional().nullable(),
   allowWithdrawal: z.boolean().optional(),
   withdrawalCharge: z.number().optional(),
   createdAt: z.coerce.date().optional(),
@@ -4582,6 +4604,8 @@ export const CurrencyUpdateManyMutationInputSchema: z.ZodType<Prisma.CurrencyUpd
   rateUpdatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   walletAddress: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   walletAddressNetwork: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  wireTransferDepositBankName: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  wireTransferDepositBankAccountNumber: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   allowWithdrawal: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   withdrawalCharge: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4597,6 +4621,8 @@ export const CurrencyUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CurrencyUn
   rateUpdatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   walletAddress: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   walletAddressNetwork: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  wireTransferDepositBankName: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  wireTransferDepositBankAccountNumber: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   allowWithdrawal: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   withdrawalCharge: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4649,7 +4675,6 @@ export const StringFilterSchema: z.ZodType<Prisma.StringFilter> = z.object({
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
-  mode: z.lazy(() => QueryModeSchema).optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringFilterSchema) ]).optional(),
 }).strict();
 
@@ -4669,7 +4694,6 @@ export const StringNullableFilterSchema: z.ZodType<Prisma.StringNullableFilter> 
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
-  mode: z.lazy(() => QueryModeSchema).optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringNullableFilterSchema) ]).optional().nullable(),
 }).strict();
 
@@ -4850,7 +4874,6 @@ export const StringWithAggregatesFilterSchema: z.ZodType<Prisma.StringWithAggreg
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
-  mode: z.lazy(() => QueryModeSchema).optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedStringFilterSchema).optional(),
@@ -4876,7 +4899,6 @@ export const StringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.StringNu
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
-  mode: z.lazy(() => QueryModeSchema).optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringNullableWithAggregatesFilterSchema) ]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
@@ -6078,6 +6100,8 @@ export const CurrencyCountOrderByAggregateInputSchema: z.ZodType<Prisma.Currency
   rateUpdatedAt: z.lazy(() => SortOrderSchema).optional(),
   walletAddress: z.lazy(() => SortOrderSchema).optional(),
   walletAddressNetwork: z.lazy(() => SortOrderSchema).optional(),
+  wireTransferDepositBankName: z.lazy(() => SortOrderSchema).optional(),
+  wireTransferDepositBankAccountNumber: z.lazy(() => SortOrderSchema).optional(),
   allowWithdrawal: z.lazy(() => SortOrderSchema).optional(),
   withdrawalCharge: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
@@ -6098,6 +6122,8 @@ export const CurrencyMaxOrderByAggregateInputSchema: z.ZodType<Prisma.CurrencyMa
   rateUpdatedAt: z.lazy(() => SortOrderSchema).optional(),
   walletAddress: z.lazy(() => SortOrderSchema).optional(),
   walletAddressNetwork: z.lazy(() => SortOrderSchema).optional(),
+  wireTransferDepositBankName: z.lazy(() => SortOrderSchema).optional(),
+  wireTransferDepositBankAccountNumber: z.lazy(() => SortOrderSchema).optional(),
   allowWithdrawal: z.lazy(() => SortOrderSchema).optional(),
   withdrawalCharge: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
@@ -6113,6 +6139,8 @@ export const CurrencyMinOrderByAggregateInputSchema: z.ZodType<Prisma.CurrencyMi
   rateUpdatedAt: z.lazy(() => SortOrderSchema).optional(),
   walletAddress: z.lazy(() => SortOrderSchema).optional(),
   walletAddressNetwork: z.lazy(() => SortOrderSchema).optional(),
+  wireTransferDepositBankName: z.lazy(() => SortOrderSchema).optional(),
+  wireTransferDepositBankAccountNumber: z.lazy(() => SortOrderSchema).optional(),
   allowWithdrawal: z.lazy(() => SortOrderSchema).optional(),
   withdrawalCharge: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
@@ -8134,7 +8162,6 @@ export const SessionCreateOrConnectWithoutUserInputSchema: z.ZodType<Prisma.Sess
 
 export const SessionCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.SessionCreateManyUserInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => SessionCreateManyUserInputSchema),z.lazy(() => SessionCreateManyUserInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const AccountCreateWithoutUserInputSchema: z.ZodType<Prisma.AccountCreateWithoutUserInput> = z.object({
@@ -8174,7 +8201,6 @@ export const AccountCreateOrConnectWithoutUserInputSchema: z.ZodType<Prisma.Acco
 
 export const AccountCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.AccountCreateManyUserInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => AccountCreateManyUserInputSchema),z.lazy(() => AccountCreateManyUserInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const FinancialAccountCreateWithoutCreatorInputSchema: z.ZodType<Prisma.FinancialAccountCreateWithoutCreatorInput> = z.object({
@@ -8236,7 +8262,6 @@ export const FinancialAccountCreateOrConnectWithoutCreatorInputSchema: z.ZodType
 
 export const FinancialAccountCreateManyCreatorInputEnvelopeSchema: z.ZodType<Prisma.FinancialAccountCreateManyCreatorInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => FinancialAccountCreateManyCreatorInputSchema),z.lazy(() => FinancialAccountCreateManyCreatorInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const AccountUserCreateWithoutUserInputSchema: z.ZodType<Prisma.AccountUserCreateWithoutUserInput> = z.object({
@@ -8270,7 +8295,6 @@ export const AccountUserCreateOrConnectWithoutUserInputSchema: z.ZodType<Prisma.
 
 export const AccountUserCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.AccountUserCreateManyUserInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => AccountUserCreateManyUserInputSchema),z.lazy(() => AccountUserCreateManyUserInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const JointAccountRequestCreateWithoutCreatorInputSchema: z.ZodType<Prisma.JointAccountRequestCreateWithoutCreatorInput> = z.object({
@@ -8312,7 +8336,6 @@ export const JointAccountRequestCreateOrConnectWithoutCreatorInputSchema: z.ZodT
 
 export const JointAccountRequestCreateManyCreatorInputEnvelopeSchema: z.ZodType<Prisma.JointAccountRequestCreateManyCreatorInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => JointAccountRequestCreateManyCreatorInputSchema),z.lazy(() => JointAccountRequestCreateManyCreatorInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const JointAccountRequestCreateWithoutRecipientInputSchema: z.ZodType<Prisma.JointAccountRequestCreateWithoutRecipientInput> = z.object({
@@ -8354,7 +8377,6 @@ export const JointAccountRequestCreateOrConnectWithoutRecipientInputSchema: z.Zo
 
 export const JointAccountRequestCreateManyRecipientInputEnvelopeSchema: z.ZodType<Prisma.JointAccountRequestCreateManyRecipientInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => JointAccountRequestCreateManyRecipientInputSchema),z.lazy(() => JointAccountRequestCreateManyRecipientInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const JointAccountModRequestCreateWithoutCreatorInputSchema: z.ZodType<Prisma.JointAccountModRequestCreateWithoutCreatorInput> = z.object({
@@ -8386,7 +8408,6 @@ export const JointAccountModRequestCreateOrConnectWithoutCreatorInputSchema: z.Z
 
 export const JointAccountModRequestCreateManyCreatorInputEnvelopeSchema: z.ZodType<Prisma.JointAccountModRequestCreateManyCreatorInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => JointAccountModRequestCreateManyCreatorInputSchema),z.lazy(() => JointAccountModRequestCreateManyCreatorInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const NotificationCreateWithoutUserInputSchema: z.ZodType<Prisma.NotificationCreateWithoutUserInput> = z.object({
@@ -8420,7 +8441,6 @@ export const NotificationCreateOrConnectWithoutUserInputSchema: z.ZodType<Prisma
 
 export const NotificationCreateManyUserInputEnvelopeSchema: z.ZodType<Prisma.NotificationCreateManyUserInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => NotificationCreateManyUserInputSchema),z.lazy(() => NotificationCreateManyUserInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const JointAccountModRequestApprovalCreateWithoutApproverInputSchema: z.ZodType<Prisma.JointAccountModRequestApprovalCreateWithoutApproverInput> = z.object({
@@ -8446,7 +8466,6 @@ export const JointAccountModRequestApprovalCreateOrConnectWithoutApproverInputSc
 
 export const JointAccountModRequestApprovalCreateManyApproverInputEnvelopeSchema: z.ZodType<Prisma.JointAccountModRequestApprovalCreateManyApproverInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => JointAccountModRequestApprovalCreateManyApproverInputSchema),z.lazy(() => JointAccountModRequestApprovalCreateManyApproverInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const ProfileUpsertWithoutUserInputSchema: z.ZodType<Prisma.ProfileUpsertWithoutUserInput> = z.object({
@@ -9325,7 +9344,6 @@ export const AccountUserCreateOrConnectWithoutFinancialAccountInputSchema: z.Zod
 
 export const AccountUserCreateManyFinancialAccountInputEnvelopeSchema: z.ZodType<Prisma.AccountUserCreateManyFinancialAccountInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => AccountUserCreateManyFinancialAccountInputSchema),z.lazy(() => AccountUserCreateManyFinancialAccountInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const JointAccountRequestCreateWithoutFinancialAccountInputSchema: z.ZodType<Prisma.JointAccountRequestCreateWithoutFinancialAccountInput> = z.object({
@@ -9367,7 +9385,6 @@ export const JointAccountRequestCreateOrConnectWithoutFinancialAccountInputSchem
 
 export const JointAccountRequestCreateManyFinancialAccountInputEnvelopeSchema: z.ZodType<Prisma.JointAccountRequestCreateManyFinancialAccountInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => JointAccountRequestCreateManyFinancialAccountInputSchema),z.lazy(() => JointAccountRequestCreateManyFinancialAccountInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const JointAccountModRequestCreateWithoutAccountInputSchema: z.ZodType<Prisma.JointAccountModRequestCreateWithoutAccountInput> = z.object({
@@ -9399,7 +9416,6 @@ export const JointAccountModRequestCreateOrConnectWithoutAccountInputSchema: z.Z
 
 export const JointAccountModRequestCreateManyAccountInputEnvelopeSchema: z.ZodType<Prisma.JointAccountModRequestCreateManyAccountInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => JointAccountModRequestCreateManyAccountInputSchema),z.lazy(() => JointAccountModRequestCreateManyAccountInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const NotificationCreateWithoutFinancialAccountInputSchema: z.ZodType<Prisma.NotificationCreateWithoutFinancialAccountInput> = z.object({
@@ -9433,7 +9449,6 @@ export const NotificationCreateOrConnectWithoutFinancialAccountInputSchema: z.Zo
 
 export const NotificationCreateManyFinancialAccountInputEnvelopeSchema: z.ZodType<Prisma.NotificationCreateManyFinancialAccountInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => NotificationCreateManyFinancialAccountInputSchema),z.lazy(() => NotificationCreateManyFinancialAccountInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const TransactionCreateWithoutFinancialAccountInputSchema: z.ZodType<Prisma.TransactionCreateWithoutFinancialAccountInput> = z.object({
@@ -9501,7 +9516,6 @@ export const TransactionCreateOrConnectWithoutFinancialAccountInputSchema: z.Zod
 
 export const TransactionCreateManyFinancialAccountInputEnvelopeSchema: z.ZodType<Prisma.TransactionCreateManyFinancialAccountInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => TransactionCreateManyFinancialAccountInputSchema),z.lazy(() => TransactionCreateManyFinancialAccountInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const TransactionCreateWithoutRecipientAccountInputSchema: z.ZodType<Prisma.TransactionCreateWithoutRecipientAccountInput> = z.object({
@@ -9569,7 +9583,6 @@ export const TransactionCreateOrConnectWithoutRecipientAccountInputSchema: z.Zod
 
 export const TransactionCreateManyRecipientAccountInputEnvelopeSchema: z.ZodType<Prisma.TransactionCreateManyRecipientAccountInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => TransactionCreateManyRecipientAccountInputSchema),z.lazy(() => TransactionCreateManyRecipientAccountInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const InvestmentCreateWithoutFinancialAccountInputSchema: z.ZodType<Prisma.InvestmentCreateWithoutFinancialAccountInput> = z.object({
@@ -9633,7 +9646,6 @@ export const InvestmentCreateOrConnectWithoutFinancialAccountInputSchema: z.ZodT
 
 export const InvestmentCreateManyFinancialAccountInputEnvelopeSchema: z.ZodType<Prisma.InvestmentCreateManyFinancialAccountInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => InvestmentCreateManyFinancialAccountInputSchema),z.lazy(() => InvestmentCreateManyFinancialAccountInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const UserUpsertWithoutCreatedAccountsInputSchema: z.ZodType<Prisma.UserUpsertWithoutCreatedAccountsInput> = z.object({
@@ -10078,7 +10090,6 @@ export const TransactionCreateOrConnectWithoutInitiatorInputSchema: z.ZodType<Pr
 
 export const TransactionCreateManyInitiatorInputEnvelopeSchema: z.ZodType<Prisma.TransactionCreateManyInitiatorInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => TransactionCreateManyInitiatorInputSchema),z.lazy(() => TransactionCreateManyInitiatorInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const InvestmentCreateWithoutInvestorInputSchema: z.ZodType<Prisma.InvestmentCreateWithoutInvestorInput> = z.object({
@@ -10142,7 +10153,6 @@ export const InvestmentCreateOrConnectWithoutInvestorInputSchema: z.ZodType<Pris
 
 export const InvestmentCreateManyInvestorInputEnvelopeSchema: z.ZodType<Prisma.InvestmentCreateManyInvestorInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => InvestmentCreateManyInvestorInputSchema),z.lazy(() => InvestmentCreateManyInvestorInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const UserUpsertWithoutAccountMembershipsInputSchema: z.ZodType<Prisma.UserUpsertWithoutAccountMembershipsInput> = z.object({
@@ -10827,7 +10837,6 @@ export const JointAccountModRequestApprovalCreateOrConnectWithoutRequestInputSch
 
 export const JointAccountModRequestApprovalCreateManyRequestInputEnvelopeSchema: z.ZodType<Prisma.JointAccountModRequestApprovalCreateManyRequestInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => JointAccountModRequestApprovalCreateManyRequestInputSchema),z.lazy(() => JointAccountModRequestApprovalCreateManyRequestInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const UserUpsertWithoutCreatedJointAccountModRequestsInputSchema: z.ZodType<Prisma.UserUpsertWithoutCreatedJointAccountModRequestsInput> = z.object({
@@ -11297,7 +11306,6 @@ export const TransactionCreateOrConnectWithoutInvestmentInputSchema: z.ZodType<P
 
 export const TransactionCreateManyInvestmentInputEnvelopeSchema: z.ZodType<Prisma.TransactionCreateManyInvestmentInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => TransactionCreateManyInvestmentInputSchema),z.lazy(() => TransactionCreateManyInvestmentInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const FinancialAccountCreateWithoutInvestmentsInputSchema: z.ZodType<Prisma.FinancialAccountCreateWithoutInvestmentsInput> = z.object({
@@ -11702,7 +11710,6 @@ export const JointAccountModRequestCreateOrConnectWithoutTransactionInputSchema:
 
 export const JointAccountModRequestCreateManyTransactionInputEnvelopeSchema: z.ZodType<Prisma.JointAccountModRequestCreateManyTransactionInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => JointAccountModRequestCreateManyTransactionInputSchema),z.lazy(() => JointAccountModRequestCreateManyTransactionInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const TransactionCreateWithoutChildTransactionsInputSchema: z.ZodType<Prisma.TransactionCreateWithoutChildTransactionsInput> = z.object({
@@ -11833,7 +11840,6 @@ export const TransactionCreateOrConnectWithoutParentTransactionInputSchema: z.Zo
 
 export const TransactionCreateManyParentTransactionInputEnvelopeSchema: z.ZodType<Prisma.TransactionCreateManyParentTransactionInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => TransactionCreateManyParentTransactionInputSchema),z.lazy(() => TransactionCreateManyParentTransactionInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const AccountUserUpsertWithoutTransactionsInputSchema: z.ZodType<Prisma.AccountUserUpsertWithoutTransactionsInput> = z.object({
@@ -14975,12 +14981,10 @@ export const UserUpsertArgsSchema: z.ZodType<Prisma.UserUpsertArgs> = z.object({
 
 export const UserCreateManyArgsSchema: z.ZodType<Prisma.UserCreateManyArgs> = z.object({
   data: z.union([ UserCreateManyInputSchema,UserCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const UserCreateManyAndReturnArgsSchema: z.ZodType<Prisma.UserCreateManyAndReturnArgs> = z.object({
   data: z.union([ UserCreateManyInputSchema,UserCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const UserDeleteArgsSchema: z.ZodType<Prisma.UserDeleteArgs> = z.object({
@@ -15029,12 +15033,10 @@ export const SessionUpsertArgsSchema: z.ZodType<Prisma.SessionUpsertArgs> = z.ob
 
 export const SessionCreateManyArgsSchema: z.ZodType<Prisma.SessionCreateManyArgs> = z.object({
   data: z.union([ SessionCreateManyInputSchema,SessionCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const SessionCreateManyAndReturnArgsSchema: z.ZodType<Prisma.SessionCreateManyAndReturnArgs> = z.object({
   data: z.union([ SessionCreateManyInputSchema,SessionCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const SessionDeleteArgsSchema: z.ZodType<Prisma.SessionDeleteArgs> = z.object({
@@ -15083,12 +15085,10 @@ export const AccountUpsertArgsSchema: z.ZodType<Prisma.AccountUpsertArgs> = z.ob
 
 export const AccountCreateManyArgsSchema: z.ZodType<Prisma.AccountCreateManyArgs> = z.object({
   data: z.union([ AccountCreateManyInputSchema,AccountCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const AccountCreateManyAndReturnArgsSchema: z.ZodType<Prisma.AccountCreateManyAndReturnArgs> = z.object({
   data: z.union([ AccountCreateManyInputSchema,AccountCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const AccountDeleteArgsSchema: z.ZodType<Prisma.AccountDeleteArgs> = z.object({
@@ -15135,12 +15135,10 @@ export const VerificationUpsertArgsSchema: z.ZodType<Prisma.VerificationUpsertAr
 
 export const VerificationCreateManyArgsSchema: z.ZodType<Prisma.VerificationCreateManyArgs> = z.object({
   data: z.union([ VerificationCreateManyInputSchema,VerificationCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const VerificationCreateManyAndReturnArgsSchema: z.ZodType<Prisma.VerificationCreateManyAndReturnArgs> = z.object({
   data: z.union([ VerificationCreateManyInputSchema,VerificationCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const VerificationDeleteArgsSchema: z.ZodType<Prisma.VerificationDeleteArgs> = z.object({
@@ -15187,12 +15185,10 @@ export const ProfileUpsertArgsSchema: z.ZodType<Prisma.ProfileUpsertArgs> = z.ob
 
 export const ProfileCreateManyArgsSchema: z.ZodType<Prisma.ProfileCreateManyArgs> = z.object({
   data: z.union([ ProfileCreateManyInputSchema,ProfileCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const ProfileCreateManyAndReturnArgsSchema: z.ZodType<Prisma.ProfileCreateManyAndReturnArgs> = z.object({
   data: z.union([ ProfileCreateManyInputSchema,ProfileCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const ProfileDeleteArgsSchema: z.ZodType<Prisma.ProfileDeleteArgs> = z.object({
@@ -15241,12 +15237,10 @@ export const BusinessProfileUpsertArgsSchema: z.ZodType<Prisma.BusinessProfileUp
 
 export const BusinessProfileCreateManyArgsSchema: z.ZodType<Prisma.BusinessProfileCreateManyArgs> = z.object({
   data: z.union([ BusinessProfileCreateManyInputSchema,BusinessProfileCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const BusinessProfileCreateManyAndReturnArgsSchema: z.ZodType<Prisma.BusinessProfileCreateManyAndReturnArgs> = z.object({
   data: z.union([ BusinessProfileCreateManyInputSchema,BusinessProfileCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const BusinessProfileDeleteArgsSchema: z.ZodType<Prisma.BusinessProfileDeleteArgs> = z.object({
@@ -15295,12 +15289,10 @@ export const FinancialAccountUpsertArgsSchema: z.ZodType<Prisma.FinancialAccount
 
 export const FinancialAccountCreateManyArgsSchema: z.ZodType<Prisma.FinancialAccountCreateManyArgs> = z.object({
   data: z.union([ FinancialAccountCreateManyInputSchema,FinancialAccountCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const FinancialAccountCreateManyAndReturnArgsSchema: z.ZodType<Prisma.FinancialAccountCreateManyAndReturnArgs> = z.object({
   data: z.union([ FinancialAccountCreateManyInputSchema,FinancialAccountCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const FinancialAccountDeleteArgsSchema: z.ZodType<Prisma.FinancialAccountDeleteArgs> = z.object({
@@ -15349,12 +15341,10 @@ export const AccountUserUpsertArgsSchema: z.ZodType<Prisma.AccountUserUpsertArgs
 
 export const AccountUserCreateManyArgsSchema: z.ZodType<Prisma.AccountUserCreateManyArgs> = z.object({
   data: z.union([ AccountUserCreateManyInputSchema,AccountUserCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const AccountUserCreateManyAndReturnArgsSchema: z.ZodType<Prisma.AccountUserCreateManyAndReturnArgs> = z.object({
   data: z.union([ AccountUserCreateManyInputSchema,AccountUserCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const AccountUserDeleteArgsSchema: z.ZodType<Prisma.AccountUserDeleteArgs> = z.object({
@@ -15403,12 +15393,10 @@ export const JointAccountRequestUpsertArgsSchema: z.ZodType<Prisma.JointAccountR
 
 export const JointAccountRequestCreateManyArgsSchema: z.ZodType<Prisma.JointAccountRequestCreateManyArgs> = z.object({
   data: z.union([ JointAccountRequestCreateManyInputSchema,JointAccountRequestCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const JointAccountRequestCreateManyAndReturnArgsSchema: z.ZodType<Prisma.JointAccountRequestCreateManyAndReturnArgs> = z.object({
   data: z.union([ JointAccountRequestCreateManyInputSchema,JointAccountRequestCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const JointAccountRequestDeleteArgsSchema: z.ZodType<Prisma.JointAccountRequestDeleteArgs> = z.object({
@@ -15457,12 +15445,10 @@ export const JointAccountModRequestUpsertArgsSchema: z.ZodType<Prisma.JointAccou
 
 export const JointAccountModRequestCreateManyArgsSchema: z.ZodType<Prisma.JointAccountModRequestCreateManyArgs> = z.object({
   data: z.union([ JointAccountModRequestCreateManyInputSchema,JointAccountModRequestCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const JointAccountModRequestCreateManyAndReturnArgsSchema: z.ZodType<Prisma.JointAccountModRequestCreateManyAndReturnArgs> = z.object({
   data: z.union([ JointAccountModRequestCreateManyInputSchema,JointAccountModRequestCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const JointAccountModRequestDeleteArgsSchema: z.ZodType<Prisma.JointAccountModRequestDeleteArgs> = z.object({
@@ -15511,12 +15497,10 @@ export const JointAccountModRequestApprovalUpsertArgsSchema: z.ZodType<Prisma.Jo
 
 export const JointAccountModRequestApprovalCreateManyArgsSchema: z.ZodType<Prisma.JointAccountModRequestApprovalCreateManyArgs> = z.object({
   data: z.union([ JointAccountModRequestApprovalCreateManyInputSchema,JointAccountModRequestApprovalCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const JointAccountModRequestApprovalCreateManyAndReturnArgsSchema: z.ZodType<Prisma.JointAccountModRequestApprovalCreateManyAndReturnArgs> = z.object({
   data: z.union([ JointAccountModRequestApprovalCreateManyInputSchema,JointAccountModRequestApprovalCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const JointAccountModRequestApprovalDeleteArgsSchema: z.ZodType<Prisma.JointAccountModRequestApprovalDeleteArgs> = z.object({
@@ -15563,12 +15547,10 @@ export const InvestmentPlanUpsertArgsSchema: z.ZodType<Prisma.InvestmentPlanUpse
 
 export const InvestmentPlanCreateManyArgsSchema: z.ZodType<Prisma.InvestmentPlanCreateManyArgs> = z.object({
   data: z.union([ InvestmentPlanCreateManyInputSchema,InvestmentPlanCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const InvestmentPlanCreateManyAndReturnArgsSchema: z.ZodType<Prisma.InvestmentPlanCreateManyAndReturnArgs> = z.object({
   data: z.union([ InvestmentPlanCreateManyInputSchema,InvestmentPlanCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const InvestmentPlanDeleteArgsSchema: z.ZodType<Prisma.InvestmentPlanDeleteArgs> = z.object({
@@ -15615,12 +15597,10 @@ export const InvestmentUpsertArgsSchema: z.ZodType<Prisma.InvestmentUpsertArgs> 
 
 export const InvestmentCreateManyArgsSchema: z.ZodType<Prisma.InvestmentCreateManyArgs> = z.object({
   data: z.union([ InvestmentCreateManyInputSchema,InvestmentCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const InvestmentCreateManyAndReturnArgsSchema: z.ZodType<Prisma.InvestmentCreateManyAndReturnArgs> = z.object({
   data: z.union([ InvestmentCreateManyInputSchema,InvestmentCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const InvestmentDeleteArgsSchema: z.ZodType<Prisma.InvestmentDeleteArgs> = z.object({
@@ -15669,12 +15649,10 @@ export const TransactionUpsertArgsSchema: z.ZodType<Prisma.TransactionUpsertArgs
 
 export const TransactionCreateManyArgsSchema: z.ZodType<Prisma.TransactionCreateManyArgs> = z.object({
   data: z.union([ TransactionCreateManyInputSchema,TransactionCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const TransactionCreateManyAndReturnArgsSchema: z.ZodType<Prisma.TransactionCreateManyAndReturnArgs> = z.object({
   data: z.union([ TransactionCreateManyInputSchema,TransactionCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const TransactionDeleteArgsSchema: z.ZodType<Prisma.TransactionDeleteArgs> = z.object({
@@ -15723,12 +15701,10 @@ export const NotificationUpsertArgsSchema: z.ZodType<Prisma.NotificationUpsertAr
 
 export const NotificationCreateManyArgsSchema: z.ZodType<Prisma.NotificationCreateManyArgs> = z.object({
   data: z.union([ NotificationCreateManyInputSchema,NotificationCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const NotificationCreateManyAndReturnArgsSchema: z.ZodType<Prisma.NotificationCreateManyAndReturnArgs> = z.object({
   data: z.union([ NotificationCreateManyInputSchema,NotificationCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const NotificationDeleteArgsSchema: z.ZodType<Prisma.NotificationDeleteArgs> = z.object({
@@ -15775,12 +15751,10 @@ export const CurrencyUpsertArgsSchema: z.ZodType<Prisma.CurrencyUpsertArgs> = z.
 
 export const CurrencyCreateManyArgsSchema: z.ZodType<Prisma.CurrencyCreateManyArgs> = z.object({
   data: z.union([ CurrencyCreateManyInputSchema,CurrencyCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const CurrencyCreateManyAndReturnArgsSchema: z.ZodType<Prisma.CurrencyCreateManyAndReturnArgs> = z.object({
   data: z.union([ CurrencyCreateManyInputSchema,CurrencyCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const CurrencyDeleteArgsSchema: z.ZodType<Prisma.CurrencyDeleteArgs> = z.object({
@@ -15825,12 +15799,10 @@ export const SettingsUpsertArgsSchema: z.ZodType<Prisma.SettingsUpsertArgs> = z.
 
 export const SettingsCreateManyArgsSchema: z.ZodType<Prisma.SettingsCreateManyArgs> = z.object({
   data: z.union([ SettingsCreateManyInputSchema,SettingsCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const SettingsCreateManyAndReturnArgsSchema: z.ZodType<Prisma.SettingsCreateManyAndReturnArgs> = z.object({
   data: z.union([ SettingsCreateManyInputSchema,SettingsCreateManyInputSchema.array() ]),
-  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const SettingsDeleteArgsSchema: z.ZodType<Prisma.SettingsDeleteArgs> = z.object({

@@ -449,7 +449,6 @@ export type JointAccountModRequestApprovalCreateOrConnectWithoutApproverInput = 
 
 export type JointAccountModRequestApprovalCreateManyApproverInputEnvelope = {
   data: Prisma.JointAccountModRequestApprovalCreateManyApproverInput | Prisma.JointAccountModRequestApprovalCreateManyApproverInput[]
-  skipDuplicates?: boolean
 }
 
 export type JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutApproverInput = {
@@ -503,7 +502,6 @@ export type JointAccountModRequestApprovalCreateOrConnectWithoutRequestInput = {
 
 export type JointAccountModRequestApprovalCreateManyRequestInputEnvelope = {
   data: Prisma.JointAccountModRequestApprovalCreateManyRequestInput | Prisma.JointAccountModRequestApprovalCreateManyRequestInput[]
-  skipDuplicates?: boolean
 }
 
 export type JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutRequestInput = {
@@ -1317,7 +1315,6 @@ export type JointAccountModRequestApprovalCreateManyArgs<ExtArgs extends runtime
    * The data used to create many JointAccountModRequestApprovals.
    */
   data: Prisma.JointAccountModRequestApprovalCreateManyInput | Prisma.JointAccountModRequestApprovalCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1336,7 +1333,6 @@ export type JointAccountModRequestApprovalCreateManyAndReturnArgs<ExtArgs extend
    * The data used to create many JointAccountModRequestApprovals.
    */
   data: Prisma.JointAccountModRequestApprovalCreateManyInput | Prisma.JointAccountModRequestApprovalCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

@@ -8,7 +8,11 @@ import resetPasswordTemplate from "../email/templates/reset-password";
 import emailChangeTemplate from "../email/templates/email-change";
 
 export const auth = betterAuth({
-  database: prismaAdapter(prisma, { provider: "postgresql" }),
+  database: prismaAdapter(prisma, { provider: "sqlite" }),
+  
+  logger: {
+    disabled: process.env.NODE_ENV === "production"
+  },
 
   session: {
     cookieCache: {

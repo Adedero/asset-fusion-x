@@ -1,6 +1,7 @@
 import { FetchError } from "ofetch";
 
 export default function normalizeException(exception: unknown): Error {
+  //console.log(exception);
   let message: string = "";
 
   if (exception instanceof FetchError) {
@@ -24,11 +25,13 @@ export default function normalizeException(exception: unknown): Error {
   } else if (
     typeof exception === "object" &&
     exception !== null &&
-    !Array.isArray(exception) &&
-    "message" in exception &&
-    typeof exception.message === "string"
+    !Array.isArray(exception)
   ) {
-    message = exception.message;
+    if ("message" in exception && typeof exception.message === "string") {
+      message = exception.message;
+    } else if ("error" in exception && typeof exception.error === "string") {
+      message = exception.error;
+    }
   } else {
     message = String(exception);
   }

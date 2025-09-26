@@ -1268,7 +1268,6 @@ export type InvestmentPlanCreateManyArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many InvestmentPlans.
    */
   data: Prisma.InvestmentPlanCreateManyInput | Prisma.InvestmentPlanCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1287,7 +1286,6 @@ export type InvestmentPlanCreateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * The data used to create many InvestmentPlans.
    */
   data: Prisma.InvestmentPlanCreateManyInput | Prisma.InvestmentPlanCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**

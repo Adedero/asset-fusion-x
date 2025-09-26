@@ -8,7 +8,7 @@ const injected = ref(
   inject<{
     accountName: string;
     refreshAccount: () => Promise<void>;
-  }>("currentAccount", { accountName: "", refreshAccount: async () => {} }),
+  }>("currentAccount", { accountName: "", refreshAccount: async () => {} })
 );
 
 const toast = useToast();
@@ -19,13 +19,13 @@ const schema = z.object({
     .nonempty("Account name is required")
     .refine((value) => {
       return value !== injected.value.accountName;
-    }, "Account name not changed"),
+    }, "Account name not changed")
 });
 
 type Schema = z.infer<typeof schema>;
 
 const state = reactive<Schema>({
-  accountName: "",
+  accountName: ""
 });
 
 const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
@@ -33,12 +33,12 @@ const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
   try {
     await $fetch(`/api/user/financial-accounts/${accountId}`, {
       method: "put",
-      body: { name: accountName },
+      body: { name: accountName }
     });
     toast.add({
       color: "success",
       title: "Success",
-      description: "Account name changed successfully",
+      description: "Account name changed successfully"
     });
     injected.value.accountName = accountName;
     injected.value.refreshAccount();
@@ -46,7 +46,7 @@ const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
     toast.add({
       color: "error",
       title: "Error",
-      description: normalizeException(error).message,
+      description: normalizeException(error).message
     });
   }
 };
@@ -78,7 +78,7 @@ const toggleAutosign = async (value: boolean) => {
           :description="`Current account name: ${injected.accountName}`"
           name="accountName"
         >
-          <NuxtButtonGroup class="w-full">
+          <NuxtFieldGroup class="w-full">
             <NuxtInput v-model="state.accountName" class="flex-1" />
 
             <NuxtButton
@@ -87,7 +87,7 @@ const toggleAutosign = async (value: boolean) => {
               icon="i-lucide-circle-check"
               loading-auto
             />
-          </NuxtButtonGroup>
+          </NuxtFieldGroup>
         </NuxtFormField>
       </NuxtForm>
     </NuxtCard>

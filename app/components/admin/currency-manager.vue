@@ -85,7 +85,6 @@ const handleSubmit = async (event: FormSubmitEvent<CurrencyInput>) => {
     :dismissible="false"
   >
     <template #body>
-      {{ state.rate }} {{ currency?.rate }}
       <NuxtForm :state :schema="currencySchema" @submit.prevent="handleSubmit">
         <div class="grid md:grid-cols-2 gap-x-2 gap-y-5">
           <NuxtFormField name="allowWithdrawal" class="md:col-span-2">
@@ -107,10 +106,54 @@ const handleSubmit = async (event: FormSubmitEvent<CurrencyInput>) => {
             name="rate"
             :label="`Rate (1 ${state.symbol || 'CUR'} to USD)`"
             required
-            class="md:col-span-2"
           >
             <NuxtInput v-model="state.rate" class="w-full" />
           </NuxtFormField>
+
+          <NuxtFormField
+            name="withdrawalCharge"
+            label="Withdrawal Charge (USD)"
+          >
+            <NuxtInput v-model="state.withdrawalCharge" class="w-full" />
+          </NuxtFormField>
+
+          <!-- <NuxtCollapsible class="space-y-3 w-full md:col-span-2">
+            <NuxtButton
+              label="Wire Transfer Options"
+              color="neutral"
+              variant="subtle"
+              trailing-icon="i-lucide-chevron-down"
+              block
+              class="mt-3"
+            />
+            <template #content>
+              <div class="bg-muted p-4">
+                <div class="grid md:grid-cols-2 gap-x-2 gap-y-5 w-full">
+                  <NuxtFormField
+                    name="wireTransferDepositBankName"
+                    label="Bank Name (for wire transfer deposits)"
+                    class="md:col-span-2"
+                  >
+                    <NuxtInput
+                      v-model="state.wireTransferDepositBankName"
+                      class="w-full"
+                    />
+                  </NuxtFormField>
+
+                  <NuxtFormField
+                    name="wireTransferDepositBankAccountNumber"
+                    label="Account Number"
+                    class="md:col-span-2"
+                  >
+                    <NuxtInput
+                      v-model="state.wireTransferDepositBankAccountNumber"
+                      class="w-full"
+                    />
+                  </NuxtFormField>
+                </div>
+              </div>
+            </template>
+          </NuxtCollapsible> -->
 
           <NuxtFormField
             name="walletAddress"
@@ -129,7 +172,11 @@ const handleSubmit = async (event: FormSubmitEvent<CurrencyInput>) => {
             <NuxtInput v-model="state.walletAddressNetwork" class="w-full" />
           </NuxtFormField>
 
-          <NuxtFormField name="image" label="Image URL" class="md:col-span-2">
+          <NuxtFormField
+            name="image"
+            label="Image URL (optional)"
+            class="md:col-span-2"
+          >
             <NuxtInput v-model="state.image" class="w-full" />
           </NuxtFormField>
 

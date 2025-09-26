@@ -739,7 +739,6 @@ export type JointAccountRequestCreateOrConnectWithoutCreatorInput = {
 
 export type JointAccountRequestCreateManyCreatorInputEnvelope = {
   data: Prisma.JointAccountRequestCreateManyCreatorInput | Prisma.JointAccountRequestCreateManyCreatorInput[]
-  skipDuplicates?: boolean
 }
 
 export type JointAccountRequestCreateWithoutRecipientInput = {
@@ -781,7 +780,6 @@ export type JointAccountRequestCreateOrConnectWithoutRecipientInput = {
 
 export type JointAccountRequestCreateManyRecipientInputEnvelope = {
   data: Prisma.JointAccountRequestCreateManyRecipientInput | Prisma.JointAccountRequestCreateManyRecipientInput[]
-  skipDuplicates?: boolean
 }
 
 export type JointAccountRequestUpsertWithWhereUniqueWithoutCreatorInput = {
@@ -875,7 +873,6 @@ export type JointAccountRequestCreateOrConnectWithoutFinancialAccountInput = {
 
 export type JointAccountRequestCreateManyFinancialAccountInputEnvelope = {
   data: Prisma.JointAccountRequestCreateManyFinancialAccountInput | Prisma.JointAccountRequestCreateManyFinancialAccountInput[]
-  skipDuplicates?: boolean
 }
 
 export type JointAccountRequestUpsertWithWhereUniqueWithoutFinancialAccountInput = {
@@ -1873,7 +1870,6 @@ export type JointAccountRequestCreateManyArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many JointAccountRequests.
    */
   data: Prisma.JointAccountRequestCreateManyInput | Prisma.JointAccountRequestCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1892,7 +1888,6 @@ export type JointAccountRequestCreateManyAndReturnArgs<ExtArgs extends runtime.T
    * The data used to create many JointAccountRequests.
    */
   data: Prisma.JointAccountRequestCreateManyInput | Prisma.JointAccountRequestCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

@@ -16,16 +16,16 @@ const schema = z.object({
   amount: z
     .number({ message: "Amount is required" })
     .min(minDepositAmount, {
-      message: `Amount must be at least ${toDollar(minDepositAmount)}`,
+      message: `Amount must be at least ${toDollar(minDepositAmount)}`
     })
     .max(maxDepositAmount, {
-      message: `Amount must not be more than ${toDollar(maxDepositAmount)}`,
-    }),
+      message: `Amount must not be more than ${toDollar(maxDepositAmount)}`
+    })
 });
 type Schema = z.infer<typeof schema>;
 
 const state = reactive<Schema>({
-  amount: 0,
+  amount: 0
 });
 
 const reset = () => {
@@ -57,14 +57,14 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
       currency: "USD",
       USDAmount: amount,
       rate: currency.rate,
-      type: "deposit",
+      type: "deposit"
     };
     open.value = true;
     return;
   }
   try {
     const data = await $fetch("/api/user/transactions/init-deposit", {
-      query: { symbol: currency.symbol, amount },
+      query: { symbol: currency.symbol, amount }
     });
     transaction.value = {
       financialAccountId: accountId,
@@ -72,7 +72,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
       currency: data.currency.symbol,
       USDAmount: amount,
       rate: data.currency.rate,
-      type: "deposit",
+      type: "deposit"
     };
     open.value = true;
     reset();
@@ -96,7 +96,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
           name="amount"
           label="Enter the deposit amount"
           :description="`Min: ${toDollar(minDepositAmount)} Max: ${toDollar(
-            maxDepositAmount,
+            maxDepositAmount
           )}`"
         >
           <NuxtInputNumber
@@ -108,7 +108,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
               currencyDisplay: 'symbol',
               currencySign: 'standard',
               minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
+              maximumFractionDigits: 2
             }"
             :min="minDepositAmount"
             :max="maxDepositAmount"
@@ -170,7 +170,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
                 :button-props="{
                   size: 'lg',
                   label: 'Proceed',
-                  trailingIcon: 'i-lucide-circle-arrow-right',
+                  trailingIcon: 'i-lucide-circle-arrow-right'
                 }"
               />
             </div>
@@ -208,7 +208,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
                 class="col-span-2"
                 :label="`Deposit amount in ${transaction.currency}`"
               >
-                <NuxtButtonGroup class="w-full">
+                <NuxtFieldGroup class="w-full">
                   <NuxtInput
                     :value="transaction.amount"
                     readonly
@@ -219,7 +219,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
                     :text="transaction.amount"
                     variant="outline"
                   />
-                </NuxtButtonGroup>
+                </NuxtFieldGroup>
               </NuxtFormField>
             </div>
 
@@ -229,7 +229,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
             />
 
             <NuxtFormField label="Wallet address">
-              <NuxtButtonGroup class="w-full">
+              <NuxtFieldGroup class="w-full">
                 <NuxtInput
                   :value="currency.walletAddress"
                   size="lg"
@@ -239,11 +239,11 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
                   :text="currency.walletAddress"
                   variant="outline"
                 />
-              </NuxtButtonGroup>
+              </NuxtFieldGroup>
             </NuxtFormField>
 
             <NuxtFormField label="Wallet address network">
-              <NuxtButtonGroup class="w-full">
+              <NuxtFieldGroup class="w-full">
                 <NuxtInput
                   :value="currency.walletAddressNetwork"
                   size="lg"
@@ -253,7 +253,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
                   :text="currency.walletAddressNetwork"
                   variant="outline"
                 />
-              </NuxtButtonGroup>
+              </NuxtFieldGroup>
             </NuxtFormField>
 
             <div class="flex gap-2 justify-end">
@@ -271,7 +271,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
                 :button-props="{
                   size: 'lg',
                   label: 'Proceed',
-                  trailingIcon: 'i-lucide-circle-arrow-right',
+                  trailingIcon: 'i-lucide-circle-arrow-right'
                 }"
               />
             </div>

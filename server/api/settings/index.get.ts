@@ -1,13 +1,13 @@
 import { prisma } from "~~/server/lib/prisma";
 
 export default defineEventHandler(async () => {
-  const settings = await prisma.settings.findFirst();
+  const settings =
+    (await prisma.settings.findFirst()) ??
+    (await prisma.settings.create({
+      data: {
+        allowWithdrawals: false
+      }
+    }));
 
-  if (!settings) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Settings not found.",
-    });
-  }
   return settings;
 });

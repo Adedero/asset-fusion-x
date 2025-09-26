@@ -14,9 +14,9 @@ export default defineEventHandler(async (event) => {
   const accounts = await prisma.financialAccount.findMany({
     where: {
       OR: [
-        { creator: { name: { contains: search, mode: "insensitive" } } },
-        { creator: { email: { contains: search, mode: "insensitive" } } },
-        { name: { contains: search, mode: "insensitive" } }
+        { creator: { name: { contains: search } } },
+        { creator: { email: { contains: search } } },
+        { name: { contains: search } }
       ]
     },
     select: {

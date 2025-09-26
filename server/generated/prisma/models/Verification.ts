@@ -1012,7 +1012,6 @@ export type VerificationCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many Verifications.
    */
   data: Prisma.VerificationCreateManyInput | Prisma.VerificationCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1031,7 +1030,6 @@ export type VerificationCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many Verifications.
    */
   data: Prisma.VerificationCreateManyInput | Prisma.VerificationCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**

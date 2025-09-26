@@ -927,7 +927,6 @@ export type FinancialAccountCreateOrConnectWithoutCreatorInput = {
 
 export type FinancialAccountCreateManyCreatorInputEnvelope = {
   data: Prisma.FinancialAccountCreateManyCreatorInput | Prisma.FinancialAccountCreateManyCreatorInput[]
-  skipDuplicates?: boolean
 }
 
 export type FinancialAccountUpsertWithWhereUniqueWithoutCreatorInput = {
@@ -2916,7 +2915,6 @@ export type FinancialAccountCreateManyArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many FinancialAccounts.
    */
   data: Prisma.FinancialAccountCreateManyInput | Prisma.FinancialAccountCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -2935,7 +2933,6 @@ export type FinancialAccountCreateManyAndReturnArgs<ExtArgs extends runtime.Type
    * The data used to create many FinancialAccounts.
    */
   data: Prisma.FinancialAccountCreateManyInput | Prisma.FinancialAccountCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

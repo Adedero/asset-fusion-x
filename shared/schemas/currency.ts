@@ -6,13 +6,19 @@ export const currencySchema = z.object({
     .string("Invalid currency symbol")
     .min(1, "Currency symbol is required"),
   image: z.string("Invalid image URL").nullish(),
-  rate: z.coerce.number("Invalid rate").min(0, "Rate must be a positive number"),
+  rate: z.coerce
+    .number("Invalid rate")
+    .min(0, "Rate must be a positive number"),
   walletAddress: z.string("Invalid wallet address").nullish(),
   walletAddressNetwork: z.string("Invalid wallet address network").nullish(),
-  allowWithdrawal: z
-    .boolean("Invalid allow withdrawal value")
-    .default(true),
-  withdrawalCharge: z
+  wireTransferDepositBankName: z
+    .string("Invalid wire deposit bank name")
+    .nullish(),
+  wireTransferDepositBankAccountNumber: z
+    .string("Invalid wire deposit bank account number")
+    .nullish(),
+  allowWithdrawal: z.boolean("Invalid allow withdrawal value").default(false),
+  withdrawalCharge: z.coerce
     .number("Invalid withdrawal charge")
     .min(0, "Withdrawal charge must be a positive number")
     .default(0)

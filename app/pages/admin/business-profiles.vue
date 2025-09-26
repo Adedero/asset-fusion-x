@@ -71,14 +71,14 @@ const headers = [
       <div class="flex items-end justify-between gap-5 flex-wrap">
         <h1 class="text-3xl font-semibold">Business Profiles</h1>
         <div class="flex items-end gap-2">
-          <NuxtButtonGroup>
+          <NuxtFieldGroup>
             <NuxtButton
               icon="lucide:search"
               color="neutral"
               variant="outline"
             />
             <NuxtInput v-model="search" placeholder="Search..." />
-          </NuxtButtonGroup>
+          </NuxtFieldGroup>
 
           <div class="flex flex-col items-end gap-1">
             <p class="text-xs font-semibold">Approval status</p>

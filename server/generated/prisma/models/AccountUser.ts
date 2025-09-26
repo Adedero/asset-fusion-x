@@ -602,7 +602,6 @@ export type AccountUserCreateOrConnectWithoutUserInput = {
 
 export type AccountUserCreateManyUserInputEnvelope = {
   data: Prisma.AccountUserCreateManyUserInput | Prisma.AccountUserCreateManyUserInput[]
-  skipDuplicates?: boolean
 }
 
 export type AccountUserUpsertWithWhereUniqueWithoutUserInput = {
@@ -666,7 +665,6 @@ export type AccountUserCreateOrConnectWithoutFinancialAccountInput = {
 
 export type AccountUserCreateManyFinancialAccountInputEnvelope = {
   data: Prisma.AccountUserCreateManyFinancialAccountInput | Prisma.AccountUserCreateManyFinancialAccountInput[]
-  skipDuplicates?: boolean
 }
 
 export type AccountUserUpsertWithWhereUniqueWithoutFinancialAccountInput = {
@@ -1692,7 +1690,6 @@ export type AccountUserCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many AccountUsers.
    */
   data: Prisma.AccountUserCreateManyInput | Prisma.AccountUserCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1711,7 +1708,6 @@ export type AccountUserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many AccountUsers.
    */
   data: Prisma.AccountUserCreateManyInput | Prisma.AccountUserCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

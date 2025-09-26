@@ -1,4 +1,4 @@
-import { writeFile, mkdir, unlink } from "fs/promises";
+import { writeFile, mkdir, rm } from "fs/promises";
 import { resolve, join } from "path";
 import normalizeException from "~~/shared/helpers/normalize-exception";
 
@@ -14,7 +14,7 @@ type SaveUserImageReturnType = {
 export async function saveUserImage(
   userId: string,
   base64Image: string,
-  outputDir = resolve("public/uploads/img/users"),
+  outputDir = resolve("public/uploads/img/users")
 ): Promise<SaveUserImageReturnType> {
   const matches = base64Image.match(/^data:(.+);base64,(.+)$/);
   if (!matches || matches.length !== 3) {
@@ -39,9 +39,9 @@ export async function saveUserImage(
       data: {
         filepath,
         filename,
-        imageUrl,
+        imageUrl
       },
-      error: null,
+      error: null
     };
   } catch (error) {
     return { data: null, error: normalizeException(error) };
@@ -56,7 +56,7 @@ export async function saveUserImage(
  */
 export async function removeUserImage(
   imageUrl: string,
-  outputDir = resolve("public/uploads/img/users"),
+  outputDir = resolve("public/uploads/img/users")
 ): Promise<{ success: boolean; error: Error | null }> {
   try {
     // Extract the filename from the imageUrl
@@ -69,7 +69,7 @@ export async function removeUserImage(
     const filePath = join(outputDir, filename);
 
     // Attempt to remove the file
-    await unlink(filePath);
+    await rm(filePath, { force: true });
 
     return { success: true, error: null };
   } catch (error) {

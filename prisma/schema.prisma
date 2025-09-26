@@ -5,8 +5,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_FILE")
 }
 
 generator json {
@@ -486,18 +486,20 @@ model Notification {
 }
 
 model Currency {
-  id                   String    @id @default(uuid())
-  name                 String
-  symbol               String    @unique
-  image                String?
-  rate                 Float
-  rateUpdatedAt        DateTime?
-  walletAddress        String?
-  walletAddressNetwork String?
-  allowWithdrawal      Boolean   @default(true)
-  withdrawalCharge     Float     @default(0)
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
+  id                           String    @id @default(uuid())
+  name                         String
+  symbol                       String    @unique
+  image                        String?
+  rate                         Float
+  rateUpdatedAt                DateTime?
+  walletAddress                String?
+  walletAddressNetwork         String?
+  wireTransferDepositBankName          String?
+  wireTransferDepositBankAccountNumber String?
+  allowWithdrawal              Boolean   @default(false)
+  withdrawalCharge             Float     @default(0)
+  createdAt                    DateTime  @default(now())
+  updatedAt                    DateTime  @updatedAt
 
   @@map("currency")
 }

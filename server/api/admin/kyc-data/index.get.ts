@@ -14,8 +14,8 @@ export default defineEventHandler(async (event) => {
   const profiles = await prisma.profile.findMany({
     where: {
       OR: [
-        { user: { name: { contains: search, mode: "insensitive" } } },
-        { user: { email: { contains: search, mode: "insensitive" } } }
+        { user: { name: { contains: search } } },
+        { user: { email: { contains: search } } }
       ]
     },
     select: {

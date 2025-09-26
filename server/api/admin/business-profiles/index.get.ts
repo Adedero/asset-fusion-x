@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
   const profiles = await prisma.businessProfile.findMany({
     where: {
       AND: [
-        { account: { name: { contains: search, mode: "insensitive" } } },
+        { account: { name: { contains: search } } },
         approved ? { approved } : {}
       ]
     },

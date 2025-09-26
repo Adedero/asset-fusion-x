@@ -1713,9 +1713,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
  */
 
 export const TransactionIsolationLevel = runtime.makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 } as const)
 
@@ -2008,6 +2005,8 @@ export const CurrencyScalarFieldEnum = {
   rateUpdatedAt: 'rateUpdatedAt',
   walletAddress: 'walletAddress',
   walletAddressNetwork: 'walletAddressNetwork',
+  wireTransferDepositBankName: 'wireTransferDepositBankName',
+  wireTransferDepositBankAccountNumber: 'wireTransferDepositBankAccountNumber',
   allowWithdrawal: 'allowWithdrawal',
   withdrawalCharge: 'withdrawalCharge',
   createdAt: 'createdAt',
@@ -2033,14 +2032,6 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
 export const NullsOrder = {
   first: 'first',
   last: 'last'
@@ -2063,13 +2054,6 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
 
 
 /**
- * Reference to a field of type 'String[]'
- */
-export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -2084,23 +2068,9 @@ export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'UserRole[]'
- */
-export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
-    
-
-
-/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-/**
- * Reference to a field of type 'DateTime[]'
- */
-export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -2112,23 +2082,9 @@ export type EnumGovernmentIdTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
- * Reference to a field of type 'GovernmentIdType[]'
- */
-export type ListEnumGovernmentIdTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GovernmentIdType[]'>
-    
-
-
-/**
  * Reference to a field of type 'KycStatus'
  */
 export type EnumKycStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KycStatus'>
-    
-
-
-/**
- * Reference to a field of type 'KycStatus[]'
- */
-export type ListEnumKycStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KycStatus[]'>
     
 
 
@@ -2140,23 +2096,9 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 
 
 /**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
  * Reference to a field of type 'AccountStatus'
  */
 export type EnumAccountStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountStatus'>
-    
-
-
-/**
- * Reference to a field of type 'AccountStatus[]'
- */
-export type ListEnumAccountStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountStatus[]'>
     
 
 
@@ -2168,23 +2110,9 @@ export type EnumAccountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
 
 
 /**
- * Reference to a field of type 'AccountType[]'
- */
-export type ListEnumAccountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountType[]'>
-    
-
-
-/**
  * Reference to a field of type 'AccountOwnership'
  */
 export type EnumAccountOwnershipFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountOwnership'>
-    
-
-
-/**
- * Reference to a field of type 'AccountOwnership[]'
- */
-export type ListEnumAccountOwnershipFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountOwnership[]'>
     
 
 
@@ -2196,23 +2124,9 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
 
 
 /**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-/**
  * Reference to a field of type 'AccountUserRole'
  */
 export type EnumAccountUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountUserRole'>
-    
-
-
-/**
- * Reference to a field of type 'AccountUserRole[]'
- */
-export type ListEnumAccountUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountUserRole[]'>
     
 
 
@@ -2224,23 +2138,9 @@ export type EnumJointAccountRequestStatusFieldRefInput<$PrismaModel> = FieldRefI
 
 
 /**
- * Reference to a field of type 'JointAccountRequestStatus[]'
- */
-export type ListEnumJointAccountRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JointAccountRequestStatus[]'>
-    
-
-
-/**
  * Reference to a field of type 'JointAccountModRequestType'
  */
 export type EnumJointAccountModRequestTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JointAccountModRequestType'>
-    
-
-
-/**
- * Reference to a field of type 'JointAccountModRequestType[]'
- */
-export type ListEnumJointAccountModRequestTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JointAccountModRequestType[]'>
     
 
 
@@ -2252,23 +2152,9 @@ export type EnumInvestmentPlanCategoryFieldRefInput<$PrismaModel> = FieldRefInpu
 
 
 /**
- * Reference to a field of type 'InvestmentPlanCategory[]'
- */
-export type ListEnumInvestmentPlanCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvestmentPlanCategory[]'>
-    
-
-
-/**
  * Reference to a field of type 'ProfitDistribution'
  */
 export type EnumProfitDistributionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProfitDistribution'>
-    
-
-
-/**
- * Reference to a field of type 'ProfitDistribution[]'
- */
-export type ListEnumProfitDistributionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProfitDistribution[]'>
     
 
 
@@ -2280,23 +2166,9 @@ export type EnumInvestmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
- * Reference to a field of type 'InvestmentStatus[]'
- */
-export type ListEnumInvestmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvestmentStatus[]'>
-    
-
-
-/**
  * Reference to a field of type 'TransactionType'
  */
 export type EnumTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionType'>
-    
-
-
-/**
- * Reference to a field of type 'TransactionType[]'
- */
-export type ListEnumTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionType[]'>
     
 
 
@@ -2308,23 +2180,9 @@ export type EnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
- * Reference to a field of type 'TransactionStatus[]'
- */
-export type ListEnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatus[]'>
-    
-
-
-/**
  * Reference to a field of type 'NotificationBodyType'
  */
 export type EnumNotificationBodyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationBodyType'>
-    
-
-
-/**
- * Reference to a field of type 'NotificationBodyType[]'
- */
-export type ListEnumNotificationBodyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationBodyType[]'>
     
 
 /**

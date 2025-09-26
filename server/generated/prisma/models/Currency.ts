@@ -46,6 +46,8 @@ export type CurrencyMinAggregateOutputType = {
   rateUpdatedAt: Date | null
   walletAddress: string | null
   walletAddressNetwork: string | null
+  wireTransferDepositBankName: string | null
+  wireTransferDepositBankAccountNumber: string | null
   allowWithdrawal: boolean | null
   withdrawalCharge: number | null
   createdAt: Date | null
@@ -61,6 +63,8 @@ export type CurrencyMaxAggregateOutputType = {
   rateUpdatedAt: Date | null
   walletAddress: string | null
   walletAddressNetwork: string | null
+  wireTransferDepositBankName: string | null
+  wireTransferDepositBankAccountNumber: string | null
   allowWithdrawal: boolean | null
   withdrawalCharge: number | null
   createdAt: Date | null
@@ -76,6 +80,8 @@ export type CurrencyCountAggregateOutputType = {
   rateUpdatedAt: number
   walletAddress: number
   walletAddressNetwork: number
+  wireTransferDepositBankName: number
+  wireTransferDepositBankAccountNumber: number
   allowWithdrawal: number
   withdrawalCharge: number
   createdAt: number
@@ -103,6 +109,8 @@ export type CurrencyMinAggregateInputType = {
   rateUpdatedAt?: true
   walletAddress?: true
   walletAddressNetwork?: true
+  wireTransferDepositBankName?: true
+  wireTransferDepositBankAccountNumber?: true
   allowWithdrawal?: true
   withdrawalCharge?: true
   createdAt?: true
@@ -118,6 +126,8 @@ export type CurrencyMaxAggregateInputType = {
   rateUpdatedAt?: true
   walletAddress?: true
   walletAddressNetwork?: true
+  wireTransferDepositBankName?: true
+  wireTransferDepositBankAccountNumber?: true
   allowWithdrawal?: true
   withdrawalCharge?: true
   createdAt?: true
@@ -133,6 +143,8 @@ export type CurrencyCountAggregateInputType = {
   rateUpdatedAt?: true
   walletAddress?: true
   walletAddressNetwork?: true
+  wireTransferDepositBankName?: true
+  wireTransferDepositBankAccountNumber?: true
   allowWithdrawal?: true
   withdrawalCharge?: true
   createdAt?: true
@@ -235,6 +247,8 @@ export type CurrencyGroupByOutputType = {
   rateUpdatedAt: Date | null
   walletAddress: string | null
   walletAddressNetwork: string | null
+  wireTransferDepositBankName: string | null
+  wireTransferDepositBankAccountNumber: string | null
   allowWithdrawal: boolean
   withdrawalCharge: number
   createdAt: Date
@@ -273,6 +287,8 @@ export type CurrencyWhereInput = {
   rateUpdatedAt?: Prisma.DateTimeNullableFilter<"Currency"> | Date | string | null
   walletAddress?: Prisma.StringNullableFilter<"Currency"> | string | null
   walletAddressNetwork?: Prisma.StringNullableFilter<"Currency"> | string | null
+  wireTransferDepositBankName?: Prisma.StringNullableFilter<"Currency"> | string | null
+  wireTransferDepositBankAccountNumber?: Prisma.StringNullableFilter<"Currency"> | string | null
   allowWithdrawal?: Prisma.BoolFilter<"Currency"> | boolean
   withdrawalCharge?: Prisma.FloatFilter<"Currency"> | number
   createdAt?: Prisma.DateTimeFilter<"Currency"> | Date | string
@@ -288,6 +304,8 @@ export type CurrencyOrderByWithRelationInput = {
   rateUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   walletAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   walletAddressNetwork?: Prisma.SortOrderInput | Prisma.SortOrder
+  wireTransferDepositBankName?: Prisma.SortOrderInput | Prisma.SortOrder
+  wireTransferDepositBankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   allowWithdrawal?: Prisma.SortOrder
   withdrawalCharge?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -306,6 +324,8 @@ export type CurrencyWhereUniqueInput = Prisma.AtLeast<{
   rateUpdatedAt?: Prisma.DateTimeNullableFilter<"Currency"> | Date | string | null
   walletAddress?: Prisma.StringNullableFilter<"Currency"> | string | null
   walletAddressNetwork?: Prisma.StringNullableFilter<"Currency"> | string | null
+  wireTransferDepositBankName?: Prisma.StringNullableFilter<"Currency"> | string | null
+  wireTransferDepositBankAccountNumber?: Prisma.StringNullableFilter<"Currency"> | string | null
   allowWithdrawal?: Prisma.BoolFilter<"Currency"> | boolean
   withdrawalCharge?: Prisma.FloatFilter<"Currency"> | number
   createdAt?: Prisma.DateTimeFilter<"Currency"> | Date | string
@@ -321,6 +341,8 @@ export type CurrencyOrderByWithAggregationInput = {
   rateUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   walletAddress?: Prisma.SortOrderInput | Prisma.SortOrder
   walletAddressNetwork?: Prisma.SortOrderInput | Prisma.SortOrder
+  wireTransferDepositBankName?: Prisma.SortOrderInput | Prisma.SortOrder
+  wireTransferDepositBankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   allowWithdrawal?: Prisma.SortOrder
   withdrawalCharge?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -344,6 +366,8 @@ export type CurrencyScalarWhereWithAggregatesInput = {
   rateUpdatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Currency"> | Date | string | null
   walletAddress?: Prisma.StringNullableWithAggregatesFilter<"Currency"> | string | null
   walletAddressNetwork?: Prisma.StringNullableWithAggregatesFilter<"Currency"> | string | null
+  wireTransferDepositBankName?: Prisma.StringNullableWithAggregatesFilter<"Currency"> | string | null
+  wireTransferDepositBankAccountNumber?: Prisma.StringNullableWithAggregatesFilter<"Currency"> | string | null
   allowWithdrawal?: Prisma.BoolWithAggregatesFilter<"Currency"> | boolean
   withdrawalCharge?: Prisma.FloatWithAggregatesFilter<"Currency"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Currency"> | Date | string
@@ -359,6 +383,8 @@ export type CurrencyCreateInput = {
   rateUpdatedAt?: Date | string | null
   walletAddress?: string | null
   walletAddressNetwork?: string | null
+  wireTransferDepositBankName?: string | null
+  wireTransferDepositBankAccountNumber?: string | null
   allowWithdrawal?: boolean
   withdrawalCharge?: number
   createdAt?: Date | string
@@ -374,6 +400,8 @@ export type CurrencyUncheckedCreateInput = {
   rateUpdatedAt?: Date | string | null
   walletAddress?: string | null
   walletAddressNetwork?: string | null
+  wireTransferDepositBankName?: string | null
+  wireTransferDepositBankAccountNumber?: string | null
   allowWithdrawal?: boolean
   withdrawalCharge?: number
   createdAt?: Date | string
@@ -389,6 +417,8 @@ export type CurrencyUpdateInput = {
   rateUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   walletAddressNetwork?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wireTransferDepositBankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wireTransferDepositBankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allowWithdrawal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   withdrawalCharge?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -404,6 +434,8 @@ export type CurrencyUncheckedUpdateInput = {
   rateUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   walletAddressNetwork?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wireTransferDepositBankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wireTransferDepositBankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allowWithdrawal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   withdrawalCharge?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -419,6 +451,8 @@ export type CurrencyCreateManyInput = {
   rateUpdatedAt?: Date | string | null
   walletAddress?: string | null
   walletAddressNetwork?: string | null
+  wireTransferDepositBankName?: string | null
+  wireTransferDepositBankAccountNumber?: string | null
   allowWithdrawal?: boolean
   withdrawalCharge?: number
   createdAt?: Date | string
@@ -434,6 +468,8 @@ export type CurrencyUpdateManyMutationInput = {
   rateUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   walletAddressNetwork?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wireTransferDepositBankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wireTransferDepositBankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allowWithdrawal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   withdrawalCharge?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -449,6 +485,8 @@ export type CurrencyUncheckedUpdateManyInput = {
   rateUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   walletAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   walletAddressNetwork?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wireTransferDepositBankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  wireTransferDepositBankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   allowWithdrawal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   withdrawalCharge?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -464,6 +502,8 @@ export type CurrencyCountOrderByAggregateInput = {
   rateUpdatedAt?: Prisma.SortOrder
   walletAddress?: Prisma.SortOrder
   walletAddressNetwork?: Prisma.SortOrder
+  wireTransferDepositBankName?: Prisma.SortOrder
+  wireTransferDepositBankAccountNumber?: Prisma.SortOrder
   allowWithdrawal?: Prisma.SortOrder
   withdrawalCharge?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -484,6 +524,8 @@ export type CurrencyMaxOrderByAggregateInput = {
   rateUpdatedAt?: Prisma.SortOrder
   walletAddress?: Prisma.SortOrder
   walletAddressNetwork?: Prisma.SortOrder
+  wireTransferDepositBankName?: Prisma.SortOrder
+  wireTransferDepositBankAccountNumber?: Prisma.SortOrder
   allowWithdrawal?: Prisma.SortOrder
   withdrawalCharge?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -499,6 +541,8 @@ export type CurrencyMinOrderByAggregateInput = {
   rateUpdatedAt?: Prisma.SortOrder
   walletAddress?: Prisma.SortOrder
   walletAddressNetwork?: Prisma.SortOrder
+  wireTransferDepositBankName?: Prisma.SortOrder
+  wireTransferDepositBankAccountNumber?: Prisma.SortOrder
   allowWithdrawal?: Prisma.SortOrder
   withdrawalCharge?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -521,6 +565,8 @@ export type CurrencySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   rateUpdatedAt?: boolean
   walletAddress?: boolean
   walletAddressNetwork?: boolean
+  wireTransferDepositBankName?: boolean
+  wireTransferDepositBankAccountNumber?: boolean
   allowWithdrawal?: boolean
   withdrawalCharge?: boolean
   createdAt?: boolean
@@ -536,6 +582,8 @@ export type CurrencySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   rateUpdatedAt?: boolean
   walletAddress?: boolean
   walletAddressNetwork?: boolean
+  wireTransferDepositBankName?: boolean
+  wireTransferDepositBankAccountNumber?: boolean
   allowWithdrawal?: boolean
   withdrawalCharge?: boolean
   createdAt?: boolean
@@ -551,6 +599,8 @@ export type CurrencySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   rateUpdatedAt?: boolean
   walletAddress?: boolean
   walletAddressNetwork?: boolean
+  wireTransferDepositBankName?: boolean
+  wireTransferDepositBankAccountNumber?: boolean
   allowWithdrawal?: boolean
   withdrawalCharge?: boolean
   createdAt?: boolean
@@ -566,13 +616,15 @@ export type CurrencySelectScalar = {
   rateUpdatedAt?: boolean
   walletAddress?: boolean
   walletAddressNetwork?: boolean
+  wireTransferDepositBankName?: boolean
+  wireTransferDepositBankAccountNumber?: boolean
   allowWithdrawal?: boolean
   withdrawalCharge?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CurrencyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "symbol" | "image" | "rate" | "rateUpdatedAt" | "walletAddress" | "walletAddressNetwork" | "allowWithdrawal" | "withdrawalCharge" | "createdAt" | "updatedAt", ExtArgs["result"]["currency"]>
+export type CurrencyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "symbol" | "image" | "rate" | "rateUpdatedAt" | "walletAddress" | "walletAddressNetwork" | "wireTransferDepositBankName" | "wireTransferDepositBankAccountNumber" | "allowWithdrawal" | "withdrawalCharge" | "createdAt" | "updatedAt", ExtArgs["result"]["currency"]>
 
 export type $CurrencyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Currency"
@@ -586,6 +638,8 @@ export type $CurrencyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     rateUpdatedAt: Date | null
     walletAddress: string | null
     walletAddressNetwork: string | null
+    wireTransferDepositBankName: string | null
+    wireTransferDepositBankAccountNumber: string | null
     allowWithdrawal: boolean
     withdrawalCharge: number
     createdAt: Date
@@ -1021,6 +1075,8 @@ export interface CurrencyFieldRefs {
   readonly rateUpdatedAt: Prisma.FieldRef<"Currency", 'DateTime'>
   readonly walletAddress: Prisma.FieldRef<"Currency", 'String'>
   readonly walletAddressNetwork: Prisma.FieldRef<"Currency", 'String'>
+  readonly wireTransferDepositBankName: Prisma.FieldRef<"Currency", 'String'>
+  readonly wireTransferDepositBankAccountNumber: Prisma.FieldRef<"Currency", 'String'>
   readonly allowWithdrawal: Prisma.FieldRef<"Currency", 'Boolean'>
   readonly withdrawalCharge: Prisma.FieldRef<"Currency", 'Float'>
   readonly createdAt: Prisma.FieldRef<"Currency", 'DateTime'>
@@ -1230,7 +1286,6 @@ export type CurrencyCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many Currencies.
    */
   data: Prisma.CurrencyCreateManyInput | Prisma.CurrencyCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1249,7 +1304,6 @@ export type CurrencyCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many Currencies.
    */
   data: Prisma.CurrencyCreateManyInput | Prisma.CurrencyCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**

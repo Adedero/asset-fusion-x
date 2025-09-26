@@ -1382,7 +1382,6 @@ export type BusinessProfileCreateManyArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many BusinessProfiles.
    */
   data: Prisma.BusinessProfileCreateManyInput | Prisma.BusinessProfileCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1401,7 +1400,6 @@ export type BusinessProfileCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    * The data used to create many BusinessProfiles.
    */
   data: Prisma.BusinessProfileCreateManyInput | Prisma.BusinessProfileCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

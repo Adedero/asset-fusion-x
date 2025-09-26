@@ -107,14 +107,14 @@ const deleteItem = async (id: string) => {
       <div class="flex items-end justify-between gap-5 flex-wrap">
         <h1 class="text-3xl font-semibold">Financial Accounts</h1>
         <div>
-          <NuxtButtonGroup>
+          <NuxtFieldGroup>
             <NuxtButton
               icon="lucide:search"
               color="neutral"
               variant="outline"
             />
             <NuxtInput v-model="search" placeholder="Search..." />
-          </NuxtButtonGroup>
+          </NuxtFieldGroup>
         </div>
       </div>
 

@@ -81,7 +81,7 @@ const changeUserRole = async (id: string, role: string, close: () => void) => {
   await authClient.admin.setRole(
     {
       userId: id,
-      role: role as unknown as "admin" | "user",
+      role: role as unknown as "admin" | "user"
     },
     {
       onError(ctx) {
@@ -144,14 +144,14 @@ const deleteUser = async (id: string) => {
         <h1 class="text-3xl font-semibold">Users</h1>
 
         <div class="flex items-center gap-2">
-          <NuxtButtonGroup>
+          <NuxtFieldGroup>
             <NuxtButton
               icon="lucide:search"
               color="neutral"
               variant="outline"
             />
             <NuxtInput v-model="search" placeholder="Search..." />
-          </NuxtButtonGroup>
+          </NuxtFieldGroup>
 
           <NuxtButton
             label="New"
@@ -213,7 +213,7 @@ const deleteUser = async (id: string) => {
                   />
 
                   <template #in-place="{ close }">
-                    <NuxtButtonGroup>
+                    <NuxtFieldGroup>
                       <NuxtSelect
                         :default-value="user.role"
                         :items="['user', 'admin']"
@@ -230,7 +230,7 @@ const deleteUser = async (id: string) => {
                         size="sm"
                         @click="close"
                       />
-                    </NuxtButtonGroup>
+                    </NuxtFieldGroup>
                   </template>
                 </NuxtInPlace>
               </VTableCell>
