@@ -24,7 +24,7 @@ export const sendEmail = async (
 ): Promise<SendEmailReturnType> => {
   try {
     const info = await transporter.sendMail({
-      from: { name: "AssetFusionX", address: process.env.USER_EMAIL ?? "" },
+      from: { name: "AssetFusionX", address: process.env.EMAIL_USER ?? "" },
       ...mailOptions
     });
     return { data: info, error: null };
