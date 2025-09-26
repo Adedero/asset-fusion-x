@@ -26,9 +26,12 @@ logs
 # Database
 prisma/migrations
 libquery_engine-debian-openssl-1.0.x.so.node
+database/
 
 # File uploads
 public/uploads
 
 # Miscellaneous
 todo.txt
+
+.htaccess
