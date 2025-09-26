@@ -6,7 +6,6 @@ import {
   TransactionStatus,
   TransactionType
 } from "../generated/prisma/enums";
-import logger from "../lib/logger";
 import { prisma } from "../lib/prisma";
 import type { Investment } from "../generated/prisma/client";
 import { notificationEmitter } from "../events/notifications/emitter";
@@ -34,7 +33,6 @@ export default async function distributeProfit() {
     });
 
     if (!eligibleInvestments.length) {
-      logger.info("No eligible investments found");
       return;
     }
 
@@ -91,7 +89,7 @@ export default async function distributeProfit() {
           updates.status = InvestmentStatus.closed;
           updates.closedAt = now;
           updates.closedReason = "Completed investment cycle";
-          logger.info(`Investment ${investment.id} closed after final payout.`);
+          console.log(`Investment ${investment.id} closed after final payout.`);
 
           // emit investment closure
           notificationEmitter.emit("investment-status:update", {
@@ -145,20 +143,20 @@ export default async function distributeProfit() {
           })
         ]);
 
-        logger.info(
+        console.log(
           `Distributed ${payout.toFixed(2)} profit for investment ${
             investment.id
           }`
         );
       } catch (error) {
-        logger.error(
+        console.error(
           `Failed to process profit distribution for investment ${investment.id}:`,
           error
         );
       }
     }
   } catch (error) {
-    logger.error(
+    console.error(
       "Error during profit distribution setup or initial fetch.",
       error
     );

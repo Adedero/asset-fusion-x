@@ -1,0 +1,59 @@
+import { d as defineEventHandler, g as getRouterParams, r as readValidatedBody, c as createError, p as prisma } from '../../../../nitro/nitro.mjs';
+import { z } from 'zod';
+import 'node:path';
+import 'fs/promises';
+import 'axios';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:crypto';
+import 'cron';
+import 'decimal.js';
+import 'node:process';
+import 'node:url';
+import '@prisma/client/runtime/library';
+import 'nodemailer';
+import 'dotenv';
+import 'better-auth';
+import 'better-auth/adapters/prisma';
+import 'better-auth/plugins';
+import '@iconify/utils';
+import 'consola';
+import 'ipx';
+
+const _profileId__put = defineEventHandler(async (event) => {
+  const { profileId } = getRouterParams(event);
+  const schema = z.object({
+    status: z.enum(
+      ["pending", "verified", "rejected", "resubmit"],
+      "Invalid KYC status"
+    )
+  });
+  const { data, success, error } = await readValidatedBody(
+    event,
+    schema.safeParse
+  );
+  if (!success) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: error.issues[0].message
+    });
+  }
+  await prisma.profile.update({
+    where: {
+      id: profileId
+    },
+    data: {
+      kycStatus: data.status
+    }
+  });
+  return {
+    message: "KYC status updated"
+  };
+});
+
+export { _profileId__put as default };
+//# sourceMappingURL=_profileId_.put.mjs.map
