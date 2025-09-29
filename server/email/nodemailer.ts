@@ -3,13 +3,12 @@ import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import normalizeException from "~~/shared/helpers/normalize-exception";
 
 const nodemailerConfig: SMTPTransport.Options = {
-  host: process.env.EMAIL_HOST,
+  host: "assetfusionx.com",
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
+    user: "info@assetfusionx.com",
+    pass: "$assetfusionx$"
   },
-  service: process.env.EMAIL_SERVICE,
-  port: parseInt(process.env.EMAIL_PORT ?? "587")
+  port: parseInt("465")
 };
 
 export const transporter = nodemailer.createTransport(nodemailerConfig);

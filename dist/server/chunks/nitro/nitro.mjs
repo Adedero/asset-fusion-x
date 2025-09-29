@@ -4993,20 +4993,13 @@ function normalizeException(exception) {
   return new Error(message);
 }
 
-var _a;
-var _b_123 = process.env.EMAIL_HOST ? process.env.EMAIL_HOST : "assetfusionx.com";
-var _b_234 = process.env.EMAIL_USER ? process.env.EMAIL_USER : "info@assetfusionx.com";
-var _b_345 = process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD : "$assetfusionx$";
-
-
 const nodemailerConfig = {
-  host: _b_123,
+  host: "assetfusionx.com",
   auth: {
-    user: _b_234,
-    pass: _b_345
+    user: "info@assetfusionx.com",
+    pass: "$assetfusionx$"
   },
-  service: process.env.EMAIL_SERVICE,
-  port: parseInt((_a = process.env.EMAIL_PORT) != null ? _a : "465")
+  port: parseInt("465")
 };
 const transporter = nodemailer.createTransport(nodemailerConfig);
 const sendEmail = async (mailOptions) => {
