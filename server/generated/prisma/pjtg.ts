@@ -1,4 +1,4 @@
-import * as Prisma from "./internal/prismaNamespace";
+import * as Prisma from './internal/prismaNamespace';
 declare global {
   namespace PrismaJson {
     // This namespace will always be empty. Definitions should be done by
@@ -20,9 +20,7 @@ export type NullableListFilter<T> = {
 };
 
 /** A type to determine how to update a json field */
-export type UpdateInput<T> = T extends object
-  ? { [P in keyof T]?: UpdateInput<T[P]> }
-  : T;
+export type UpdateInput<T> = T extends object ? { [P in keyof T]?: UpdateInput<T[P]> } : T;
 
 /** A type to determine how to update a json[] field */
 export type UpdateManyInput<T> = T | T[] | { set?: T[]; push?: T | T[] };

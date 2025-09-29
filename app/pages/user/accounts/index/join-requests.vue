@@ -52,7 +52,7 @@ async function rejectRequest(item: JoinRequest, close: () => void) {
     <div v-if="data">
       <div
         v-if="joinRequests.length > 0"
-        class="grid gap-4 md:grid-cols-[repeat(auto-fill,minmax(24rem,1fr))]"
+        class="grid gap-4 md:grid-cols-[repeat(auto-fill,minmax(28rem,1fr))]"
       >
         <NuxtCard v-for="item in joinRequests" :key="item.id">
           <template #header>

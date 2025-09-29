@@ -13,11 +13,11 @@ definePageMeta({
 
 const items: NavbarItem[] = [
   {
-    label: "Accounts",
+    label: "My Accounts",
     to: "/user/accounts"
   },
   {
-    label: "Requests",
+    label: "Joint Account Requests",
     to: "/user/accounts/join-requests"
   }
 ];

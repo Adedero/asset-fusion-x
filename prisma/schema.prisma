@@ -498,6 +498,8 @@ model Currency {
   wireTransferDepositBankName          String?
   wireTransferDepositBankAccountNumber String?
   allowWithdrawal              Boolean   @default(false)
+  allowDeposit                 Boolean   @default(true)
+  automaticallyUpdateRate      Boolean   @default(true)
   withdrawalCharge             Float     @default(0)
   createdAt                    DateTime  @default(now())
   updatedAt                    DateTime  @updatedAt

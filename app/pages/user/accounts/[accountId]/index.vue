@@ -173,8 +173,8 @@ const { data, error } = await useFetch(
               <div class="border-2 border-muted rounded-md px-2 py-1 w-fit">
                 <p class="card-title text-base!">{{ data.name }}</p>
               </div>
-              <p class="font-geist-mono text-xl font-medium">
-                {{ data.number }}
+              <p class="font-geist-mono text-lg font-medium">
+                Account Number: {{ data.number }}
               </p>
               <p class="text-sm text-muted">
                 Opened on

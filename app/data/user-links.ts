@@ -1,9 +1,11 @@
 import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
 
 export const links = ({
-  signOut
+  signOut,
+  close
 }: {
   signOut: () => void;
+  close: () => void;
 }): NavigationMenuItem[][] => [
   [
     {
@@ -13,7 +15,8 @@ export const links = ({
     {
       label: "Dashboard",
       icon: "i-lucide-house",
-      to: "/user"
+      to: "/user",
+      onSelect: () => close()
     }
   ],
   [
@@ -24,12 +27,14 @@ export const links = ({
     {
       label: "Accounts",
       icon: "i-lucide-book-user",
-      to: "/user/accounts"
+      to: "/user/accounts",
+      onSelect: () => close()
     },
     {
       label: "Investment Plans",
       icon: "i-lucide-circle-dollar-sign",
-      to: "/user/investment-plans"
+      to: "/user/investment-plans",
+      onSelect: () => close()
     }
     /* {
       label: "Investment Advisor",
@@ -44,17 +49,20 @@ export const links = ({
     {
       label: "Forgot Password",
       icon: "i-lucide-lock-open",
-      to: "/forgot-password"
+      to: "/forgot-password",
+      onSelect: () => close()
     },
     {
       label: "Change Password",
       icon: "i-lucide-lock",
-      to: "/user/change-password"
+      to: "/user/change-password",
+      onSelect: () => close()
     },
     {
       label: "Change Email",
       icon: "i-lucide-mail-warning",
-      to: "/user/change-email"
+      to: "/user/change-email",
+      onSelect: () => close()
     }
   ],
   [
@@ -65,12 +73,14 @@ export const links = ({
     {
       label: "Profile",
       icon: "i-lucide-circle-user-round",
-      to: "/user/profile"
+      to: "/user/profile",
+      onSelect: () => close()
     },
     {
       label: "Notifications",
       icon: "i-lucide-bell",
-      to: "/user/notifications"
+      to: "/user/notifications",
+      onSelect: () => close()
     }
     /*   {
       label: "Settings",

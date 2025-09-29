@@ -27,11 +27,11 @@ const { data, error, pending, refresh } = await useFetch(
 
 const open = ref<boolean>(false);
 
-function links() {
+function links(close: () => void) {
   if (authStore.user.value?.role === "admin") {
-    return adminLinks({ signOut: () => (open.value = true) });
+    return adminLinks({ signOut: () => (open.value = true), close });
   }
-  return userLinks({ signOut: () => (open.value = true) });
+  return userLinks({ signOut: () => (open.value = true), close });
 }
 
 const signOutError = ref<Error | null>(null);
@@ -69,9 +69,9 @@ const signOut = async () => {
         </div>
       </template>
 
-      <template #content>
+      <template #content="{ close }">
         <div>
-          <NuxtNavigationMenu orientation="vertical" :items="links()" />
+          <NuxtNavigationMenu orientation="vertical" :items="links(close)" />
         </div>
       </template>
 

@@ -149,8 +149,9 @@ const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
     pausedReason: null,
     terminatedAt: null,
     terminatedReason: null,
-    createdAt: new Date(),
-    updatedAt: new Date()
+    lastProfitDistributedAt: null,
+    createdAt:new Date(),
+    updatedAt:new Date()
   };
 
   try {

@@ -18,6 +18,8 @@ export const currencySchema = z.object({
     .string("Invalid wire deposit bank account number")
     .nullish(),
   allowWithdrawal: z.boolean("Invalid allow withdrawal value").default(false),
+  allowDeposit: z.boolean("Invalid allow deposit value").default(true),
+  automaticallyUpdateRate: z.boolean("Invalid automatically update rate value").default(true),
   withdrawalCharge: z.coerce
     .number("Invalid withdrawal charge")
     .min(0, "Withdrawal charge must be a positive number")

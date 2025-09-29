@@ -58,7 +58,16 @@ watch(query, (newValue) => executeImmediate(newValue));
 const allLoaded = computed(
   () => (state.value?.users.length ?? 0) < limit.value
 );
-const headers = ["#", "Name", "Role", "Email", "Banned", "Created", "Actions"];
+const headers = [
+  "#",
+  "Name",
+  "Role",
+  "Email",
+  "Email Verified",
+  "Banned",
+  "Created",
+  "Actions"
+];
 
 const selectedUser = ref<User | null>(null);
 const selectUser = (user: string | User | null) => {
@@ -97,6 +106,47 @@ const changeUserRole = async (id: string, role: string, close: () => void) => {
           title: "Success",
           description: "Role changed successfully"
         });
+        executeImmediate(query.value);
+        close();
+      }
+    }
+  );
+};
+
+const changeEmailVerified = async (
+  id: string,
+  verified: boolean,
+  close: () => void
+) => {
+  const confirm = await confirmAsync({
+    title: "Change Email Verification Status",
+    description:
+      "Are you sure you want to change this user's email verification status?"
+  });
+  if (!confirm) {
+    close();
+    return;
+  }
+  await authClient.admin.updateUser(
+    {
+      userId: id,
+      data: { emailVerified: verified }
+    },
+    {
+      onError(ctx) {
+        toast.add({
+          color: "error",
+          title: "Error",
+          description: ctx.error.message
+        });
+      },
+      onSuccess() {
+        toast.add({
+          color: "success",
+          title: "Success",
+          description: "Email verification status changed successfully"
+        });
+        close();
         executeImmediate(query.value);
       }
     }
@@ -235,6 +285,36 @@ const deleteUser = async (id: string) => {
                 </NuxtInPlace>
               </VTableCell>
               <VTableCell>{{ user.email }}</VTableCell>
+              <VTableCell>
+                <NuxtInPlace>
+                  <NuxtBadge
+                    :label="user.emailVerified.toString()"
+                    :color="user.emailVerified ? 'success' : 'error'"
+                    variant="subtle"
+                  />
+
+                  <template #in-place="{ close }">
+                    <NuxtFieldGroup>
+                      <NuxtSelect
+                        :default-value="user.emailVerified"
+                        :items="[true, false]"
+                        size="sm"
+                        class="w-20"
+                        @update:model-value="
+                          changeEmailVerified(user.id, $event, close)
+                        "
+                      />
+                      <NuxtButton
+                        icon="lucide:x"
+                        color="neutral"
+                        variant="subtle"
+                        size="sm"
+                        @click="close"
+                      />
+                    </NuxtFieldGroup>
+                  </template>
+                </NuxtInPlace>
+              </VTableCell>
               <VTableCell>
                 <NuxtBadge
                   :label="user.banned ? 'Yes' : 'No'"

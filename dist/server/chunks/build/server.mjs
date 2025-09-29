@@ -1,4 +1,4 @@
-import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { defineComponent, mergeModels, useModel, computed, unref, mergeProps, withCtx, renderSlot, createVNode, createBlock, createCommentVNode, openBlock, createTextVNode, toDisplayString, toRef, isRef, hasInjectionContext, inject, shallowRef, getCurrentInstance, provide, cloneVNode, h, createElementBlock, resolveComponent, useSlots, ref, resolveDynamicComponent, toHandlers, watch, Suspense, toValue, onServerPrefetch, shallowReactive, Fragment, nextTick, defineAsyncComponent, useSSRContext, createApp, renderList, useId, onErrorCaptured, reactive, effectScope, isReadonly, isShallow, isReactive, toRaw, withModifiers, getCurrentScope, markRaw } from 'vue';
+import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { defineComponent, mergeModels, useModel, computed, unref, mergeProps, withCtx, renderSlot, createVNode, createBlock, createCommentVNode, openBlock, createTextVNode, toDisplayString, hasInjectionContext, inject, shallowRef, getCurrentInstance, provide, cloneVNode, h, createElementBlock, resolveComponent, useSlots, ref, resolveDynamicComponent, toRef, toHandlers, watch, Suspense, toValue, isRef, onServerPrefetch, shallowReactive, Fragment, nextTick, defineAsyncComponent, useSSRContext, createApp, renderList, useId, onErrorCaptured, reactive, effectScope, isReadonly, isShallow, isReactive, toRaw, withModifiers, getCurrentScope, markRaw } from 'vue';
 import { N as serialize, O as defu, P as isEqual, c as createError$1, Q as parseQuery, R as klona, S as defuFn, I as hasProtocol, T as isScriptProtocol, K as joinURL, U as withQuery, V as sanitizeStatusCode, W as withTrailingSlash, X as withoutTrailingSlash, Y as getContext, $ as $fetch$1, Z as baseURL, _ as createHooks, a0 as executeAsync, a1 as toRouteMatcher, a2 as createRouter$1 } from '../nitro/nitro.mjs';
 import { RouterView, useRoute as useRoute$1, createMemoryHistory, createRouter, START_LOCATION } from 'vue-router';
 import { createAuthClient } from 'better-auth/vue';
@@ -878,25 +878,25 @@ const _routes = [
     name: "index",
     path: "/",
     meta: __nuxt_page_meta$Z || {},
-    component: () => import('./index-BjDMCheo.mjs')
+    component: () => import('./index-C9iMiYGw.mjs')
   },
   {
     name: "user",
     path: "/user",
     meta: __nuxt_page_meta$Y || {},
-    component: () => import('./index-BLr8QrpX.mjs')
+    component: () => import('./index-CF6Nb_A9.mjs')
   },
   {
     name: "admin",
     path: "/admin",
     meta: __nuxt_page_meta$X || {},
-    component: () => import('./index-DK4YnAP5.mjs')
+    component: () => import('./index-DoAk858A.mjs')
   },
   {
     name: "admin-users",
     path: "/admin/users",
     meta: __nuxt_page_meta$W || {},
-    component: () => import('./users-CFo3sJYx.mjs')
+    component: () => import('./users-BjW2mWQb.mjs')
   },
   {
     name: "contact",
@@ -907,31 +907,31 @@ const _routes = [
     name: "admin-kyc-data",
     path: "/admin/kyc-data",
     meta: __nuxt_page_meta$V || {},
-    component: () => import('./kyc-data-CQwH_Zah.mjs')
+    component: () => import('./kyc-data-Ba32ssaX.mjs')
   },
   {
     name: "admin-settings",
     path: "/admin/settings",
     meta: __nuxt_page_meta$U || {},
-    component: () => import('./settings-OqMAe-fc.mjs')
+    component: () => import('./settings-DGS7C6kk.mjs')
   },
   {
     name: "admin-currencies",
     path: "/admin/currencies",
     meta: __nuxt_page_meta$T || {},
-    component: () => import('./currencies-D_r7MNqp.mjs')
+    component: () => import('./currencies-D6qu0Qy-.mjs')
   },
   {
     name: "about-story",
     path: "/about/story",
     meta: __nuxt_page_meta$S || {},
-    component: () => import('./story-CMRJngs-.mjs')
+    component: () => import('./story-2NdD63Ig.mjs')
   },
   {
     name: "admin-transactions",
     path: "/admin/transactions",
     meta: __nuxt_page_meta$R || {},
-    component: () => import('./transactions-f4Q_rWB-.mjs')
+    component: () => import('./transactions-DjXX4dpW.mjs')
   },
   {
     name: "user-contact",
@@ -942,19 +942,19 @@ const _routes = [
   {
     name: __nuxt_page_meta$N?.name,
     path: "/user/profile",
-    component: () => import('./index-D0YqsVtW.mjs'),
+    component: () => import('./index-CaBmRnBK.mjs'),
     children: [
       {
         name: "user-profile-index-kyc",
         path: "kyc",
         meta: __nuxt_page_meta$P || {},
-        component: () => import('./kyc-SVMwma6g.mjs')
+        component: () => import('./kyc-BXp691nh.mjs')
       },
       {
         name: "",
         path: "",
         meta: __nuxt_page_meta$O || {},
-        component: () => import('./index-DIdfEjdI.mjs')
+        component: () => import('./index-C4eFH6XT.mjs')
       }
     ]
   },
@@ -962,17 +962,17 @@ const _routes = [
     name: __nuxt_page_meta$M?.name,
     path: "/user/accounts",
     meta: __nuxt_page_meta$M || {},
-    component: () => import('./index-D3C1O7BK.mjs'),
+    component: () => import('./index-DTPdCAVQ.mjs'),
     children: [
       {
         name: "user-accounts-index",
         path: "",
-        component: () => import('./index-cLL53TqA.mjs')
+        component: () => import('./index-ChkDWCHt.mjs')
       },
       {
         name: "user-accounts-index-join-requests",
         path: "join-requests",
-        component: () => import('./join-requests-CGWCMrXC.mjs')
+        component: () => import('./join-requests-Cwo8kcnD.mjs')
       }
     ]
   },
@@ -980,31 +980,31 @@ const _routes = [
     name: "sign-in",
     path: "/sign-in",
     meta: __nuxt_page_meta$L || {},
-    component: () => import('./index-BVxT1ium.mjs')
+    component: () => import('./index-BcInRXPz.mjs')
   },
   {
     name: "sign-up",
     path: "/sign-up",
     meta: __nuxt_page_meta$K || {},
-    component: () => import('./index-wr0kvaN8.mjs')
+    component: () => import('./index-B4XJyvlN.mjs')
   },
   {
     name: "about-careers",
     path: "/about/careers",
     meta: __nuxt_page_meta$J || {},
-    component: () => import('./careers-84GWhtCG.mjs')
+    component: () => import('./careers-B3-Q51oL.mjs')
   },
   {
     name: "about-mission",
     path: "/about/mission",
     meta: __nuxt_page_meta$I || {},
-    component: () => import('./mission-pmUoh7O7.mjs')
+    component: () => import('./mission-yGejWd57.mjs')
   },
   {
     name: "impact-reviews",
     path: "/impact/reviews",
     meta: __nuxt_page_meta$H || {},
-    component: () => import('./reviews-DcHpwH7E.mjs')
+    component: () => import('./reviews-tIr-jlf7.mjs')
   },
   {
     name: "user-accounts-nav-list",
@@ -1015,43 +1015,43 @@ const _routes = [
     name: "admin-investment-plans",
     path: "/admin/investment-plans",
     meta: __nuxt_page_meta$G || {},
-    component: () => import('./investment-plans-BXeN8nfV.mjs')
+    component: () => import('./investment-plans-vnR6FNqB.mjs')
   },
   {
     name: "admin-business-profiles",
     path: "/admin/business-profiles",
     meta: __nuxt_page_meta$F || {},
-    component: () => import('./business-profiles-DdNLjtxT.mjs')
+    component: () => import('./business-profiles-ClfpeSmV.mjs')
   },
   {
     name: "user-change-email",
     path: "/user/change-email",
     meta: __nuxt_page_meta$E || {},
-    component: () => import('./index-Czkh_Qgm.mjs')
+    component: () => import('./index-BFkkRSav.mjs')
   },
   {
     name: "investments-bonds",
     path: "/investments/bonds",
     meta: __nuxt_page_meta$D || {},
-    component: () => import('./bonds-BYEYjJ4w.mjs')
+    component: () => import('./bonds-B39s1IOg.mjs')
   },
   {
     name: "investments-forex",
     path: "/investments/forex",
     meta: __nuxt_page_meta$C || {},
-    component: () => import('./forex-buQsiEQa.mjs')
+    component: () => import('./forex-CHhGXDX3.mjs')
   },
   {
     name: "investments-reits",
     path: "/investments/reits",
     meta: __nuxt_page_meta$B || {},
-    component: () => import('./reits-BZQHSM3_.mjs')
+    component: () => import('./reits-DYWQciiK.mjs')
   },
   {
     name: "admin-financial-accounts",
     path: "/admin/financial-accounts",
     meta: __nuxt_page_meta$A || {},
-    component: () => import('./financial-accounts--YqMM97X.mjs')
+    component: () => import('./financial-accounts-B_h9-GYy.mjs')
   },
   {
     name: "user-accounts-open",
@@ -1063,19 +1063,19 @@ const _routes = [
     name: "user-notifications",
     path: "/user/notifications",
     meta: __nuxt_page_meta$y || {},
-    component: () => import('./index-DOPrnoN8.mjs')
+    component: () => import('./index-CmIpd7l0.mjs')
   },
   {
     name: "about-partnerships",
     path: "/about/partnerships",
     meta: __nuxt_page_meta$x || {},
-    component: () => import('./partnerships-KQyBLFRn.mjs')
+    component: () => import('./partnerships-DaJNHQBP.mjs')
   },
   {
     name: "investments-stocks",
     path: "/investments/stocks",
     meta: __nuxt_page_meta$w || {},
-    component: () => import('./stocks-DjXeariM.mjs')
+    component: () => import('./stocks-D99m4j1u.mjs')
   },
   {
     name: "legal-terms-of-use",
@@ -1087,28 +1087,28 @@ const _routes = [
     name: __nuxt_page_meta$l?.name,
     path: "/user/accounts/:accountId()",
     meta: __nuxt_page_meta$l || {},
-    component: () => import('./_accountId_-DFs1Rhtp.mjs'),
+    component: () => import('./_accountId_-BoHTN9Z_.mjs'),
     children: [
       {
         name: "user-accounts-accountId",
         path: "",
-        component: () => import('./index-C7Ddi2Pf.mjs')
+        component: () => import('./index-Dw87va4Z.mjs')
       },
       {
         name: "user-accounts-accountId-deposit",
         path: "deposit",
         meta: __nuxt_page_meta$u || {},
-        component: () => import('./deposit-5RkZvTrg.mjs')
+        component: () => import('./deposit-DTTF8oGG.mjs')
       },
       {
         name: "user-accounts-accountId-requests",
         path: "requests",
-        component: () => import('./requests-CUV1uXHh.mjs')
+        component: () => import('./requests-BrZ5_5G1.mjs')
       },
       {
         name: "user-accounts-accountId-settings",
         path: "settings",
-        component: () => import('./settings-C2oxjWqP.mjs')
+        component: () => import('./settings-Bw5XQDV4.mjs')
       },
       {
         name: "user-accounts-accountId-transfer",
@@ -1120,7 +1120,7 @@ const _routes = [
         name: "user-accounts-accountId-withdraw",
         path: "withdraw",
         meta: __nuxt_page_meta$s || {},
-        component: () => import('./withdraw-IHMcQFw4.mjs')
+        component: () => import('./withdraw-D0xw2MmU.mjs')
       },
       {
         name: "user-accounts-accountId-documents",
@@ -1132,41 +1132,41 @@ const _routes = [
         name: "user-accounts-accountId-account-users",
         path: "account-users",
         meta: __nuxt_page_meta$q || {},
-        component: () => import('./account-users-OWL-OMI5.mjs')
+        component: () => import('./account-users-CMkJtM5v.mjs')
       },
       {
         name: "user-accounts-accountId-notifications",
         path: "notifications",
         meta: __nuxt_page_meta$p || {},
-        component: () => import('./notifications-CghfnBC3.mjs')
+        component: () => import('./notifications-CPdtfiAe.mjs')
       },
       {
         name: "user-accounts-accountId-business-profile",
         path: "business-profile",
-        component: () => import('./business-profile-j0FSRRPJ.mjs')
+        component: () => import('./business-profile-OaSkcOqY.mjs')
       },
       {
         name: "user-accounts-accountId-investments",
         path: "investments",
         meta: __nuxt_page_meta$o || {},
-        component: () => import('./index-C4dUSjcD.mjs')
+        component: () => import('./index-YZZ7XpeW.mjs')
       },
       {
         name: "user-accounts-accountId-transactions",
         path: "transactions",
         meta: __nuxt_page_meta$n || {},
-        component: () => import('./index-1GAeL_gc.mjs')
+        component: () => import('./index-ocKMhtEp.mjs')
       },
       {
         name: "user-accounts-accountId-investments-investmentId",
         path: "investments/:investmentId()",
         meta: __nuxt_page_meta$m || {},
-        component: () => import('./_investmentId_-CSPylXuZ.mjs')
+        component: () => import('./_investmentId_-HPugz1ei.mjs')
       },
       {
         name: "user-accounts-accountId-transactions-transactionId",
         path: "transactions/:transactionId()",
-        component: () => createClientPage(() => import('./_transactionId_.client-CqMmnL5S.mjs'))
+        component: () => createClientPage(() => import('./_transactionId_.client-BANF66W8.mjs'))
       }
     ]
   },
@@ -1174,29 +1174,29 @@ const _routes = [
     name: "impact-track-record",
     path: "/impact/track-record",
     meta: __nuxt_page_meta$k || {},
-    component: () => import('./track-record-mrwuvZTj.mjs')
+    component: () => import('./track-record-D8vkS9pT.mjs')
   },
   {
     name: "user-change-password",
     path: "/user/change-password",
     meta: __nuxt_page_meta$j || {},
-    component: () => import('./index-BXwQ6WqK.mjs')
+    component: () => import('./index-CFCYHsXG.mjs')
   },
   {
     name: "reset-password",
     path: "/reset-password",
     meta: __nuxt_page_meta$i || {},
-    component: () => import('./index-k5l5Yy4p.mjs')
+    component: () => import('./index-BpITTGFM.mjs')
   },
   {
     name: "sign-in-sign-in-form",
     path: "/sign-in/sign-in-form",
-    component: () => import('./sign-in-form-DPFM9R0P.mjs')
+    component: () => import('./sign-in-form-DlCAHAt2.mjs')
   },
   {
     name: "sign-up-sign-up-form",
     path: "/sign-up/sign-up-form",
-    component: () => import('./sign-up-form--P7ik7qR.mjs')
+    component: () => import('./sign-up-form-geT-cfET.mjs')
   },
   {
     name: "legal-privacy-policy",
@@ -1208,25 +1208,25 @@ const _routes = [
     name: "resources-strategies",
     path: "/resources/strategies",
     meta: __nuxt_page_meta$g || {},
-    component: () => import('./strategies-CM4a2rCs.mjs')
+    component: () => import('./strategies-CJpIsLKg.mjs')
   },
   {
     name: "user-investment-plans",
     path: "/user/investment-plans",
     meta: __nuxt_page_meta$f || {},
-    component: () => import('./index-CG0F6rT9.mjs')
+    component: () => import('./index-vfZqv1wt.mjs')
   },
   {
     name: "forgot-password",
     path: "/forgot-password",
     meta: __nuxt_page_meta$e || {},
-    component: () => import('./index-rFD2PQqb.mjs')
+    component: () => import('./index-BylNEuYn.mjs')
   },
   {
     name: "impact-sustainability",
     path: "/impact/sustainability",
     meta: __nuxt_page_meta$d || {},
-    component: () => import('./sustainability-DouFYb_m.mjs')
+    component: () => import('./sustainability-DmJD0cS8.mjs')
   },
   {
     name: "token-validation",
@@ -1238,19 +1238,19 @@ const _routes = [
     name: "resources-walkthroughs",
     path: "/resources/walkthroughs",
     meta: __nuxt_page_meta$b || {},
-    component: () => import('./walkthroughs-CVP83xO9.mjs')
+    component: () => import('./walkthroughs-nhhD3RaW.mjs')
   },
   {
     name: "investments-commodities",
     path: "/investments/commodities",
     meta: __nuxt_page_meta$a || {},
-    component: () => import('./commodities-IBujZZWi.mjs')
+    component: () => import('./commodities-CKGDLjrF.mjs')
   },
   {
     name: "investments-derivatives",
     path: "/investments/derivatives",
     meta: __nuxt_page_meta$9 || {},
-    component: () => import('./derivatives-CYJASKkP.mjs')
+    component: () => import('./derivatives-EDQc2pJ5.mjs')
   },
   {
     name: "user-change-email-verification",
@@ -1268,41 +1268,41 @@ const _routes = [
     name: "resources-market-insights",
     path: "/resources/market-insights",
     meta: __nuxt_page_meta$6 || {},
-    component: () => import('./market-insights-B2qCD051.mjs')
+    component: () => import('./market-insights-BFM6c0kK.mjs')
   },
   {
     name: "resources-risk-disclosure",
     path: "/resources/risk-disclosure",
     meta: __nuxt_page_meta$5 || {},
-    component: () => import('./risk-disclosure-C0xnS5B4.mjs')
+    component: () => import('./risk-disclosure-DojXSW23.mjs')
   },
   {
     name: "impact-social-responsibility",
     path: "/impact/social-responsibility",
     meta: __nuxt_page_meta$4 || {},
-    component: () => import('./social-responsibility-mOzShsfE.mjs')
+    component: () => import('./social-responsibility-CZacjEW4.mjs')
   },
   {
     name: "investments-cryptocurrencies",
     path: "/investments/cryptocurrencies",
     meta: __nuxt_page_meta$3 || {},
-    component: () => import('./cryptocurrencies-Dv3LdZHy.mjs')
+    component: () => import('./cryptocurrencies-C6LpDdzn.mjs')
   },
   {
     name: "resources-investor-education",
     path: "/resources/investor-education",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./investor-education-2HpPNlUp.mjs')
+    component: () => import('./investor-education-C8oHK3M1.mjs')
   },
   {
     name: "user-profile-components-name-changer",
     path: "/user/profile/components/name-changer",
-    component: () => import('./name-changer-CmJbGncY.mjs')
+    component: () => import('./name-changer-DYScsXv3.mjs')
   },
   {
     name: "user-profile-components-image-changer",
     path: "/user/profile/components/image-changer",
-    component: () => import('./image-changer-BCd1kRAG.mjs')
+    component: () => import('./image-changer-B5CO4O6j.mjs')
   },
   {
     name: "user-accounts-open-accountType",
@@ -1313,18 +1313,18 @@ const _routes = [
   {
     name: "user-profile-components-profile-editor",
     path: "/user/profile/components/profile-editor",
-    component: () => import('./profile-editor-QdGIH55I.mjs')
+    component: () => import('./profile-editor-DyAbG0CJ.mjs')
   },
   {
     name: "reset-password-reset-password-form",
     path: "/reset-password/reset-password-form",
-    component: () => import('./reset-password-form-CHF33NcN.mjs')
+    component: () => import('./reset-password-form-DBxEOhH4.mjs')
   },
   {
     name: "user-accounts-open-accountType-accountOwnership",
     path: "/user/accounts/open/:accountType()/:accountOwnership()",
     meta: __nuxt_page_meta || {},
-    component: () => import('./index-BYb_RUxr.mjs')
+    component: () => import('./index-CnVg2lXQ.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -6755,9 +6755,9 @@ _sfc_main$3.setup = (props, ctx) => {
 };
 const __nuxt_component_2 = Object.assign(_sfc_main$3, { __name: "NuxtConfirmDialog" });
 const layouts = {
-  auth: defineAsyncComponent(() => import('./auth-Bl5dwdHB.mjs').then((m) => m.default || m)),
-  main: defineAsyncComponent(() => import('./main-C9dnr0_O.mjs').then((m) => m.default || m)),
-  user: defineAsyncComponent(() => import('./user-DglGRi7K.mjs').then((m) => m.default || m))
+  auth: defineAsyncComponent(() => import('./auth-B5GXobQQ.mjs').then((m) => m.default || m)),
+  main: defineAsyncComponent(() => import('./main-MJ1PXA9j.mjs').then((m) => m.default || m)),
+  user: defineAsyncComponent(() => import('./user-C1i3uOA8.mjs').then((m) => m.default || m))
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",
@@ -7144,5 +7144,5 @@ let entry;
 }
 const entry$1 = (ssrContext) => entry(ssrContext);
 
-export { _sfc_main$e as A, getDisplayValue as B, useState as C, formBusInjectionKey as D, formStateInjectionKey as E, formErrorsInjectionKey as F, formInputsInjectionKey as G, formLoadingInjectionKey as H, formOptionsInjectionKey as I, inputIdInjectionKey as J, formFieldInjectionKey as K, omit as L, _sfc_main$b as M, pickLinkProps as N, _sfc_main$c as O, compare as P, avatarGroupInjectionKey as Q, useRoute as R, createError as S, useRouter as T, __nuxt_component_1$1 as U, __nuxt_component_0 as _, __nuxt_component_4 as a, useRuntimeConfig as b, _sfc_main$a as c, _sfc_main$f as d, entry$1 as default, useLocale as e, useAppConfig as f, useToast as g, _sfc_main$4 as h, authClient as i, useConfirm as j, _sfc_main$d as k, useFormField as l, __nuxt_component_12 as m, navigateTo as n, useFieldGroup as o, useComponentIcons as p, useNuxtApp as q, fetchDefaults as r, useAsyncData as s, tv as t, useHead as u, fieldGroupInjectionKey as v, looseToNumber as w, usePortal as x, isArrayOfArray as y, get as z };
+export { get as A, _sfc_main$e as B, getDisplayValue as C, formBusInjectionKey as D, formStateInjectionKey as E, formErrorsInjectionKey as F, formInputsInjectionKey as G, formLoadingInjectionKey as H, formOptionsInjectionKey as I, inputIdInjectionKey as J, formFieldInjectionKey as K, omit as L, _sfc_main$b as M, pickLinkProps as N, _sfc_main$c as O, compare as P, avatarGroupInjectionKey as Q, useRoute as R, createError as S, useRouter as T, __nuxt_component_1$1 as U, __nuxt_component_0 as _, __nuxt_component_4 as a, useRuntimeConfig as b, _sfc_main$a as c, _sfc_main$f as d, entry$1 as default, useLocale as e, useAppConfig as f, useToast as g, _sfc_main$4 as h, authClient as i, useConfirm as j, _sfc_main$d as k, useFormField as l, __nuxt_component_12 as m, navigateTo as n, useFieldGroup as o, useComponentIcons as p, useState as q, useNuxtApp as r, fetchDefaults as s, tv as t, useHead as u, useAsyncData as v, fieldGroupInjectionKey as w, looseToNumber as x, usePortal as y, isArrayOfArray as z };
 //# sourceMappingURL=server.mjs.map

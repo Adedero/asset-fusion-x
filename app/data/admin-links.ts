@@ -1,9 +1,11 @@
 import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
 
 export const links = ({
-  signOut
+  signOut,
+  close
 }: {
   signOut: () => void;
+  close: () => void;
 }): NavigationMenuItem[][] => [
   [
     {
@@ -13,7 +15,8 @@ export const links = ({
     {
       label: "Dashboard",
       icon: "i-lucide-house",
-      to: "/admin"
+      to: "/admin",
+      onSelect: () => close()
     }
   ],
   [
@@ -24,12 +27,14 @@ export const links = ({
     {
       label: "Accounts",
       icon: "i-lucide-book-user",
-      to: "/user/accounts"
+      to: "/user/accounts",
+      onSelect: () => close()
     },
     {
       label: "Investment Plans",
       icon: "i-lucide-circle-dollar-sign",
-      to: "/user/investment-plans"
+      to: "/user/investment-plans",
+      onSelect: () => close()
     }
   ],
   [
@@ -40,42 +45,50 @@ export const links = ({
     {
       label: "Users",
       icon: "lucide:users",
-      to: "/admin/users"
+      to: "/admin/users",
+      onSelect: () => close()
     },
     {
       label: "Transactions",
       icon: "lucide:arrow-left-right",
-      to: "/admin/transactions"
+      to: "/admin/transactions",
+      onSelect: () => close()
     },
     {
       label: "Manage Accounts",
       icon: "lucide:square-user",
-      to: "/admin/financial-accounts"
+      to: "/admin/financial-accounts",
+      onSelect: () => close()
     },
     {
       label: "KYC Requests",
       icon: "lucide:user-check",
-      to: "/admin/kyc-data"
+      to: "/admin/kyc-data",
+      onSelect: () => close()
     },
     {
       label: "Business Profiles",
       icon: "lucide:building-2",
-      to: "/admin/business-profiles"
+      to: "/admin/business-profiles",
+      onSelect: () => close()
     },
     {
       label: "Currencies",
       icon: "lucide:coins",
-      to: "/admin/currencies"
+      to: "/admin/currencies",
+      onSelect: () => close()
     },
     {
       label: "Manage Investment Plans",
       icon: "lucide:chart-no-axes-combined",
-      to: "/admin/investment-plans"
+      to: "/admin/investment-plans",
+      onSelect: () => close()
     },
     {
       label: "Site Settings",
       icon: "lucide:settings",
-      to: "/admin/settings"
+      to: "/admin/settings",
+      onSelect: () => close()
     }
   ],
   [
@@ -86,12 +99,14 @@ export const links = ({
     {
       label: "Forgot Password",
       icon: "i-lucide-lock-open",
-      to: "/forgot-password"
+      to: "/forgot-password",
+      onSelect: () => close()
     },
     {
       label: "Change Password",
       icon: "i-lucide-lock",
-      to: "/user/change-password"
+      to: "/user/change-password",
+      onSelect: () => close()
     },
     {
       label: "Change Email",
@@ -107,12 +122,14 @@ export const links = ({
     {
       label: "Profile",
       icon: "i-lucide-circle-user-round",
-      to: "/user/profile"
+      to: "/user/profile",
+      onSelect: () => close()
     },
     {
       label: "Notifications",
       icon: "i-lucide-bell",
-      to: "/user/notifications"
+      to: "/user/notifications",
+      onSelect: () => close()
     }
     /*   {
       label: "Settings",

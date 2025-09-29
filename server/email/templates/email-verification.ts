@@ -20,12 +20,11 @@ export default function emailVerificationTemplate({
   <section>
     ${Button({ label: "Verify email", href: url, centered: true })}
   </section>
-
-  <section>
-    If clicking the button above doesn't work you can click this link or copy and paste it in your browser: ${url}
-  </section>
 </section>
 `;
 
   return Layout(body, { subject });
 }
+/* <section>
+    If clicking the button above doesn't work you can click this link or copy and paste it in your browser: ${url}
+  </section> */

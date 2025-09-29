@@ -6,9 +6,11 @@ import type { Serialize } from "~~/types";
 
 interface Props {
   onlyWithdrawalCurrencies?: boolean;
+  onlyDepositCurrencies?: boolean;
 }
 
-const { onlyWithdrawalCurrencies = false } = defineProps<Props>();
+const { onlyDepositCurrencies = false, onlyWithdrawalCurrencies = false } =
+  defineProps<Props>();
 
 const { pending, data, error, refresh } = await useFetch("/api/currencies", {
   key: "currencies"
@@ -19,12 +21,21 @@ const err = computed(() =>
 );
 
 const items = computed<RadioGroupItem[]>(() => {
-  const filter = onlyWithdrawalCurrencies
-    ? data.value?.filter((currency) => currency.allowWithdrawal === true)
-    : data.value;
+  let filtered = data.value ?? [];
 
-  const formatted = filter
-    ? filter.map((currency) => ({
+  if (onlyDepositCurrencies && !onlyWithdrawalCurrencies) {
+    filtered = filtered.filter((currency) => currency.allowDeposit === true);
+  } else if (!onlyDepositCurrencies && onlyWithdrawalCurrencies) {
+    filtered = filtered.filter((currency) => currency.allowWithdrawal === true);
+  } else if (onlyDepositCurrencies && onlyWithdrawalCurrencies) {
+    filtered = filtered.filter(
+      (currency) =>
+        currency.allowDeposit === true && currency.allowWithdrawal === true
+    );
+  }
+
+  const formatted = filtered
+    ? filtered.map((currency) => ({
         label: currency.symbol,
         value: currency.symbol,
         description: currency.name

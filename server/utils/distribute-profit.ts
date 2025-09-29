@@ -9,6 +9,7 @@ import {
 import { prisma } from "../lib/prisma";
 import type { Investment } from "../generated/prisma/client";
 import { notificationEmitter } from "../events/notifications/emitter";
+import type { PrismaPromise } from "../generated/prisma/internal/prismaNamespace";
 
 export default async function distributeProfit() {
   const startOfToday = getStartOfTodayUTC();
@@ -52,11 +53,10 @@ export default async function distributeProfit() {
 
         let payout: Decimal;
 
-        const isLastCycle = investment.profitCount + 1 >= investment.duration;
+        const isLastCycle = investment.daysCompleted + 1 >= investment.duration;
 
         if (isLastCycle) {
           // Reconcile final payout
-
           const remainingProfit = expectedTotalProfit.minus(
             new Decimal(investment.totalProfit)
           );
@@ -78,18 +78,25 @@ export default async function distributeProfit() {
           .plus(payout)
           .toDecimalPlaces(2, Decimal.ROUND_HALF_UP);
 
+        const actualDaysCompleted = daysBetween(
+          new Date(investment.createdAt),
+          startOfToday
+        );
+
         const updates: Partial<Investment> = {
           totalProfit: newTotalProfit.toNumber(),
           profitCount: investment.profitCount + 1,
           lastProfitDistributedAt: now,
-          daysCompleted: investment.daysCompleted + 1
+          ...(actualDaysCompleted > investment.daysCompleted
+            ? { daysCompleted: actualDaysCompleted }
+            : undefined)
         };
 
         if (isLastCycle) {
           updates.status = InvestmentStatus.closed;
           updates.closedAt = now;
           updates.closedReason = "Completed investment cycle";
-          console.log(`Investment ${investment.id} closed after final payout.`);
+          //console.log(`Investment ${investment.id} closed after final payout.`);
 
           // emit investment closure
           notificationEmitter.emit("investment-status:update", {
@@ -104,14 +111,10 @@ export default async function distributeProfit() {
           });
         }
 
-        await prisma.$transaction([
+        const txs: PrismaPromise<unknown>[]= [
           prisma.investment.update({
             where: { id: investment.id },
             data: updates
-          }),
-          prisma.financialAccount.update({
-            where: { id: investment.financialAccountId },
-            data: { balance: newBalance.toNumber() }
           }),
           prisma.transaction.create({
             data: {
@@ -141,13 +144,24 @@ export default async function distributeProfit() {
               link: `/user/accounts/${investment.financialAccountId}/investments/${investment.id}`
             }
           })
-        ]);
+        ];
 
-        console.log(
+        if (isLastCycle) {
+          txs.push(
+            prisma.financialAccount.update({
+              where: { id: investment.financialAccountId },
+              data: { balance: newBalance.toNumber() }
+            })
+          );
+        }
+
+        await prisma.$transaction(txs);
+
+        /*  console.log(
           `Distributed ${payout.toFixed(2)} profit for investment ${
             investment.id
           }`
-        );
+        ); */
       } catch (error) {
         console.error(
           `Failed to process profit distribution for investment ${investment.id}:`,

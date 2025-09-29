@@ -18,7 +18,7 @@ const selectedCurrency = ref<Serialize<Currency> | null>(null);
         <p class="card-title">Select medium</p>
       </header>
 
-      <UserCurrencySelect v-model="selectedCurrency" />
+      <UserCurrencySelect v-model="selectedCurrency" :only-deposit-currencies="true" />
     </div>
 
     <div class="h-full overflow-y-auto md:flex-grow p-0.5">

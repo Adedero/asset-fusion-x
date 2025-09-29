@@ -1,5 +1,5 @@
-import { config } from "dotenv";
+import { config as dotenvConfig } from "dotenv";
 
 export default defineNitroPlugin(() => {
-  config({ quiet: true });
+  dotenvConfig({ quiet: true });
 });

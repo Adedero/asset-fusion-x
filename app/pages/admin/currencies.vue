@@ -32,6 +32,7 @@ const state = computed(() => {
       symbol: currency.symbol,
       name: currency.name,
       rate: currency.rate,
+      deposit: currency.allowDeposit ? "allowed" : "not allowed",
       withdrawal: currency.allowWithdrawal ? "allowed" : "not allowed",
       withdrawalCharge: `$${currency.withdrawalCharge}`,
       walletAddress: currency.walletAddress || "N/A",
@@ -45,7 +46,8 @@ const headers = [
   "Symbol",
   "Name",
   "Rate (USD)",
-  "Withdrawal",
+  "Deposits",
+  "Withdrawals",
   "Withdrawal Charge",
   "Wallet Address",
   "Network",
@@ -135,6 +137,13 @@ const deleteItem = async (id: string) => {
               <VTableCell>{{ item.symbol }}</VTableCell>
               <VTableCell>{{ item.name }}</VTableCell>
               <VTableCell>{{ item.rate }}</VTableCell>
+              <VTableCell>
+                <NuxtBadge
+                  :label="item.deposit"
+                  :color="item.deposit === 'allowed' ? 'primary' : 'error'"
+                  variant="soft"
+                />
+              </VTableCell>
               <VTableCell>
                 <NuxtBadge
                   :label="item.withdrawal"

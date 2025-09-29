@@ -87,19 +87,32 @@ const handleSubmit = async (event: FormSubmitEvent<CurrencyInput>) => {
     <template #body>
       <NuxtForm :state :schema="currencySchema" @submit.prevent="handleSubmit">
         <div class="grid md:grid-cols-2 gap-x-2 gap-y-5">
-          <NuxtFormField name="allowWithdrawal" class="md:col-span-2">
-            <NuxtSwitch
-              v-model="state.allowWithdrawal"
-              label="Allow withdrawal with this currency"
-            />
-          </NuxtFormField>
-
           <NuxtFormField name="name" label="Name" required>
             <NuxtInput v-model="state.name" class="w-full" />
           </NuxtFormField>
 
           <NuxtFormField name="symbol" label="Symbol" required>
             <NuxtInput v-model="state.symbol" class="w-full" />
+          </NuxtFormField>
+
+          <NuxtFormField
+            name="allowDeposit"
+            class="border border-accented rounded-lg p-4 md:col-span-2"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <p>Allow deposits with this currency</p>
+              <NuxtSwitch v-model="state.allowDeposit" />
+            </div>
+          </NuxtFormField>
+
+          <NuxtFormField
+            name="allowWithdrawal"
+            class="border border-accented rounded-lg p-4 md:col-span-2"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <p>Allow withdrawals with this currency</p>
+              <NuxtSwitch v-model="state.allowWithdrawal" />
+            </div>
           </NuxtFormField>
 
           <NuxtFormField
@@ -115,6 +128,20 @@ const handleSubmit = async (event: FormSubmitEvent<CurrencyInput>) => {
             label="Withdrawal Charge (USD)"
           >
             <NuxtInput v-model="state.withdrawalCharge" class="w-full" />
+          </NuxtFormField>
+
+          <NuxtFormField
+            name="automaticallyUpdateRate"
+            class="border border-accented rounded-lg p-4 md:col-span-2"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <p>Automatically update rate</p>
+              <NuxtSwitch v-model="state.automaticallyUpdateRate" />
+            </div>
+            <p class="text-xs text-muted mt-1">
+              If checked, the current rate will be automatically fetched and
+              updated every 24 hours
+            </p>
           </NuxtFormField>
 
           <!-- <NuxtCollapsible class="space-y-3 w-full md:col-span-2">

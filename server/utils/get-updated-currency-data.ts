@@ -8,6 +8,9 @@ const COINLAYER_API_KEY = process.env.COINLAYER_API_KEY;
 export default async function getUpdatedCurrencyData(
   currency: Currency
 ): Promise<Currency> {
+  if (!currency.automaticallyUpdateRate) {
+    return currency;
+  }
   const ONE_DAY_AGO = new Date().getTime() - 24 * 60 * 60 * 1000;
   const updatedAt = currency.rateUpdatedAt
     ? new Date(currency.rateUpdatedAt).getTime()

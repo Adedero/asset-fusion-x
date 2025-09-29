@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { useAuthStore } from "~/stores/auth.store";
+
 const config = useRuntimeConfig();
 
 const typewriter = useTemplateRef("typewriter");
 
 useTypewriter(typewriter);
+
+const authStore = useAuthStore();
 </script>
 
 <template>
@@ -33,13 +37,23 @@ useTypewriter(typewriter);
         you enjoy the returns.
       </p>
 
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-4 text-white">
         <NuxtButton
+          v-if="!authStore.user.value"
           to="/sign-in"
           icon="lucide:rocket"
           label="Get Started"
           size="lg"
           class="rounded-full text-white"
+        />
+
+        <NuxtButton
+          v-else
+          icon="lucide:rocket"
+          :label="`Continue on ${config.public.appName}`"
+          size="lg"
+          class="rounded-full text-white"
+          @click="() => navigateToDashboard(authStore.user.value?.role)"
         />
 
         <NuxtButton
@@ -51,7 +65,6 @@ useTypewriter(typewriter);
         />
       </div>
     </div>
-
     <div class="grid">
       <img src="/img/buildings.gif" class="rounded-2xl" />
     </div>

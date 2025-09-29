@@ -32,12 +32,12 @@ onUnmounted(() => {
           <slot name="header" />
         </template>
 
-        <template #body>
-          <slot name="content" />
+        <template #body="{ close }">
+          <slot name="content" :close />
         </template>
 
-        <template #footer>
-          <slot name="footer" />
+        <template #footer="{ close }">
+          <slot name="footer" :close />
         </template>
       </NuxtSlideover>
     </div>
@@ -55,11 +55,11 @@ onUnmounted(() => {
         </header>
 
         <div class="flex-shrink-o flex-grow overflow-y-auto p-4 sm:px-6">
-          <slot name="content" />
+          <slot name="content" :close="() => {}" />
         </div>
 
         <footer class="flex items-center gap-1.5 p-4 sm:px-6 min-h-16">
-          <slot name="footer" />
+          <slot name="footer" :close="() => {}" />
         </footer>
       </aside>
     </ClientOnly>

@@ -75,7 +75,7 @@ const maxAvatarGroup = 3;
               <div class="flex items-center gap-2 justify-between">
                 <div>
                   <p class="font-geist-mono text-muted text-[0.9rem]">
-                    {{ account.number }}
+                    Account Number: {{ account.number }}
                   </p>
                   <div class="flex gap-x-2 flex-wrap items-baseline">
                     <p class="font-geist-mono text-4xl font-semibold">

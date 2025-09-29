@@ -261,7 +261,7 @@ const handleSubmit = async (event: FormSubmitEvent<InvestmentPlanInput>) => {
           <NuxtFormField label="Total Returns">
             <NuxtInput
               readonly
-              :value="`$${exampleTotalReturns}`"
+              :value="toDollar(exampleTotalReturns)"
               class="w-full"
             />
           </NuxtFormField>
