@@ -38,6 +38,8 @@ export const InvestmentPlanScalarFieldEnumSchema = z.enum(['id','name','category
 
 export const InvestmentScalarFieldEnumSchema = z.enum(['id','financialAccountId','investorId','deposit','investmentName','totalProfit','profitCount','status','pausedAt','pausedReason','closedAt','closedReason','terminatedAt','terminatedReason','category','daysCompleted','duration','totalReturn','periodicReturn','profitDistribution','terminationFee','lastProfitDistributedAt','createdAt','updatedAt']);
 
+export const ProfitScalarFieldEnumSchema = z.enum(['id','investmentId','number','intendedAmount','actualAmount','isDistributed','distributedAt','createdAt','updatedAt']);
+
 export const TransactionScalarFieldEnumSchema = z.enum(['id','amount','currency','USDAmount','rate','charges','financialAccountId','type','initiatorAccountId','recipientAccountId','investmentId','status','parentTransactionId','approvedAt','failedAt','failReason','depositWalletAddress','depositWalletAddressNetwork','withdrawalWalletAddress','withdrawalWalletAddressNetwork','bank','bankAccount','description','createdAt','updatedAt']);
 
 export const NotificationScalarFieldEnumSchema = z.enum(['id','title','body','bodyType','userId','financialAccountId','link','isRead','createdAt','updatedAt']);
@@ -388,6 +390,24 @@ export const InvestmentSchema = z.object({
 export type Investment = z.infer<typeof InvestmentSchema>
 
 /////////////////////////////////////////
+// PROFIT SCHEMA
+/////////////////////////////////////////
+
+export const ProfitSchema = z.object({
+  id: z.string().uuid(),
+  investmentId: z.string(),
+  number: z.number().int(),
+  intendedAmount: z.number(),
+  actualAmount: z.number(),
+  isDistributed: z.boolean(),
+  distributedAt: z.coerce.date().nullable(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+})
+
+export type Profit = z.infer<typeof ProfitSchema>
+
+/////////////////////////////////////////
 // TRANSACTION SCHEMA
 /////////////////////////////////////////
 
@@ -401,7 +421,7 @@ export const TransactionSchema = z.object({
   rate: z.number(),
   charges: z.number(),
   financialAccountId: z.string(),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().nullable(),
   recipientAccountId: z.string().nullable(),
   investmentId: z.string().nullable(),
   parentTransactionId: z.string().nullable(),
@@ -894,6 +914,7 @@ export const InvestmentIncludeSchema: z.ZodType<Prisma.InvestmentInclude> = z.ob
   investor: z.union([z.boolean(),z.lazy(() => AccountUserArgsSchema)]).optional(),
   transactions: z.union([z.boolean(),z.lazy(() => TransactionFindManyArgsSchema)]).optional(),
   financialAccount: z.union([z.boolean(),z.lazy(() => FinancialAccountArgsSchema)]).optional(),
+  profits: z.union([z.boolean(),z.lazy(() => ProfitFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => InvestmentCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -908,6 +929,7 @@ export const InvestmentCountOutputTypeArgsSchema: z.ZodType<Prisma.InvestmentCou
 
 export const InvestmentCountOutputTypeSelectSchema: z.ZodType<Prisma.InvestmentCountOutputTypeSelect> = z.object({
   transactions: z.boolean().optional(),
+  profits: z.boolean().optional(),
 }).strict();
 
 export const InvestmentSelectSchema: z.ZodType<Prisma.InvestmentSelect> = z.object({
@@ -938,7 +960,33 @@ export const InvestmentSelectSchema: z.ZodType<Prisma.InvestmentSelect> = z.obje
   investor: z.union([z.boolean(),z.lazy(() => AccountUserArgsSchema)]).optional(),
   transactions: z.union([z.boolean(),z.lazy(() => TransactionFindManyArgsSchema)]).optional(),
   financialAccount: z.union([z.boolean(),z.lazy(() => FinancialAccountArgsSchema)]).optional(),
+  profits: z.union([z.boolean(),z.lazy(() => ProfitFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => InvestmentCountOutputTypeArgsSchema)]).optional(),
+}).strict()
+
+// PROFIT
+//------------------------------------------------------
+
+export const ProfitIncludeSchema: z.ZodType<Prisma.ProfitInclude> = z.object({
+  investment: z.union([z.boolean(),z.lazy(() => InvestmentArgsSchema)]).optional(),
+}).strict()
+
+export const ProfitArgsSchema: z.ZodType<Prisma.ProfitDefaultArgs> = z.object({
+  select: z.lazy(() => ProfitSelectSchema).optional(),
+  include: z.lazy(() => ProfitIncludeSchema).optional(),
+}).strict();
+
+export const ProfitSelectSchema: z.ZodType<Prisma.ProfitSelect> = z.object({
+  id: z.boolean().optional(),
+  investmentId: z.boolean().optional(),
+  number: z.boolean().optional(),
+  intendedAmount: z.boolean().optional(),
+  actualAmount: z.boolean().optional(),
+  isDistributed: z.boolean().optional(),
+  distributedAt: z.boolean().optional(),
+  createdAt: z.boolean().optional(),
+  updatedAt: z.boolean().optional(),
+  investment: z.union([z.boolean(),z.lazy(() => InvestmentArgsSchema)]).optional(),
 }).strict()
 
 // TRANSACTION
@@ -2273,6 +2321,7 @@ export const InvestmentWhereInputSchema: z.ZodType<Prisma.InvestmentWhereInput> 
   investor: z.union([ z.lazy(() => AccountUserScalarRelationFilterSchema),z.lazy(() => AccountUserWhereInputSchema) ]).optional(),
   transactions: z.lazy(() => TransactionListRelationFilterSchema).optional(),
   financialAccount: z.union([ z.lazy(() => FinancialAccountScalarRelationFilterSchema),z.lazy(() => FinancialAccountWhereInputSchema) ]).optional(),
+  profits: z.lazy(() => ProfitListRelationFilterSchema).optional()
 }).strict();
 
 export const InvestmentOrderByWithRelationInputSchema: z.ZodType<Prisma.InvestmentOrderByWithRelationInput> = z.object({
@@ -2302,7 +2351,8 @@ export const InvestmentOrderByWithRelationInputSchema: z.ZodType<Prisma.Investme
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   investor: z.lazy(() => AccountUserOrderByWithRelationInputSchema).optional(),
   transactions: z.lazy(() => TransactionOrderByRelationAggregateInputSchema).optional(),
-  financialAccount: z.lazy(() => FinancialAccountOrderByWithRelationInputSchema).optional()
+  financialAccount: z.lazy(() => FinancialAccountOrderByWithRelationInputSchema).optional(),
+  profits: z.lazy(() => ProfitOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const InvestmentWhereUniqueInputSchema: z.ZodType<Prisma.InvestmentWhereUniqueInput> = z.object({
@@ -2339,6 +2389,7 @@ export const InvestmentWhereUniqueInputSchema: z.ZodType<Prisma.InvestmentWhereU
   investor: z.union([ z.lazy(() => AccountUserScalarRelationFilterSchema),z.lazy(() => AccountUserWhereInputSchema) ]).optional(),
   transactions: z.lazy(() => TransactionListRelationFilterSchema).optional(),
   financialAccount: z.union([ z.lazy(() => FinancialAccountScalarRelationFilterSchema),z.lazy(() => FinancialAccountWhereInputSchema) ]).optional(),
+  profits: z.lazy(() => ProfitListRelationFilterSchema).optional()
 }).strict());
 
 export const InvestmentOrderByWithAggregationInputSchema: z.ZodType<Prisma.InvestmentOrderByWithAggregationInput> = z.object({
@@ -2403,6 +2454,86 @@ export const InvestmentScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.In
   updatedAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
 }).strict();
 
+export const ProfitWhereInputSchema: z.ZodType<Prisma.ProfitWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => ProfitWhereInputSchema),z.lazy(() => ProfitWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => ProfitWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => ProfitWhereInputSchema),z.lazy(() => ProfitWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  investmentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  number: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  intendedAmount: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
+  actualAmount: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
+  isDistributed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
+  distributedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  investment: z.union([ z.lazy(() => InvestmentScalarRelationFilterSchema),z.lazy(() => InvestmentWhereInputSchema) ]).optional(),
+}).strict();
+
+export const ProfitOrderByWithRelationInputSchema: z.ZodType<Prisma.ProfitOrderByWithRelationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  investmentId: z.lazy(() => SortOrderSchema).optional(),
+  number: z.lazy(() => SortOrderSchema).optional(),
+  intendedAmount: z.lazy(() => SortOrderSchema).optional(),
+  actualAmount: z.lazy(() => SortOrderSchema).optional(),
+  isDistributed: z.lazy(() => SortOrderSchema).optional(),
+  distributedAt: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional(),
+  investment: z.lazy(() => InvestmentOrderByWithRelationInputSchema).optional()
+}).strict();
+
+export const ProfitWhereUniqueInputSchema: z.ZodType<Prisma.ProfitWhereUniqueInput> = z.object({
+  id: z.string().uuid()
+})
+.and(z.object({
+  id: z.string().uuid().optional(),
+  AND: z.union([ z.lazy(() => ProfitWhereInputSchema),z.lazy(() => ProfitWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => ProfitWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => ProfitWhereInputSchema),z.lazy(() => ProfitWhereInputSchema).array() ]).optional(),
+  investmentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  number: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
+  intendedAmount: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
+  actualAmount: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
+  isDistributed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
+  distributedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  investment: z.union([ z.lazy(() => InvestmentScalarRelationFilterSchema),z.lazy(() => InvestmentWhereInputSchema) ]).optional(),
+}).strict());
+
+export const ProfitOrderByWithAggregationInputSchema: z.ZodType<Prisma.ProfitOrderByWithAggregationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  investmentId: z.lazy(() => SortOrderSchema).optional(),
+  number: z.lazy(() => SortOrderSchema).optional(),
+  intendedAmount: z.lazy(() => SortOrderSchema).optional(),
+  actualAmount: z.lazy(() => SortOrderSchema).optional(),
+  isDistributed: z.lazy(() => SortOrderSchema).optional(),
+  distributedAt: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => ProfitCountOrderByAggregateInputSchema).optional(),
+  _avg: z.lazy(() => ProfitAvgOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => ProfitMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => ProfitMinOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => ProfitSumOrderByAggregateInputSchema).optional()
+}).strict();
+
+export const ProfitScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.ProfitScalarWhereWithAggregatesInput> = z.object({
+  AND: z.union([ z.lazy(() => ProfitScalarWhereWithAggregatesInputSchema),z.lazy(() => ProfitScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => ProfitScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => ProfitScalarWhereWithAggregatesInputSchema),z.lazy(() => ProfitScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  investmentId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  number: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  intendedAmount: z.union([ z.lazy(() => FloatWithAggregatesFilterSchema),z.number() ]).optional(),
+  actualAmount: z.union([ z.lazy(() => FloatWithAggregatesFilterSchema),z.number() ]).optional(),
+  isDistributed: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
+  distributedAt: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
+  updatedAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
+}).strict();
+
 export const TransactionWhereInputSchema: z.ZodType<Prisma.TransactionWhereInput> = z.object({
   AND: z.union([ z.lazy(() => TransactionWhereInputSchema),z.lazy(() => TransactionWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => TransactionWhereInputSchema).array().optional(),
@@ -2415,7 +2546,7 @@ export const TransactionWhereInputSchema: z.ZodType<Prisma.TransactionWhereInput
   charges: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
   financialAccountId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   type: z.union([ z.lazy(() => EnumTransactionTypeFilterSchema),z.lazy(() => TransactionTypeSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  initiatorAccountId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   recipientAccountId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   investmentId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   status: z.union([ z.lazy(() => EnumTransactionStatusFilterSchema),z.lazy(() => TransactionStatusSchema) ]).optional(),
@@ -2432,7 +2563,7 @@ export const TransactionWhereInputSchema: z.ZodType<Prisma.TransactionWhereInput
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  initiator: z.union([ z.lazy(() => AccountUserScalarRelationFilterSchema),z.lazy(() => AccountUserWhereInputSchema) ]).optional(),
+  initiator: z.union([ z.lazy(() => AccountUserNullableScalarRelationFilterSchema),z.lazy(() => AccountUserWhereInputSchema) ]).optional().nullable(),
   financialAccount: z.union([ z.lazy(() => FinancialAccountScalarRelationFilterSchema),z.lazy(() => FinancialAccountWhereInputSchema) ]).optional(),
   recipientAccount: z.union([ z.lazy(() => FinancialAccountNullableScalarRelationFilterSchema),z.lazy(() => FinancialAccountWhereInputSchema) ]).optional().nullable(),
   investment: z.union([ z.lazy(() => InvestmentNullableScalarRelationFilterSchema),z.lazy(() => InvestmentWhereInputSchema) ]).optional().nullable(),
@@ -2450,7 +2581,7 @@ export const TransactionOrderByWithRelationInputSchema: z.ZodType<Prisma.Transac
   charges: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
-  initiatorAccountId: z.lazy(() => SortOrderSchema).optional(),
+  initiatorAccountId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   recipientAccountId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   investmentId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
@@ -2491,7 +2622,7 @@ export const TransactionWhereUniqueInputSchema: z.ZodType<Prisma.TransactionWher
   charges: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
   financialAccountId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   type: z.union([ z.lazy(() => EnumTransactionTypeFilterSchema),z.lazy(() => TransactionTypeSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  initiatorAccountId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   recipientAccountId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   investmentId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   status: z.union([ z.lazy(() => EnumTransactionStatusFilterSchema),z.lazy(() => TransactionStatusSchema) ]).optional(),
@@ -2508,7 +2639,7 @@ export const TransactionWhereUniqueInputSchema: z.ZodType<Prisma.TransactionWher
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  initiator: z.union([ z.lazy(() => AccountUserScalarRelationFilterSchema),z.lazy(() => AccountUserWhereInputSchema) ]).optional(),
+  initiator: z.union([ z.lazy(() => AccountUserNullableScalarRelationFilterSchema),z.lazy(() => AccountUserWhereInputSchema) ]).optional().nullable(),
   financialAccount: z.union([ z.lazy(() => FinancialAccountScalarRelationFilterSchema),z.lazy(() => FinancialAccountWhereInputSchema) ]).optional(),
   recipientAccount: z.union([ z.lazy(() => FinancialAccountNullableScalarRelationFilterSchema),z.lazy(() => FinancialAccountWhereInputSchema) ]).optional().nullable(),
   investment: z.union([ z.lazy(() => InvestmentNullableScalarRelationFilterSchema),z.lazy(() => InvestmentWhereInputSchema) ]).optional().nullable(),
@@ -2526,7 +2657,7 @@ export const TransactionOrderByWithAggregationInputSchema: z.ZodType<Prisma.Tran
   charges: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
-  initiatorAccountId: z.lazy(() => SortOrderSchema).optional(),
+  initiatorAccountId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   recipientAccountId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   investmentId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
@@ -2562,7 +2693,7 @@ export const TransactionScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.T
   charges: z.union([ z.lazy(() => FloatWithAggregatesFilterSchema),z.number() ]).optional(),
   financialAccountId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   type: z.union([ z.lazy(() => EnumTransactionTypeWithAggregatesFilterSchema),z.lazy(() => TransactionTypeSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  initiatorAccountId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   recipientAccountId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   investmentId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   status: z.union([ z.lazy(() => EnumTransactionStatusWithAggregatesFilterSchema),z.lazy(() => TransactionStatusSchema) ]).optional(),
@@ -4070,7 +4201,8 @@ export const InvestmentCreateInputSchema: z.ZodType<Prisma.InvestmentCreateInput
   updatedAt: z.coerce.date().optional(),
   investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutInvestmentInputSchema).optional(),
-  financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema)
+  financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema),
+  profits: z.lazy(() => ProfitCreateNestedManyWithoutInvestmentInputSchema).optional()
 }).strict();
 
 export const InvestmentUncheckedCreateInputSchema: z.ZodType<Prisma.InvestmentUncheckedCreateInput> = z.object({
@@ -4098,7 +4230,8 @@ export const InvestmentUncheckedCreateInputSchema: z.ZodType<Prisma.InvestmentUn
   lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
+  transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional(),
+  profits: z.lazy(() => ProfitUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
 }).strict();
 
 export const InvestmentUpdateInputSchema: z.ZodType<Prisma.InvestmentUpdateInput> = z.object({
@@ -4126,7 +4259,8 @@ export const InvestmentUpdateInputSchema: z.ZodType<Prisma.InvestmentUpdateInput
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
   transactions: z.lazy(() => TransactionUpdateManyWithoutInvestmentNestedInputSchema).optional(),
-  financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional()
+  financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
+  profits: z.lazy(() => ProfitUpdateManyWithoutInvestmentNestedInputSchema).optional()
 }).strict();
 
 export const InvestmentUncheckedUpdateInputSchema: z.ZodType<Prisma.InvestmentUncheckedUpdateInput> = z.object({
@@ -4154,7 +4288,8 @@ export const InvestmentUncheckedUpdateInputSchema: z.ZodType<Prisma.InvestmentUn
   lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
+  transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional(),
+  profits: z.lazy(() => ProfitUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
 }).strict();
 
 export const InvestmentCreateManyInputSchema: z.ZodType<Prisma.InvestmentCreateManyInput> = z.object({
@@ -4236,6 +4371,89 @@ export const InvestmentUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Investme
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
+export const ProfitCreateInputSchema: z.ZodType<Prisma.ProfitCreateInput> = z.object({
+  id: z.string().uuid().optional(),
+  number: z.number().int(),
+  intendedAmount: z.number(),
+  actualAmount: z.number(),
+  isDistributed: z.boolean().optional(),
+  distributedAt: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+  investment: z.lazy(() => InvestmentCreateNestedOneWithoutProfitsInputSchema)
+}).strict();
+
+export const ProfitUncheckedCreateInputSchema: z.ZodType<Prisma.ProfitUncheckedCreateInput> = z.object({
+  id: z.string().uuid().optional(),
+  investmentId: z.string(),
+  number: z.number().int(),
+  intendedAmount: z.number(),
+  actualAmount: z.number(),
+  isDistributed: z.boolean().optional(),
+  distributedAt: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional()
+}).strict();
+
+export const ProfitUpdateInputSchema: z.ZodType<Prisma.ProfitUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  intendedAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  actualAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isDistributed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  distributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  investment: z.lazy(() => InvestmentUpdateOneRequiredWithoutProfitsNestedInputSchema).optional()
+}).strict();
+
+export const ProfitUncheckedUpdateInputSchema: z.ZodType<Prisma.ProfitUncheckedUpdateInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  investmentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  intendedAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  actualAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isDistributed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  distributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const ProfitCreateManyInputSchema: z.ZodType<Prisma.ProfitCreateManyInput> = z.object({
+  id: z.string().uuid().optional(),
+  investmentId: z.string(),
+  number: z.number().int(),
+  intendedAmount: z.number(),
+  actualAmount: z.number(),
+  isDistributed: z.boolean().optional(),
+  distributedAt: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional()
+}).strict();
+
+export const ProfitUpdateManyMutationInputSchema: z.ZodType<Prisma.ProfitUpdateManyMutationInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  intendedAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  actualAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isDistributed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  distributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const ProfitUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ProfitUncheckedUpdateManyInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  investmentId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  intendedAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  actualAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isDistributed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  distributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
 export const TransactionCreateInputSchema: z.ZodType<Prisma.TransactionCreateInput> = z.object({
   id: z.string().uuid().optional(),
   amount: z.number(),
@@ -4257,7 +4475,7 @@ export const TransactionCreateInputSchema: z.ZodType<Prisma.TransactionCreateInp
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema),
+  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutTransactionsInputSchema),
   recipientAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutReceivedTransactionsInputSchema).optional(),
   investment: z.lazy(() => InvestmentCreateNestedOneWithoutTransactionsInputSchema).optional(),
@@ -4275,7 +4493,7 @@ export const TransactionUncheckedCreateInputSchema: z.ZodType<Prisma.Transaction
   charges: z.number().optional(),
   financialAccountId: z.string(),
   type: z.lazy(() => TransactionTypeSchema),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().optional().nullable(),
   recipientAccountId: z.string().optional().nullable(),
   investmentId: z.string().optional().nullable(),
   status: z.lazy(() => TransactionStatusSchema).optional(),
@@ -4317,7 +4535,7 @@ export const TransactionUpdateInputSchema: z.ZodType<Prisma.TransactionUpdateInp
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiator: z.lazy(() => AccountUserUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
+  initiator: z.lazy(() => AccountUserUpdateOneWithoutTransactionsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
   recipientAccount: z.lazy(() => FinancialAccountUpdateOneWithoutReceivedTransactionsNestedInputSchema).optional(),
   investment: z.lazy(() => InvestmentUpdateOneWithoutTransactionsNestedInputSchema).optional(),
@@ -4335,7 +4553,7 @@ export const TransactionUncheckedUpdateInputSchema: z.ZodType<Prisma.Transaction
   charges: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   financialAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => TransactionTypeSchema),z.lazy(() => EnumTransactionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  initiatorAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   recipientAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   investmentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => EnumTransactionStatusFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4365,7 +4583,7 @@ export const TransactionCreateManyInputSchema: z.ZodType<Prisma.TransactionCreat
   charges: z.number().optional(),
   financialAccountId: z.string(),
   type: z.lazy(() => TransactionTypeSchema),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().optional().nullable(),
   recipientAccountId: z.string().optional().nullable(),
   investmentId: z.string().optional().nullable(),
   status: z.lazy(() => TransactionStatusSchema).optional(),
@@ -4416,7 +4634,7 @@ export const TransactionUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Transac
   charges: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   financialAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => TransactionTypeSchema),z.lazy(() => EnumTransactionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  initiatorAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   recipientAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   investmentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => EnumTransactionStatusFieldUpdateOperationsInputSchema) ]).optional(),
@@ -5808,6 +6026,16 @@ export const AccountUserScalarRelationFilterSchema: z.ZodType<Prisma.AccountUser
   isNot: z.lazy(() => AccountUserWhereInputSchema).optional()
 }).strict();
 
+export const ProfitListRelationFilterSchema: z.ZodType<Prisma.ProfitListRelationFilter> = z.object({
+  every: z.lazy(() => ProfitWhereInputSchema).optional(),
+  some: z.lazy(() => ProfitWhereInputSchema).optional(),
+  none: z.lazy(() => ProfitWhereInputSchema).optional()
+}).strict();
+
+export const ProfitOrderByRelationAggregateInputSchema: z.ZodType<Prisma.ProfitOrderByRelationAggregateInput> = z.object({
+  _count: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
 export const InvestmentCountOrderByAggregateInputSchema: z.ZodType<Prisma.InvestmentCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
@@ -5921,6 +6149,59 @@ export const EnumInvestmentStatusWithAggregatesFilterSchema: z.ZodType<Prisma.En
   _max: z.lazy(() => NestedEnumInvestmentStatusFilterSchema).optional()
 }).strict();
 
+export const InvestmentScalarRelationFilterSchema: z.ZodType<Prisma.InvestmentScalarRelationFilter> = z.object({
+  is: z.lazy(() => InvestmentWhereInputSchema).optional(),
+  isNot: z.lazy(() => InvestmentWhereInputSchema).optional()
+}).strict();
+
+export const ProfitCountOrderByAggregateInputSchema: z.ZodType<Prisma.ProfitCountOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  investmentId: z.lazy(() => SortOrderSchema).optional(),
+  number: z.lazy(() => SortOrderSchema).optional(),
+  intendedAmount: z.lazy(() => SortOrderSchema).optional(),
+  actualAmount: z.lazy(() => SortOrderSchema).optional(),
+  isDistributed: z.lazy(() => SortOrderSchema).optional(),
+  distributedAt: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const ProfitAvgOrderByAggregateInputSchema: z.ZodType<Prisma.ProfitAvgOrderByAggregateInput> = z.object({
+  number: z.lazy(() => SortOrderSchema).optional(),
+  intendedAmount: z.lazy(() => SortOrderSchema).optional(),
+  actualAmount: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const ProfitMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ProfitMaxOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  investmentId: z.lazy(() => SortOrderSchema).optional(),
+  number: z.lazy(() => SortOrderSchema).optional(),
+  intendedAmount: z.lazy(() => SortOrderSchema).optional(),
+  actualAmount: z.lazy(() => SortOrderSchema).optional(),
+  isDistributed: z.lazy(() => SortOrderSchema).optional(),
+  distributedAt: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const ProfitMinOrderByAggregateInputSchema: z.ZodType<Prisma.ProfitMinOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  investmentId: z.lazy(() => SortOrderSchema).optional(),
+  number: z.lazy(() => SortOrderSchema).optional(),
+  intendedAmount: z.lazy(() => SortOrderSchema).optional(),
+  actualAmount: z.lazy(() => SortOrderSchema).optional(),
+  isDistributed: z.lazy(() => SortOrderSchema).optional(),
+  distributedAt: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const ProfitSumOrderByAggregateInputSchema: z.ZodType<Prisma.ProfitSumOrderByAggregateInput> = z.object({
+  number: z.lazy(() => SortOrderSchema).optional(),
+  intendedAmount: z.lazy(() => SortOrderSchema).optional(),
+  actualAmount: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
 export const EnumTransactionTypeFilterSchema: z.ZodType<Prisma.EnumTransactionTypeFilter> = z.object({
   equals: z.lazy(() => TransactionTypeSchema).optional(),
   in: z.lazy(() => TransactionTypeSchema).array().optional(),
@@ -5933,6 +6214,11 @@ export const EnumTransactionStatusFilterSchema: z.ZodType<Prisma.EnumTransaction
   in: z.lazy(() => TransactionStatusSchema).array().optional(),
   notIn: z.lazy(() => TransactionStatusSchema).array().optional(),
   not: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => NestedEnumTransactionStatusFilterSchema) ]).optional(),
+}).strict();
+
+export const AccountUserNullableScalarRelationFilterSchema: z.ZodType<Prisma.AccountUserNullableScalarRelationFilter> = z.object({
+  is: z.lazy(() => AccountUserWhereInputSchema).optional().nullable(),
+  isNot: z.lazy(() => AccountUserWhereInputSchema).optional().nullable()
 }).strict();
 
 export const FinancialAccountNullableScalarRelationFilterSchema: z.ZodType<Prisma.FinancialAccountNullableScalarRelationFilter> = z.object({
@@ -7388,11 +7674,25 @@ export const FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema: z.Zod
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional()
 }).strict();
 
+export const ProfitCreateNestedManyWithoutInvestmentInputSchema: z.ZodType<Prisma.ProfitCreateNestedManyWithoutInvestmentInput> = z.object({
+  create: z.union([ z.lazy(() => ProfitCreateWithoutInvestmentInputSchema),z.lazy(() => ProfitCreateWithoutInvestmentInputSchema).array(),z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema),z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema),z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => ProfitCreateManyInvestmentInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => ProfitWhereUniqueInputSchema),z.lazy(() => ProfitWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
 export const TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema: z.ZodType<Prisma.TransactionUncheckedCreateNestedManyWithoutInvestmentInput> = z.object({
   create: z.union([ z.lazy(() => TransactionCreateWithoutInvestmentInputSchema),z.lazy(() => TransactionCreateWithoutInvestmentInputSchema).array(),z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema),z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => TransactionCreateOrConnectWithoutInvestmentInputSchema),z.lazy(() => TransactionCreateOrConnectWithoutInvestmentInputSchema).array() ]).optional(),
   createMany: z.lazy(() => TransactionCreateManyInvestmentInputEnvelopeSchema).optional(),
   connect: z.union([ z.lazy(() => TransactionWhereUniqueInputSchema),z.lazy(() => TransactionWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
+export const ProfitUncheckedCreateNestedManyWithoutInvestmentInputSchema: z.ZodType<Prisma.ProfitUncheckedCreateNestedManyWithoutInvestmentInput> = z.object({
+  create: z.union([ z.lazy(() => ProfitCreateWithoutInvestmentInputSchema),z.lazy(() => ProfitCreateWithoutInvestmentInputSchema).array(),z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema),z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema),z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => ProfitCreateManyInvestmentInputEnvelopeSchema).optional(),
+  connect: z.union([ z.lazy(() => ProfitWhereUniqueInputSchema),z.lazy(() => ProfitWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
 export const EnumInvestmentStatusFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumInvestmentStatusFieldUpdateOperationsInput> = z.object({
@@ -7429,6 +7729,20 @@ export const FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchem
   update: z.union([ z.lazy(() => FinancialAccountUpdateToOneWithWhereWithoutInvestmentsInputSchema),z.lazy(() => FinancialAccountUpdateWithoutInvestmentsInputSchema),z.lazy(() => FinancialAccountUncheckedUpdateWithoutInvestmentsInputSchema) ]).optional(),
 }).strict();
 
+export const ProfitUpdateManyWithoutInvestmentNestedInputSchema: z.ZodType<Prisma.ProfitUpdateManyWithoutInvestmentNestedInput> = z.object({
+  create: z.union([ z.lazy(() => ProfitCreateWithoutInvestmentInputSchema),z.lazy(() => ProfitCreateWithoutInvestmentInputSchema).array(),z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema),z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema),z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => ProfitUpsertWithWhereUniqueWithoutInvestmentInputSchema),z.lazy(() => ProfitUpsertWithWhereUniqueWithoutInvestmentInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => ProfitCreateManyInvestmentInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => ProfitWhereUniqueInputSchema),z.lazy(() => ProfitWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => ProfitWhereUniqueInputSchema),z.lazy(() => ProfitWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => ProfitWhereUniqueInputSchema),z.lazy(() => ProfitWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => ProfitWhereUniqueInputSchema),z.lazy(() => ProfitWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => ProfitUpdateWithWhereUniqueWithoutInvestmentInputSchema),z.lazy(() => ProfitUpdateWithWhereUniqueWithoutInvestmentInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => ProfitUpdateManyWithWhereWithoutInvestmentInputSchema),z.lazy(() => ProfitUpdateManyWithWhereWithoutInvestmentInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => ProfitScalarWhereInputSchema),z.lazy(() => ProfitScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
 export const TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema: z.ZodType<Prisma.TransactionUncheckedUpdateManyWithoutInvestmentNestedInput> = z.object({
   create: z.union([ z.lazy(() => TransactionCreateWithoutInvestmentInputSchema),z.lazy(() => TransactionCreateWithoutInvestmentInputSchema).array(),z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema),z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => TransactionCreateOrConnectWithoutInvestmentInputSchema),z.lazy(() => TransactionCreateOrConnectWithoutInvestmentInputSchema).array() ]).optional(),
@@ -7441,6 +7755,34 @@ export const TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema: z
   update: z.union([ z.lazy(() => TransactionUpdateWithWhereUniqueWithoutInvestmentInputSchema),z.lazy(() => TransactionUpdateWithWhereUniqueWithoutInvestmentInputSchema).array() ]).optional(),
   updateMany: z.union([ z.lazy(() => TransactionUpdateManyWithWhereWithoutInvestmentInputSchema),z.lazy(() => TransactionUpdateManyWithWhereWithoutInvestmentInputSchema).array() ]).optional(),
   deleteMany: z.union([ z.lazy(() => TransactionScalarWhereInputSchema),z.lazy(() => TransactionScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const ProfitUncheckedUpdateManyWithoutInvestmentNestedInputSchema: z.ZodType<Prisma.ProfitUncheckedUpdateManyWithoutInvestmentNestedInput> = z.object({
+  create: z.union([ z.lazy(() => ProfitCreateWithoutInvestmentInputSchema),z.lazy(() => ProfitCreateWithoutInvestmentInputSchema).array(),z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema),z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema),z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => ProfitUpsertWithWhereUniqueWithoutInvestmentInputSchema),z.lazy(() => ProfitUpsertWithWhereUniqueWithoutInvestmentInputSchema).array() ]).optional(),
+  createMany: z.lazy(() => ProfitCreateManyInvestmentInputEnvelopeSchema).optional(),
+  set: z.union([ z.lazy(() => ProfitWhereUniqueInputSchema),z.lazy(() => ProfitWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => ProfitWhereUniqueInputSchema),z.lazy(() => ProfitWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => ProfitWhereUniqueInputSchema),z.lazy(() => ProfitWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => ProfitWhereUniqueInputSchema),z.lazy(() => ProfitWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => ProfitUpdateWithWhereUniqueWithoutInvestmentInputSchema),z.lazy(() => ProfitUpdateWithWhereUniqueWithoutInvestmentInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => ProfitUpdateManyWithWhereWithoutInvestmentInputSchema),z.lazy(() => ProfitUpdateManyWithWhereWithoutInvestmentInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => ProfitScalarWhereInputSchema),z.lazy(() => ProfitScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const InvestmentCreateNestedOneWithoutProfitsInputSchema: z.ZodType<Prisma.InvestmentCreateNestedOneWithoutProfitsInput> = z.object({
+  create: z.union([ z.lazy(() => InvestmentCreateWithoutProfitsInputSchema),z.lazy(() => InvestmentUncheckedCreateWithoutProfitsInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => InvestmentCreateOrConnectWithoutProfitsInputSchema).optional(),
+  connect: z.lazy(() => InvestmentWhereUniqueInputSchema).optional()
+}).strict();
+
+export const InvestmentUpdateOneRequiredWithoutProfitsNestedInputSchema: z.ZodType<Prisma.InvestmentUpdateOneRequiredWithoutProfitsNestedInput> = z.object({
+  create: z.union([ z.lazy(() => InvestmentCreateWithoutProfitsInputSchema),z.lazy(() => InvestmentUncheckedCreateWithoutProfitsInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => InvestmentCreateOrConnectWithoutProfitsInputSchema).optional(),
+  upsert: z.lazy(() => InvestmentUpsertWithoutProfitsInputSchema).optional(),
+  connect: z.lazy(() => InvestmentWhereUniqueInputSchema).optional(),
+  update: z.union([ z.lazy(() => InvestmentUpdateToOneWithWhereWithoutProfitsInputSchema),z.lazy(() => InvestmentUpdateWithoutProfitsInputSchema),z.lazy(() => InvestmentUncheckedUpdateWithoutProfitsInputSchema) ]).optional(),
 }).strict();
 
 export const AccountUserCreateNestedOneWithoutTransactionsInputSchema: z.ZodType<Prisma.AccountUserCreateNestedOneWithoutTransactionsInput> = z.object({
@@ -7509,10 +7851,12 @@ export const EnumTransactionStatusFieldUpdateOperationsInputSchema: z.ZodType<Pr
   set: z.lazy(() => TransactionStatusSchema).optional()
 }).strict();
 
-export const AccountUserUpdateOneRequiredWithoutTransactionsNestedInputSchema: z.ZodType<Prisma.AccountUserUpdateOneRequiredWithoutTransactionsNestedInput> = z.object({
+export const AccountUserUpdateOneWithoutTransactionsNestedInputSchema: z.ZodType<Prisma.AccountUserUpdateOneWithoutTransactionsNestedInput> = z.object({
   create: z.union([ z.lazy(() => AccountUserCreateWithoutTransactionsInputSchema),z.lazy(() => AccountUserUncheckedCreateWithoutTransactionsInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => AccountUserCreateOrConnectWithoutTransactionsInputSchema).optional(),
   upsert: z.lazy(() => AccountUserUpsertWithoutTransactionsInputSchema).optional(),
+  disconnect: z.union([ z.boolean(),z.lazy(() => AccountUserWhereInputSchema) ]).optional(),
+  delete: z.union([ z.boolean(),z.lazy(() => AccountUserWhereInputSchema) ]).optional(),
   connect: z.lazy(() => AccountUserWhereUniqueInputSchema).optional(),
   update: z.union([ z.lazy(() => AccountUserUpdateToOneWithWhereWithoutTransactionsInputSchema),z.lazy(() => AccountUserUpdateWithoutTransactionsInputSchema),z.lazy(() => AccountUserUncheckedUpdateWithoutTransactionsInputSchema) ]).optional(),
 }).strict();
@@ -9506,7 +9850,7 @@ export const TransactionCreateWithoutFinancialAccountInputSchema: z.ZodType<Pris
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema),
+  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema).optional(),
   recipientAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutReceivedTransactionsInputSchema).optional(),
   investment: z.lazy(() => InvestmentCreateNestedOneWithoutTransactionsInputSchema).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutTransactionInputSchema).optional(),
@@ -9522,7 +9866,7 @@ export const TransactionUncheckedCreateWithoutFinancialAccountInputSchema: z.Zod
   rate: z.number().optional(),
   charges: z.number().optional(),
   type: z.lazy(() => TransactionTypeSchema),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().optional().nullable(),
   recipientAccountId: z.string().optional().nullable(),
   investmentId: z.string().optional().nullable(),
   status: z.lazy(() => TransactionStatusSchema).optional(),
@@ -9573,7 +9917,7 @@ export const TransactionCreateWithoutRecipientAccountInputSchema: z.ZodType<Pris
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema),
+  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutTransactionsInputSchema),
   investment: z.lazy(() => InvestmentCreateNestedOneWithoutTransactionsInputSchema).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutTransactionInputSchema).optional(),
@@ -9590,7 +9934,7 @@ export const TransactionUncheckedCreateWithoutRecipientAccountInputSchema: z.Zod
   charges: z.number().optional(),
   financialAccountId: z.string(),
   type: z.lazy(() => TransactionTypeSchema),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().optional().nullable(),
   investmentId: z.string().optional().nullable(),
   status: z.lazy(() => TransactionStatusSchema).optional(),
   parentTransactionId: z.string().optional().nullable(),
@@ -9643,7 +9987,8 @@ export const InvestmentCreateWithoutFinancialAccountInputSchema: z.ZodType<Prism
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
-  transactions: z.lazy(() => TransactionCreateNestedManyWithoutInvestmentInputSchema).optional()
+  transactions: z.lazy(() => TransactionCreateNestedManyWithoutInvestmentInputSchema).optional(),
+  profits: z.lazy(() => ProfitCreateNestedManyWithoutInvestmentInputSchema).optional()
 }).strict();
 
 export const InvestmentUncheckedCreateWithoutFinancialAccountInputSchema: z.ZodType<Prisma.InvestmentUncheckedCreateWithoutFinancialAccountInput> = z.object({
@@ -9670,7 +10015,8 @@ export const InvestmentUncheckedCreateWithoutFinancialAccountInputSchema: z.ZodT
   lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
+  transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional(),
+  profits: z.lazy(() => ProfitUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
 }).strict();
 
 export const InvestmentCreateOrConnectWithoutFinancialAccountInputSchema: z.ZodType<Prisma.InvestmentCreateOrConnectWithoutFinancialAccountInput> = z.object({
@@ -9870,7 +10216,7 @@ export const TransactionScalarWhereInputSchema: z.ZodType<Prisma.TransactionScal
   charges: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
   financialAccountId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   type: z.union([ z.lazy(() => EnumTransactionTypeFilterSchema),z.lazy(() => TransactionTypeSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  initiatorAccountId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   recipientAccountId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   investmentId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   status: z.union([ z.lazy(() => EnumTransactionStatusFilterSchema),z.lazy(() => TransactionStatusSchema) ]).optional(),
@@ -10150,7 +10496,8 @@ export const InvestmentCreateWithoutInvestorInputSchema: z.ZodType<Prisma.Invest
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutInvestmentInputSchema).optional(),
-  financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema)
+  financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema),
+  profits: z.lazy(() => ProfitCreateNestedManyWithoutInvestmentInputSchema).optional()
 }).strict();
 
 export const InvestmentUncheckedCreateWithoutInvestorInputSchema: z.ZodType<Prisma.InvestmentUncheckedCreateWithoutInvestorInput> = z.object({
@@ -10177,7 +10524,8 @@ export const InvestmentUncheckedCreateWithoutInvestorInputSchema: z.ZodType<Pris
   lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
+  transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional(),
+  profits: z.lazy(() => ProfitUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
 }).strict();
 
 export const InvestmentCreateOrConnectWithoutInvestorInputSchema: z.ZodType<Prisma.InvestmentCreateOrConnectWithoutInvestorInput> = z.object({
@@ -10806,7 +11154,7 @@ export const TransactionCreateWithoutJointAccountModRequestsInputSchema: z.ZodTy
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema),
+  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutTransactionsInputSchema),
   recipientAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutReceivedTransactionsInputSchema).optional(),
   investment: z.lazy(() => InvestmentCreateNestedOneWithoutTransactionsInputSchema).optional(),
@@ -10823,7 +11171,7 @@ export const TransactionUncheckedCreateWithoutJointAccountModRequestsInputSchema
   charges: z.number().optional(),
   financialAccountId: z.string(),
   type: z.lazy(() => TransactionTypeSchema),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().optional().nullable(),
   recipientAccountId: z.string().optional().nullable(),
   investmentId: z.string().optional().nullable(),
   status: z.lazy(() => TransactionStatusSchema).optional(),
@@ -11025,7 +11373,7 @@ export const TransactionUpdateWithoutJointAccountModRequestsInputSchema: z.ZodTy
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiator: z.lazy(() => AccountUserUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
+  initiator: z.lazy(() => AccountUserUpdateOneWithoutTransactionsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
   recipientAccount: z.lazy(() => FinancialAccountUpdateOneWithoutReceivedTransactionsNestedInputSchema).optional(),
   investment: z.lazy(() => InvestmentUpdateOneWithoutTransactionsNestedInputSchema).optional(),
@@ -11042,7 +11390,7 @@ export const TransactionUncheckedUpdateWithoutJointAccountModRequestsInputSchema
   charges: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   financialAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => TransactionTypeSchema),z.lazy(() => EnumTransactionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  initiatorAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   recipientAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   investmentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => EnumTransactionStatusFieldUpdateOperationsInputSchema) ]).optional(),
@@ -11296,7 +11644,7 @@ export const TransactionCreateWithoutInvestmentInputSchema: z.ZodType<Prisma.Tra
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema),
+  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutTransactionsInputSchema),
   recipientAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutReceivedTransactionsInputSchema).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutTransactionInputSchema).optional(),
@@ -11313,7 +11661,7 @@ export const TransactionUncheckedCreateWithoutInvestmentInputSchema: z.ZodType<P
   charges: z.number().optional(),
   financialAccountId: z.string(),
   type: z.lazy(() => TransactionTypeSchema),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().optional().nullable(),
   recipientAccountId: z.string().optional().nullable(),
   status: z.lazy(() => TransactionStatusSchema).optional(),
   parentTransactionId: z.string().optional().nullable(),
@@ -11397,6 +11745,37 @@ export const FinancialAccountUncheckedCreateWithoutInvestmentsInputSchema: z.Zod
 export const FinancialAccountCreateOrConnectWithoutInvestmentsInputSchema: z.ZodType<Prisma.FinancialAccountCreateOrConnectWithoutInvestmentsInput> = z.object({
   where: z.lazy(() => FinancialAccountWhereUniqueInputSchema),
   create: z.union([ z.lazy(() => FinancialAccountCreateWithoutInvestmentsInputSchema),z.lazy(() => FinancialAccountUncheckedCreateWithoutInvestmentsInputSchema) ]),
+}).strict();
+
+export const ProfitCreateWithoutInvestmentInputSchema: z.ZodType<Prisma.ProfitCreateWithoutInvestmentInput> = z.object({
+  id: z.string().uuid().optional(),
+  number: z.number().int(),
+  intendedAmount: z.number(),
+  actualAmount: z.number(),
+  isDistributed: z.boolean().optional(),
+  distributedAt: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional()
+}).strict();
+
+export const ProfitUncheckedCreateWithoutInvestmentInputSchema: z.ZodType<Prisma.ProfitUncheckedCreateWithoutInvestmentInput> = z.object({
+  id: z.string().uuid().optional(),
+  number: z.number().int(),
+  intendedAmount: z.number(),
+  actualAmount: z.number(),
+  isDistributed: z.boolean().optional(),
+  distributedAt: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional()
+}).strict();
+
+export const ProfitCreateOrConnectWithoutInvestmentInputSchema: z.ZodType<Prisma.ProfitCreateOrConnectWithoutInvestmentInput> = z.object({
+  where: z.lazy(() => ProfitWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => ProfitCreateWithoutInvestmentInputSchema),z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema) ]),
+}).strict();
+
+export const ProfitCreateManyInvestmentInputEnvelopeSchema: z.ZodType<Prisma.ProfitCreateManyInvestmentInputEnvelope> = z.object({
+  data: z.union([ z.lazy(() => ProfitCreateManyInvestmentInputSchema),z.lazy(() => ProfitCreateManyInvestmentInputSchema).array() ]),
 }).strict();
 
 export const AccountUserUpsertWithoutInvestmentsInputSchema: z.ZodType<Prisma.AccountUserUpsertWithoutInvestmentsInput> = z.object({
@@ -11511,6 +11890,165 @@ export const FinancialAccountUncheckedUpdateWithoutInvestmentsInputSchema: z.Zod
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema).optional()
+}).strict();
+
+export const ProfitUpsertWithWhereUniqueWithoutInvestmentInputSchema: z.ZodType<Prisma.ProfitUpsertWithWhereUniqueWithoutInvestmentInput> = z.object({
+  where: z.lazy(() => ProfitWhereUniqueInputSchema),
+  update: z.union([ z.lazy(() => ProfitUpdateWithoutInvestmentInputSchema),z.lazy(() => ProfitUncheckedUpdateWithoutInvestmentInputSchema) ]),
+  create: z.union([ z.lazy(() => ProfitCreateWithoutInvestmentInputSchema),z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema) ]),
+}).strict();
+
+export const ProfitUpdateWithWhereUniqueWithoutInvestmentInputSchema: z.ZodType<Prisma.ProfitUpdateWithWhereUniqueWithoutInvestmentInput> = z.object({
+  where: z.lazy(() => ProfitWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => ProfitUpdateWithoutInvestmentInputSchema),z.lazy(() => ProfitUncheckedUpdateWithoutInvestmentInputSchema) ]),
+}).strict();
+
+export const ProfitUpdateManyWithWhereWithoutInvestmentInputSchema: z.ZodType<Prisma.ProfitUpdateManyWithWhereWithoutInvestmentInput> = z.object({
+  where: z.lazy(() => ProfitScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => ProfitUpdateManyMutationInputSchema),z.lazy(() => ProfitUncheckedUpdateManyWithoutInvestmentInputSchema) ]),
+}).strict();
+
+export const ProfitScalarWhereInputSchema: z.ZodType<Prisma.ProfitScalarWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => ProfitScalarWhereInputSchema),z.lazy(() => ProfitScalarWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => ProfitScalarWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => ProfitScalarWhereInputSchema),z.lazy(() => ProfitScalarWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  investmentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  number: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  intendedAmount: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
+  actualAmount: z.union([ z.lazy(() => FloatFilterSchema),z.number() ]).optional(),
+  isDistributed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
+  distributedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+}).strict();
+
+export const InvestmentCreateWithoutProfitsInputSchema: z.ZodType<Prisma.InvestmentCreateWithoutProfitsInput> = z.object({
+  id: z.string().uuid().optional(),
+  deposit: z.number(),
+  investmentName: z.string(),
+  totalProfit: z.number().optional(),
+  profitCount: z.number().int().optional(),
+  status: z.lazy(() => InvestmentStatusSchema).optional(),
+  pausedAt: z.coerce.date().optional().nullable(),
+  pausedReason: z.string().optional().nullable(),
+  closedAt: z.coerce.date().optional().nullable(),
+  closedReason: z.string().optional().nullable(),
+  terminatedAt: z.coerce.date().optional().nullable(),
+  terminatedReason: z.string().optional().nullable(),
+  category: z.lazy(() => InvestmentPlanCategorySchema),
+  daysCompleted: z.number().int().optional(),
+  duration: z.number().int(),
+  totalReturn: z.number(),
+  periodicReturn: z.number(),
+  profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
+  terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+  investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
+  transactions: z.lazy(() => TransactionCreateNestedManyWithoutInvestmentInputSchema).optional(),
+  financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema)
+}).strict();
+
+export const InvestmentUncheckedCreateWithoutProfitsInputSchema: z.ZodType<Prisma.InvestmentUncheckedCreateWithoutProfitsInput> = z.object({
+  id: z.string().uuid().optional(),
+  financialAccountId: z.string(),
+  investorId: z.string(),
+  deposit: z.number(),
+  investmentName: z.string(),
+  totalProfit: z.number().optional(),
+  profitCount: z.number().int().optional(),
+  status: z.lazy(() => InvestmentStatusSchema).optional(),
+  pausedAt: z.coerce.date().optional().nullable(),
+  pausedReason: z.string().optional().nullable(),
+  closedAt: z.coerce.date().optional().nullable(),
+  closedReason: z.string().optional().nullable(),
+  terminatedAt: z.coerce.date().optional().nullable(),
+  terminatedReason: z.string().optional().nullable(),
+  category: z.lazy(() => InvestmentPlanCategorySchema),
+  daysCompleted: z.number().int().optional(),
+  duration: z.number().int(),
+  totalReturn: z.number(),
+  periodicReturn: z.number(),
+  profitDistribution: z.lazy(() => ProfitDistributionSchema).optional(),
+  terminationFee: z.number().optional(),
+  lastProfitDistributedAt: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+  transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
+}).strict();
+
+export const InvestmentCreateOrConnectWithoutProfitsInputSchema: z.ZodType<Prisma.InvestmentCreateOrConnectWithoutProfitsInput> = z.object({
+  where: z.lazy(() => InvestmentWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => InvestmentCreateWithoutProfitsInputSchema),z.lazy(() => InvestmentUncheckedCreateWithoutProfitsInputSchema) ]),
+}).strict();
+
+export const InvestmentUpsertWithoutProfitsInputSchema: z.ZodType<Prisma.InvestmentUpsertWithoutProfitsInput> = z.object({
+  update: z.union([ z.lazy(() => InvestmentUpdateWithoutProfitsInputSchema),z.lazy(() => InvestmentUncheckedUpdateWithoutProfitsInputSchema) ]),
+  create: z.union([ z.lazy(() => InvestmentCreateWithoutProfitsInputSchema),z.lazy(() => InvestmentUncheckedCreateWithoutProfitsInputSchema) ]),
+  where: z.lazy(() => InvestmentWhereInputSchema).optional()
+}).strict();
+
+export const InvestmentUpdateToOneWithWhereWithoutProfitsInputSchema: z.ZodType<Prisma.InvestmentUpdateToOneWithWhereWithoutProfitsInput> = z.object({
+  where: z.lazy(() => InvestmentWhereInputSchema).optional(),
+  data: z.union([ z.lazy(() => InvestmentUpdateWithoutProfitsInputSchema),z.lazy(() => InvestmentUncheckedUpdateWithoutProfitsInputSchema) ]),
+}).strict();
+
+export const InvestmentUpdateWithoutProfitsInputSchema: z.ZodType<Prisma.InvestmentUpdateWithoutProfitsInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  deposit: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  investmentName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  totalProfit: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  profitCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => InvestmentStatusSchema),z.lazy(() => EnumInvestmentStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  pausedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pausedReason: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  closedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  closedReason: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  terminatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  terminatedReason: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  category: z.union([ z.lazy(() => InvestmentPlanCategorySchema),z.lazy(() => EnumInvestmentPlanCategoryFieldUpdateOperationsInputSchema) ]).optional(),
+  daysCompleted: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  duration: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  totalReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
+  terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
+  transactions: z.lazy(() => TransactionUpdateManyWithoutInvestmentNestedInputSchema).optional(),
+  financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional()
+}).strict();
+
+export const InvestmentUncheckedUpdateWithoutProfitsInputSchema: z.ZodType<Prisma.InvestmentUncheckedUpdateWithoutProfitsInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  financialAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  investorId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  deposit: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  investmentName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  totalProfit: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  profitCount: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  status: z.union([ z.lazy(() => InvestmentStatusSchema),z.lazy(() => EnumInvestmentStatusFieldUpdateOperationsInputSchema) ]).optional(),
+  pausedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  pausedReason: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  closedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  closedReason: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  terminatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  terminatedReason: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  category: z.union([ z.lazy(() => InvestmentPlanCategorySchema),z.lazy(() => EnumInvestmentPlanCategoryFieldUpdateOperationsInputSchema) ]).optional(),
+  daysCompleted: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  duration: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  totalReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  periodicReturn: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  profitDistribution: z.union([ z.lazy(() => ProfitDistributionSchema),z.lazy(() => EnumProfitDistributionFieldUpdateOperationsInputSchema) ]).optional(),
+  terminationFee: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
 }).strict();
 
 export const AccountUserCreateWithoutTransactionsInputSchema: z.ZodType<Prisma.AccountUserCreateWithoutTransactionsInput> = z.object({
@@ -11680,7 +12218,8 @@ export const InvestmentCreateWithoutTransactionsInputSchema: z.ZodType<Prisma.In
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
-  financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema)
+  financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema),
+  profits: z.lazy(() => ProfitCreateNestedManyWithoutInvestmentInputSchema).optional()
 }).strict();
 
 export const InvestmentUncheckedCreateWithoutTransactionsInputSchema: z.ZodType<Prisma.InvestmentUncheckedCreateWithoutTransactionsInput> = z.object({
@@ -11707,7 +12246,8 @@ export const InvestmentUncheckedCreateWithoutTransactionsInputSchema: z.ZodType<
   terminationFee: z.number().optional(),
   lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional()
+  updatedAt: z.coerce.date().optional(),
+  profits: z.lazy(() => ProfitUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
 }).strict();
 
 export const InvestmentCreateOrConnectWithoutTransactionsInputSchema: z.ZodType<Prisma.InvestmentCreateOrConnectWithoutTransactionsInput> = z.object({
@@ -11767,7 +12307,7 @@ export const TransactionCreateWithoutChildTransactionsInputSchema: z.ZodType<Pri
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema),
+  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutTransactionsInputSchema),
   recipientAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutReceivedTransactionsInputSchema).optional(),
   investment: z.lazy(() => InvestmentCreateNestedOneWithoutTransactionsInputSchema).optional(),
@@ -11784,7 +12324,7 @@ export const TransactionUncheckedCreateWithoutChildTransactionsInputSchema: z.Zo
   charges: z.number().optional(),
   financialAccountId: z.string(),
   type: z.lazy(() => TransactionTypeSchema),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().optional().nullable(),
   recipientAccountId: z.string().optional().nullable(),
   investmentId: z.string().optional().nullable(),
   status: z.lazy(() => TransactionStatusSchema).optional(),
@@ -11830,7 +12370,7 @@ export const TransactionCreateWithoutParentTransactionInputSchema: z.ZodType<Pri
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema),
+  initiator: z.lazy(() => AccountUserCreateNestedOneWithoutTransactionsInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutTransactionsInputSchema),
   recipientAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutReceivedTransactionsInputSchema).optional(),
   investment: z.lazy(() => InvestmentCreateNestedOneWithoutTransactionsInputSchema).optional(),
@@ -11847,7 +12387,7 @@ export const TransactionUncheckedCreateWithoutParentTransactionInputSchema: z.Zo
   charges: z.number().optional(),
   financialAccountId: z.string(),
   type: z.lazy(() => TransactionTypeSchema),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().optional().nullable(),
   recipientAccountId: z.string().optional().nullable(),
   investmentId: z.string().optional().nullable(),
   status: z.lazy(() => TransactionStatusSchema).optional(),
@@ -12072,7 +12612,8 @@ export const InvestmentUpdateWithoutTransactionsInputSchema: z.ZodType<Prisma.In
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
-  financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional()
+  financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
+  profits: z.lazy(() => ProfitUpdateManyWithoutInvestmentNestedInputSchema).optional()
 }).strict();
 
 export const InvestmentUncheckedUpdateWithoutTransactionsInputSchema: z.ZodType<Prisma.InvestmentUncheckedUpdateWithoutTransactionsInput> = z.object({
@@ -12100,6 +12641,7 @@ export const InvestmentUncheckedUpdateWithoutTransactionsInputSchema: z.ZodType<
   lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  profits: z.lazy(() => ProfitUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
 }).strict();
 
 export const JointAccountModRequestUpsertWithWhereUniqueWithoutTransactionInputSchema: z.ZodType<Prisma.JointAccountModRequestUpsertWithWhereUniqueWithoutTransactionInput> = z.object({
@@ -12150,7 +12692,7 @@ export const TransactionUpdateWithoutChildTransactionsInputSchema: z.ZodType<Pri
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiator: z.lazy(() => AccountUserUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
+  initiator: z.lazy(() => AccountUserUpdateOneWithoutTransactionsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
   recipientAccount: z.lazy(() => FinancialAccountUpdateOneWithoutReceivedTransactionsNestedInputSchema).optional(),
   investment: z.lazy(() => InvestmentUpdateOneWithoutTransactionsNestedInputSchema).optional(),
@@ -12167,7 +12709,7 @@ export const TransactionUncheckedUpdateWithoutChildTransactionsInputSchema: z.Zo
   charges: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   financialAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => TransactionTypeSchema),z.lazy(() => EnumTransactionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  initiatorAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   recipientAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   investmentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => EnumTransactionStatusFieldUpdateOperationsInputSchema) ]).optional(),
@@ -12973,7 +13515,7 @@ export const TransactionCreateManyFinancialAccountInputSchema: z.ZodType<Prisma.
   rate: z.number().optional(),
   charges: z.number().optional(),
   type: z.lazy(() => TransactionTypeSchema),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().optional().nullable(),
   recipientAccountId: z.string().optional().nullable(),
   investmentId: z.string().optional().nullable(),
   status: z.lazy(() => TransactionStatusSchema).optional(),
@@ -13001,7 +13543,7 @@ export const TransactionCreateManyRecipientAccountInputSchema: z.ZodType<Prisma.
   charges: z.number().optional(),
   financialAccountId: z.string(),
   type: z.lazy(() => TransactionTypeSchema),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().optional().nullable(),
   investmentId: z.string().optional().nullable(),
   status: z.lazy(() => TransactionStatusSchema).optional(),
   parentTransactionId: z.string().optional().nullable(),
@@ -13216,7 +13758,7 @@ export const TransactionUpdateWithoutFinancialAccountInputSchema: z.ZodType<Pris
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiator: z.lazy(() => AccountUserUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
+  initiator: z.lazy(() => AccountUserUpdateOneWithoutTransactionsNestedInputSchema).optional(),
   recipientAccount: z.lazy(() => FinancialAccountUpdateOneWithoutReceivedTransactionsNestedInputSchema).optional(),
   investment: z.lazy(() => InvestmentUpdateOneWithoutTransactionsNestedInputSchema).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema).optional(),
@@ -13232,7 +13774,7 @@ export const TransactionUncheckedUpdateWithoutFinancialAccountInputSchema: z.Zod
   rate: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   charges: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => TransactionTypeSchema),z.lazy(() => EnumTransactionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  initiatorAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   recipientAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   investmentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => EnumTransactionStatusFieldUpdateOperationsInputSchema) ]).optional(),
@@ -13261,7 +13803,7 @@ export const TransactionUncheckedUpdateManyWithoutFinancialAccountInputSchema: z
   rate: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   charges: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => TransactionTypeSchema),z.lazy(() => EnumTransactionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  initiatorAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   recipientAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   investmentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => EnumTransactionStatusFieldUpdateOperationsInputSchema) ]).optional(),
@@ -13301,7 +13843,7 @@ export const TransactionUpdateWithoutRecipientAccountInputSchema: z.ZodType<Pris
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiator: z.lazy(() => AccountUserUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
+  initiator: z.lazy(() => AccountUserUpdateOneWithoutTransactionsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
   investment: z.lazy(() => InvestmentUpdateOneWithoutTransactionsNestedInputSchema).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema).optional(),
@@ -13318,7 +13860,7 @@ export const TransactionUncheckedUpdateWithoutRecipientAccountInputSchema: z.Zod
   charges: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   financialAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => TransactionTypeSchema),z.lazy(() => EnumTransactionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  initiatorAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   investmentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => EnumTransactionStatusFieldUpdateOperationsInputSchema) ]).optional(),
   parentTransactionId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -13347,7 +13889,7 @@ export const TransactionUncheckedUpdateManyWithoutRecipientAccountInputSchema: z
   charges: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   financialAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => TransactionTypeSchema),z.lazy(() => EnumTransactionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  initiatorAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   investmentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => EnumTransactionStatusFieldUpdateOperationsInputSchema) ]).optional(),
   parentTransactionId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -13389,7 +13931,8 @@ export const InvestmentUpdateWithoutFinancialAccountInputSchema: z.ZodType<Prism
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
-  transactions: z.lazy(() => TransactionUpdateManyWithoutInvestmentNestedInputSchema).optional()
+  transactions: z.lazy(() => TransactionUpdateManyWithoutInvestmentNestedInputSchema).optional(),
+  profits: z.lazy(() => ProfitUpdateManyWithoutInvestmentNestedInputSchema).optional()
 }).strict();
 
 export const InvestmentUncheckedUpdateWithoutFinancialAccountInputSchema: z.ZodType<Prisma.InvestmentUncheckedUpdateWithoutFinancialAccountInput> = z.object({
@@ -13416,7 +13959,8 @@ export const InvestmentUncheckedUpdateWithoutFinancialAccountInputSchema: z.ZodT
   lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
+  transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional(),
+  profits: z.lazy(() => ProfitUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
 }).strict();
 
 export const InvestmentUncheckedUpdateManyWithoutFinancialAccountInputSchema: z.ZodType<Prisma.InvestmentUncheckedUpdateManyWithoutFinancialAccountInput> = z.object({
@@ -13607,7 +14151,8 @@ export const InvestmentUpdateWithoutInvestorInputSchema: z.ZodType<Prisma.Invest
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   transactions: z.lazy(() => TransactionUpdateManyWithoutInvestmentNestedInputSchema).optional(),
-  financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional()
+  financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
+  profits: z.lazy(() => ProfitUpdateManyWithoutInvestmentNestedInputSchema).optional()
 }).strict();
 
 export const InvestmentUncheckedUpdateWithoutInvestorInputSchema: z.ZodType<Prisma.InvestmentUncheckedUpdateWithoutInvestorInput> = z.object({
@@ -13634,7 +14179,8 @@ export const InvestmentUncheckedUpdateWithoutInvestorInputSchema: z.ZodType<Pris
   lastProfitDistributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
+  transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional(),
+  profits: z.lazy(() => ProfitUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
 }).strict();
 
 export const InvestmentUncheckedUpdateManyWithoutInvestorInputSchema: z.ZodType<Prisma.InvestmentUncheckedUpdateManyWithoutInvestorInput> = z.object({
@@ -13704,7 +14250,7 @@ export const TransactionCreateManyInvestmentInputSchema: z.ZodType<Prisma.Transa
   charges: z.number().optional(),
   financialAccountId: z.string(),
   type: z.lazy(() => TransactionTypeSchema),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().optional().nullable(),
   recipientAccountId: z.string().optional().nullable(),
   status: z.lazy(() => TransactionStatusSchema).optional(),
   parentTransactionId: z.string().optional().nullable(),
@@ -13718,6 +14264,17 @@ export const TransactionCreateManyInvestmentInputSchema: z.ZodType<Prisma.Transa
   bank: z.string().optional().nullable(),
   bankAccount: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional()
+}).strict();
+
+export const ProfitCreateManyInvestmentInputSchema: z.ZodType<Prisma.ProfitCreateManyInvestmentInput> = z.object({
+  id: z.string().uuid().optional(),
+  number: z.number().int(),
+  intendedAmount: z.number(),
+  actualAmount: z.number(),
+  isDistributed: z.boolean().optional(),
+  distributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
@@ -13743,7 +14300,7 @@ export const TransactionUpdateWithoutInvestmentInputSchema: z.ZodType<Prisma.Tra
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiator: z.lazy(() => AccountUserUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
+  initiator: z.lazy(() => AccountUserUpdateOneWithoutTransactionsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
   recipientAccount: z.lazy(() => FinancialAccountUpdateOneWithoutReceivedTransactionsNestedInputSchema).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema).optional(),
@@ -13760,7 +14317,7 @@ export const TransactionUncheckedUpdateWithoutInvestmentInputSchema: z.ZodType<P
   charges: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   financialAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => TransactionTypeSchema),z.lazy(() => EnumTransactionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  initiatorAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   recipientAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => EnumTransactionStatusFieldUpdateOperationsInputSchema) ]).optional(),
   parentTransactionId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -13789,7 +14346,7 @@ export const TransactionUncheckedUpdateManyWithoutInvestmentInputSchema: z.ZodTy
   charges: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   financialAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => TransactionTypeSchema),z.lazy(() => EnumTransactionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  initiatorAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   recipientAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => EnumTransactionStatusFieldUpdateOperationsInputSchema) ]).optional(),
   parentTransactionId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -13803,6 +14360,39 @@ export const TransactionUncheckedUpdateManyWithoutInvestmentInputSchema: z.ZodTy
   bank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   bankAccount: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const ProfitUpdateWithoutInvestmentInputSchema: z.ZodType<Prisma.ProfitUpdateWithoutInvestmentInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  intendedAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  actualAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isDistributed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  distributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const ProfitUncheckedUpdateWithoutInvestmentInputSchema: z.ZodType<Prisma.ProfitUncheckedUpdateWithoutInvestmentInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  intendedAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  actualAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isDistributed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  distributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const ProfitUncheckedUpdateManyWithoutInvestmentInputSchema: z.ZodType<Prisma.ProfitUncheckedUpdateManyWithoutInvestmentInput> = z.object({
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  number: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  intendedAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  actualAmount: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
+  isDistributed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  distributedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -13826,7 +14416,7 @@ export const TransactionCreateManyParentTransactionInputSchema: z.ZodType<Prisma
   charges: z.number().optional(),
   financialAccountId: z.string(),
   type: z.lazy(() => TransactionTypeSchema),
-  initiatorAccountId: z.string(),
+  initiatorAccountId: z.string().optional().nullable(),
   recipientAccountId: z.string().optional().nullable(),
   investmentId: z.string().optional().nullable(),
   status: z.lazy(() => TransactionStatusSchema).optional(),
@@ -13897,7 +14487,7 @@ export const TransactionUpdateWithoutParentTransactionInputSchema: z.ZodType<Pri
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiator: z.lazy(() => AccountUserUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
+  initiator: z.lazy(() => AccountUserUpdateOneWithoutTransactionsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutTransactionsNestedInputSchema).optional(),
   recipientAccount: z.lazy(() => FinancialAccountUpdateOneWithoutReceivedTransactionsNestedInputSchema).optional(),
   investment: z.lazy(() => InvestmentUpdateOneWithoutTransactionsNestedInputSchema).optional(),
@@ -13914,7 +14504,7 @@ export const TransactionUncheckedUpdateWithoutParentTransactionInputSchema: z.Zo
   charges: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   financialAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => TransactionTypeSchema),z.lazy(() => EnumTransactionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  initiatorAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   recipientAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   investmentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => EnumTransactionStatusFieldUpdateOperationsInputSchema) ]).optional(),
@@ -13943,7 +14533,7 @@ export const TransactionUncheckedUpdateManyWithoutParentTransactionInputSchema: 
   charges: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   financialAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => TransactionTypeSchema),z.lazy(() => EnumTransactionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  initiatorAccountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  initiatorAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   recipientAccountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   investmentId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   status: z.union([ z.lazy(() => TransactionStatusSchema),z.lazy(() => EnumTransactionStatusFieldUpdateOperationsInputSchema) ]).optional(),
@@ -14759,6 +15349,68 @@ export const InvestmentFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.InvestmentF
   select: InvestmentSelectSchema.optional(),
   include: InvestmentIncludeSchema.optional(),
   where: InvestmentWhereUniqueInputSchema,
+}).strict() ;
+
+export const ProfitFindFirstArgsSchema: z.ZodType<Prisma.ProfitFindFirstArgs> = z.object({
+  select: ProfitSelectSchema.optional(),
+  include: ProfitIncludeSchema.optional(),
+  where: ProfitWhereInputSchema.optional(),
+  orderBy: z.union([ ProfitOrderByWithRelationInputSchema.array(),ProfitOrderByWithRelationInputSchema ]).optional(),
+  cursor: ProfitWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: z.union([ ProfitScalarFieldEnumSchema,ProfitScalarFieldEnumSchema.array() ]).optional(),
+}).strict() ;
+
+export const ProfitFindFirstOrThrowArgsSchema: z.ZodType<Prisma.ProfitFindFirstOrThrowArgs> = z.object({
+  select: ProfitSelectSchema.optional(),
+  include: ProfitIncludeSchema.optional(),
+  where: ProfitWhereInputSchema.optional(),
+  orderBy: z.union([ ProfitOrderByWithRelationInputSchema.array(),ProfitOrderByWithRelationInputSchema ]).optional(),
+  cursor: ProfitWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: z.union([ ProfitScalarFieldEnumSchema,ProfitScalarFieldEnumSchema.array() ]).optional(),
+}).strict() ;
+
+export const ProfitFindManyArgsSchema: z.ZodType<Prisma.ProfitFindManyArgs> = z.object({
+  select: ProfitSelectSchema.optional(),
+  include: ProfitIncludeSchema.optional(),
+  where: ProfitWhereInputSchema.optional(),
+  orderBy: z.union([ ProfitOrderByWithRelationInputSchema.array(),ProfitOrderByWithRelationInputSchema ]).optional(),
+  cursor: ProfitWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: z.union([ ProfitScalarFieldEnumSchema,ProfitScalarFieldEnumSchema.array() ]).optional(),
+}).strict() ;
+
+export const ProfitAggregateArgsSchema: z.ZodType<Prisma.ProfitAggregateArgs> = z.object({
+  where: ProfitWhereInputSchema.optional(),
+  orderBy: z.union([ ProfitOrderByWithRelationInputSchema.array(),ProfitOrderByWithRelationInputSchema ]).optional(),
+  cursor: ProfitWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict() ;
+
+export const ProfitGroupByArgsSchema: z.ZodType<Prisma.ProfitGroupByArgs> = z.object({
+  where: ProfitWhereInputSchema.optional(),
+  orderBy: z.union([ ProfitOrderByWithAggregationInputSchema.array(),ProfitOrderByWithAggregationInputSchema ]).optional(),
+  by: ProfitScalarFieldEnumSchema.array(),
+  having: ProfitScalarWhereWithAggregatesInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict() ;
+
+export const ProfitFindUniqueArgsSchema: z.ZodType<Prisma.ProfitFindUniqueArgs> = z.object({
+  select: ProfitSelectSchema.optional(),
+  include: ProfitIncludeSchema.optional(),
+  where: ProfitWhereUniqueInputSchema,
+}).strict() ;
+
+export const ProfitFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.ProfitFindUniqueOrThrowArgs> = z.object({
+  select: ProfitSelectSchema.optional(),
+  include: ProfitIncludeSchema.optional(),
+  where: ProfitWhereUniqueInputSchema,
 }).strict() ;
 
 export const TransactionFindFirstArgsSchema: z.ZodType<Prisma.TransactionFindFirstArgs> = z.object({
@@ -15664,6 +16316,58 @@ export const InvestmentUpdateManyAndReturnArgsSchema: z.ZodType<Prisma.Investmen
 
 export const InvestmentDeleteManyArgsSchema: z.ZodType<Prisma.InvestmentDeleteManyArgs> = z.object({
   where: InvestmentWhereInputSchema.optional(),
+  limit: z.number().optional(),
+}).strict() ;
+
+export const ProfitCreateArgsSchema: z.ZodType<Prisma.ProfitCreateArgs> = z.object({
+  select: ProfitSelectSchema.optional(),
+  include: ProfitIncludeSchema.optional(),
+  data: z.union([ ProfitCreateInputSchema,ProfitUncheckedCreateInputSchema ]),
+}).strict() ;
+
+export const ProfitUpsertArgsSchema: z.ZodType<Prisma.ProfitUpsertArgs> = z.object({
+  select: ProfitSelectSchema.optional(),
+  include: ProfitIncludeSchema.optional(),
+  where: ProfitWhereUniqueInputSchema,
+  create: z.union([ ProfitCreateInputSchema,ProfitUncheckedCreateInputSchema ]),
+  update: z.union([ ProfitUpdateInputSchema,ProfitUncheckedUpdateInputSchema ]),
+}).strict() ;
+
+export const ProfitCreateManyArgsSchema: z.ZodType<Prisma.ProfitCreateManyArgs> = z.object({
+  data: z.union([ ProfitCreateManyInputSchema,ProfitCreateManyInputSchema.array() ]),
+}).strict() ;
+
+export const ProfitCreateManyAndReturnArgsSchema: z.ZodType<Prisma.ProfitCreateManyAndReturnArgs> = z.object({
+  data: z.union([ ProfitCreateManyInputSchema,ProfitCreateManyInputSchema.array() ]),
+}).strict() ;
+
+export const ProfitDeleteArgsSchema: z.ZodType<Prisma.ProfitDeleteArgs> = z.object({
+  select: ProfitSelectSchema.optional(),
+  include: ProfitIncludeSchema.optional(),
+  where: ProfitWhereUniqueInputSchema,
+}).strict() ;
+
+export const ProfitUpdateArgsSchema: z.ZodType<Prisma.ProfitUpdateArgs> = z.object({
+  select: ProfitSelectSchema.optional(),
+  include: ProfitIncludeSchema.optional(),
+  data: z.union([ ProfitUpdateInputSchema,ProfitUncheckedUpdateInputSchema ]),
+  where: ProfitWhereUniqueInputSchema,
+}).strict() ;
+
+export const ProfitUpdateManyArgsSchema: z.ZodType<Prisma.ProfitUpdateManyArgs> = z.object({
+  data: z.union([ ProfitUpdateManyMutationInputSchema,ProfitUncheckedUpdateManyInputSchema ]),
+  where: ProfitWhereInputSchema.optional(),
+  limit: z.number().optional(),
+}).strict() ;
+
+export const ProfitUpdateManyAndReturnArgsSchema: z.ZodType<Prisma.ProfitUpdateManyAndReturnArgs> = z.object({
+  data: z.union([ ProfitUpdateManyMutationInputSchema,ProfitUncheckedUpdateManyInputSchema ]),
+  where: ProfitWhereInputSchema.optional(),
+  limit: z.number().optional(),
+}).strict() ;
+
+export const ProfitDeleteManyArgsSchema: z.ZodType<Prisma.ProfitDeleteManyArgs> = z.object({
+  where: ProfitWhereInputSchema.optional(),
   limit: z.number().optional(),
 }).strict() ;
 

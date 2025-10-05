@@ -32,6 +32,7 @@ export const ModelName = {
   JointAccountModRequestApproval: 'JointAccountModRequestApproval',
   InvestmentPlan: 'InvestmentPlan',
   Investment: 'Investment',
+  Profit: 'Profit',
   Transaction: 'Transaction',
   Notification: 'Notification',
   Currency: 'Currency',
@@ -278,6 +279,21 @@ export const InvestmentScalarFieldEnum = {
 } as const
 
 export type InvestmentScalarFieldEnum = (typeof InvestmentScalarFieldEnum)[keyof typeof InvestmentScalarFieldEnum]
+
+
+export const ProfitScalarFieldEnum = {
+  id: 'id',
+  investmentId: 'investmentId',
+  number: 'number',
+  intendedAmount: 'intendedAmount',
+  actualAmount: 'actualAmount',
+  isDistributed: 'isDistributed',
+  distributedAt: 'distributedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProfitScalarFieldEnum = (typeof ProfitScalarFieldEnum)[keyof typeof ProfitScalarFieldEnum]
 
 
 export const TransactionScalarFieldEnum = {

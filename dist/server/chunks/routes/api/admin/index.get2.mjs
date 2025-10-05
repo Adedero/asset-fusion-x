@@ -11,7 +11,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';

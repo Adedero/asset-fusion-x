@@ -10,7 +10,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';
@@ -41,9 +40,18 @@ const index_get = defineEventHandler(async (event) => {
           }
         }
       },
+      profits: true,
       transactions: {
         where: {
           type: "profit"
+        },
+        select: {
+          id: true,
+          amount: true,
+          USDAmount: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true
         },
         take: 1,
         orderBy: {

@@ -1,4 +1,4 @@
-import { d as defineEventHandler, p as prisma, c as createError, v as checkUserKycApproval, r as readValidatedBody, w as checkBusinessProfileApproval, x as getJointAccountModApprovals } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, p as prisma, c as createError, x as checkUserKycApproval, r as readValidatedBody, y as checkBusinessProfileApproval, z as getJointAccountModApprovals } from '../../../../nitro/nitro.mjs';
 import z from 'zod';
 import { r as round } from '../../../../_/round.mjs';
 import 'node:path';
@@ -12,7 +12,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';
@@ -160,8 +159,7 @@ const withdrawal_post = defineEventHandler(async (event) => {
                 financialAccountId,
                 user.id,
                 tx
-              ),
-              skipDuplicates: true
+              )
             }
           }
         }

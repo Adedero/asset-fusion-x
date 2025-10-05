@@ -131,10 +131,20 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
           <UserAccountBalance
             ref="account-balance-component"
             :account-id="accountId"
-            class="text-3xl font-medium font-geist-mono"
-            @update="(balance) => (accountBalance = balance)"
-          />
-          <NuxtBadge label="Account Balance" variant="outline" />
+            @update="(balance) => (accountBalance = balance?.dividend ?? 0)"
+          >
+            <template #default="{ balance }">
+              <div class="flex-col-center">
+                <p class="text-center font-geist-mono">
+                  Total Balance: <b>{{ toDollar(balance?.balance ?? 0) }}</b>
+                </p>
+                <p class="text-3xl font-medium font-geist-mono">
+                  {{ toDollar(balance?.dividend ?? 0) }}
+                </p>
+              </div>
+            </template>
+          </UserAccountBalance>
+          <NuxtBadge label="Withdrawable Amount" variant="outline" />
         </div>
 
         <NuxtAlert
@@ -147,7 +157,7 @@ const handleFormSubmit = async (event: FormSubmitEvent<Schema>) => {
         <div class="grid md:grid-cols-2 gap-4">
           <NuxtFormField
             name="amount"
-            label="Enter the deposit amount"
+            label="Enter the withdrawal amount"
             required
             :description="`Charges: ${toDollar(
               currency.withdrawalCharge ?? 0

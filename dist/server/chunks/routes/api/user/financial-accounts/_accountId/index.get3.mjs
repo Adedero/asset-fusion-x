@@ -1,5 +1,6 @@
-import { d as defineEventHandler, f as getRouterParam, a as getValidatedQuery, c as createError, p as prisma } from '../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, h as getRouterParam, a as getValidatedQuery, c as createError, p as prisma } from '../../../../../nitro/nitro.mjs';
 import { p as paginationQuerySchema } from '../../../../../_/schemas.mjs';
+import z from 'zod';
 import 'node:path';
 import 'fs/promises';
 import 'axios';
@@ -11,7 +12,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';
@@ -22,22 +22,32 @@ import 'better-auth/adapters/prisma';
 import 'better-auth/plugins';
 import '@iconify/utils';
 import 'consola';
-import 'zod';
 
 const LIMIT = parseInt(process.env.GET_REQUEST_LIMIT || "20");
+const schema = z.object({
+  ...paginationQuerySchema.shape,
+  type: z.array(
+    z.enum(["deposit", "withdrawal", "transfer", "investment", "profit"])
+  ).optional(),
+  status: z.array(z.enum(["pending", "successfull", "reversed", "failed"])).optional()
+});
 const index_get = defineEventHandler(async (event) => {
   var _a;
   const accountId = (_a = getRouterParam(event, "accountId")) != null ? _a : "";
-  const query = await getValidatedQuery(event, paginationQuerySchema.safeParse);
+  const query = await getValidatedQuery(event, schema.safeParse);
   if (!query.success) {
     throw createError({
       statusCode: 400,
       statusMessage: query.error.issues[0].message
     });
   }
-  const { page = 1, limit = LIMIT } = query.data;
+  const { type, status, page = 1, limit = LIMIT } = query.data;
   const transactions = await prisma.transaction.findMany({
     where: {
+      AND: [
+        type ? { type: { in: type } } : {},
+        status ? { status: { in: status } } : {}
+      ],
       financialAccountId: accountId
     },
     take: limit,

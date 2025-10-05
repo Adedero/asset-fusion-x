@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import type { TableColumn, TableRow } from "@nuxt/ui";
 import normalizeException from "~~/shared/helpers/normalize-exception";
+import round from "~~/shared/utils/round";
+
+const { balance } = defineProps<{
+  balance: number;
+}>();
 
 const accountId = useRouteData().getParams("accountId");
 
@@ -19,7 +24,8 @@ const items = computed(() => {
         name: item.user?.name,
         email: item.user?.email,
         role: item.role,
-        ownership: item.ownership
+        ownership: item.ownership,
+        balance: round(balance * (item.ownership / 100))
       };
     }) ?? []
   );
@@ -56,6 +62,11 @@ const columns: TableColumn<AccountUser>[] = [
     accessorKey: "ownership",
     header: "Ownership",
     cell: ({ row }) => `${row.getValue("ownership")}%`
+  },
+  {
+    accessorKey: "balance",
+    header: "Available Balance",
+    cell: ({ row }) => toDollar(row.getValue("balance") as number)
   }
 ];
 type SelectedUser = NonNullable<typeof data.value>[number];
@@ -89,6 +100,14 @@ const removeUser = async (accountUserId: string, close: () => void) => {
 
 <template>
   <MyPage :error @refresh="() => refresh()">
+    <div>
+      <p class="font-semibold font-geist-mono">
+        Total Account Balance: <b>{{ toDollar(balance) }}</b>
+      </p>
+    </div>
+
+    <NuxtSeparator class="my-3" />
+
     <NuxtTable
       :data="items"
       :columns

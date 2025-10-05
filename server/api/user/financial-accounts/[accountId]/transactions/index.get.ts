@@ -1,11 +1,25 @@
 import { prisma } from "~~/server/lib/prisma";
 import { paginationQuerySchema } from "~~/shared/schemas";
+import z from "zod";
 
 const LIMIT = parseInt(process.env.GET_REQUEST_LIMIT || "20");
 
+const schema = z.object({
+  ...paginationQuerySchema.shape,
+  type: z
+    .array(
+      z.enum(["deposit", "withdrawal", "transfer", "investment", "profit"])
+    )
+    .optional(),
+  status: z
+    .array(z.enum(["pending", "successfull", "reversed", "failed"]))
+    .optional()
+});
+
 export default defineEventHandler(async (event) => {
   const accountId = getRouterParam(event, "accountId") ?? "";
-  const query = await getValidatedQuery(event, paginationQuerySchema.safeParse);
+ 
+  const query = await getValidatedQuery(event, schema.safeParse);
 
   if (!query.success) {
     throw createError({
@@ -14,10 +28,14 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const { page = 1, limit = LIMIT } = query.data;
+  const { type, status, page = 1, limit = LIMIT } = query.data;
 
   const transactions = await prisma.transaction.findMany({
     where: {
+      AND: [
+        type ? { type: { in: type } } : {},
+        status ? { status: { in: status } } : {}
+      ],
       financialAccountId: accountId
     },
     take: limit,

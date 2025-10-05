@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import type { BadgeProps } from "@nuxt/ui";
+import type { BadgeProps, FormSubmitEvent } from "@nuxt/ui";
 import { useDateFormat } from "@vueuse/core";
+import z from "zod";
+import normalizeException from "~~/shared/helpers/normalize-exception";
 
 definePageMeta({
   layout: "user"
 });
+
+const toast = useToast();
 
 const [accountId, investmentId] = useRouteData().getParams([
   "accountId",
@@ -21,6 +25,14 @@ const investment = computed(() => {
     lastProfit: data.value?.investment.transactions[0]
   };
 });
+
+const estimatedReturn = computed(
+  () =>
+    data.value?.investment?.profits?.reduce(
+      (acc, curr) => acc + curr.actualAmount,
+      0
+    ) ?? 0
+);
 
 const cards = computed(() => {
   if (!investment.value) return [];
@@ -68,19 +80,46 @@ const cards = computed(() => {
       class: "bg-primary-500 text-white"
     },
     {
-      label: "Expected Profit",
+      label: "Total Returns: Initial Estimate",
       value: toDollar(
         ((investment.value.totalReturn ?? 0) / 100) *
           (investment.value.deposit ?? 0)
       ),
-      description: `${
-        (investment.value.totalReturn ?? 0) - 100
-      }% total returns`,
+      description: `${investment.value.totalReturn ?? 0}% of deposit`,
       icon: "lucide:coins",
       badgeColor: "primary"
     },
     {
-      label: "Current Profit",
+      label: "Total Returns: Current Estimate",
+      value: toDollar(estimatedReturn.value),
+      description: "Based on profits and losses",
+      icon:
+        estimatedReturn.value < (investment.value.totalReturn ?? 0)
+          ? "lucide:trending-down"
+          : "lucide:trending-up",
+      badgeColor:
+        estimatedReturn.value < (investment.value.totalReturn ?? 0)
+          ? "error"
+          : "success"
+    },
+    {
+      label: "Investment Health",
+      value:
+        estimatedReturn.value < (investment.value.deposit ?? 0)
+          ? "Loss"
+          : "Profit",
+      description:
+        estimatedReturn.value < (investment.value.deposit ?? 0)
+          ? "Est. return less than deposit"
+          : "Est. return higher than deposit",
+      icon: "lucide:pie-chart",
+      badgeColor:
+        estimatedReturn.value < (investment.value.deposit ?? 0)
+          ? "error"
+          : "success"
+    },
+    {
+      label: "Current Total Returns",
       value: toDollar(investment.value.totalProfit ?? 0),
       description: `Distributed ${toCase(
         investment.value.profitDistribution ?? "",
@@ -90,7 +129,7 @@ const cards = computed(() => {
       badgeColor: "success"
     },
     {
-      label: "Last Profit",
+      label: "Last Trade",
       value: toDollar(investment.value.lastProfit?.USDAmount ?? 0),
       description: investment.value.lastProfit?.createdAt
         ? useDateFormat(
@@ -118,11 +157,49 @@ const cards = computed(() => {
     }
   ];
 });
+
+/* Investment termination */
+const schema = z.object({
+  terminatedReason: z
+    .string("Reason is required")
+    .nonempty("Reason is required.")
+    .trim()
+});
+type Schema = z.infer<typeof schema>;
+
+const state = reactive<Schema>({ terminatedReason: "" });
+
+const open = ref<boolean>(false);
+const handleSubmit = async (event: FormSubmitEvent<Schema>) => {
+  try {
+    const res = await $fetch(
+      `/api/user/financial-accounts/${accountId}/investments/${investmentId}/terminate`,
+      {
+        method: "put",
+        body: event.data
+      }
+    );
+    toast.add({
+      color: "success",
+      title: "Success",
+      description: res.message
+    });
+    refresh();
+    open.value = false;
+  } catch (error) {
+    toast.add({
+      color: "error",
+      title: "Error",
+      description: normalizeException(error).message
+    });
+  }
+};
 </script>
 
 <template>
   <MyPage :error @refresh="() => refresh()">
     <div v-if="investment" class="mb-4">
+      <!-- <pre>{{ investment }}</pre> -->
       <header class="flex items-center gap-4 justify-between">
         <div class="space-y-2">
           <NuxtBadge
@@ -144,6 +221,7 @@ const cards = computed(() => {
             />
 
             <NuxtModal
+              v-model:open="open"
               title="Investment Details"
               :description="investment.investmentName"
               :dismissible="false"
@@ -243,6 +321,53 @@ const cards = computed(() => {
                   </div>
                 </div>
               </template>
+
+              <template
+                v-if="
+                  investment.status === 'open' || investment.status === 'paused'
+                "
+                #footer
+              >
+                <div class="space-y-2 w-full">
+                  <p class="text-error-500">Terminate Investment</p>
+
+                  <NuxtAlert
+                    :description="`Terminating this investment incurs a termination fee of ${toDollar(
+                      investment?.terminationFee ?? 0
+                    )}, and cannot be undone. Be sure you want to proceed.`"
+                    icon="lucide:circle-x"
+                    color="error"
+                    variant="subtle"
+                  />
+
+                  <NuxtForm
+                    :state
+                    :schema
+                    class="space-y-2"
+                    @submit.prevent="handleSubmit"
+                  >
+                    <NuxtFormField
+                      name="terminatedReason"
+                      label="Reason for terminating the investment"
+                      required
+                    >
+                      <NuxtTextarea
+                        v-model="state.terminatedReason"
+                        autoresize
+                        :maxrows="3"
+                        class="w-full"
+                      />
+                    </NuxtFormField>
+
+                    <NuxtButton
+                      type="submit"
+                      label="Terminate"
+                      color="error"
+                      loading-auto
+                    />
+                  </NuxtForm>
+                </div>
+              </template>
             </NuxtModal>
           </div>
 
@@ -262,7 +387,7 @@ const cards = computed(() => {
 
       <div class="mt-6 space-y-4">
         <div
-          class="grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(20rem,1fr))] xl:grid-cols-3"
+          class="grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(20rem,1fr))] xl:grid-cols-4"
         >
           <NuxtCard v-for="card in cards" :key="card.label" :class="card.class">
             <header>

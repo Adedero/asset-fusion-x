@@ -15,7 +15,12 @@ const { data, error } = await useFetch(
   <MyPage :error>
     <div v-if="data" class="space-y-4">
       <div
-        class="grid gap-4 md:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(20rem,1fr))] xl:grid-cols-4"
+        :class="[
+          'grid gap-4 md:grid-cols-2',
+          data.ownership === 'joint'
+            ? 'lg:grid-cols-3'
+            : 'lg:grid-cols-[repeat(auto-fill,minmax(28rem,1fr))] xl:grid-cols-4'
+        ]"
       >
         <NuxtCard class="bg-primary text-white">
           <header>
@@ -33,57 +38,36 @@ const { data, error } = await useFetch(
               class="mr-2 dark:bg-white dark:text-primary"
               icon="lucide-wallet"
             />
-            <small>Withdrawable amount</small>
+            <small>Total Balance</small>
           </footer>
         </NuxtCard>
 
-        <NuxtCard>
+        <NuxtCard
+          v-if="data.ownership === 'joint'"
+          class="bg-success text-white"
+        >
           <header>
-            <p class="card-title">Investment Profits</p>
+            <p class="card-title text-white">
+              Your Dividend: {{ data?.primaryUser?.ownership }}%
+            </p>
           </header>
 
           <div class="mt-2 text-2xl font-semibold font-geist-mono">
-            {{ toDollar(data.totalProfit) }}
+            {{
+              toDollar(
+                data.balance * ((data?.primaryUser?.ownership ?? 100) / 100)
+              )
+            }}
           </div>
 
           <footer class="mt-2">
             <NuxtBadge
-              color="success"
+              color="neutral"
               variant="soft"
-              class="mr-2"
-              icon="lucide-flower-2"
-            />
-            <small class="text-muted"
-              >From {{ data.activeInvestmentCount }} investments</small
-            >
-          </footer>
-        </NuxtCard>
-
-        <NuxtCard>
-          <header>
-            <p class="card-title">Last Profit</p>
-          </header>
-
-          <div class="mt-2 text-2xl font-semibold font-geist-mono">
-            {{ toDollar(data.lastProfit?.USDAmount ?? 0) }}
-          </div>
-
-          <footer class="mt-2">
-            <NuxtBadge
-              color="success"
-              variant="soft"
-              class="mr-2"
+              class="mr-2 dark:bg-white dark:text-success"
               icon="lucide-hand-coins"
             />
-            <small v-if="data.lastProfit?.createdAt" class="text-muted">
-              {{
-                useDateFormat(
-                  data.lastProfit.createdAt,
-                  "MMM DD, YYYY | hh:mm aa"
-                )
-              }}
-            </small>
-            <small v-else class="text-muted">Not available</small>
+            <small>Withdrawable Amount</small>
           </footer>
         </NuxtCard>
 
@@ -119,6 +103,79 @@ const { data, error } = await useFetch(
                 )
               }}
             </small>
+          </footer>
+        </NuxtCard>
+
+        <NuxtCard v-if="data.ownership === 'joint'">
+          <header>
+            <p class="card-title">Active Investments</p>
+          </header>
+
+          <div class="mt-2 text-2xl font-semibold font-geist-mono">
+            {{ data.activeInvestmentCount }}
+          </div>
+
+          <footer class="mt-2">
+            <NuxtBadge
+              color="success"
+              variant="soft"
+              class="mr-2"
+              icon="lucide-flower-2"
+            />
+            <small class="text-muted">Financial Growth</small>
+          </footer>
+        </NuxtCard>
+
+        <NuxtCard>
+          <header>
+            <p class="card-title">Total Investment Profits</p>
+          </header>
+
+          <div class="mt-2 text-2xl font-semibold font-geist-mono">
+            {{ toDollar(data.totalProfit) }}
+          </div>
+
+          <footer class="mt-2">
+            <NuxtBadge
+              color="success"
+              variant="soft"
+              class="mr-2"
+              icon="lucide:coins"
+            />
+            <small class="text-muted">
+              From {{ data.activeInvestmentCount }} active
+              {{
+                data.activeInvestmentCount === 1 ? "investment" : "investments"
+              }}
+            </small>
+          </footer>
+        </NuxtCard>
+
+        <NuxtCard>
+          <header>
+            <p class="card-title">Last Profit</p>
+          </header>
+
+          <div class="mt-2 text-2xl font-semibold font-geist-mono">
+            {{ toDollar(data.lastProfit?.USDAmount ?? 0) }}
+          </div>
+
+          <footer class="mt-2">
+            <NuxtBadge
+              color="success"
+              variant="soft"
+              class="mr-2"
+              icon="lucide:coins"
+            />
+            <small v-if="data.lastProfit?.createdAt" class="text-muted">
+              {{
+                useDateFormat(
+                  data.lastProfit.createdAt,
+                  "MMM DD, YYYY | hh:mm aa"
+                )
+              }}
+            </small>
+            <small v-else class="text-muted">Not available</small>
           </footer>
         </NuxtCard>
       </div>

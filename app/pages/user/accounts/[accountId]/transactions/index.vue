@@ -18,7 +18,11 @@ const page = computed({
 
 const limit = 20;
 
-const query = computed(() => ({ page: page.value, limit }));
+const query = computed(() => ({
+  page: page.value,
+  limit,
+  type: ["deposit", "withdrawal", "investment"]
+}));
 
 const { data: account, error: accountError } = await useFetch(
   `/api/user/financial-accounts/${accountId}`,

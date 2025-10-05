@@ -181,8 +181,7 @@ export default defineEventHandler(async (event) => {
                 financialAccountId,
                 user.id,
                 tx
-              ),
-              skipDuplicates: true
+              )
             }
           }
         }

@@ -10,7 +10,6 @@ import { Buffer as Buffer$1 } from 'node:buffer';
 import { promises, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { CronJob } from 'cron';
-import { Decimal } from 'decimal.js';
 import * as process$1 from 'node:process';
 import { fileURLToPath } from 'node:url';
 import * as runtime from '@prisma/client/runtime/library';
@@ -21,8 +20,6 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { admin } from 'better-auth/plugins';
 import { getIcons } from '@iconify/utils';
 import { consola } from 'consola';
-
-config$2({ silent: true });
 
 const suspectProtoRx = /"(?:_|\\u0{2}5[Ff]){2}(?:p|\\u0{2}70)(?:r|\\u0{2}72)(?:o|\\u0{2}6[Ff])(?:t|\\u0{2}74)(?:o|\\u0{2}6[Ff])(?:_|\\u0{2}5[Ff]){2}"\s*:/;
 const suspectConstructorRx = /"(?:c|\\u0063)(?:o|\\u006[Ff])(?:n|\\u006[Ee])(?:s|\\u0073)(?:t|\\u0074)(?:r|\\u0072)(?:u|\\u0075)(?:c|\\u0063)(?:t|\\u0074)(?:o|\\u006[Ff])(?:r|\\u0072)"\s*:/;
@@ -4389,7 +4386,7 @@ function _expandFromEnv(value) {
 const _inlineRuntimeConfig = {
   "app": {
     "baseURL": "/",
-    "buildId": "fd682249-372c-4612-82fa-d1be24a4fe71",
+    "buildId": "cc635cbb-9ae2-4f47-8bc7-f234d567e392",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
   },
@@ -4420,7 +4417,7 @@ const _inlineRuntimeConfig = {
     "appName": "AssetFusionX",
     "appCopyrightYear": null,
     "defaultErrorMsg": "Something happened and we are working on it. Please, try again alter",
-    "emailAddress": "andienathie@gmail.com",
+    "emailAddress": "info@assetfusionx.com",
     "minPasswordLength": 8,
     "maxAccounts": 20,
     "minDepositAmount": 10,
@@ -4859,6 +4856,17 @@ function defineNitroPlugin(def) {
   return def;
 }
 
+function round(value, decimals = 2) {
+  if (!Number.isFinite(value)) {
+    return NaN;
+  }
+  if (!Number.isInteger(decimals) || decimals < 0) {
+    throw new Error("Decimals must be a non-negative integer");
+  }
+  const factor = Math.pow(10, decimals);
+  return Math.round((value + Number.EPSILON) * factor) / factor;
+}
+
 const AccountStatus = {
   active: "active",
   dormant: "dormant",
@@ -4934,8 +4942,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": 'generator client {\n  provider      = "prisma-client"\n  output        = "../server/generated/prisma"\n  binaryTargets = ["native", "debian-openssl-1.0.x"]\n  //engineType = "client"\n}\n\ndatasource db {\n  provider = "sqlite"\n  url      = env("DATABASE_FILE")\n}\n\ngenerator json {\n  provider = "prisma-json-types-generator"\n}\n\ngenerator zod {\n  provider = "zod-prisma-types"\n  output   = "../shared/zod"\n}\n\nenum UserRole {\n  admin\n  user\n}\n\nmodel User {\n  id            String    @id @default(uuid())\n  name          String\n  email         String    @unique\n  emailVerified Boolean\n  image         String?\n  role          UserRole  @default(user)\n  banned        Boolean?\n  banReason     String?\n  banExpires    DateTime?\n  createdAt     DateTime  @default(now())\n  updatedAt     DateTime  @updatedAt\n\n  // Existing Relations\n  profile  Profile?\n  sessions Session[]\n  accounts Account[]\n\n  // New Relations\n  createdAccounts                 FinancialAccount[]               @relation("UserCreatedAccounts")\n  accountMemberships              AccountUser[]\n  createdJointAccountRequests     JointAccountRequest[]\n  receivedJointAccountRequests    JointAccountRequest[]            @relation("JointRequestRecipient")\n  createdJointAccountModRequests  JointAccountModRequest[]\n  notifications                   Notification[]\n  approvedJointAccountModRequests JointAccountModRequestApproval[]\n\n  @@map("user")\n}\n\nmodel Session {\n  id             String   @id @default(uuid())\n  userId         String\n  token          String   @unique\n  expiresAt      DateTime\n  ipAddress      String?\n  userAgent      String?\n  impersonatedBy String?\n  createdAt      DateTime @default(now())\n  updatedAt      DateTime @updatedAt\n\n  // Relation\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map("session")\n}\n\nmodel Account {\n  id                    String    @id @default(uuid())\n  userId                String\n  accountId             String\n  providerId            String\n  accessToken           String?\n  refreshToken          String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  idToken               String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @updatedAt\n\n  // Relation\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@index([accountId, providerId])\n  @@map("account")\n}\n\nmodel Verification {\n  id         String   @id @default(uuid())\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  @@index([identifier])\n  @@map("verification")\n}\n\nenum KycStatus {\n  pending\n  verified\n  rejected\n  resubmit\n}\n\nenum GovernmentIdType {\n  international_passport\n  national_id\n  driving_license\n}\n\nmodel Profile {\n  id               String            @id @default(uuid())\n  userId           String            @unique\n  address          String?\n  country          String?\n  state            String?\n  city             String?\n  postalCode       String?\n  governmentId     String?\n  governmentIdType GovernmentIdType?\n  governmentIdExt  String?\n  kycStatus        KycStatus?\n  createdAt        DateTime          @default(now())\n  updatedAt        DateTime          @updatedAt\n\n  // Relation\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map("profile")\n}\n\nmodel BusinessProfile {\n  id                 String   @id @default(uuid())\n  financialAccountId String   @unique\n  address            String?\n  creationMonth      String?\n  creationYear       Int?\n  proofOfAddress     String?\n  proofOfAddressExt  String?\n  certificate        String?\n  certificateExt     String?\n  approved           Boolean\n  createdAt          DateTime @default(now())\n  updatedAt          DateTime @updatedAt\n\n  // Relation\n  account FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n\n  @@map("business_profile")\n}\n\nenum AccountType {\n  personal\n  business\n}\n\nenum AccountOwnership {\n  single\n  joint\n}\n\nenum AccountStatus {\n  active\n  dormant\n  closed\n}\n\nmodel FinancialAccount {\n  id                 String           @id @default(uuid())\n  creatorId          String\n  name               String\n  number             String\n  status             AccountStatus    @default(active)\n  type               AccountType      @default(personal)\n  ownership          AccountOwnership @default(single)\n  balance            Float            @default(0)\n  totalTransactions  Int              @default(0)\n  totalInvestments   Int              @default(0)\n  firstTransactionAt DateTime?\n  lastTransactionAt  DateTime?\n  closedAt           DateTime?\n  dormantAt          DateTime?\n  createdAt          DateTime         @default(now())\n  updatedAt          DateTime         @updatedAt\n\n  // Relations\n  creator                 User                     @relation("UserCreatedAccounts", fields: [creatorId], references: [id], onDelete: Cascade)\n  businessProfile         BusinessProfile?\n  accountUsers            AccountUser[]\n  jointAccountRequests    JointAccountRequest[]\n  jointAccountModRequests JointAccountModRequest[]\n  notifications           Notification[]\n  transactions            Transaction[]\n  receivedTransactions    Transaction[]            @relation("RecipientTransaction")\n  investments             Investment[]\n\n  @@index([status])\n  @@map("financial_account")\n}\n\nenum AccountUserRole {\n  owner\n  co_owner\n  manager\n  admin\n  accountant\n  investor\n  contributor\n  legal_guardian\n  signatory\n}\n\nmodel AccountUser {\n  id                 String          @id @default(uuid())\n  userId             String\n  financialAccountId String\n  role               AccountUserRole @default(owner)\n  ownership          Float           @default(100)\n  autosign           Boolean         @default(false)\n  createdAt          DateTime        @default(now())\n  updatedAt          DateTime        @updatedAt\n\n  // Relations\n  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)\n  financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n  transactions     Transaction[]\n  investments      Investment[]\n\n  @@unique([userId, financialAccountId])\n  @@index([financialAccountId])\n  @@map("account_user")\n}\n\nenum JointAccountRequestStatus {\n  pending\n  accepted\n  rejected\n}\n\nmodel JointAccountRequest {\n  id                 String                    @id @default(uuid())\n  creatorId          String\n  recipientName      String\n  recipientEmail     String\n  role               AccountUserRole\n  ownership          Float\n  recipientId        String? // If user already has an account\n  financialAccountId String\n  description        String?\n  lastReminderAt     DateTime?\n  reminderCount      Int                       @default(0)\n  status             JointAccountRequestStatus @default(pending)\n  createdAt          DateTime                  @default(now())\n  updatedAt          DateTime                  @updatedAt\n\n  // Relation\n  creator          User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)\n  recipient        User?            @relation("JointRequestRecipient", fields: [recipientId], references: [id], onDelete: Cascade)\n  financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n\n  @@map("joint_account_request")\n}\n\nenum JointAccountModRequestType {\n  transfer\n  withdrawal\n  name_change\n}\n\nmodel JointAccountModRequest {\n  id                 String                     @id @default(uuid())\n  creatorId          String\n  financialAccountId String\n  type               JointAccountModRequestType\n  transactionId      String?\n  description        String?\n  createdAt          DateTime                   @default(now())\n  updatedAt          DateTime                   @updatedAt\n\n  creator     User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)\n  account     FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n  transaction Transaction?     @relation(fields: [transactionId], references: [id], onDelete: Cascade)\n\n  approvals JointAccountModRequestApproval[]\n\n  @@map("joint_account_mod_request")\n}\n\nmodel JointAccountModRequestApproval {\n  id                       String                    @id @default(uuid())\n  jointAccountModRequestId String\n  approverId               String\n  status                   JointAccountRequestStatus @default(pending)\n  createdAt                DateTime                  @default(now())\n  updatedAt                DateTime                  @updatedAt\n\n  request  JointAccountModRequest @relation(fields: [jointAccountModRequestId], references: [id], onDelete: Cascade)\n  approver User                   @relation(fields: [approverId], references: [id], onDelete: Cascade)\n\n  @@map("joint_account_mod_approval")\n}\n\nenum ProfitDistribution {\n  daily\n  weekly\n  bi_weekly\n  monthly\n}\n\nenum InvestmentPlanCategory {\n  forex\n  stocks\n  real_estate\n  bonds\n  commodities\n  cryptocurrencies\n  derivatives\n}\n\nmodel InvestmentPlan {\n  id                       String                 @id @default(uuid())\n  name                     String\n  category                 InvestmentPlanCategory\n  minimumDeposit           Float\n  maximumDeposit           Float\n  duration                 Int\n  profitDistribution       ProfitDistribution     @default(daily)\n  percentageTotalReturn    Float\n  percentagePeriodicReturn Float\n  terminationFee           Float                  @default(0)\n  createdAt                DateTime               @default(now())\n  updatedAt                DateTime               @updatedAt\n\n  @@unique([category, name])\n  @@map("investment_plan")\n}\n\nenum InvestmentStatus {\n  open\n  closed\n  paused\n  terminated\n}\n\nmodel Investment {\n  id                      String                 @id @default(uuid())\n  financialAccountId      String\n  investorId              String\n  deposit                 Float\n  investmentName          String\n  totalProfit             Float                  @default(0)\n  profitCount             Int                    @default(0)\n  status                  InvestmentStatus       @default(open)\n  pausedAt                DateTime?\n  pausedReason            String?\n  closedAt                DateTime?\n  closedReason            String?\n  terminatedAt            DateTime?\n  terminatedReason        String?\n  category                InvestmentPlanCategory\n  daysCompleted           Int                    @default(0)\n  duration                Int\n  totalReturn             Float\n  periodicReturn          Float\n  profitDistribution      ProfitDistribution     @default(daily)\n  terminationFee          Float                  @default(0)\n  lastProfitDistributedAt DateTime?\n  createdAt               DateTime               @default(now())\n  updatedAt               DateTime               @updatedAt\n\n  // Relation\n  investor         AccountUser      @relation(fields: [investorId], references: [id], onDelete: Cascade)\n  // profits          Profit[]\n  transactions     Transaction[]\n  financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n\n  @@index([financialAccountId])\n  @@index([status])\n  @@map("investment")\n}\n\n/**\n * model Profit {\n * id                 String   @id @default(uuid())\n * financialAccountId String\n * investmentId       String\n * amount             Float\n * createdAt          DateTime @default(now())\n * updatedAt          DateTime @updatedAt\n * // Relation\n * investment       Investment       @relation(fields: [investmentId], references: [id], onDelete: Cascade)\n * financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n * @@map("profit")\n * }\n */\n\nenum TransactionType {\n  deposit\n  withdrawal\n  transfer\n  investment\n  profit\n}\n\nenum TransactionStatus {\n  pending\n  successfull\n  reversed\n  failed\n}\n\nenum TransactionMedium {\n  wire\n  crypto\n}\n\nmodel Transaction {\n  id                             String            @id @default(uuid())\n  amount                         Float\n  currency                       String            @default("USD")\n  USDAmount                      Float\n  rate                           Float             @default(1)\n  charges                        Float             @default(0)\n  financialAccountId             String\n  type                           TransactionType\n  initiatorAccountId             String\n  recipientAccountId             String?\n  investmentId                   String?\n  status                         TransactionStatus @default(pending)\n  parentTransactionId            String?\n  approvedAt                     DateTime?\n  failedAt                       DateTime?\n  failReason                     String?\n  depositWalletAddress           String?\n  depositWalletAddressNetwork    String?\n  withdrawalWalletAddress        String?\n  withdrawalWalletAddressNetwork String?\n  bank                           String?\n  bankAccount                    String?\n  description                    String?\n  createdAt                      DateTime          @default(now())\n  updatedAt                      DateTime          @updatedAt\n\n  initiator               AccountUser              @relation(fields: [initiatorAccountId], references: [id])\n  financialAccount        FinancialAccount         @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n  recipientAccount        FinancialAccount?        @relation("RecipientTransaction", fields: [recipientAccountId], references: [id])\n  investment              Investment?              @relation(fields: [investmentId], references: [id], onDelete: Cascade)\n  jointAccountModRequests JointAccountModRequest[]\n  parentTransaction       Transaction?             @relation("childTransactions", fields: [parentTransactionId], references: [id])\n  childTransactions       Transaction[]            @relation("childTransactions")\n\n  @@map("transaction")\n}\n\nenum NotificationBodyType {\n  string\n  html\n}\n\nmodel Notification {\n  id                 String               @id @default(uuid())\n  title              String\n  body               String\n  bodyType           NotificationBodyType @default(string)\n  userId             String?\n  financialAccountId String?\n  link               String?\n  isRead             Boolean              @default(false)\n  createdAt          DateTime             @default(now())\n  updatedAt          DateTime             @updatedAt\n\n  user             User?             @relation(fields: [userId], references: [id], onDelete: Cascade)\n  financialAccount FinancialAccount? @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n\n  @@map("notification")\n}\n\nmodel Currency {\n  id                                   String    @id @default(uuid())\n  name                                 String\n  symbol                               String    @unique\n  image                                String?\n  rate                                 Float\n  rateUpdatedAt                        DateTime?\n  walletAddress                        String?\n  walletAddressNetwork                 String?\n  wireTransferDepositBankName          String?\n  wireTransferDepositBankAccountNumber String?\n  allowWithdrawal                      Boolean   @default(false)\n  allowDeposit                         Boolean   @default(true)\n  automaticallyUpdateRate              Boolean   @default(true)\n  withdrawalCharge                     Float     @default(0)\n  createdAt                            DateTime  @default(now())\n  updatedAt                            DateTime  @updatedAt\n\n  @@map("currency")\n}\n\nmodel Settings {\n  id               String  @id @default(uuid())\n  allowWithdrawals Boolean\n\n  @@map("settings")\n}\n',
-  "inlineSchemaHash": "671ba3291cd84e053188f8eb219e154a0b740f4a65920e44b7081229773ffb33",
+  "inlineSchema": 'generator client {\n  provider      = "prisma-client"\n  output        = "../server/generated/prisma"\n  binaryTargets = ["native", "debian-openssl-1.0.x"]\n  //engineType = "client"\n}\n\ndatasource db {\n  provider = "sqlite"\n  url      = env("DATABASE_FILE")\n}\n\ngenerator json {\n  provider = "prisma-json-types-generator"\n}\n\ngenerator zod {\n  provider = "zod-prisma-types"\n  output   = "../shared/zod"\n}\n\nenum UserRole {\n  admin\n  user\n}\n\nmodel User {\n  id            String    @id @default(uuid())\n  name          String\n  email         String    @unique\n  emailVerified Boolean\n  image         String?\n  role          UserRole  @default(user)\n  banned        Boolean?\n  banReason     String?\n  banExpires    DateTime?\n  createdAt     DateTime  @default(now())\n  updatedAt     DateTime  @updatedAt\n\n  // Existing Relations\n  profile  Profile?\n  sessions Session[]\n  accounts Account[]\n\n  // New Relations\n  createdAccounts                 FinancialAccount[]               @relation("UserCreatedAccounts")\n  accountMemberships              AccountUser[]\n  createdJointAccountRequests     JointAccountRequest[]\n  receivedJointAccountRequests    JointAccountRequest[]            @relation("JointRequestRecipient")\n  createdJointAccountModRequests  JointAccountModRequest[]\n  notifications                   Notification[]\n  approvedJointAccountModRequests JointAccountModRequestApproval[]\n\n  @@map("user")\n}\n\nmodel Session {\n  id             String   @id @default(uuid())\n  userId         String\n  token          String   @unique\n  expiresAt      DateTime\n  ipAddress      String?\n  userAgent      String?\n  impersonatedBy String?\n  createdAt      DateTime @default(now())\n  updatedAt      DateTime @updatedAt\n\n  // Relation\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map("session")\n}\n\nmodel Account {\n  id                    String    @id @default(uuid())\n  userId                String\n  accountId             String\n  providerId            String\n  accessToken           String?\n  refreshToken          String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  idToken               String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @updatedAt\n\n  // Relation\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@index([accountId, providerId])\n  @@map("account")\n}\n\nmodel Verification {\n  id         String   @id @default(uuid())\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  @@index([identifier])\n  @@map("verification")\n}\n\nenum KycStatus {\n  pending\n  verified\n  rejected\n  resubmit\n}\n\nenum GovernmentIdType {\n  international_passport\n  national_id\n  driving_license\n}\n\nmodel Profile {\n  id               String            @id @default(uuid())\n  userId           String            @unique\n  address          String?\n  country          String?\n  state            String?\n  city             String?\n  postalCode       String?\n  governmentId     String?\n  governmentIdType GovernmentIdType?\n  governmentIdExt  String?\n  kycStatus        KycStatus?\n  createdAt        DateTime          @default(now())\n  updatedAt        DateTime          @updatedAt\n\n  // Relation\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map("profile")\n}\n\nmodel BusinessProfile {\n  id                 String   @id @default(uuid())\n  financialAccountId String   @unique\n  address            String?\n  creationMonth      String?\n  creationYear       Int?\n  proofOfAddress     String?\n  proofOfAddressExt  String?\n  certificate        String?\n  certificateExt     String?\n  approved           Boolean\n  createdAt          DateTime @default(now())\n  updatedAt          DateTime @updatedAt\n\n  // Relation\n  account FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n\n  @@map("business_profile")\n}\n\nenum AccountType {\n  personal\n  business\n}\n\nenum AccountOwnership {\n  single\n  joint\n}\n\nenum AccountStatus {\n  active\n  dormant\n  closed\n}\n\nmodel FinancialAccount {\n  id                 String           @id @default(uuid())\n  creatorId          String\n  name               String\n  number             String\n  status             AccountStatus    @default(active)\n  type               AccountType      @default(personal)\n  ownership          AccountOwnership @default(single)\n  balance            Float            @default(0)\n  totalTransactions  Int              @default(0)\n  totalInvestments   Int              @default(0)\n  firstTransactionAt DateTime?\n  lastTransactionAt  DateTime?\n  closedAt           DateTime?\n  dormantAt          DateTime?\n  createdAt          DateTime         @default(now())\n  updatedAt          DateTime         @updatedAt\n\n  // Relations\n  creator                 User                     @relation("UserCreatedAccounts", fields: [creatorId], references: [id], onDelete: Cascade)\n  businessProfile         BusinessProfile?\n  accountUsers            AccountUser[]\n  jointAccountRequests    JointAccountRequest[]\n  jointAccountModRequests JointAccountModRequest[]\n  notifications           Notification[]\n  transactions            Transaction[]\n  receivedTransactions    Transaction[]            @relation("RecipientTransaction")\n  investments             Investment[]\n\n  @@index([status])\n  @@map("financial_account")\n}\n\nenum AccountUserRole {\n  owner\n  co_owner\n  manager\n  admin\n  accountant\n  investor\n  contributor\n  legal_guardian\n  signatory\n}\n\nmodel AccountUser {\n  id                 String          @id @default(uuid())\n  userId             String\n  financialAccountId String\n  role               AccountUserRole @default(owner)\n  ownership          Float           @default(100)\n  autosign           Boolean         @default(false)\n  createdAt          DateTime        @default(now())\n  updatedAt          DateTime        @updatedAt\n\n  // Relations\n  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)\n  financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n  transactions     Transaction[]\n  investments      Investment[]\n\n  @@unique([userId, financialAccountId])\n  @@index([financialAccountId])\n  @@map("account_user")\n}\n\nenum JointAccountRequestStatus {\n  pending\n  accepted\n  rejected\n}\n\nmodel JointAccountRequest {\n  id                 String                    @id @default(uuid())\n  creatorId          String\n  recipientName      String\n  recipientEmail     String\n  role               AccountUserRole\n  ownership          Float\n  recipientId        String? // If user already has an account\n  financialAccountId String\n  description        String?\n  lastReminderAt     DateTime?\n  reminderCount      Int                       @default(0)\n  status             JointAccountRequestStatus @default(pending)\n  createdAt          DateTime                  @default(now())\n  updatedAt          DateTime                  @updatedAt\n\n  // Relation\n  creator          User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)\n  recipient        User?            @relation("JointRequestRecipient", fields: [recipientId], references: [id], onDelete: Cascade)\n  financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n\n  @@map("joint_account_request")\n}\n\nenum JointAccountModRequestType {\n  transfer\n  withdrawal\n  name_change\n}\n\nmodel JointAccountModRequest {\n  id                 String                     @id @default(uuid())\n  creatorId          String\n  financialAccountId String\n  type               JointAccountModRequestType\n  transactionId      String?\n  description        String?\n  createdAt          DateTime                   @default(now())\n  updatedAt          DateTime                   @updatedAt\n\n  creator     User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)\n  account     FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n  transaction Transaction?     @relation(fields: [transactionId], references: [id], onDelete: Cascade)\n\n  approvals JointAccountModRequestApproval[]\n\n  @@map("joint_account_mod_request")\n}\n\nmodel JointAccountModRequestApproval {\n  id                       String                    @id @default(uuid())\n  jointAccountModRequestId String\n  approverId               String\n  status                   JointAccountRequestStatus @default(pending)\n  createdAt                DateTime                  @default(now())\n  updatedAt                DateTime                  @updatedAt\n\n  request  JointAccountModRequest @relation(fields: [jointAccountModRequestId], references: [id], onDelete: Cascade)\n  approver User                   @relation(fields: [approverId], references: [id], onDelete: Cascade)\n\n  @@map("joint_account_mod_approval")\n}\n\nenum ProfitDistribution {\n  daily\n  weekly\n  bi_weekly\n  monthly\n}\n\nenum InvestmentPlanCategory {\n  forex\n  stocks\n  real_estate\n  bonds\n  commodities\n  cryptocurrencies\n  derivatives\n}\n\nmodel InvestmentPlan {\n  id                       String                 @id @default(uuid())\n  name                     String\n  category                 InvestmentPlanCategory\n  minimumDeposit           Float\n  maximumDeposit           Float\n  duration                 Int\n  profitDistribution       ProfitDistribution     @default(daily)\n  percentageTotalReturn    Float\n  percentagePeriodicReturn Float\n  terminationFee           Float                  @default(0)\n  createdAt                DateTime               @default(now())\n  updatedAt                DateTime               @updatedAt\n\n  @@unique([category, name])\n  @@map("investment_plan")\n}\n\nenum InvestmentStatus {\n  open\n  closed\n  paused\n  terminated\n}\n\nmodel Investment {\n  id                      String                 @id @default(uuid())\n  financialAccountId      String\n  investorId              String\n  deposit                 Float\n  investmentName          String\n  totalProfit             Float                  @default(0)\n  profitCount             Int                    @default(0)\n  status                  InvestmentStatus       @default(open)\n  pausedAt                DateTime?\n  pausedReason            String?\n  closedAt                DateTime?\n  closedReason            String?\n  terminatedAt            DateTime?\n  terminatedReason        String?\n  category                InvestmentPlanCategory\n  daysCompleted           Int                    @default(0)\n  duration                Int\n  totalReturn             Float\n  periodicReturn          Float\n  profitDistribution      ProfitDistribution     @default(daily)\n  terminationFee          Float                  @default(0)\n  lastProfitDistributedAt DateTime?\n  createdAt               DateTime               @default(now())\n  updatedAt               DateTime               @updatedAt\n\n  // Relation\n  investor         AccountUser      @relation(fields: [investorId], references: [id], onDelete: Cascade)\n  transactions     Transaction[]\n  financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n  profits          Profit[]\n\n  @@index([financialAccountId])\n  @@index([status])\n  @@map("investment")\n}\n\nmodel Profit {\n  id             String    @id @default(uuid())\n  investmentId   String\n  number         Int\n  intendedAmount Float\n  actualAmount   Float\n  isDistributed  Boolean   @default(false)\n  distributedAt  DateTime?\n  createdAt      DateTime  @default(now())\n  updatedAt      DateTime  @updatedAt\n\n  // Relations\n  investment Investment @relation(fields: [investmentId], references: [id], onDelete: Cascade)\n\n  @@map("profit")\n}\n\nenum TransactionType {\n  deposit\n  withdrawal\n  transfer\n  investment\n  profit\n}\n\nenum TransactionStatus {\n  pending\n  successfull\n  reversed\n  failed\n}\n\nenum TransactionMedium {\n  wire\n  crypto\n}\n\nmodel Transaction {\n  id                             String            @id @default(uuid())\n  amount                         Float\n  currency                       String            @default("USD")\n  USDAmount                      Float\n  rate                           Float             @default(1)\n  charges                        Float             @default(0)\n  financialAccountId             String\n  type                           TransactionType\n  initiatorAccountId             String?\n  recipientAccountId             String?\n  investmentId                   String?\n  status                         TransactionStatus @default(pending)\n  parentTransactionId            String?\n  approvedAt                     DateTime?\n  failedAt                       DateTime?\n  failReason                     String?\n  depositWalletAddress           String?\n  depositWalletAddressNetwork    String?\n  withdrawalWalletAddress        String?\n  withdrawalWalletAddressNetwork String?\n  bank                           String?\n  bankAccount                    String?\n  description                    String?\n  createdAt                      DateTime          @default(now())\n  updatedAt                      DateTime          @updatedAt\n\n  initiator               AccountUser?             @relation(fields: [initiatorAccountId], references: [id])\n  financialAccount        FinancialAccount         @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n  recipientAccount        FinancialAccount?        @relation("RecipientTransaction", fields: [recipientAccountId], references: [id])\n  investment              Investment?              @relation(fields: [investmentId], references: [id], onDelete: Cascade)\n  jointAccountModRequests JointAccountModRequest[]\n  parentTransaction       Transaction?             @relation("childTransactions", fields: [parentTransactionId], references: [id])\n  childTransactions       Transaction[]            @relation("childTransactions")\n\n  @@map("transaction")\n}\n\nenum NotificationBodyType {\n  string\n  html\n}\n\nmodel Notification {\n  id                 String               @id @default(uuid())\n  title              String\n  body               String\n  bodyType           NotificationBodyType @default(string)\n  userId             String?\n  financialAccountId String?\n  link               String?\n  isRead             Boolean              @default(false)\n  createdAt          DateTime             @default(now())\n  updatedAt          DateTime             @updatedAt\n\n  user             User?             @relation(fields: [userId], references: [id], onDelete: Cascade)\n  financialAccount FinancialAccount? @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)\n\n  @@map("notification")\n}\n\nmodel Currency {\n  id                                   String    @id @default(uuid())\n  name                                 String\n  symbol                               String    @unique\n  image                                String?\n  rate                                 Float\n  rateUpdatedAt                        DateTime?\n  walletAddress                        String?\n  walletAddressNetwork                 String?\n  wireTransferDepositBankName          String?\n  wireTransferDepositBankAccountNumber String?\n  allowWithdrawal                      Boolean   @default(false)\n  allowDeposit                         Boolean   @default(true)\n  automaticallyUpdateRate              Boolean   @default(true)\n  withdrawalCharge                     Float     @default(0)\n  createdAt                            DateTime  @default(now())\n  updatedAt                            DateTime  @updatedAt\n\n  @@map("currency")\n}\n\nmodel Settings {\n  id               String  @id @default(uuid())\n  allowWithdrawals Boolean\n\n  @@map("settings")\n}\n',
+  "inlineSchemaHash": "239b196db38034a19769c803ed725201d31878fc2eac3c14bab286ceec8dda30",
   "copyEngine": true,
   "runtimeDataModel": {
     "models": {},
@@ -4944,7 +4952,7 @@ const config = {
   },
   "dirname": ""
 };
-config.runtimeDataModel = JSON.parse('{"models":{"User":{"dbName":"user","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"name","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"email","kind":"scalar","isList":false,"isRequired":true,"isUnique":true,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"emailVerified","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Boolean","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"image","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"role","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"UserRole","nativeType":null,"default":"user","isGenerated":false,"isUpdatedAt":false},{"name":"banned","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Boolean","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"banReason","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"banExpires","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"profile","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Profile","nativeType":null,"relationName":"ProfileToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"sessions","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Session","nativeType":null,"relationName":"SessionToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"accounts","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Account","nativeType":null,"relationName":"AccountToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"createdAccounts","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"UserCreatedAccounts","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"accountMemberships","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"AccountUser","nativeType":null,"relationName":"AccountUserToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"createdJointAccountRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountRequest","nativeType":null,"relationName":"JointAccountRequestToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"receivedJointAccountRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountRequest","nativeType":null,"relationName":"JointRequestRecipient","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"createdJointAccountModRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequest","nativeType":null,"relationName":"JointAccountModRequestToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"notifications","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Notification","nativeType":null,"relationName":"NotificationToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"approvedJointAccountModRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequestApproval","nativeType":null,"relationName":"JointAccountModRequestApprovalToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Session":{"dbName":"session","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"token","kind":"scalar","isList":false,"isRequired":true,"isUnique":true,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"expiresAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"ipAddress","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"userAgent","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"impersonatedBy","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"user","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"SessionToUser","relationFromFields":["userId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Account":{"dbName":"account","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"accountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"providerId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"accessToken","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"refreshToken","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"accessTokenExpiresAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"refreshTokenExpiresAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"scope","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"idToken","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"password","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"user","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"AccountToUser","relationFromFields":["userId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Verification":{"dbName":"verification","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"identifier","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"value","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"expiresAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Profile":{"dbName":"profile","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":true,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"address","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"country","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"state","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"city","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"postalCode","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"governmentId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"governmentIdType","kind":"enum","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"GovernmentIdType","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"governmentIdExt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"kycStatus","kind":"enum","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"KycStatus","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"user","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"ProfileToUser","relationFromFields":["userId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"BusinessProfile":{"dbName":"business_profile","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":true,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"address","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"creationMonth","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"creationYear","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Int","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"proofOfAddress","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"proofOfAddressExt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"certificate","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"certificateExt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"approved","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Boolean","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"account","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"BusinessProfileToFinancialAccount","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"FinancialAccount":{"dbName":"financial_account","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"creatorId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"name","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"number","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"status","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"AccountStatus","nativeType":null,"default":"active","isGenerated":false,"isUpdatedAt":false},{"name":"type","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"AccountType","nativeType":null,"default":"personal","isGenerated":false,"isUpdatedAt":false},{"name":"ownership","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"AccountOwnership","nativeType":null,"default":"single","isGenerated":false,"isUpdatedAt":false},{"name":"balance","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"totalTransactions","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Int","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"totalInvestments","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Int","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"firstTransactionAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"lastTransactionAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"closedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"dormantAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"creator","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"UserCreatedAccounts","relationFromFields":["creatorId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"businessProfile","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"BusinessProfile","nativeType":null,"relationName":"BusinessProfileToFinancialAccount","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"accountUsers","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"AccountUser","nativeType":null,"relationName":"AccountUserToFinancialAccount","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"jointAccountRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountRequest","nativeType":null,"relationName":"FinancialAccountToJointAccountRequest","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"jointAccountModRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequest","nativeType":null,"relationName":"FinancialAccountToJointAccountModRequest","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"notifications","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Notification","nativeType":null,"relationName":"FinancialAccountToNotification","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"transactions","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"FinancialAccountToTransaction","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"receivedTransactions","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"RecipientTransaction","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"investments","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Investment","nativeType":null,"relationName":"FinancialAccountToInvestment","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"AccountUser":{"dbName":"account_user","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"role","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"AccountUserRole","nativeType":null,"default":"owner","isGenerated":false,"isUpdatedAt":false},{"name":"ownership","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":100,"isGenerated":false,"isUpdatedAt":false},{"name":"autosign","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Boolean","nativeType":null,"default":false,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"user","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"AccountUserToUser","relationFromFields":["userId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"financialAccount","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"AccountUserToFinancialAccount","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"transactions","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"AccountUserToTransaction","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"investments","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Investment","nativeType":null,"relationName":"AccountUserToInvestment","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[["userId","financialAccountId"]],"uniqueIndexes":[{"name":null,"fields":["userId","financialAccountId"]}],"isGenerated":false},"JointAccountRequest":{"dbName":"joint_account_request","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"creatorId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"recipientName","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"recipientEmail","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"role","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"AccountUserRole","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"ownership","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"recipientId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"description","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"lastReminderAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"reminderCount","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Int","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"status","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"JointAccountRequestStatus","nativeType":null,"default":"pending","isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"creator","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"JointAccountRequestToUser","relationFromFields":["creatorId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"recipient","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"JointRequestRecipient","relationFromFields":["recipientId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"financialAccount","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"FinancialAccountToJointAccountRequest","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"JointAccountModRequest":{"dbName":"joint_account_mod_request","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"creatorId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"type","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequestType","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"transactionId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"description","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"creator","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"JointAccountModRequestToUser","relationFromFields":["creatorId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"account","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"FinancialAccountToJointAccountModRequest","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"transaction","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"JointAccountModRequestToTransaction","relationFromFields":["transactionId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"approvals","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequestApproval","nativeType":null,"relationName":"JointAccountModRequestToJointAccountModRequestApproval","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"JointAccountModRequestApproval":{"dbName":"joint_account_mod_approval","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"jointAccountModRequestId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"approverId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"status","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"JointAccountRequestStatus","nativeType":null,"default":"pending","isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"request","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequest","nativeType":null,"relationName":"JointAccountModRequestToJointAccountModRequestApproval","relationFromFields":["jointAccountModRequestId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"approver","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"JointAccountModRequestApprovalToUser","relationFromFields":["approverId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"InvestmentPlan":{"dbName":"investment_plan","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"name","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"category","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"InvestmentPlanCategory","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"minimumDeposit","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"maximumDeposit","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"duration","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Int","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"profitDistribution","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"ProfitDistribution","nativeType":null,"default":"daily","isGenerated":false,"isUpdatedAt":false},{"name":"percentageTotalReturn","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"percentagePeriodicReturn","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"terminationFee","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true}],"primaryKey":null,"uniqueFields":[["category","name"]],"uniqueIndexes":[{"name":null,"fields":["category","name"]}],"isGenerated":false},"Investment":{"dbName":"investment","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"investorId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"deposit","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"investmentName","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"totalProfit","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"profitCount","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Int","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"status","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"InvestmentStatus","nativeType":null,"default":"open","isGenerated":false,"isUpdatedAt":false},{"name":"pausedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"pausedReason","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"closedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"closedReason","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"terminatedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"terminatedReason","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"category","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"InvestmentPlanCategory","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"daysCompleted","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Int","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"duration","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Int","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"totalReturn","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"periodicReturn","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"profitDistribution","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"ProfitDistribution","nativeType":null,"default":"daily","isGenerated":false,"isUpdatedAt":false},{"name":"terminationFee","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"lastProfitDistributedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"investor","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"AccountUser","nativeType":null,"relationName":"AccountUserToInvestment","relationFromFields":["investorId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"transactions","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"InvestmentToTransaction","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccount","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"FinancialAccountToInvestment","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Transaction":{"dbName":"transaction","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"amount","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"currency","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":"USD","isGenerated":false,"isUpdatedAt":false},{"name":"USDAmount","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"rate","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":1,"isGenerated":false,"isUpdatedAt":false},{"name":"charges","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"type","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"TransactionType","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"initiatorAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"recipientAccountId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"investmentId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"status","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"TransactionStatus","nativeType":null,"default":"pending","isGenerated":false,"isUpdatedAt":false},{"name":"parentTransactionId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"approvedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"failedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"failReason","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"depositWalletAddress","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"depositWalletAddressNetwork","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"withdrawalWalletAddress","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"withdrawalWalletAddressNetwork","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"bank","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"bankAccount","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"description","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"initiator","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"AccountUser","nativeType":null,"relationName":"AccountUserToTransaction","relationFromFields":["initiatorAccountId"],"relationToFields":["id"],"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccount","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"FinancialAccountToTransaction","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"recipientAccount","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"RecipientTransaction","relationFromFields":["recipientAccountId"],"relationToFields":["id"],"isGenerated":false,"isUpdatedAt":false},{"name":"investment","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Investment","nativeType":null,"relationName":"InvestmentToTransaction","relationFromFields":["investmentId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"jointAccountModRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequest","nativeType":null,"relationName":"JointAccountModRequestToTransaction","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"parentTransaction","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"childTransactions","relationFromFields":["parentTransactionId"],"relationToFields":["id"],"isGenerated":false,"isUpdatedAt":false},{"name":"childTransactions","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"childTransactions","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Notification":{"dbName":"notification","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"title","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"body","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"bodyType","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"NotificationBodyType","nativeType":null,"default":"string","isGenerated":false,"isUpdatedAt":false},{"name":"userId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"link","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"isRead","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Boolean","nativeType":null,"default":false,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"user","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"NotificationToUser","relationFromFields":["userId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"financialAccount","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"FinancialAccountToNotification","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Currency":{"dbName":"currency","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"name","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"symbol","kind":"scalar","isList":false,"isRequired":true,"isUnique":true,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"image","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"rate","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"rateUpdatedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"walletAddress","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"walletAddressNetwork","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"wireTransferDepositBankName","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"wireTransferDepositBankAccountNumber","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"allowWithdrawal","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Boolean","nativeType":null,"default":false,"isGenerated":false,"isUpdatedAt":false},{"name":"allowDeposit","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Boolean","nativeType":null,"default":true,"isGenerated":false,"isUpdatedAt":false},{"name":"automaticallyUpdateRate","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Boolean","nativeType":null,"default":true,"isGenerated":false,"isUpdatedAt":false},{"name":"withdrawalCharge","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Settings":{"dbName":"settings","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"allowWithdrawals","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Boolean","nativeType":null,"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false}},"enums":{"UserRole":{"values":[{"name":"admin","dbName":null},{"name":"user","dbName":null}],"dbName":null},"KycStatus":{"values":[{"name":"pending","dbName":null},{"name":"verified","dbName":null},{"name":"rejected","dbName":null},{"name":"resubmit","dbName":null}],"dbName":null},"GovernmentIdType":{"values":[{"name":"international_passport","dbName":null},{"name":"national_id","dbName":null},{"name":"driving_license","dbName":null}],"dbName":null},"AccountType":{"values":[{"name":"personal","dbName":null},{"name":"business","dbName":null}],"dbName":null},"AccountOwnership":{"values":[{"name":"single","dbName":null},{"name":"joint","dbName":null}],"dbName":null},"AccountStatus":{"values":[{"name":"active","dbName":null},{"name":"dormant","dbName":null},{"name":"closed","dbName":null}],"dbName":null},"AccountUserRole":{"values":[{"name":"owner","dbName":null},{"name":"co_owner","dbName":null},{"name":"manager","dbName":null},{"name":"admin","dbName":null},{"name":"accountant","dbName":null},{"name":"investor","dbName":null},{"name":"contributor","dbName":null},{"name":"legal_guardian","dbName":null},{"name":"signatory","dbName":null}],"dbName":null},"JointAccountRequestStatus":{"values":[{"name":"pending","dbName":null},{"name":"accepted","dbName":null},{"name":"rejected","dbName":null}],"dbName":null},"JointAccountModRequestType":{"values":[{"name":"transfer","dbName":null},{"name":"withdrawal","dbName":null},{"name":"name_change","dbName":null}],"dbName":null},"ProfitDistribution":{"values":[{"name":"daily","dbName":null},{"name":"weekly","dbName":null},{"name":"bi_weekly","dbName":null},{"name":"monthly","dbName":null}],"dbName":null},"InvestmentPlanCategory":{"values":[{"name":"forex","dbName":null},{"name":"stocks","dbName":null},{"name":"real_estate","dbName":null},{"name":"bonds","dbName":null},{"name":"commodities","dbName":null},{"name":"cryptocurrencies","dbName":null},{"name":"derivatives","dbName":null}],"dbName":null},"InvestmentStatus":{"values":[{"name":"open","dbName":null},{"name":"closed","dbName":null},{"name":"paused","dbName":null},{"name":"terminated","dbName":null}],"dbName":null},"TransactionType":{"values":[{"name":"deposit","dbName":null},{"name":"withdrawal","dbName":null},{"name":"transfer","dbName":null},{"name":"investment","dbName":null},{"name":"profit","dbName":null}],"dbName":null},"TransactionStatus":{"values":[{"name":"pending","dbName":null},{"name":"successfull","dbName":null},{"name":"reversed","dbName":null},{"name":"failed","dbName":null}],"dbName":null},"TransactionMedium":{"values":[{"name":"wire","dbName":null},{"name":"crypto","dbName":null}],"dbName":null},"NotificationBodyType":{"values":[{"name":"string","dbName":null},{"name":"html","dbName":null}],"dbName":null}},"types":{}}');
+config.runtimeDataModel = JSON.parse('{"models":{"User":{"dbName":"user","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"name","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"email","kind":"scalar","isList":false,"isRequired":true,"isUnique":true,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"emailVerified","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Boolean","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"image","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"role","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"UserRole","nativeType":null,"default":"user","isGenerated":false,"isUpdatedAt":false},{"name":"banned","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Boolean","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"banReason","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"banExpires","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"profile","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Profile","nativeType":null,"relationName":"ProfileToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"sessions","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Session","nativeType":null,"relationName":"SessionToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"accounts","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Account","nativeType":null,"relationName":"AccountToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"createdAccounts","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"UserCreatedAccounts","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"accountMemberships","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"AccountUser","nativeType":null,"relationName":"AccountUserToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"createdJointAccountRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountRequest","nativeType":null,"relationName":"JointAccountRequestToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"receivedJointAccountRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountRequest","nativeType":null,"relationName":"JointRequestRecipient","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"createdJointAccountModRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequest","nativeType":null,"relationName":"JointAccountModRequestToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"notifications","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Notification","nativeType":null,"relationName":"NotificationToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"approvedJointAccountModRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequestApproval","nativeType":null,"relationName":"JointAccountModRequestApprovalToUser","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Session":{"dbName":"session","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"token","kind":"scalar","isList":false,"isRequired":true,"isUnique":true,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"expiresAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"ipAddress","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"userAgent","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"impersonatedBy","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"user","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"SessionToUser","relationFromFields":["userId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Account":{"dbName":"account","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"accountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"providerId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"accessToken","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"refreshToken","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"accessTokenExpiresAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"refreshTokenExpiresAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"scope","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"idToken","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"password","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"user","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"AccountToUser","relationFromFields":["userId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Verification":{"dbName":"verification","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"identifier","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"value","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"expiresAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Profile":{"dbName":"profile","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":true,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"address","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"country","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"state","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"city","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"postalCode","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"governmentId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"governmentIdType","kind":"enum","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"GovernmentIdType","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"governmentIdExt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"kycStatus","kind":"enum","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"KycStatus","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"user","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"ProfileToUser","relationFromFields":["userId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"BusinessProfile":{"dbName":"business_profile","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":true,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"address","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"creationMonth","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"creationYear","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Int","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"proofOfAddress","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"proofOfAddressExt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"certificate","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"certificateExt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"approved","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Boolean","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"account","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"BusinessProfileToFinancialAccount","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"FinancialAccount":{"dbName":"financial_account","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"creatorId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"name","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"number","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"status","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"AccountStatus","nativeType":null,"default":"active","isGenerated":false,"isUpdatedAt":false},{"name":"type","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"AccountType","nativeType":null,"default":"personal","isGenerated":false,"isUpdatedAt":false},{"name":"ownership","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"AccountOwnership","nativeType":null,"default":"single","isGenerated":false,"isUpdatedAt":false},{"name":"balance","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"totalTransactions","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Int","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"totalInvestments","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Int","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"firstTransactionAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"lastTransactionAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"closedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"dormantAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"creator","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"UserCreatedAccounts","relationFromFields":["creatorId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"businessProfile","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"BusinessProfile","nativeType":null,"relationName":"BusinessProfileToFinancialAccount","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"accountUsers","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"AccountUser","nativeType":null,"relationName":"AccountUserToFinancialAccount","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"jointAccountRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountRequest","nativeType":null,"relationName":"FinancialAccountToJointAccountRequest","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"jointAccountModRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequest","nativeType":null,"relationName":"FinancialAccountToJointAccountModRequest","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"notifications","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Notification","nativeType":null,"relationName":"FinancialAccountToNotification","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"transactions","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"FinancialAccountToTransaction","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"receivedTransactions","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"RecipientTransaction","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"investments","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Investment","nativeType":null,"relationName":"FinancialAccountToInvestment","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"AccountUser":{"dbName":"account_user","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"role","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"AccountUserRole","nativeType":null,"default":"owner","isGenerated":false,"isUpdatedAt":false},{"name":"ownership","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":100,"isGenerated":false,"isUpdatedAt":false},{"name":"autosign","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Boolean","nativeType":null,"default":false,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"user","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"AccountUserToUser","relationFromFields":["userId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"financialAccount","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"AccountUserToFinancialAccount","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"transactions","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"AccountUserToTransaction","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"investments","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Investment","nativeType":null,"relationName":"AccountUserToInvestment","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[["userId","financialAccountId"]],"uniqueIndexes":[{"name":null,"fields":["userId","financialAccountId"]}],"isGenerated":false},"JointAccountRequest":{"dbName":"joint_account_request","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"creatorId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"recipientName","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"recipientEmail","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"role","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"AccountUserRole","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"ownership","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"recipientId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"description","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"lastReminderAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"reminderCount","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Int","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"status","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"JointAccountRequestStatus","nativeType":null,"default":"pending","isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"creator","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"JointAccountRequestToUser","relationFromFields":["creatorId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"recipient","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"JointRequestRecipient","relationFromFields":["recipientId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"financialAccount","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"FinancialAccountToJointAccountRequest","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"JointAccountModRequest":{"dbName":"joint_account_mod_request","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"creatorId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"type","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequestType","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"transactionId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"description","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"creator","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"JointAccountModRequestToUser","relationFromFields":["creatorId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"account","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"FinancialAccountToJointAccountModRequest","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"transaction","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"JointAccountModRequestToTransaction","relationFromFields":["transactionId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"approvals","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequestApproval","nativeType":null,"relationName":"JointAccountModRequestToJointAccountModRequestApproval","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"JointAccountModRequestApproval":{"dbName":"joint_account_mod_approval","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"jointAccountModRequestId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"approverId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"status","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"JointAccountRequestStatus","nativeType":null,"default":"pending","isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"request","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequest","nativeType":null,"relationName":"JointAccountModRequestToJointAccountModRequestApproval","relationFromFields":["jointAccountModRequestId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"approver","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"JointAccountModRequestApprovalToUser","relationFromFields":["approverId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"InvestmentPlan":{"dbName":"investment_plan","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"name","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"category","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"InvestmentPlanCategory","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"minimumDeposit","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"maximumDeposit","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"duration","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Int","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"profitDistribution","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"ProfitDistribution","nativeType":null,"default":"daily","isGenerated":false,"isUpdatedAt":false},{"name":"percentageTotalReturn","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"percentagePeriodicReturn","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"terminationFee","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true}],"primaryKey":null,"uniqueFields":[["category","name"]],"uniqueIndexes":[{"name":null,"fields":["category","name"]}],"isGenerated":false},"Investment":{"dbName":"investment","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"investorId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"deposit","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"investmentName","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"totalProfit","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"profitCount","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Int","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"status","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"InvestmentStatus","nativeType":null,"default":"open","isGenerated":false,"isUpdatedAt":false},{"name":"pausedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"pausedReason","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"closedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"closedReason","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"terminatedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"terminatedReason","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"category","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"InvestmentPlanCategory","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"daysCompleted","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Int","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"duration","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Int","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"totalReturn","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"periodicReturn","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"profitDistribution","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"ProfitDistribution","nativeType":null,"default":"daily","isGenerated":false,"isUpdatedAt":false},{"name":"terminationFee","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"lastProfitDistributedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"investor","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"AccountUser","nativeType":null,"relationName":"AccountUserToInvestment","relationFromFields":["investorId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"transactions","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"InvestmentToTransaction","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccount","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"FinancialAccountToInvestment","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"profits","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Profit","nativeType":null,"relationName":"InvestmentToProfit","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Profit":{"dbName":"profit","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"investmentId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"number","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Int","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"intendedAmount","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"actualAmount","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"isDistributed","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Boolean","nativeType":null,"default":false,"isGenerated":false,"isUpdatedAt":false},{"name":"distributedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"investment","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Investment","nativeType":null,"relationName":"InvestmentToProfit","relationFromFields":["investmentId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Transaction":{"dbName":"transaction","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"amount","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"currency","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":"USD","isGenerated":false,"isUpdatedAt":false},{"name":"USDAmount","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"rate","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":1,"isGenerated":false,"isUpdatedAt":false},{"name":"charges","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"type","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"TransactionType","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"initiatorAccountId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"recipientAccountId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"investmentId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"status","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"TransactionStatus","nativeType":null,"default":"pending","isGenerated":false,"isUpdatedAt":false},{"name":"parentTransactionId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"approvedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"failedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"failReason","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"depositWalletAddress","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"depositWalletAddressNetwork","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"withdrawalWalletAddress","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"withdrawalWalletAddressNetwork","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"bank","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"bankAccount","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"description","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"initiator","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"AccountUser","nativeType":null,"relationName":"AccountUserToTransaction","relationFromFields":["initiatorAccountId"],"relationToFields":["id"],"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccount","kind":"object","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"FinancialAccountToTransaction","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"recipientAccount","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"RecipientTransaction","relationFromFields":["recipientAccountId"],"relationToFields":["id"],"isGenerated":false,"isUpdatedAt":false},{"name":"investment","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Investment","nativeType":null,"relationName":"InvestmentToTransaction","relationFromFields":["investmentId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"jointAccountModRequests","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"JointAccountModRequest","nativeType":null,"relationName":"JointAccountModRequestToTransaction","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false},{"name":"parentTransaction","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"childTransactions","relationFromFields":["parentTransactionId"],"relationToFields":["id"],"isGenerated":false,"isUpdatedAt":false},{"name":"childTransactions","kind":"object","isList":true,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Transaction","nativeType":null,"relationName":"childTransactions","relationFromFields":[],"relationToFields":[],"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Notification":{"dbName":"notification","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"title","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"body","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"bodyType","kind":"enum","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"NotificationBodyType","nativeType":null,"default":"string","isGenerated":false,"isUpdatedAt":false},{"name":"userId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"financialAccountId","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":true,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"link","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"isRead","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Boolean","nativeType":null,"default":false,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true},{"name":"user","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"User","nativeType":null,"relationName":"NotificationToUser","relationFromFields":["userId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false},{"name":"financialAccount","kind":"object","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"FinancialAccount","nativeType":null,"relationName":"FinancialAccountToNotification","relationFromFields":["financialAccountId"],"relationToFields":["id"],"relationOnDelete":"Cascade","isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Currency":{"dbName":"currency","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"name","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"symbol","kind":"scalar","isList":false,"isRequired":true,"isUnique":true,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"image","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"rate","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Float","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"rateUpdatedAt","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"walletAddress","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"walletAddressNetwork","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"wireTransferDepositBankName","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"wireTransferDepositBankAccountNumber","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"String","nativeType":null,"isGenerated":false,"isUpdatedAt":false},{"name":"allowWithdrawal","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Boolean","nativeType":null,"default":false,"isGenerated":false,"isUpdatedAt":false},{"name":"allowDeposit","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Boolean","nativeType":null,"default":true,"isGenerated":false,"isUpdatedAt":false},{"name":"automaticallyUpdateRate","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Boolean","nativeType":null,"default":true,"isGenerated":false,"isUpdatedAt":false},{"name":"withdrawalCharge","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"Float","nativeType":null,"default":0,"isGenerated":false,"isUpdatedAt":false},{"name":"createdAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":true,"type":"DateTime","nativeType":null,"default":{"name":"now","args":[]},"isGenerated":false,"isUpdatedAt":false},{"name":"updatedAt","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"DateTime","nativeType":null,"isGenerated":false,"isUpdatedAt":true}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false},"Settings":{"dbName":"settings","schema":null,"fields":[{"name":"id","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":true,"isReadOnly":false,"hasDefaultValue":true,"type":"String","nativeType":null,"default":{"name":"uuid","args":[4]},"isGenerated":false,"isUpdatedAt":false},{"name":"allowWithdrawals","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"hasDefaultValue":false,"type":"Boolean","nativeType":null,"isGenerated":false,"isUpdatedAt":false}],"primaryKey":null,"uniqueFields":[],"uniqueIndexes":[],"isGenerated":false}},"enums":{"UserRole":{"values":[{"name":"admin","dbName":null},{"name":"user","dbName":null}],"dbName":null},"KycStatus":{"values":[{"name":"pending","dbName":null},{"name":"verified","dbName":null},{"name":"rejected","dbName":null},{"name":"resubmit","dbName":null}],"dbName":null},"GovernmentIdType":{"values":[{"name":"international_passport","dbName":null},{"name":"national_id","dbName":null},{"name":"driving_license","dbName":null}],"dbName":null},"AccountType":{"values":[{"name":"personal","dbName":null},{"name":"business","dbName":null}],"dbName":null},"AccountOwnership":{"values":[{"name":"single","dbName":null},{"name":"joint","dbName":null}],"dbName":null},"AccountStatus":{"values":[{"name":"active","dbName":null},{"name":"dormant","dbName":null},{"name":"closed","dbName":null}],"dbName":null},"AccountUserRole":{"values":[{"name":"owner","dbName":null},{"name":"co_owner","dbName":null},{"name":"manager","dbName":null},{"name":"admin","dbName":null},{"name":"accountant","dbName":null},{"name":"investor","dbName":null},{"name":"contributor","dbName":null},{"name":"legal_guardian","dbName":null},{"name":"signatory","dbName":null}],"dbName":null},"JointAccountRequestStatus":{"values":[{"name":"pending","dbName":null},{"name":"accepted","dbName":null},{"name":"rejected","dbName":null}],"dbName":null},"JointAccountModRequestType":{"values":[{"name":"transfer","dbName":null},{"name":"withdrawal","dbName":null},{"name":"name_change","dbName":null}],"dbName":null},"ProfitDistribution":{"values":[{"name":"daily","dbName":null},{"name":"weekly","dbName":null},{"name":"bi_weekly","dbName":null},{"name":"monthly","dbName":null}],"dbName":null},"InvestmentPlanCategory":{"values":[{"name":"forex","dbName":null},{"name":"stocks","dbName":null},{"name":"real_estate","dbName":null},{"name":"bonds","dbName":null},{"name":"commodities","dbName":null},{"name":"cryptocurrencies","dbName":null},{"name":"derivatives","dbName":null}],"dbName":null},"InvestmentStatus":{"values":[{"name":"open","dbName":null},{"name":"closed","dbName":null},{"name":"paused","dbName":null},{"name":"terminated","dbName":null}],"dbName":null},"TransactionType":{"values":[{"name":"deposit","dbName":null},{"name":"withdrawal","dbName":null},{"name":"transfer","dbName":null},{"name":"investment","dbName":null},{"name":"profit","dbName":null}],"dbName":null},"TransactionStatus":{"values":[{"name":"pending","dbName":null},{"name":"successfull","dbName":null},{"name":"reversed","dbName":null},{"name":"failed","dbName":null}],"dbName":null},"TransactionMedium":{"values":[{"name":"wire","dbName":null},{"name":"crypto","dbName":null}],"dbName":null},"NotificationBodyType":{"values":[{"name":"string","dbName":null},{"name":"html","dbName":null}],"dbName":null}},"types":{}}');
 config.engineWasm = void 0;
 config.compilerWasm = void 0;
 function getPrismaClientClass(dirname) {
@@ -5003,10 +5011,10 @@ const nodemailerConfig = {
 };
 const transporter = nodemailer.createTransport(nodemailerConfig);
 const sendEmail = async (mailOptions) => {
-  var _a2;
+  var _a;
   try {
     const info = await transporter.sendMail({
-      from: { name: "AssetFusionX", address: (_a2 = process.env.EMAIL_USER) != null ? _a2 : "" },
+      from: { name: "AssetFusionX", address: (_a = process.env.EMAIL_USER) != null ? _a : "" },
       ...mailOptions
     });
     return { data: info, error: null };
@@ -5545,6 +5553,9 @@ function investmentStatusUpdateEmail(params) {
     <p>Duration: <b>${data.investment.duration} days</b></p>
     <p>Account: <b>${data.account.name}</b></p>
     <p>The investment status is: <b>${data.investment.status}</b></p>
+    ${data.investment.status === "terminated" && `<p>Termination Reason: <b>${data.investment.terminatedReason}</b></p>`}
+    ${data.investment.status === "paused" && `<p>Termination Reason: <b>${data.investment.pausedReason}</b></p>`}
+    ${data.investment.status === "closed" && `<p>Termination Reason: <b>${data.investment.closedReason}</b></p>`}
   </section>
 
     <section>
@@ -5564,7 +5575,7 @@ function investmentStatusUpdateEmail(params) {
 
 const onInvestmentStatusUpdate = (ctx) => {
   var _a;
-  const subject = "New Financial Investment";
+  const subject = "Financial Investment Status Update";
   const userEmail = investmentStatusUpdateEmail({
     role: "user",
     subject,
@@ -5629,6 +5640,7 @@ notificationEmitter.on("investment:create", onInvestmentCreate);
 notificationEmitter.on("investment-status:update", onInvestmentStatusUpdate);
 
 async function distributeProfit() {
+  var _a;
   const startOfToday = getStartOfTodayUTC();
   const now = /* @__PURE__ */ new Date();
   try {
@@ -5644,7 +5656,8 @@ async function distributeProfit() {
           select: {
             user: true
           }
-        }
+        },
+        profits: true
       }
     });
     if (!eligibleInvestments.length) {
@@ -5655,42 +5668,42 @@ async function distributeProfit() {
         if (!isDistributionDue(investment)) {
           continue;
         }
-        const deposit = new Decimal(investment.deposit);
-        const expectedTotalProfit = deposit.mul(investment.totalReturn).div(100);
-        const periodicProfit = deposit.mul(investment.periodicReturn).div(100);
-        let payout;
-        const isLastCycle = investment.daysCompleted + 1 >= investment.duration;
-        if (isLastCycle) {
-          const remainingProfit = expectedTotalProfit.minus(
-            new Decimal(investment.totalProfit)
-          );
-          payout = remainingProfit.greaterThan(0) ? remainingProfit : new Decimal(0);
-        } else {
-          payout = periodicProfit;
-        }
-        payout = payout.toDecimalPlaces(2, Decimal.ROUND_HALF_UP);
-        const newTotalProfit = new Decimal(investment.totalProfit).plus(payout).toDecimalPlaces(2, Decimal.ROUND_HALF_UP);
-        const newBalance = new Decimal(investment.financialAccount.balance).plus(payout).toDecimalPlaces(2, Decimal.ROUND_HALF_UP);
-        const actualDaysCompleted = daysBetween(
-          new Date(investment.createdAt),
-          startOfToday
+        const nextProfit = investment.profits.find(
+          (profit) => profit.number - investment.profitCount === 1
         );
-        const updates = {
-          totalProfit: newTotalProfit.toNumber(),
+        if (!nextProfit) {
+          continue;
+        }
+        const payout = nextProfit.actualAmount;
+        const newTotalProfit = investment.totalProfit + payout;
+        const newBalance = round(
+          investment.financialAccount.balance + newTotalProfit
+        );
+        const actualDaysCompleted = Math.max(
+          1,
+          daysBetween(new Date(investment.createdAt), startOfToday)
+        );
+        const investmentUpdates = {
+          totalProfit: round(newTotalProfit),
           profitCount: investment.profitCount + 1,
           lastProfitDistributedAt: now,
           ...actualDaysCompleted > investment.daysCompleted ? { daysCompleted: actualDaysCompleted } : void 0
         };
+        const profitUpdates = {
+          isDistributed: true,
+          distributedAt: now
+        };
+        const isLastCycle = ((_a = investmentUpdates.daysCompleted) != null ? _a : 0) + 1 >= investment.duration;
         if (isLastCycle) {
-          updates.status = InvestmentStatus.closed;
-          updates.closedAt = now;
-          updates.closedReason = "Completed investment cycle";
+          investmentUpdates.status = InvestmentStatus.closed;
+          investmentUpdates.closedAt = now;
+          investmentUpdates.closedReason = "Investment cycle completed";
           notificationEmitter.emit("investment-status:update", {
             user: investment.investor.user,
             data: {
               investment: {
                 ...investment,
-                ...updates
+                ...investmentUpdates
               },
               account: investment.financialAccount
             }
@@ -5699,25 +5712,31 @@ async function distributeProfit() {
         const txs = [
           prisma.investment.update({
             where: { id: investment.id },
-            data: updates
+            data: investmentUpdates
+          }),
+          prisma.profit.update({
+            where: {
+              id: nextProfit.id
+            },
+            data: profitUpdates
           }),
           prisma.transaction.create({
             data: {
-              amount: payout.toNumber(),
-              USDAmount: payout.toNumber(),
+              amount: payout,
+              USDAmount: payout,
               type: TransactionType.profit,
               status: TransactionStatus.successfull,
               investmentId: investment.id,
               financialAccountId: investment.financialAccountId,
               initiatorAccountId: investment.investorId,
               description: `Profit distribution (${isLastCycle ? "final" : investment.profitDistribution}) for ${investment.investmentName}`,
-              approvedAt: /* @__PURE__ */ new Date()
+              approvedAt: now
             }
           }),
           prisma.notification.create({
             data: {
               title: "Profit Distribution",
-              body: `You have received a profit distribution of $${payout.toDecimalPlaces(2).toNumber().toLocaleString()} on your investment ${investment.investmentName}`,
+              body: `You have received a profit distribution of $${payout.toLocaleString()} on your investment ${investment.investmentName}`,
               financialAccountId: investment.financialAccountId,
               link: `/user/accounts/${investment.financialAccountId}/investments/${investment.id}`
             }
@@ -5727,7 +5746,7 @@ async function distributeProfit() {
           txs.push(
             prisma.financialAccount.update({
               where: { id: investment.financialAccountId },
-              data: { balance: newBalance.toNumber() }
+              data: { balance: newBalance }
             })
           );
         }
@@ -5757,16 +5776,13 @@ function isDistributionDue(investment) {
     case ProfitDistribution.bi_weekly:
       return !last || daysBetween(last, now) >= 14;
     case ProfitDistribution.monthly:
-      return !last || monthsBetween(last, now) >= 1;
+      return !last || daysBetween(last, now) >= 30;
     default:
       return false;
   }
 }
 function daysBetween(d1, d2) {
   return Math.floor((d2.getTime() - d1.getTime()) / (1e3 * 60 * 60 * 24));
-}
-function monthsBetween(d1, d2) {
-  return d2.getUTCFullYear() * 12 + d2.getUTCMonth() - (d1.getUTCFullYear() * 12 + d1.getUTCMonth());
 }
 function getStartOfTodayUTC() {
   const now = /* @__PURE__ */ new Date();
@@ -5802,1673 +5818,1729 @@ const assets = {
   "/favicon.ico": {
     "type": "image/vnd.microsoft.icon",
     "etag": "\"325fc-hS2DUiI+No6LCRWWmoeDjSrrjyc\"",
-    "mtime": "2025-09-29T10:55:25.603Z",
+    "mtime": "2025-10-05T15:29:59.152Z",
     "size": 206332,
     "path": "../public/favicon.ico"
   },
   "/logo.png": {
     "type": "image/png",
     "etag": "\"8693-eL5Fl1t6wDGD6TOZQYx/ZD7Ecw4\"",
-    "mtime": "2025-09-29T10:55:25.599Z",
+    "mtime": "2025-10-05T15:29:59.156Z",
     "size": 34451,
     "path": "../public/logo.png"
   },
   "/robots.txt": {
     "type": "text/plain; charset=utf-8",
     "etag": "\"18-j8OIsL9qGDmNZ+lHhp2tyH4XtaE\"",
-    "mtime": "2025-09-29T10:55:25.603Z",
+    "mtime": "2025-10-05T15:29:59.156Z",
     "size": 24,
     "path": "../public/robots.txt"
-  },
-  "/_nuxt/-7KF7Ksm.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"223-E6w/16EmZDO7NVbeVCSUQ+XFR3A\"",
-    "mtime": "2025-09-29T10:55:25.507Z",
-    "size": 547,
-    "path": "../public/_nuxt/-7KF7Ksm.js"
-  },
-  "/_nuxt/1QA1qeAv.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"39bd-DhSxSdjL1s152ZzxIiif4xjAkVY\"",
-    "mtime": "2025-09-29T10:55:25.453Z",
-    "size": 14781,
-    "path": "../public/_nuxt/1QA1qeAv.js"
-  },
-  "/_nuxt/3O_b-4PU.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"818-VoNXvUv1HHWXOJayQhLuXFGO9C0\"",
-    "mtime": "2025-09-29T10:55:25.453Z",
-    "size": 2072,
-    "path": "../public/_nuxt/3O_b-4PU.js"
-  },
-  "/_nuxt/5Hs4G3Ly.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"139-3svR7BTpYRGT0aq0yPYZ7vkyc9g\"",
-    "mtime": "2025-09-29T10:55:25.453Z",
-    "size": 313,
-    "path": "../public/_nuxt/5Hs4G3Ly.js"
-  },
-  "/_nuxt/8e0Crs9f.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1be6-JAXwJg6hLEnuHUPv5fd0vBgOy2A\"",
-    "mtime": "2025-09-29T10:55:25.453Z",
-    "size": 7142,
-    "path": "../public/_nuxt/8e0Crs9f.js"
-  },
-  "/_nuxt/9Sj_QenJ.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1e-0OW+1XYJEH1z7qtsmO8ASFjxOi8\"",
-    "mtime": "2025-09-29T10:55:25.453Z",
-    "size": 30,
-    "path": "../public/_nuxt/9Sj_QenJ.js"
-  },
-  "/_nuxt/9ThFSRxC.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"20a-dQJ8BWv4HS7IZbEXbVesaiSYSQ8\"",
-    "mtime": "2025-09-29T10:55:25.453Z",
-    "size": 522,
-    "path": "../public/_nuxt/9ThFSRxC.js"
-  },
-  "/_nuxt/AOeLjPtC.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"217-BnRu9m1vJjEBSsnUpetdhLwpbpo\"",
-    "mtime": "2025-09-29T10:55:25.453Z",
-    "size": 535,
-    "path": "../public/_nuxt/AOeLjPtC.js"
-  },
-  "/_nuxt/AfY2Eh_3.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"19e5-tA0waAicutvus0SX04lWqS2cYJM\"",
-    "mtime": "2025-09-29T10:55:25.453Z",
-    "size": 6629,
-    "path": "../public/_nuxt/AfY2Eh_3.js"
-  },
-  "/_nuxt/B-sDdYQN.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"185b-WmaJY2P8En964EfxqhWEMBtO1yY\"",
-    "mtime": "2025-09-29T10:55:25.453Z",
-    "size": 6235,
-    "path": "../public/_nuxt/B-sDdYQN.js"
-  },
-  "/_nuxt/B0JZmyGU.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"297-5Ax9MDfZ6/HbR55DmtEAnGJP4xk\"",
-    "mtime": "2025-09-29T10:55:25.453Z",
-    "size": 663,
-    "path": "../public/_nuxt/B0JZmyGU.js"
-  },
-  "/_nuxt/B0tyYwQk.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"3167b-rHTRwHaZunlshPtKtRGoIeyWH2M\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 202363,
-    "path": "../public/_nuxt/B0tyYwQk.js"
-  },
-  "/_nuxt/B1PCNxH-.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"88f-cLy5vSQjvZLMyoVLMbfA9AESURw\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 2191,
-    "path": "../public/_nuxt/B1PCNxH-.js"
-  },
-  "/_nuxt/B1cfMhPW.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2c21-0+BrnFwdkFR4RVOVhPe5ZocNMkI\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 11297,
-    "path": "../public/_nuxt/B1cfMhPW.js"
-  },
-  "/_nuxt/B2k7DbDL.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"174b-a0TpLxdrJ845KgcWq7AwSswTUvY\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 5963,
-    "path": "../public/_nuxt/B2k7DbDL.js"
-  },
-  "/_nuxt/B3kJvf1m.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"637-tcgeVgC7/srf0m3pBEFiHvs/7a8\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 1591,
-    "path": "../public/_nuxt/B3kJvf1m.js"
-  },
-  "/_nuxt/B528m7Ee.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"3891-1SAyC/9LXEgSPVO3+r5T0hxCkNo\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 14481,
-    "path": "../public/_nuxt/B528m7Ee.js"
-  },
-  "/_nuxt/B6Ak2GOI.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"31ba-gpoUeqYf+n3x+86zo5h5hiRexmE\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 12730,
-    "path": "../public/_nuxt/B6Ak2GOI.js"
-  },
-  "/_nuxt/BCWtqmHz.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"3518-KE2mvH3d2RQBIPMOOk5CRR7cDtA\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 13592,
-    "path": "../public/_nuxt/BCWtqmHz.js"
-  },
-  "/_nuxt/BCiAisIb.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"16d6-VLOg69LQjrERrf43+nNWhJqkLSs\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 5846,
-    "path": "../public/_nuxt/BCiAisIb.js"
-  },
-  "/_nuxt/BDruDGZ2.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"10d-KuEMb9tK7s2Vm8hTkn2y1mAVjAY\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 269,
-    "path": "../public/_nuxt/BDruDGZ2.js"
-  },
-  "/_nuxt/BE5a99XP.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"d12-WSrV6iF5typQXc9v4/4NYo2GUyo\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 3346,
-    "path": "../public/_nuxt/BE5a99XP.js"
-  },
-  "/_nuxt/BEYzRJY9.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"135d-xzaJt2wRhb9RXQTvSJ2oTsFW2us\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 4957,
-    "path": "../public/_nuxt/BEYzRJY9.js"
-  },
-  "/_nuxt/BEs45A29.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"a396-XdDu/Y9z1kdOEpmBODZlsc1BGqI\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 41878,
-    "path": "../public/_nuxt/BEs45A29.js"
-  },
-  "/_nuxt/BIpI0Us3.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"e3-C3HLQpvUXdMyHbfiOIcALwPoLRg\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 227,
-    "path": "../public/_nuxt/BIpI0Us3.js"
-  },
-  "/_nuxt/BKGLD4AN.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"84bb-nZ+uANzg1fUwGGD/U0ZCo/QTKEU\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 33979,
-    "path": "../public/_nuxt/BKGLD4AN.js"
-  },
-  "/_nuxt/BLzJDWgv.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"21e7-Pr1olq0KxMYW8+0xSoPUK7X6/wI\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 8679,
-    "path": "../public/_nuxt/BLzJDWgv.js"
-  },
-  "/_nuxt/BMagNV4R.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1562-44AMM5M4940faFZuv6erU1igPSM\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 5474,
-    "path": "../public/_nuxt/BMagNV4R.js"
-  },
-  "/_nuxt/BNnk2oOX.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"670-+VUo7EmfLmVOjUNzKPQ08jDPYoA\"",
-    "mtime": "2025-09-29T10:55:25.458Z",
-    "size": 1648,
-    "path": "../public/_nuxt/BNnk2oOX.js"
-  },
-  "/_nuxt/BPKYJU6e.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"95-msPqhVDSdRNmT//AH0xaOx+sAjw\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 149,
-    "path": "../public/_nuxt/BPKYJU6e.js"
-  },
-  "/_nuxt/BPfgvtU3.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"30c-lSgVANcIHX3Anxqow3i9Sx3gSp4\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 780,
-    "path": "../public/_nuxt/BPfgvtU3.js"
-  },
-  "/_nuxt/BS2s7U1N.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2e9d-dmyc4BNoAMH2JYZGTxzTDeVIUus\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 11933,
-    "path": "../public/_nuxt/BS2s7U1N.js"
-  },
-  "/_nuxt/BW-75agw.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"3666-DkmhbqcuseXF7ZCfL+2B/oMyhtY\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 13926,
-    "path": "../public/_nuxt/BW-75agw.js"
-  },
-  "/_nuxt/BZFIiZxl.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"92-nG9NBR3qSyZbIqwh2uSMVHwR1WQ\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 146,
-    "path": "../public/_nuxt/BZFIiZxl.js"
-  },
-  "/_nuxt/B_D_Kjhd.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"801-59zsYqf4imbXSIV+pnGmLhsotlw\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 2049,
-    "path": "../public/_nuxt/B_D_Kjhd.js"
-  },
-  "/_nuxt/BanwWMB6.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"77-TF5O+2A7VlHhIlUTxkVZJNbx9lE\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 119,
-    "path": "../public/_nuxt/BanwWMB6.js"
-  },
-  "/_nuxt/Bbb799Gy.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1e9-0klbiF5TdHqdrtUe65j1YUtHwK4\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 489,
-    "path": "../public/_nuxt/Bbb799Gy.js"
-  },
-  "/_nuxt/BdFxtwSd.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"3650-QXCZN1a8FdnEIzVys8Myxr+i9GA\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 13904,
-    "path": "../public/_nuxt/BdFxtwSd.js"
-  },
-  "/_nuxt/BetjkCKF.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1e3a-gs+Y9YLFlaBf5BXsOMQaJffOs+A\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 7738,
-    "path": "../public/_nuxt/BetjkCKF.js"
-  },
-  "/_nuxt/Bg6_oOu2.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"6ce-RywtOq9qVAQdMswL4bDLf+0ptI4\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 1742,
-    "path": "../public/_nuxt/Bg6_oOu2.js"
-  },
-  "/_nuxt/Bgx9EZP1.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"424-hYOpgXa4IilmVtWtMi89emtpcQk\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 1060,
-    "path": "../public/_nuxt/Bgx9EZP1.js"
-  },
-  "/_nuxt/Bj3FyKGF.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"274a-y1pGLPFeIeRD3fVTf6UkEuIvmCo\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 10058,
-    "path": "../public/_nuxt/Bj3FyKGF.js"
-  },
-  "/_nuxt/Bk7-xE4S.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1347-39bfd67+7t2PkrrftK4t+9YQN5A\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 4935,
-    "path": "../public/_nuxt/Bk7-xE4S.js"
-  },
-  "/_nuxt/BkUz6oi4.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"158b-7iXSqd10VwKK+mRut2UA1TJ+o8o\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 5515,
-    "path": "../public/_nuxt/BkUz6oi4.js"
-  },
-  "/_nuxt/Bo6mSoWq.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1ac3-IakCmhuUA3Xb6ShmBOnAQscno58\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 6851,
-    "path": "../public/_nuxt/Bo6mSoWq.js"
-  },
-  "/_nuxt/Bp-vGGEN.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"18af-BdrYTRjVE+YjZHrJfP2YXBl+icY\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 6319,
-    "path": "../public/_nuxt/Bp-vGGEN.js"
-  },
-  "/_nuxt/Bp5OBBKB.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"24ba-lGYB+nRBISYxMD8nKnohfWrtdIg\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 9402,
-    "path": "../public/_nuxt/Bp5OBBKB.js"
-  },
-  "/_nuxt/BpmwN212.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1045e-mlUvD1efYkRB5mr9H2q+yj89IpY\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 66654,
-    "path": "../public/_nuxt/BpmwN212.js"
-  },
-  "/_nuxt/BtNIPrzs.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2b5-sKOhHF470w9RyMuP8o+eO8UyvXk\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 693,
-    "path": "../public/_nuxt/BtNIPrzs.js"
-  },
-  "/_nuxt/Bw8Jy4xi.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"a67c-yNKN86Nc3aTBQJQEw2p8RYZWDPo\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 42620,
-    "path": "../public/_nuxt/Bw8Jy4xi.js"
-  },
-  "/_nuxt/BxKNt86c.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"fae-pycv8ztMkHD3Kgo8kYUvIE37tUs\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 4014,
-    "path": "../public/_nuxt/BxKNt86c.js"
-  },
-  "/_nuxt/ByMUEZ-H.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"5c0-uqVkq7eLqWhZJZI+u5E7j2SOqtE\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 1472,
-    "path": "../public/_nuxt/ByMUEZ-H.js"
-  },
-  "/_nuxt/Bz3H2nqV.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2bd8-vudeozd7RJOQW6M3CyU/7mjirYY\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 11224,
-    "path": "../public/_nuxt/Bz3H2nqV.js"
-  },
-  "/_nuxt/C-LBGTmx.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"64ca5-iHMShswwPii9Y+A9U1HPI6sFaZM\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 412837,
-    "path": "../public/_nuxt/C-LBGTmx.js"
-  },
-  "/_nuxt/C1DUflo4.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"5ea62-ch+eR/ygeVX4eOWi7GWRpB62T9Q\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 387682,
-    "path": "../public/_nuxt/C1DUflo4.js"
-  },
-  "/_nuxt/C2cBEfUs.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"3397-LZVPG1Sp2DigN7wkKSIToFvKRTU\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 13207,
-    "path": "../public/_nuxt/C2cBEfUs.js"
-  },
-  "/_nuxt/C34u_Fr_.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"b4de-EH3ytKfVY2c3MUCtMQiiDuxyymc\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 46302,
-    "path": "../public/_nuxt/C34u_Fr_.js"
-  },
-  "/_nuxt/C3npS8vC.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"7d-nbW5YAXslhzO7iI9vjTMJ6KkmGc\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 125,
-    "path": "../public/_nuxt/C3npS8vC.js"
-  },
-  "/_nuxt/C3xkHGSj.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"4a3-mmetu5qP8goQE5cY8KiWozB1Wsk\"",
-    "mtime": "2025-09-29T10:55:25.462Z",
-    "size": 1187,
-    "path": "../public/_nuxt/C3xkHGSj.js"
-  },
-  "/_nuxt/C7pKdu57.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"b6a-HBSTG1Epjg1nVviz908FaOlXROk\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 2922,
-    "path": "../public/_nuxt/C7pKdu57.js"
-  },
-  "/_nuxt/C8rSykoZ.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1e9-HseFZX7Gyjbi+t6+12wVS8X+5iQ\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 489,
-    "path": "../public/_nuxt/C8rSykoZ.js"
-  },
-  "/_nuxt/CAAXWTwr.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"7395-AxCA3VjK3w7dxMc3gAo3+MRmAOU\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 29589,
-    "path": "../public/_nuxt/CAAXWTwr.js"
-  },
-  "/_nuxt/CEKJFYUk.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1bff-faI0FbUMnOyagpiLsBBPDbv3Y74\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 7167,
-    "path": "../public/_nuxt/CEKJFYUk.js"
-  },
-  "/_nuxt/CGTGJwYQ.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"59b-sS+5lfEnPCantLMzYvrd7VBNJ9s\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 1435,
-    "path": "../public/_nuxt/CGTGJwYQ.js"
-  },
-  "/_nuxt/CIg2Y4Xz.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"275a-mwMonTwPbdbf8HunQIPTpWN9GRw\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 10074,
-    "path": "../public/_nuxt/CIg2Y4Xz.js"
-  },
-  "/_nuxt/CIzcNE9p.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"26e83-59Ohq5xRzCMH6XAndiG6SrDz/pY\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 159363,
-    "path": "../public/_nuxt/CIzcNE9p.js"
-  },
-  "/_nuxt/CM02IxXZ.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"6b1-+RnGkrk8uczXgL9+1Yqpkr5wNe4\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 1713,
-    "path": "../public/_nuxt/CM02IxXZ.js"
-  },
-  "/_nuxt/CPR7dAeh.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2a18-8YxIHS1ye/U9n7+ziPT7iPpO1Xw\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 10776,
-    "path": "../public/_nuxt/CPR7dAeh.js"
-  },
-  "/_nuxt/CQjSHSFP.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"24c-QSJgB3+DbAkffm+9vtqSLkUKItg\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 588,
-    "path": "../public/_nuxt/CQjSHSFP.js"
-  },
-  "/_nuxt/CRLC2MuU.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"dd0-41Q60EBdtNXcD+T68Fa6tWLMefw\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 3536,
-    "path": "../public/_nuxt/CRLC2MuU.js"
-  },
-  "/_nuxt/CSQRXKBW.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"abb-mXpgbrx0pgxp5xtUZhT10UKyZjs\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 2747,
-    "path": "../public/_nuxt/CSQRXKBW.js"
-  },
-  "/_nuxt/CT9ZpJyO.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"3b16-1M7LErhnOs9fmSfcmLT4bJMj02M\"",
-    "mtime": "2025-09-29T10:55:25.466Z",
-    "size": 15126,
-    "path": "../public/_nuxt/CT9ZpJyO.js"
-  },
-  "/_nuxt/CWJwkmXg.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2075-lmb1GEukxp/opx/Z341ffVegMSM\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 8309,
-    "path": "../public/_nuxt/CWJwkmXg.js"
-  },
-  "/_nuxt/CXICWBWE.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"db2-kcBgL9XcKN6vbpUnyJm2Hqwjf9Y\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 3506,
-    "path": "../public/_nuxt/CXICWBWE.js"
-  },
-  "/_nuxt/CYGQRhui.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"14b-FLs7lfWSBNeHynKrGiVg18PsJL8\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 331,
-    "path": "../public/_nuxt/CYGQRhui.js"
-  },
-  "/_nuxt/C_FulvQL.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2066-n1yrfb/BZ9FhKQNb2vCGr3DvVjU\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 8294,
-    "path": "../public/_nuxt/C_FulvQL.js"
-  },
-  "/_nuxt/CeEDNElg.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"6982a-AZ2ap9JkRVbEdyfupkT7vuADc6A\"",
-    "mtime": "2025-09-29T10:55:25.474Z",
-    "size": 432170,
-    "path": "../public/_nuxt/CeEDNElg.js"
-  },
-  "/_nuxt/ChRclvJ-.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"6b-rBe7DvpIcfXU3km160ev1lSyBhk\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 107,
-    "path": "../public/_nuxt/ChRclvJ-.js"
-  },
-  "/_nuxt/Cmnadxfh.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"139-svgRjkvYEBjsklYJFrZEDsnnJOU\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 313,
-    "path": "../public/_nuxt/Cmnadxfh.js"
-  },
-  "/_nuxt/CoOAKJSi.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1e4-0gdxmU/YLwA2hURZABHEoFwNNVM\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 484,
-    "path": "../public/_nuxt/CoOAKJSi.js"
-  },
-  "/_nuxt/Coc48Zqk.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"f7f-7Y4JG1/GxMmhRlaNJ4xT4rjw9TY\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 3967,
-    "path": "../public/_nuxt/Coc48Zqk.js"
-  },
-  "/_nuxt/CpB5esaq.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"5d9d-WWfIknwbasLdTmcZgMA9bFvryRY\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 23965,
-    "path": "../public/_nuxt/CpB5esaq.js"
-  },
-  "/_nuxt/Cpj98o6Y.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"ec-QtY1KaLA8vnMK3l2IvajpxyuPmY\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 236,
-    "path": "../public/_nuxt/Cpj98o6Y.js"
-  },
-  "/_nuxt/CqH_i7MZ.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"cf9-dHbNMZgpne2FczTDyMePrH985Ac\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 3321,
-    "path": "../public/_nuxt/CqH_i7MZ.js"
-  },
-  "/_nuxt/CrfLGxAw.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"6cb-lo0sHoXxvEUThP3hdQ2nDLV2dhg\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 1739,
-    "path": "../public/_nuxt/CrfLGxAw.js"
-  },
-  "/_nuxt/Csflxw_B.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"15f-zBf2s7RZUMEZObSriFM+MfALCPU\"",
-    "mtime": "2025-09-29T10:55:25.474Z",
-    "size": 351,
-    "path": "../public/_nuxt/Csflxw_B.js"
-  },
-  "/_nuxt/CtXYoPLG.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"4d9-A2cLZ895BYBc5BrExLjk7HDNASw\"",
-    "mtime": "2025-09-29T10:55:25.470Z",
-    "size": 1241,
-    "path": "../public/_nuxt/CtXYoPLG.js"
-  },
-  "/_nuxt/CteLUNrr.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"25562-+IP95+QEYGnQET7UJiQBh21HOPA\"",
-    "mtime": "2025-09-29T10:55:25.474Z",
-    "size": 152930,
-    "path": "../public/_nuxt/CteLUNrr.js"
-  },
-  "/_nuxt/CtxfVsyd.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1ee-mZ66FXRHqatarihNTrcBdCzK+vI\"",
-    "mtime": "2025-09-29T10:55:25.474Z",
-    "size": 494,
-    "path": "../public/_nuxt/CtxfVsyd.js"
-  },
-  "/_nuxt/D1WgHW_o.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"353-UKkENuJXEvv2V2ceB/CgmvQsEh8\"",
-    "mtime": "2025-09-29T10:55:25.474Z",
-    "size": 851,
-    "path": "../public/_nuxt/D1WgHW_o.js"
-  },
-  "/_nuxt/D228C6_z.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"25f5-txN9xEKK1ow9OdxQ5k1mkGQqdYo\"",
-    "mtime": "2025-09-29T10:55:25.474Z",
-    "size": 9717,
-    "path": "../public/_nuxt/D228C6_z.js"
-  },
-  "/_nuxt/D3IWMNxR.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"860-56/WfFSzq39bPYPypZdZQgpaH0I\"",
-    "mtime": "2025-09-29T10:55:25.474Z",
-    "size": 2144,
-    "path": "../public/_nuxt/D3IWMNxR.js"
-  },
-  "/_nuxt/D3XLSkh0.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"9af-JN5BdBbFo+unybcam+/Zo1WKtgA\"",
-    "mtime": "2025-09-29T10:55:25.474Z",
-    "size": 2479,
-    "path": "../public/_nuxt/D3XLSkh0.js"
-  },
-  "/_nuxt/D44FMmxR.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"ec7-P21rcpKx7I33oQ4l4ylOiGvp8zk\"",
-    "mtime": "2025-09-29T10:55:25.474Z",
-    "size": 3783,
-    "path": "../public/_nuxt/D44FMmxR.js"
-  },
-  "/_nuxt/D63nLU7I.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"4685-xfGApec8VVmMJ6xLjjcmVDzH4Yw\"",
-    "mtime": "2025-09-29T10:55:25.474Z",
-    "size": 18053,
-    "path": "../public/_nuxt/D63nLU7I.js"
-  },
-  "/_nuxt/D7EzAq-8.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"166d-mgM3zIgc2hfXQvIYdoc52yuiJt8\"",
-    "mtime": "2025-09-29T10:55:25.478Z",
-    "size": 5741,
-    "path": "../public/_nuxt/D7EzAq-8.js"
-  },
-  "/_nuxt/D9B1UaIg.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"e6-X81fKxNZb17Lqq/IBerVuyFi/V8\"",
-    "mtime": "2025-09-29T10:55:25.478Z",
-    "size": 230,
-    "path": "../public/_nuxt/D9B1UaIg.js"
-  },
-  "/_nuxt/D9XIeYUM.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"4f8-ydvrxy2GNOrXA6AVydSiTW/Nf+o\"",
-    "mtime": "2025-09-29T10:55:25.478Z",
-    "size": 1272,
-    "path": "../public/_nuxt/D9XIeYUM.js"
-  },
-  "/_nuxt/D9mponbQ.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"16ce1-UcXeoV3PKuT9bMvsfr/xQR5kDU4\"",
-    "mtime": "2025-09-29T10:55:25.478Z",
-    "size": 93409,
-    "path": "../public/_nuxt/D9mponbQ.js"
-  },
-  "/_nuxt/DBNt4UR8.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1782e9-5hiYhly4Z/F9JE8Qv1fOiDsTO58\"",
-    "mtime": "2025-09-29T10:55:25.487Z",
-    "size": 1540841,
-    "path": "../public/_nuxt/DBNt4UR8.js"
-  },
-  "/_nuxt/DDnjbJhc.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"95b-VcwVYx0Meig5QQfMh8H9WbQJQis\"",
-    "mtime": "2025-09-29T10:55:25.478Z",
-    "size": 2395,
-    "path": "../public/_nuxt/DDnjbJhc.js"
-  },
-  "/_nuxt/DDt7IjCh.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"75e-dTjY3NFf8Jg5c0Kduuq6nGf6Vt4\"",
-    "mtime": "2025-09-29T10:55:25.478Z",
-    "size": 1886,
-    "path": "../public/_nuxt/DDt7IjCh.js"
-  },
-  "/_nuxt/DDuD5jM5.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"235f-9DMbe/KX3TyLAXy5eRTcDrbYFJU\"",
-    "mtime": "2025-09-29T10:55:25.478Z",
-    "size": 9055,
-    "path": "../public/_nuxt/DDuD5jM5.js"
-  },
-  "/_nuxt/DDxL5x5s.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"44f9-dY9fHA19NmhNRksmnlBsFH9wf+g\"",
-    "mtime": "2025-09-29T10:55:25.478Z",
-    "size": 17657,
-    "path": "../public/_nuxt/DDxL5x5s.js"
-  },
-  "/_nuxt/DFC3NVv7.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"70f-aERXpiOF8RYZIHM93A97nKB3RqY\"",
-    "mtime": "2025-09-29T10:55:25.478Z",
-    "size": 1807,
-    "path": "../public/_nuxt/DFC3NVv7.js"
-  },
-  "/_nuxt/DGp_KP7c.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1bef-ZYm8Lcy++MfqKceXBZDwPAQWZc0\"",
-    "mtime": "2025-09-29T10:55:25.478Z",
-    "size": 7151,
-    "path": "../public/_nuxt/DGp_KP7c.js"
-  },
-  "/_nuxt/DI6KJISO.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"7fc-+h91L5j6ENaCukirOj6U8w7v0EY\"",
-    "mtime": "2025-09-29T10:55:25.478Z",
-    "size": 2044,
-    "path": "../public/_nuxt/DI6KJISO.js"
-  },
-  "/_nuxt/DUye3jTT.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"158d-Wu2gb8bSpKeUz6jtunUqAiVMNLA\"",
-    "mtime": "2025-09-29T10:55:25.478Z",
-    "size": 5517,
-    "path": "../public/_nuxt/DUye3jTT.js"
-  },
-  "/_nuxt/DVBT9clD.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"28f4-biP/ZljyaxzcUzLMKy/8wRYfQ+g\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 10484,
-    "path": "../public/_nuxt/DVBT9clD.js"
-  },
-  "/_nuxt/DViDmhL1.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"da4-OPCcN0NKDo5ZbX4U+q4Q07AQ7vo\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 3492,
-    "path": "../public/_nuxt/DViDmhL1.js"
-  },
-  "/_nuxt/DWZwYTgq.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1706-hFFt7l2CdqTGJxmFaiQKDDojFME\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 5894,
-    "path": "../public/_nuxt/DWZwYTgq.js"
-  },
-  "/_nuxt/Dc9u3tNI.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"47fd-DTJyV202IivakYkTin4Ue6PVwDw\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 18429,
-    "path": "../public/_nuxt/Dc9u3tNI.js"
-  },
-  "/_nuxt/DdBeZkeI.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"8ec-H54ulcJbzgO8j9FYHdwunJBJCPs\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 2284,
-    "path": "../public/_nuxt/DdBeZkeI.js"
-  },
-  "/_nuxt/DegOazH6.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2267-CwaOtcb7rnEia7pXVAgs1+6lSH8\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 8807,
-    "path": "../public/_nuxt/DegOazH6.js"
-  },
-  "/_nuxt/DeuzRBk-.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"509-jRmyYgTkVc3TmWQUZSHF04EMLoM\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 1289,
-    "path": "../public/_nuxt/DeuzRBk-.js"
-  },
-  "/_nuxt/DhTThthB.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"cc6-CdkPK0oj/EoS4MRa9ih/Q8A5b34\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 3270,
-    "path": "../public/_nuxt/DhTThthB.js"
-  },
-  "/_nuxt/Dhzwx1na.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"89-EZAMdi/+xK+3++wIyPVyG9K340g\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 137,
-    "path": "../public/_nuxt/Dhzwx1na.js"
-  },
-  "/_nuxt/DjpyhHjD.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2925-wLWCX0qbgyxoKKMtqiz8izX+DW8\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 10533,
-    "path": "../public/_nuxt/DjpyhHjD.js"
-  },
-  "/_nuxt/Dk3hXDIF.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1f01-N+ubGBU2hGWwEdlQXJr3uGiS+oo\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 7937,
-    "path": "../public/_nuxt/Dk3hXDIF.js"
-  },
-  "/_nuxt/Dkm3ViKx.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"7c-v/wTKHYkAnATzampDQXBVNIBuIY\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 124,
-    "path": "../public/_nuxt/Dkm3ViKx.js"
-  },
-  "/_nuxt/DlAUqK2U.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"5b-eFCz/UrraTh721pgAl0VxBNR1es\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 91,
-    "path": "../public/_nuxt/DlAUqK2U.js"
-  },
-  "/_nuxt/DlN4ybdK.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"a8c-nHGCIVaW1Ex+PY/LGo5TKNJS3xM\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 2700,
-    "path": "../public/_nuxt/DlN4ybdK.js"
-  },
-  "/_nuxt/DlSKs646.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2121-ejWsfjYLzukf383fDtvn1Brhb3U\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 8481,
-    "path": "../public/_nuxt/DlSKs646.js"
-  },
-  "/_nuxt/DmaxpY7T.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"ccc-kFe4mtqKLMvzKAkLS+fEOu/tMXE\"",
-    "mtime": "2025-09-29T10:55:25.482Z",
-    "size": 3276,
-    "path": "../public/_nuxt/DmaxpY7T.js"
-  },
-  "/_nuxt/DmzpfOPm.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"422a-HR5l5AHt8VuyGACKyLTbeH3401o\"",
-    "mtime": "2025-09-29T10:55:25.487Z",
-    "size": 16938,
-    "path": "../public/_nuxt/DmzpfOPm.js"
-  },
-  "/_nuxt/DnnjeX2K.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"5c40-oJSReElIN6atrS6Tq6/etOrOYiU\"",
-    "mtime": "2025-09-29T10:55:25.487Z",
-    "size": 23616,
-    "path": "../public/_nuxt/DnnjeX2K.js"
-  },
-  "/_nuxt/DouKs7Xy.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"31a57-w/ko0OZjsvLNfObmba+yItJ4lns\"",
-    "mtime": "2025-09-29T10:55:25.487Z",
-    "size": 203351,
-    "path": "../public/_nuxt/DouKs7Xy.js"
-  },
-  "/_nuxt/Dp0Z3TVT.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1ef2-Rw5A8KZuszTMxTuLMnRIbEfnSTo\"",
-    "mtime": "2025-09-29T10:55:25.487Z",
-    "size": 7922,
-    "path": "../public/_nuxt/Dp0Z3TVT.js"
-  },
-  "/_nuxt/DpDWrd7e.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"210f-2t+YY0KoZxGBZwsgdpvj7XRlwU4\"",
-    "mtime": "2025-09-29T10:55:25.487Z",
-    "size": 8463,
-    "path": "../public/_nuxt/DpDWrd7e.js"
-  },
-  "/_nuxt/Dre8A2H3.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1b4-BH1Rm7jWCrw9Pc0kNjXRJFP2KyA\"",
-    "mtime": "2025-09-29T10:55:25.487Z",
-    "size": 436,
-    "path": "../public/_nuxt/Dre8A2H3.js"
-  },
-  "/_nuxt/Dsaz7ZGA.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"24d-K3PiDkR/mYRFru65JJVdG+jmE8Y\"",
-    "mtime": "2025-09-29T10:55:25.487Z",
-    "size": 589,
-    "path": "../public/_nuxt/Dsaz7ZGA.js"
-  },
-  "/_nuxt/DtKguFLG.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1b887-siMqZZdAeBLkau/KwqKB+sVocRg\"",
-    "mtime": "2025-09-29T10:55:25.487Z",
-    "size": 112775,
-    "path": "../public/_nuxt/DtKguFLG.js"
-  },
-  "/_nuxt/Dttxen_t.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2ba-3mz2wdgH/38jvv6lTsfDkXDGOgU\"",
-    "mtime": "2025-09-29T10:55:25.487Z",
-    "size": 698,
-    "path": "../public/_nuxt/Dttxen_t.js"
-  },
-  "/_nuxt/DzJBPTvs.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"24d6-DDD76XWTCBjcZa2o8GQw9ZCD2dM\"",
-    "mtime": "2025-09-29T10:55:25.487Z",
-    "size": 9430,
-    "path": "../public/_nuxt/DzJBPTvs.js"
-  },
-  "/_nuxt/E7rUulBw.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"673-7DsmyUv2MFJf94clvG7UnKhdZ6I\"",
-    "mtime": "2025-09-29T10:55:25.487Z",
-    "size": 1651,
-    "path": "../public/_nuxt/E7rUulBw.js"
-  },
-  "/_nuxt/F-6Q0K9U.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"365d-kM+hiqjova5G+OAIM4B0xC/qXE8\"",
-    "mtime": "2025-09-29T10:55:25.491Z",
-    "size": 13917,
-    "path": "../public/_nuxt/F-6Q0K9U.js"
-  },
-  "/_nuxt/FQLUZvvs.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"7d-dzd258qBOzWaz5CkUwM72ac0fdk\"",
-    "mtime": "2025-09-29T10:55:25.491Z",
-    "size": 125,
-    "path": "../public/_nuxt/FQLUZvvs.js"
-  },
-  "/_nuxt/Fa6VHrA2.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"50f-9kt1r5vMoAwmRUinROfxzaEerck\"",
-    "mtime": "2025-09-29T10:55:25.491Z",
-    "size": 1295,
-    "path": "../public/_nuxt/Fa6VHrA2.js"
-  },
-  "/_nuxt/GeistMono.BlNDD6KS.ttf": {
-    "type": "font/ttf",
-    "etag": "\"21a4c-gm9w2ENvXcfFhYWyTL/dr//O2vQ\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 137804,
-    "path": "../public/_nuxt/GeistMono.BlNDD6KS.ttf"
-  },
-  "/_nuxt/JpCUZv6s.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"222-oiWZC7B+hzwM5rjVPxZrylJixrk\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 546,
-    "path": "../public/_nuxt/JpCUZv6s.js"
-  },
-  "/_nuxt/ONxkfkan.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"b2-Q+BROpWnPyEUCYwCrZSPt5iXY00\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 178,
-    "path": "../public/_nuxt/ONxkfkan.js"
-  },
-  "/_nuxt/Poppins.CTKNfV9P.ttf": {
-    "type": "font/ttf",
-    "etag": "\"26a20-/dMALn2BTuR8HBuEh8csa7s6LQA\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 158240,
-    "path": "../public/_nuxt/Poppins.CTKNfV9P.ttf"
-  },
-  "/_nuxt/QEtgjnmK.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"452-QV0GQ7UqrLjdI0I3QPJSA5+r/tA\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 1106,
-    "path": "../public/_nuxt/QEtgjnmK.js"
-  },
-  "/_nuxt/T-ib9I2F.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2c3e-6WtuppQbiKq38rPaABXzrtJTi6I\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 11326,
-    "path": "../public/_nuxt/T-ib9I2F.js"
-  },
-  "/_nuxt/T50DtdQH.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2af-l3kXK7G6dmAfbVg+FfAPGqBR7SA\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 687,
-    "path": "../public/_nuxt/T50DtdQH.js"
-  },
-  "/_nuxt/To2xzWH6.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"995-xA6LnZzv/9qHWJJxOupqyZFs1QI\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 2453,
-    "path": "../public/_nuxt/To2xzWH6.js"
-  },
-  "/_nuxt/V1H5cGm8.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"36081-qWkOvw5UA9ZOvE15XVNKKtb+giM\"",
-    "mtime": "2025-09-29T10:55:25.499Z",
-    "size": 221313,
-    "path": "../public/_nuxt/V1H5cGm8.js"
-  },
-  "/_nuxt/VHV49OU3.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"fc3-/Nj5mQMBge7m20v1SnkRXpoySpc\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 4035,
-    "path": "../public/_nuxt/VHV49OU3.js"
-  },
-  "/_nuxt/VTFQ-hBr.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2193-BL+1aitZng7K1zkCHmFeBno3W3o\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 8595,
-    "path": "../public/_nuxt/VTFQ-hBr.js"
-  },
-  "/_nuxt/Wb6mD6Xi.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"b59-6inkK4Hgnwavo1xh4U5mqnG/VaM\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 2905,
-    "path": "../public/_nuxt/Wb6mD6Xi.js"
-  },
-  "/_nuxt/Xt0GgwGd.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"6ba-0lj9CSIy0Jrh/UcrrJ9xjteZ2Tc\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 1722,
-    "path": "../public/_nuxt/Xt0GgwGd.js"
-  },
-  "/_nuxt/YGpyX2rP.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"3627-4zYy61TOwSIM6WSoUPb9dWrXZWU\"",
-    "mtime": "2025-09-29T10:55:25.499Z",
-    "size": 13863,
-    "path": "../public/_nuxt/YGpyX2rP.js"
-  },
-  "/_nuxt/ZLQxYAnj.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"a8e-uHWnjR2PGgI7yTLhpMJBKnbEPuw\"",
-    "mtime": "2025-09-29T10:55:25.495Z",
-    "size": 2702,
-    "path": "../public/_nuxt/ZLQxYAnj.js"
-  },
-  "/_nuxt/Zk35v2o2.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1a7-Cs9BB5hqx5eimsrEXEXhpILt/VE\"",
-    "mtime": "2025-09-29T10:55:25.499Z",
-    "size": 423,
-    "path": "../public/_nuxt/Zk35v2o2.js"
-  },
-  "/_nuxt/_4PzR13X.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2435-s38aRh+5CJ4zvzd/XaowaGY93BQ\"",
-    "mtime": "2025-09-29T10:55:25.499Z",
-    "size": 9269,
-    "path": "../public/_nuxt/_4PzR13X.js"
-  },
-  "/_nuxt/aGzT-_H7.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"5687-JhEo3tARYgIwyUZWGiDNKDAheqw\"",
-    "mtime": "2025-09-29T10:55:25.499Z",
-    "size": 22151,
-    "path": "../public/_nuxt/aGzT-_H7.js"
-  },
-  "/_nuxt/dxPpLWON.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"2cf-oAAoKyK+WqluQKTSHXLLbnUlep4\"",
-    "mtime": "2025-09-29T10:55:25.499Z",
-    "size": 719,
-    "path": "../public/_nuxt/dxPpLWON.js"
-  },
-  "/_nuxt/eiXyoLxS.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"4063-PuRAr4O5I8xdZFoqpg4UuES2mkU\"",
-    "mtime": "2025-09-29T10:55:25.499Z",
-    "size": 16483,
-    "path": "../public/_nuxt/eiXyoLxS.js"
-  },
-  "/_nuxt/entry.DyLPhJwq.css": {
-    "type": "text/css; charset=utf-8",
-    "etag": "\"2be84-eHEd3zbAmdxoueNgs2PqwqjQiNA\"",
-    "mtime": "2025-09-29T10:55:25.503Z",
-    "size": 179844,
-    "path": "../public/_nuxt/entry.DyLPhJwq.css"
-  },
-  "/_nuxt/error-404.DlVPZ4GE.css": {
-    "type": "text/css; charset=utf-8",
-    "etag": "\"980-mEKr2yDhHmG21upnVXydWBGkQJ0\"",
-    "mtime": "2025-09-29T10:55:25.499Z",
-    "size": 2432,
-    "path": "../public/_nuxt/error-404.DlVPZ4GE.css"
-  },
-  "/_nuxt/error-500.DjyirMQI.css": {
-    "type": "text/css; charset=utf-8",
-    "etag": "\"775-e/ssyla9fMU+TjO0KjMl5vd3xXk\"",
-    "mtime": "2025-09-29T10:55:25.499Z",
-    "size": 1909,
-    "path": "../public/_nuxt/error-500.DjyirMQI.css"
-  },
-  "/_nuxt/fcZIVg0E.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"832-gli/S+OKSVA5L34l1Az5g3ZJ/PU\"",
-    "mtime": "2025-09-29T10:55:25.503Z",
-    "size": 2098,
-    "path": "../public/_nuxt/fcZIVg0E.js"
-  },
-  "/_nuxt/fntxY4Hd.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"d0e-yeGqUWnTPAB0lI+p7c7IG9PHuTQ\"",
-    "mtime": "2025-09-29T10:55:25.499Z",
-    "size": 3342,
-    "path": "../public/_nuxt/fntxY4Hd.js"
-  },
-  "/_nuxt/jFYhBC76.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"224-FHzXPBCuJL9jsLYPNEezdythwVM\"",
-    "mtime": "2025-09-29T10:55:25.503Z",
-    "size": 548,
-    "path": "../public/_nuxt/jFYhBC76.js"
-  },
-  "/_nuxt/kRIii9yh.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1f3-yYb3MkTdiuhHjcDfFDHvLT+nO3M\"",
-    "mtime": "2025-09-29T10:55:25.503Z",
-    "size": 499,
-    "path": "../public/_nuxt/kRIii9yh.js"
-  },
-  "/_nuxt/partner-list.phP7Mvgh.css": {
-    "type": "text/css; charset=utf-8",
-    "etag": "\"27c-UYcm/JERbzV/wmR6YOEolOKZrXE\"",
-    "mtime": "2025-09-29T10:55:25.503Z",
-    "size": 636,
-    "path": "../public/_nuxt/partner-list.phP7Mvgh.css"
-  },
-  "/_nuxt/password.D7e_onzx.css": {
-    "type": "text/css; charset=utf-8",
-    "etag": "\"1b-TMZKD6boIOYNoDcCE4aOxomJVYw\"",
-    "mtime": "2025-09-29T10:55:25.503Z",
-    "size": 27,
-    "path": "../public/_nuxt/password.D7e_onzx.css"
-  },
-  "/_nuxt/qpaNww9i.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"9c7-WDHvSLF6kMPN9PhZsdqfe8IplaQ\"",
-    "mtime": "2025-09-29T10:55:25.503Z",
-    "size": 2503,
-    "path": "../public/_nuxt/qpaNww9i.js"
-  },
-  "/_nuxt/rKi8OkKt.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"44a0-8oA7/32YS2+PBU7Ri5p4lLNHSWk\"",
-    "mtime": "2025-09-29T10:55:25.503Z",
-    "size": 17568,
-    "path": "../public/_nuxt/rKi8OkKt.js"
-  },
-  "/_nuxt/v-table.BzAvpRaz.css": {
-    "type": "text/css; charset=utf-8",
-    "etag": "\"ae-H2baAMXsbb/EWycGxLCR5QEoRb4\"",
-    "mtime": "2025-09-29T10:55:25.503Z",
-    "size": 174,
-    "path": "../public/_nuxt/v-table.BzAvpRaz.css"
-  },
-  "/_nuxt/vPzuxfr0.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"945-yzkmWayowTYz4qyeAIXnMSUs0Xo\"",
-    "mtime": "2025-09-29T10:55:25.503Z",
-    "size": 2373,
-    "path": "../public/_nuxt/vPzuxfr0.js"
-  },
-  "/_nuxt/vvKt0aL2.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"36e-osulGLPgmxl/ys1FSEcoUbREHE0\"",
-    "mtime": "2025-09-29T10:55:25.503Z",
-    "size": 878,
-    "path": "../public/_nuxt/vvKt0aL2.js"
-  },
-  "/_nuxt/zA7OgElu.js": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"3dc-wpUhEVUp4gcccrX79Lt7KKm/kU4\"",
-    "mtime": "2025-09-29T10:55:25.507Z",
-    "size": 988,
-    "path": "../public/_nuxt/zA7OgElu.js"
-  },
-  "/img/buildings.gif": {
-    "type": "image/gif",
-    "etag": "\"1c979b-wMrXSFYQ7E3K7FN99ily+7ygRQA\"",
-    "mtime": "2025-09-29T10:55:25.574Z",
-    "size": 1873819,
-    "path": "../public/img/buildings.gif"
-  },
-  "/img/investment.gif": {
-    "type": "image/gif",
-    "etag": "\"1a163c-h9iQAqizr1z0MSlmV4/0LCDrz+4\"",
-    "mtime": "2025-09-29T10:55:25.590Z",
-    "size": 1709628,
-    "path": "../public/img/investment.gif"
   },
   "/vid/animation-01.mp4": {
     "type": "video/mp4",
     "etag": "\"206b2f-WxlnaRGMdb9hXupWC5otyg5yzCM\"",
-    "mtime": "2025-09-29T10:55:25.586Z",
+    "mtime": "2025-10-05T15:29:59.119Z",
     "size": 2124591,
     "path": "../public/vid/animation-01.mp4"
   },
   "/vid/animation-02.mp4": {
     "type": "video/mp4",
     "etag": "\"3ce49f-k2iIGipKhiXyCfC6+QqUE3xUEuc\"",
-    "mtime": "2025-09-29T10:55:25.640Z",
+    "mtime": "2025-10-05T15:29:59.185Z",
     "size": 3990687,
     "path": "../public/vid/animation-02.mp4"
   },
-  "/_nuxt/builds/latest.json": {
-    "type": "application/json",
-    "etag": "\"47-W4xGX9nFYlYudRRCQ3Lwiqu37eo\"",
-    "mtime": "2025-09-29T10:55:25.217Z",
-    "size": 71,
-    "path": "../public/_nuxt/builds/latest.json"
+  "/img/buildings.gif": {
+    "type": "image/gif",
+    "etag": "\"1c979b-wMrXSFYQ7E3K7FN99ily+7ygRQA\"",
+    "mtime": "2025-10-05T15:29:59.102Z",
+    "size": 1873819,
+    "path": "../public/img/buildings.gif"
   },
-  "/img/customers/executives.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"1868c-MtaFRjfWMSBA+WFCEkCWQftWnVs\"",
-    "mtime": "2025-09-29T10:55:25.557Z",
-    "size": 99980,
-    "path": "../public/img/customers/executives.jpg"
+  "/img/investment.gif": {
+    "type": "image/gif",
+    "etag": "\"1a163c-h9iQAqizr1z0MSlmV4/0LCDrz+4\"",
+    "mtime": "2025-10-05T15:29:59.123Z",
+    "size": 1709628,
+    "path": "../public/img/investment.gif"
   },
-  "/img/customers/investors.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"a0c2-Ump14YaHOpNKT0vmJMqpBpU3W1g\"",
-    "mtime": "2025-09-29T10:55:25.574Z",
-    "size": 41154,
-    "path": "../public/img/customers/investors.jpg"
+  "/_nuxt/-7KF7Ksm.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"223-E6w/16EmZDO7NVbeVCSUQ+XFR3A\"",
+    "mtime": "2025-10-05T15:29:59.024Z",
+    "size": 547,
+    "path": "../public/_nuxt/-7KF7Ksm.js"
   },
-  "/img/customers/new-to-investing.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"adce-y0X23YMivRn0tr+/MO75W7QsLP8\"",
-    "mtime": "2025-09-29T10:55:25.574Z",
-    "size": 44494,
-    "path": "../public/img/customers/new-to-investing.jpg"
+  "/_nuxt/0S7KqB8m.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"db2-HycenAO0hkhLLx93AsTsuMv3ydI\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 3506,
+    "path": "../public/_nuxt/0S7KqB8m.js"
   },
-  "/img/customers/private-clients.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"2ffca-FlC6bCaB0K9LpTdASmziTwO5bMo\"",
-    "mtime": "2025-09-29T10:55:25.582Z",
-    "size": 196554,
-    "path": "../public/img/customers/private-clients.jpg"
+  "/_nuxt/1QA1qeAv.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"39bd-DhSxSdjL1s152ZzxIiif4xjAkVY\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 14781,
+    "path": "../public/_nuxt/1QA1qeAv.js"
   },
-  "/img/customers/retirees.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"569e-NPmoiG6327rGXeJU1qOeA+x5Vpc\"",
-    "mtime": "2025-09-29T10:55:25.582Z",
-    "size": 22174,
-    "path": "../public/img/customers/retirees.jpg"
+  "/_nuxt/3O_b-4PU.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"818-VoNXvUv1HHWXOJayQhLuXFGO9C0\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 2072,
+    "path": "../public/_nuxt/3O_b-4PU.js"
+  },
+  "/_nuxt/8e0Crs9f.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1be6-JAXwJg6hLEnuHUPv5fd0vBgOy2A\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 7142,
+    "path": "../public/_nuxt/8e0Crs9f.js"
+  },
+  "/_nuxt/9Sj_QenJ.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1e-0OW+1XYJEH1z7qtsmO8ASFjxOi8\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 30,
+    "path": "../public/_nuxt/9Sj_QenJ.js"
+  },
+  "/_nuxt/9ThFSRxC.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"20a-dQJ8BWv4HS7IZbEXbVesaiSYSQ8\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 522,
+    "path": "../public/_nuxt/9ThFSRxC.js"
+  },
+  "/_nuxt/AOeLjPtC.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"217-BnRu9m1vJjEBSsnUpetdhLwpbpo\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 535,
+    "path": "../public/_nuxt/AOeLjPtC.js"
+  },
+  "/_nuxt/B-sDdYQN.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"185b-WmaJY2P8En964EfxqhWEMBtO1yY\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 6235,
+    "path": "../public/_nuxt/B-sDdYQN.js"
+  },
+  "/_nuxt/B0JZmyGU.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"297-5Ax9MDfZ6/HbR55DmtEAnGJP4xk\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 663,
+    "path": "../public/_nuxt/B0JZmyGU.js"
+  },
+  "/_nuxt/B0tyYwQk.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"3167b-rHTRwHaZunlshPtKtRGoIeyWH2M\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 202363,
+    "path": "../public/_nuxt/B0tyYwQk.js"
+  },
+  "/_nuxt/B268wmHY.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1347-dMYYy9SHJaJ+VZm3iG3CgcGpCiA\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 4935,
+    "path": "../public/_nuxt/B268wmHY.js"
+  },
+  "/_nuxt/B528m7Ee.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"3891-1SAyC/9LXEgSPVO3+r5T0hxCkNo\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 14481,
+    "path": "../public/_nuxt/B528m7Ee.js"
+  },
+  "/_nuxt/B6Ak2GOI.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"31ba-gpoUeqYf+n3x+86zo5h5hiRexmE\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 12730,
+    "path": "../public/_nuxt/B6Ak2GOI.js"
+  },
+  "/_nuxt/BCWtqmHz.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"3518-KE2mvH3d2RQBIPMOOk5CRR7cDtA\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 13592,
+    "path": "../public/_nuxt/BCWtqmHz.js"
+  },
+  "/_nuxt/BDQkWKi4.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"8ec-7PAptWOnijTtIT0eVcBo1MjfkVk\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 2284,
+    "path": "../public/_nuxt/BDQkWKi4.js"
+  },
+  "/_nuxt/BE5a99XP.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"d12-WSrV6iF5typQXc9v4/4NYo2GUyo\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 3346,
+    "path": "../public/_nuxt/BE5a99XP.js"
+  },
+  "/_nuxt/BIpI0Us3.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"e3-C3HLQpvUXdMyHbfiOIcALwPoLRg\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 227,
+    "path": "../public/_nuxt/BIpI0Us3.js"
+  },
+  "/_nuxt/BKGLD4AN.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"84bb-nZ+uANzg1fUwGGD/U0ZCo/QTKEU\"",
+    "mtime": "2025-10-05T15:29:58.949Z",
+    "size": 33979,
+    "path": "../public/_nuxt/BKGLD4AN.js"
+  },
+  "/_nuxt/BMagNV4R.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1562-44AMM5M4940faFZuv6erU1igPSM\"",
+    "mtime": "2025-10-05T15:29:58.945Z",
+    "size": 5474,
+    "path": "../public/_nuxt/BMagNV4R.js"
+  },
+  "/_nuxt/BN4boxsC.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"59b-qzoJFi7hh5ADzuH3qIgum+G0S6g\"",
+    "mtime": "2025-10-05T15:29:58.949Z",
+    "size": 1435,
+    "path": "../public/_nuxt/BN4boxsC.js"
+  },
+  "/_nuxt/BNnk2oOX.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"670-+VUo7EmfLmVOjUNzKPQ08jDPYoA\"",
+    "mtime": "2025-10-05T15:29:58.949Z",
+    "size": 1648,
+    "path": "../public/_nuxt/BNnk2oOX.js"
+  },
+  "/_nuxt/BO1kl3cG.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"365d-VtJbjWys7pq3bpJ5b4K/EblaHS8\"",
+    "mtime": "2025-10-05T15:29:58.949Z",
+    "size": 13917,
+    "path": "../public/_nuxt/BO1kl3cG.js"
+  },
+  "/_nuxt/BPKYJU6e.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"95-msPqhVDSdRNmT//AH0xaOx+sAjw\"",
+    "mtime": "2025-10-05T15:29:58.949Z",
+    "size": 149,
+    "path": "../public/_nuxt/BPKYJU6e.js"
+  },
+  "/_nuxt/BPMfCQiw.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"353-O7LigMaVkHZWqwMfrbnqJIfDaME\"",
+    "mtime": "2025-10-05T15:29:58.949Z",
+    "size": 851,
+    "path": "../public/_nuxt/BPMfCQiw.js"
+  },
+  "/_nuxt/BPfgvtU3.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"30c-lSgVANcIHX3Anxqow3i9Sx3gSp4\"",
+    "mtime": "2025-10-05T15:29:58.949Z",
+    "size": 780,
+    "path": "../public/_nuxt/BPfgvtU3.js"
+  },
+  "/_nuxt/BS2s7U1N.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2e9d-dmyc4BNoAMH2JYZGTxzTDeVIUus\"",
+    "mtime": "2025-10-05T15:29:58.949Z",
+    "size": 11933,
+    "path": "../public/_nuxt/BS2s7U1N.js"
+  },
+  "/_nuxt/BW-75agw.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"3666-DkmhbqcuseXF7ZCfL+2B/oMyhtY\"",
+    "mtime": "2025-10-05T15:29:58.949Z",
+    "size": 13926,
+    "path": "../public/_nuxt/BW-75agw.js"
+  },
+  "/_nuxt/BWDyykhX.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"75e-bOSauokoVs0njC7SoPuhQqb+gSE\"",
+    "mtime": "2025-10-05T15:29:58.949Z",
+    "size": 1886,
+    "path": "../public/_nuxt/BWDyykhX.js"
+  },
+  "/_nuxt/BY83W1Lf.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"b6a-6arS1+08KBkZIznD4VuecrDFqDM\"",
+    "mtime": "2025-10-05T15:29:58.949Z",
+    "size": 2922,
+    "path": "../public/_nuxt/BY83W1Lf.js"
+  },
+  "/_nuxt/BYmcmUhT.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"21e7-SbMgYRfveOsJy1c7hCYB0pgL0R4\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 8679,
+    "path": "../public/_nuxt/BYmcmUhT.js"
+  },
+  "/_nuxt/BZFIiZxl.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"92-nG9NBR3qSyZbIqwh2uSMVHwR1WQ\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 146,
+    "path": "../public/_nuxt/BZFIiZxl.js"
+  },
+  "/_nuxt/B_D_Kjhd.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"801-59zsYqf4imbXSIV+pnGmLhsotlw\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 2049,
+    "path": "../public/_nuxt/B_D_Kjhd.js"
+  },
+  "/_nuxt/BanwWMB6.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"77-TF5O+2A7VlHhIlUTxkVZJNbx9lE\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 119,
+    "path": "../public/_nuxt/BanwWMB6.js"
+  },
+  "/_nuxt/BbZZJUbN.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"dd-py2JVqUWY0cotauVKQcZw7QzP2A\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 221,
+    "path": "../public/_nuxt/BbZZJUbN.js"
+  },
+  "/_nuxt/BbsIq4ZF.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"995-puE9mN2ea01etsIuOWKzvjhMgZw\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 2453,
+    "path": "../public/_nuxt/BbsIq4ZF.js"
+  },
+  "/_nuxt/Bd4uj477.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"360a1-sTO3vy4q8JXJ7dLC88SRcd4xwiE\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 221345,
+    "path": "../public/_nuxt/Bd4uj477.js"
+  },
+  "/_nuxt/BdFxtwSd.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"3650-QXCZN1a8FdnEIzVys8Myxr+i9GA\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 13904,
+    "path": "../public/_nuxt/BdFxtwSd.js"
+  },
+  "/_nuxt/BetjkCKF.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1e3a-gs+Y9YLFlaBf5BXsOMQaJffOs+A\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 7738,
+    "path": "../public/_nuxt/BetjkCKF.js"
+  },
+  "/_nuxt/Bgx9EZP1.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"424-hYOpgXa4IilmVtWtMi89emtpcQk\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 1060,
+    "path": "../public/_nuxt/Bgx9EZP1.js"
+  },
+  "/_nuxt/BkO2E3vI.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"7fc-qo57w1OpX+E1fei3C+xMUINo0s0\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 2044,
+    "path": "../public/_nuxt/BkO2E3vI.js"
+  },
+  "/_nuxt/BkUz6oi4.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"158b-7iXSqd10VwKK+mRut2UA1TJ+o8o\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 5515,
+    "path": "../public/_nuxt/BkUz6oi4.js"
+  },
+  "/_nuxt/BlQ17NgN.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"5c0-/mKI0om48mrmRfhPfGkFTNfx8CI\"",
+    "mtime": "2025-10-05T15:29:58.958Z",
+    "size": 1472,
+    "path": "../public/_nuxt/BlQ17NgN.js"
+  },
+  "/_nuxt/Bo6mSoWq.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1ac3-IakCmhuUA3Xb6ShmBOnAQscno58\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 6851,
+    "path": "../public/_nuxt/Bo6mSoWq.js"
+  },
+  "/_nuxt/Bp-vGGEN.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"18af-BdrYTRjVE+YjZHrJfP2YXBl+icY\"",
+    "mtime": "2025-10-05T15:29:58.953Z",
+    "size": 6319,
+    "path": "../public/_nuxt/Bp-vGGEN.js"
+  },
+  "/_nuxt/BpmwN212.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1045e-mlUvD1efYkRB5mr9H2q+yj89IpY\"",
+    "mtime": "2025-10-05T15:29:58.958Z",
+    "size": 66654,
+    "path": "../public/_nuxt/BpmwN212.js"
+  },
+  "/_nuxt/BqmktAKj.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"4fc-c/joDVMIVBbqEAvebpIjz3rvPcM\"",
+    "mtime": "2025-10-05T15:29:58.958Z",
+    "size": 1276,
+    "path": "../public/_nuxt/BqmktAKj.js"
+  },
+  "/_nuxt/BtumT2fF.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"dd0-LDcuqGrmQpLG5s5WdxbObAes+1k\"",
+    "mtime": "2025-10-05T15:29:58.958Z",
+    "size": 3536,
+    "path": "../public/_nuxt/BtumT2fF.js"
+  },
+  "/_nuxt/BvyPBNtU.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"9af-M3sKY0VUmOkeS8/y4yJF3BFt34g\"",
+    "mtime": "2025-10-05T15:29:58.958Z",
+    "size": 2479,
+    "path": "../public/_nuxt/BvyPBNtU.js"
+  },
+  "/_nuxt/BxKNt86c.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"fae-pycv8ztMkHD3Kgo8kYUvIE37tUs\"",
+    "mtime": "2025-10-05T15:29:58.958Z",
+    "size": 4014,
+    "path": "../public/_nuxt/BxKNt86c.js"
+  },
+  "/_nuxt/ByIQSOsC.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2bd8-9FJ4dip71OxcyZ0MjmAs7c9sRuU\"",
+    "mtime": "2025-10-05T15:29:58.958Z",
+    "size": 11224,
+    "path": "../public/_nuxt/ByIQSOsC.js"
+  },
+  "/_nuxt/C-nmf7f_.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1ef2-XSXLDfXAPghEKZpQG/YJv7zh/0Q\"",
+    "mtime": "2025-10-05T15:29:58.958Z",
+    "size": 7922,
+    "path": "../public/_nuxt/C-nmf7f_.js"
+  },
+  "/_nuxt/C1DUflo4.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"5ea62-oeIKmQhWcKnzoCpKF9Jomfxsc5Q\"",
+    "mtime": "2025-10-05T15:29:58.966Z",
+    "size": 387682,
+    "path": "../public/_nuxt/C1DUflo4.js"
+  },
+  "/_nuxt/C2cBEfUs.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"3397-LZVPG1Sp2DigN7wkKSIToFvKRTU\"",
+    "mtime": "2025-10-05T15:29:58.962Z",
+    "size": 13207,
+    "path": "../public/_nuxt/C2cBEfUs.js"
+  },
+  "/_nuxt/C34u_Fr_.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"b4de-EH3ytKfVY2c3MUCtMQiiDuxyymc\"",
+    "mtime": "2025-10-05T15:29:58.962Z",
+    "size": 46302,
+    "path": "../public/_nuxt/C34u_Fr_.js"
+  },
+  "/_nuxt/C3npS8vC.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"7d-nbW5YAXslhzO7iI9vjTMJ6KkmGc\"",
+    "mtime": "2025-10-05T15:29:58.962Z",
+    "size": 125,
+    "path": "../public/_nuxt/C3npS8vC.js"
+  },
+  "/_nuxt/C3xkHGSj.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"4a3-mmetu5qP8goQE5cY8KiWozB1Wsk\"",
+    "mtime": "2025-10-05T15:29:58.962Z",
+    "size": 1187,
+    "path": "../public/_nuxt/C3xkHGSj.js"
+  },
+  "/_nuxt/C78TnzLn.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"297d-fvutHNhlmCFNAXScXosPEyd5bNA\"",
+    "mtime": "2025-10-05T15:29:58.962Z",
+    "size": 10621,
+    "path": "../public/_nuxt/C78TnzLn.js"
+  },
+  "/_nuxt/C87bt8Dz.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"ab9-kVf2HbVmsVpO9GpE9OVlxEi/wX4\"",
+    "mtime": "2025-10-05T15:29:58.966Z",
+    "size": 2745,
+    "path": "../public/_nuxt/C87bt8Dz.js"
+  },
+  "/_nuxt/C89HOVBg.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"31ecf-QGzm9p+KZ7nGJFiRgWctB3DiqV0\"",
+    "mtime": "2025-10-05T15:29:58.966Z",
+    "size": 204495,
+    "path": "../public/_nuxt/C89HOVBg.js"
+  },
+  "/_nuxt/CAAXWTwr.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"7395-AxCA3VjK3w7dxMc3gAo3+MRmAOU\"",
+    "mtime": "2025-10-05T15:29:58.962Z",
+    "size": 29589,
+    "path": "../public/_nuxt/CAAXWTwr.js"
+  },
+  "/_nuxt/CCPB9phV.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"a67c-z8pvgfyAePgpIE72J3toHP8n8Sc\"",
+    "mtime": "2025-10-05T15:29:58.966Z",
+    "size": 42620,
+    "path": "../public/_nuxt/CCPB9phV.js"
+  },
+  "/_nuxt/CEKJFYUk.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1bff-faI0FbUMnOyagpiLsBBPDbv3Y74\"",
+    "mtime": "2025-10-05T15:29:58.966Z",
+    "size": 7167,
+    "path": "../public/_nuxt/CEKJFYUk.js"
+  },
+  "/_nuxt/CEyeOJ8M.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1e9-/PM90Zh9Rdk+69uXo8/G48S/nIo\"",
+    "mtime": "2025-10-05T15:29:58.966Z",
+    "size": 489,
+    "path": "../public/_nuxt/CEyeOJ8M.js"
+  },
+  "/_nuxt/CIzcNE9p.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"26e83-59Ohq5xRzCMH6XAndiG6SrDz/pY\"",
+    "mtime": "2025-10-05T15:29:58.966Z",
+    "size": 159363,
+    "path": "../public/_nuxt/CIzcNE9p.js"
+  },
+  "/_nuxt/CLn2O1s8.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"21bf-1BqmndueWjBoEX1n/LwK5bz4mi0\"",
+    "mtime": "2025-10-05T15:29:58.970Z",
+    "size": 8639,
+    "path": "../public/_nuxt/CLn2O1s8.js"
+  },
+  "/_nuxt/CM02IxXZ.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"6b1-+RnGkrk8uczXgL9+1Yqpkr5wNe4\"",
+    "mtime": "2025-10-05T15:29:58.966Z",
+    "size": 1713,
+    "path": "../public/_nuxt/CM02IxXZ.js"
+  },
+  "/_nuxt/CMOWTdUA.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"19e5-i7cAolMCFjjp+Q3jicNtm3PdxKk\"",
+    "mtime": "2025-10-05T15:29:58.966Z",
+    "size": 6629,
+    "path": "../public/_nuxt/CMOWTdUA.js"
+  },
+  "/_nuxt/COSdjE4l.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1a7-DayXlJOnbgvxUVTkSfUdXbx51C8\"",
+    "mtime": "2025-10-05T15:29:58.966Z",
+    "size": 423,
+    "path": "../public/_nuxt/COSdjE4l.js"
+  },
+  "/_nuxt/COy3fCi4.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"832-V2xcRKec7HtnMHfZfX9cLs3A1rc\"",
+    "mtime": "2025-10-05T15:29:58.970Z",
+    "size": 2098,
+    "path": "../public/_nuxt/COy3fCi4.js"
+  },
+  "/_nuxt/CPKVDivb.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"222-32j9ggMkkSy/YZhTc0thnjZLrEo\"",
+    "mtime": "2025-10-05T15:29:58.970Z",
+    "size": 546,
+    "path": "../public/_nuxt/CPKVDivb.js"
+  },
+  "/_nuxt/CPR7dAeh.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2a18-8YxIHS1ye/U9n7+ziPT7iPpO1Xw\"",
+    "mtime": "2025-10-05T15:29:58.974Z",
+    "size": 10776,
+    "path": "../public/_nuxt/CPR7dAeh.js"
+  },
+  "/_nuxt/CQjSHSFP.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"24c-QSJgB3+DbAkffm+9vtqSLkUKItg\"",
+    "mtime": "2025-10-05T15:29:58.970Z",
+    "size": 588,
+    "path": "../public/_nuxt/CQjSHSFP.js"
+  },
+  "/_nuxt/CSQRXKBW.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"abb-mXpgbrx0pgxp5xtUZhT10UKyZjs\"",
+    "mtime": "2025-10-05T15:29:58.970Z",
+    "size": 2747,
+    "path": "../public/_nuxt/CSQRXKBW.js"
+  },
+  "/_nuxt/CT9ZpJyO.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"3b16-1M7LErhnOs9fmSfcmLT4bJMj02M\"",
+    "mtime": "2025-10-05T15:29:58.970Z",
+    "size": 15126,
+    "path": "../public/_nuxt/CT9ZpJyO.js"
+  },
+  "/_nuxt/CTxHX_dt.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"135d-jM+zI7h4lVARat4itAtfyfuZDdk\"",
+    "mtime": "2025-10-05T15:29:58.970Z",
+    "size": 4957,
+    "path": "../public/_nuxt/CTxHX_dt.js"
+  },
+  "/_nuxt/CU0QwPrg.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"20d3-fhvs48ZAFc4H7YDq3YllrUxGmVE\"",
+    "mtime": "2025-10-05T15:29:58.970Z",
+    "size": 8403,
+    "path": "../public/_nuxt/CU0QwPrg.js"
+  },
+  "/_nuxt/CUoJcXSF.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"6520f-F1xYARXhDCFJIRSCB8EXGdTzuLc\"",
+    "mtime": "2025-10-05T15:29:58.974Z",
+    "size": 414223,
+    "path": "../public/_nuxt/CUoJcXSF.js"
+  },
+  "/_nuxt/CVqGeeWM.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1e4-nwaRkXbcWVvnrJ5nxAowaHE8akY\"",
+    "mtime": "2025-10-05T15:29:58.974Z",
+    "size": 484,
+    "path": "../public/_nuxt/CVqGeeWM.js"
+  },
+  "/_nuxt/CW2IE8UP.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"14ff-ee1EN55PyhYYI16t0UJy56sH0vA\"",
+    "mtime": "2025-10-05T15:29:58.974Z",
+    "size": 5375,
+    "path": "../public/_nuxt/CW2IE8UP.js"
+  },
+  "/_nuxt/CYGQRhui.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"14b-FLs7lfWSBNeHynKrGiVg18PsJL8\"",
+    "mtime": "2025-10-05T15:29:58.974Z",
+    "size": 331,
+    "path": "../public/_nuxt/CYGQRhui.js"
+  },
+  "/_nuxt/C_FulvQL.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2066-n1yrfb/BZ9FhKQNb2vCGr3DvVjU\"",
+    "mtime": "2025-10-05T15:29:58.974Z",
+    "size": 8294,
+    "path": "../public/_nuxt/C_FulvQL.js"
+  },
+  "/_nuxt/CdA4sw7r.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2121-Kpdrqg0OydVyUJ2XR0qR6PTQ3Dc\"",
+    "mtime": "2025-10-05T15:29:58.974Z",
+    "size": 8481,
+    "path": "../public/_nuxt/CdA4sw7r.js"
+  },
+  "/_nuxt/CdMrpoIB.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"166d-cJxGrsHXFoLuK0csH3udX1D8CRM\"",
+    "mtime": "2025-10-05T15:29:58.974Z",
+    "size": 5741,
+    "path": "../public/_nuxt/CdMrpoIB.js"
+  },
+  "/_nuxt/ChRclvJ-.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"6b-rBe7DvpIcfXU3km160ev1lSyBhk\"",
+    "mtime": "2025-10-05T15:29:58.974Z",
+    "size": 107,
+    "path": "../public/_nuxt/ChRclvJ-.js"
+  },
+  "/_nuxt/ClRQc91n.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"b59-e4P0ija7tI2r0Gag+d9kpCBrjJw\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 2905,
+    "path": "../public/_nuxt/ClRQc91n.js"
+  },
+  "/_nuxt/Coc48Zqk.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"f7f-7Y4JG1/GxMmhRlaNJ4xT4rjw9TY\"",
+    "mtime": "2025-10-05T15:29:58.974Z",
+    "size": 3967,
+    "path": "../public/_nuxt/Coc48Zqk.js"
+  },
+  "/_nuxt/CpB5esaq.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"5d9d-WWfIknwbasLdTmcZgMA9bFvryRY\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 23965,
+    "path": "../public/_nuxt/CpB5esaq.js"
+  },
+  "/_nuxt/Cpj98o6Y.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"ec-QtY1KaLA8vnMK3l2IvajpxyuPmY\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 236,
+    "path": "../public/_nuxt/Cpj98o6Y.js"
+  },
+  "/_nuxt/CrfLGxAw.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"6cb-lo0sHoXxvEUThP3hdQ2nDLV2dhg\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 1739,
+    "path": "../public/_nuxt/CrfLGxAw.js"
+  },
+  "/_nuxt/Csflxw_B.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"15f-zBf2s7RZUMEZObSriFM+MfALCPU\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 351,
+    "path": "../public/_nuxt/Csflxw_B.js"
+  },
+  "/_nuxt/CtXYoPLG.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"4d9-A2cLZ895BYBc5BrExLjk7HDNASw\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 1241,
+    "path": "../public/_nuxt/CtXYoPLG.js"
+  },
+  "/_nuxt/CtxfVsyd.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1ee-mZ66FXRHqatarihNTrcBdCzK+vI\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 494,
+    "path": "../public/_nuxt/CtxfVsyd.js"
+  },
+  "/_nuxt/CuoRDeiE.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"274a-oXpiG0IS9dxUXj/jjTGSGKtvxnU\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 10058,
+    "path": "../public/_nuxt/CuoRDeiE.js"
+  },
+  "/_nuxt/CzQRW3G6.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"25f5-ZDy5ywkIlP66GkOIiX74HUuUbVo\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 9717,
+    "path": "../public/_nuxt/CzQRW3G6.js"
+  },
+  "/_nuxt/CzzSG5Iq.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"16d6-YR0TpcTQMLSIVd289DEHbKoesr8\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 5846,
+    "path": "../public/_nuxt/CzzSG5Iq.js"
+  },
+  "/_nuxt/D1MV86hb.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"637-4/m/W67fXXb6PLDvv8Bk8fGJYBE\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 1591,
+    "path": "../public/_nuxt/D1MV86hb.js"
+  },
+  "/_nuxt/D3IWMNxR.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"860-56/WfFSzq39bPYPypZdZQgpaH0I\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 2144,
+    "path": "../public/_nuxt/D3IWMNxR.js"
+  },
+  "/_nuxt/D44FMmxR.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"ec7-P21rcpKx7I33oQ4l4ylOiGvp8zk\"",
+    "mtime": "2025-10-05T15:29:58.978Z",
+    "size": 3783,
+    "path": "../public/_nuxt/D44FMmxR.js"
+  },
+  "/_nuxt/D63nLU7I.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"4685-xfGApec8VVmMJ6xLjjcmVDzH4Yw\"",
+    "mtime": "2025-10-05T15:29:58.982Z",
+    "size": 18053,
+    "path": "../public/_nuxt/D63nLU7I.js"
+  },
+  "/_nuxt/D6CVtBzC.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"a396-XF0x9g5cRl90nxv6k1o8rbG6T5I\"",
+    "mtime": "2025-10-05T15:29:58.982Z",
+    "size": 41878,
+    "path": "../public/_nuxt/D6CVtBzC.js"
+  },
+  "/_nuxt/D8OUuRCQ.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"5c40-NR8NlxSc7ThRkiwb1hEjb5iFI9M\"",
+    "mtime": "2025-10-05T15:29:58.982Z",
+    "size": 23616,
+    "path": "../public/_nuxt/D8OUuRCQ.js"
+  },
+  "/_nuxt/D9B1UaIg.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"e6-X81fKxNZb17Lqq/IBerVuyFi/V8\"",
+    "mtime": "2025-10-05T15:29:58.982Z",
+    "size": 230,
+    "path": "../public/_nuxt/D9B1UaIg.js"
+  },
+  "/_nuxt/D9XIeYUM.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"4f8-ydvrxy2GNOrXA6AVydSiTW/Nf+o\"",
+    "mtime": "2025-10-05T15:29:58.982Z",
+    "size": 1272,
+    "path": "../public/_nuxt/D9XIeYUM.js"
+  },
+  "/_nuxt/DDuD5jM5.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"235f-9DMbe/KX3TyLAXy5eRTcDrbYFJU\"",
+    "mtime": "2025-10-05T15:29:58.987Z",
+    "size": 9055,
+    "path": "../public/_nuxt/DDuD5jM5.js"
+  },
+  "/_nuxt/DEtFe290.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"95b-42POr+CiQ6fhhvFe148s6qB23zk\"",
+    "mtime": "2025-10-05T15:29:58.987Z",
+    "size": 2395,
+    "path": "../public/_nuxt/DEtFe290.js"
+  },
+  "/_nuxt/DGp_KP7c.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1bef-ZYm8Lcy++MfqKceXBZDwPAQWZc0\"",
+    "mtime": "2025-10-05T15:29:58.987Z",
+    "size": 7151,
+    "path": "../public/_nuxt/DGp_KP7c.js"
+  },
+  "/_nuxt/DHA89ZQr.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"16ce1-q70ygRFFHB69nfc4egmE4oWbEhI\"",
+    "mtime": "2025-10-05T15:29:58.987Z",
+    "size": 93409,
+    "path": "../public/_nuxt/DHA89ZQr.js"
+  },
+  "/_nuxt/DHmBs7PA.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1e9-nTyHMtGopBkk1oaNlWaWbT0xaT4\"",
+    "mtime": "2025-10-05T15:29:58.991Z",
+    "size": 489,
+    "path": "../public/_nuxt/DHmBs7PA.js"
+  },
+  "/_nuxt/DIC4zwQV.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2dc9-UdpcXmq2OMpJ6wrTT6sWv3QH808\"",
+    "mtime": "2025-10-05T15:29:58.987Z",
+    "size": 11721,
+    "path": "../public/_nuxt/DIC4zwQV.js"
+  },
+  "/_nuxt/DM0hGR0G.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"6ce-ALHPiGFmCmrxUN6abqW4Owlixsk\"",
+    "mtime": "2025-10-05T15:29:58.987Z",
+    "size": 1742,
+    "path": "../public/_nuxt/DM0hGR0G.js"
+  },
+  "/_nuxt/DQmnq5Jc.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"25562-g8mI60Xjep3eOg3DuSMFhC82HYE\"",
+    "mtime": "2025-10-05T15:29:58.991Z",
+    "size": 152930,
+    "path": "../public/_nuxt/DQmnq5Jc.js"
+  },
+  "/_nuxt/DRDCf1jJ.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"24ba-GXpbfvLScQZ9IPBIP7SqE+c/haw\"",
+    "mtime": "2025-10-05T15:29:58.991Z",
+    "size": 9402,
+    "path": "../public/_nuxt/DRDCf1jJ.js"
+  },
+  "/_nuxt/DSQLTXyp.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"107-XSArGJdv9GWPfXiLRiGFWGRQ47A\"",
+    "mtime": "2025-10-05T15:29:58.991Z",
+    "size": 263,
+    "path": "../public/_nuxt/DSQLTXyp.js"
+  },
+  "/_nuxt/DUxGFQqV.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2c21-AcQn0N5bo9nimlz0L4xt1CwHqMg\"",
+    "mtime": "2025-10-05T15:29:58.991Z",
+    "size": 11297,
+    "path": "../public/_nuxt/DUxGFQqV.js"
+  },
+  "/_nuxt/DUye3jTT.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"158d-Wu2gb8bSpKeUz6jtunUqAiVMNLA\"",
+    "mtime": "2025-10-05T15:29:58.991Z",
+    "size": 5517,
+    "path": "../public/_nuxt/DUye3jTT.js"
+  },
+  "/_nuxt/DViDmhL1.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"da4-OPCcN0NKDo5ZbX4U+q4Q07AQ7vo\"",
+    "mtime": "2025-10-05T15:29:58.991Z",
+    "size": 3492,
+    "path": "../public/_nuxt/DViDmhL1.js"
+  },
+  "/_nuxt/DW6tRRFJ.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"275a-00LvSXhYwnblS+5bIKXfbVVbUlI\"",
+    "mtime": "2025-10-05T15:29:58.995Z",
+    "size": 10074,
+    "path": "../public/_nuxt/DW6tRRFJ.js"
+  },
+  "/_nuxt/DWZwYTgq.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1706-hFFt7l2CdqTGJxmFaiQKDDojFME\"",
+    "mtime": "2025-10-05T15:29:58.991Z",
+    "size": 5894,
+    "path": "../public/_nuxt/DWZwYTgq.js"
+  },
+  "/_nuxt/D_a68MIm.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"10d5-FGTXfdsZNxFNtZtrsLCSuYZSkEA\"",
+    "mtime": "2025-10-05T15:29:58.995Z",
+    "size": 4309,
+    "path": "../public/_nuxt/D_a68MIm.js"
+  },
+  "/_nuxt/Dc9u3tNI.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"47fd-DTJyV202IivakYkTin4Ue6PVwDw\"",
+    "mtime": "2025-10-05T15:29:58.995Z",
+    "size": 18429,
+    "path": "../public/_nuxt/Dc9u3tNI.js"
+  },
+  "/_nuxt/DdpLfM0Z.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"3dc-nbQKVstJarS6dQ1XvsG0lGpEa7k\"",
+    "mtime": "2025-10-05T15:29:58.995Z",
+    "size": 988,
+    "path": "../public/_nuxt/DdpLfM0Z.js"
+  },
+  "/_nuxt/DeuzRBk-.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"509-jRmyYgTkVc3TmWQUZSHF04EMLoM\"",
+    "mtime": "2025-10-05T15:29:58.995Z",
+    "size": 1289,
+    "path": "../public/_nuxt/DeuzRBk-.js"
+  },
+  "/_nuxt/DhTThthB.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"cc6-CdkPK0oj/EoS4MRa9ih/Q8A5b34\"",
+    "mtime": "2025-10-05T15:29:58.995Z",
+    "size": 3270,
+    "path": "../public/_nuxt/DhTThthB.js"
+  },
+  "/_nuxt/Dhzwx1na.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"89-EZAMdi/+xK+3++wIyPVyG9K340g\"",
+    "mtime": "2025-10-05T15:29:58.995Z",
+    "size": 137,
+    "path": "../public/_nuxt/Dhzwx1na.js"
+  },
+  "/_nuxt/DjpyhHjD.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2925-wLWCX0qbgyxoKKMtqiz8izX+DW8\"",
+    "mtime": "2025-10-05T15:29:58.995Z",
+    "size": 10533,
+    "path": "../public/_nuxt/DjpyhHjD.js"
+  },
+  "/_nuxt/Dk3hXDIF.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1f01-N+ubGBU2hGWwEdlQXJr3uGiS+oo\"",
+    "mtime": "2025-10-05T15:29:58.999Z",
+    "size": 7937,
+    "path": "../public/_nuxt/Dk3hXDIF.js"
+  },
+  "/_nuxt/Dkm3ViKx.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"7c-v/wTKHYkAnATzampDQXBVNIBuIY\"",
+    "mtime": "2025-10-05T15:29:58.995Z",
+    "size": 124,
+    "path": "../public/_nuxt/Dkm3ViKx.js"
+  },
+  "/_nuxt/DlAUqK2U.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"5b-eFCz/UrraTh721pgAl0VxBNR1es\"",
+    "mtime": "2025-10-05T15:29:58.995Z",
+    "size": 91,
+    "path": "../public/_nuxt/DlAUqK2U.js"
+  },
+  "/_nuxt/DmaxpY7T.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"ccc-kFe4mtqKLMvzKAkLS+fEOu/tMXE\"",
+    "mtime": "2025-10-05T15:29:58.999Z",
+    "size": 3276,
+    "path": "../public/_nuxt/DmaxpY7T.js"
+  },
+  "/_nuxt/DmzpfOPm.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"422a-HR5l5AHt8VuyGACKyLTbeH3401o\"",
+    "mtime": "2025-10-05T15:29:58.999Z",
+    "size": 16938,
+    "path": "../public/_nuxt/DmzpfOPm.js"
+  },
+  "/_nuxt/DpDWrd7e.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"210f-2t+YY0KoZxGBZwsgdpvj7XRlwU4\"",
+    "mtime": "2025-10-05T15:29:58.999Z",
+    "size": 8463,
+    "path": "../public/_nuxt/DpDWrd7e.js"
+  },
+  "/_nuxt/DpfjB2tZ.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1782e9-qKFSKKHF2WPGcIGWlvG3oKqnoJU\"",
+    "mtime": "2025-10-05T15:29:59.007Z",
+    "size": 1540841,
+    "path": "../public/_nuxt/DpfjB2tZ.js"
+  },
+  "/_nuxt/DrDDl9t3.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"a8c-yQ5V1+h1Aqnr9ptbFzmIeVe1UdI\"",
+    "mtime": "2025-10-05T15:29:58.999Z",
+    "size": 2700,
+    "path": "../public/_nuxt/DrDDl9t3.js"
+  },
+  "/_nuxt/Dre8A2H3.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1b4-BH1Rm7jWCrw9Pc0kNjXRJFP2KyA\"",
+    "mtime": "2025-10-05T15:29:58.999Z",
+    "size": 436,
+    "path": "../public/_nuxt/Dre8A2H3.js"
+  },
+  "/_nuxt/Dsaz7ZGA.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"24d-K3PiDkR/mYRFru65JJVdG+jmE8Y\"",
+    "mtime": "2025-10-05T15:29:58.999Z",
+    "size": 589,
+    "path": "../public/_nuxt/Dsaz7ZGA.js"
+  },
+  "/_nuxt/DtKguFLG.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1b887-siMqZZdAeBLkau/KwqKB+sVocRg\"",
+    "mtime": "2025-10-05T15:29:58.999Z",
+    "size": 112775,
+    "path": "../public/_nuxt/DtKguFLG.js"
+  },
+  "/_nuxt/Dttxen_t.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2ba-3mz2wdgH/38jvv6lTsfDkXDGOgU\"",
+    "mtime": "2025-10-05T15:29:58.999Z",
+    "size": 698,
+    "path": "../public/_nuxt/Dttxen_t.js"
+  },
+  "/_nuxt/DzJBPTvs.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"24d6-DDD76XWTCBjcZa2o8GQw9ZCD2dM\"",
+    "mtime": "2025-10-05T15:29:59.003Z",
+    "size": 9430,
+    "path": "../public/_nuxt/DzJBPTvs.js"
+  },
+  "/_nuxt/Dzft3eJT.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"10d-IWkgy8v38ReOZ64yqgFG5xeTFUI\"",
+    "mtime": "2025-10-05T15:29:58.999Z",
+    "size": 269,
+    "path": "../public/_nuxt/Dzft3eJT.js"
+  },
+  "/_nuxt/E7rUulBw.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"673-7DsmyUv2MFJf94clvG7UnKhdZ6I\"",
+    "mtime": "2025-10-05T15:29:59.003Z",
+    "size": 1651,
+    "path": "../public/_nuxt/E7rUulBw.js"
+  },
+  "/_nuxt/ERt8BNj3.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"88f-pu0HfiPnmwepL+JrIksDY9tWFOw\"",
+    "mtime": "2025-10-05T15:29:59.003Z",
+    "size": 2191,
+    "path": "../public/_nuxt/ERt8BNj3.js"
+  },
+  "/_nuxt/FQLUZvvs.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"7d-dzd258qBOzWaz5CkUwM72ac0fdk\"",
+    "mtime": "2025-10-05T15:29:59.003Z",
+    "size": 125,
+    "path": "../public/_nuxt/FQLUZvvs.js"
+  },
+  "/_nuxt/Fa6VHrA2.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"50f-9kt1r5vMoAwmRUinROfxzaEerck\"",
+    "mtime": "2025-10-05T15:29:59.003Z",
+    "size": 1295,
+    "path": "../public/_nuxt/Fa6VHrA2.js"
+  },
+  "/_nuxt/GeistMono.BlNDD6KS.ttf": {
+    "type": "font/ttf",
+    "etag": "\"21a4c-gm9w2ENvXcfFhYWyTL/dr//O2vQ\"",
+    "mtime": "2025-10-05T15:29:59.003Z",
+    "size": 137804,
+    "path": "../public/_nuxt/GeistMono.BlNDD6KS.ttf"
+  },
+  "/_nuxt/KTL2np9d.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"702-8l7MUvFzpC1Sml7PCo9cDHi9/Aw\"",
+    "mtime": "2025-10-05T15:29:59.007Z",
+    "size": 1794,
+    "path": "../public/_nuxt/KTL2np9d.js"
+  },
+  "/_nuxt/ONxkfkan.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"b2-Q+BROpWnPyEUCYwCrZSPt5iXY00\"",
+    "mtime": "2025-10-05T15:29:59.007Z",
+    "size": 178,
+    "path": "../public/_nuxt/ONxkfkan.js"
+  },
+  "/_nuxt/Poppins.CTKNfV9P.ttf": {
+    "type": "font/ttf",
+    "etag": "\"26a20-/dMALn2BTuR8HBuEh8csa7s6LQA\"",
+    "mtime": "2025-10-05T15:29:59.007Z",
+    "size": 158240,
+    "path": "../public/_nuxt/Poppins.CTKNfV9P.ttf"
+  },
+  "/_nuxt/QEtgjnmK.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"452-QV0GQ7UqrLjdI0I3QPJSA5+r/tA\"",
+    "mtime": "2025-10-05T15:29:59.007Z",
+    "size": 1106,
+    "path": "../public/_nuxt/QEtgjnmK.js"
+  },
+  "/_nuxt/QdGAwHzh.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2435-XtQLoJYh9zuA90ek/VuZFMYZ9fI\"",
+    "mtime": "2025-10-05T15:29:59.007Z",
+    "size": 9269,
+    "path": "../public/_nuxt/QdGAwHzh.js"
+  },
+  "/_nuxt/RT-pn75S.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"223-uPDMfTt/GcTpKadwF+nRFX5r0ow\"",
+    "mtime": "2025-10-05T15:29:59.007Z",
+    "size": 547,
+    "path": "../public/_nuxt/RT-pn75S.js"
+  },
+  "/_nuxt/RVf452-t.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2267-tvIswmaqnel8V/glNjkN9Z5k23M\"",
+    "mtime": "2025-10-05T15:29:59.007Z",
+    "size": 8807,
+    "path": "../public/_nuxt/RVf452-t.js"
+  },
+  "/_nuxt/S4HpnhJu.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"139-3hmwFikFUEnWC8zWfuZ7LMgK3GI\"",
+    "mtime": "2025-10-05T15:29:59.011Z",
+    "size": 313,
+    "path": "../public/_nuxt/S4HpnhJu.js"
+  },
+  "/_nuxt/T50DtdQH.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2af-l3kXK7G6dmAfbVg+FfAPGqBR7SA\"",
+    "mtime": "2025-10-05T15:29:59.007Z",
+    "size": 687,
+    "path": "../public/_nuxt/T50DtdQH.js"
+  },
+  "/_nuxt/VHV49OU3.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"fc3-/Nj5mQMBge7m20v1SnkRXpoySpc\"",
+    "mtime": "2025-10-05T15:29:59.007Z",
+    "size": 4035,
+    "path": "../public/_nuxt/VHV49OU3.js"
+  },
+  "/_nuxt/VTFQ-hBr.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2193-BL+1aitZng7K1zkCHmFeBno3W3o\"",
+    "mtime": "2025-10-05T15:29:59.011Z",
+    "size": 8595,
+    "path": "../public/_nuxt/VTFQ-hBr.js"
+  },
+  "/_nuxt/Xt0GgwGd.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"6ba-0lj9CSIy0Jrh/UcrrJ9xjteZ2Tc\"",
+    "mtime": "2025-10-05T15:29:59.011Z",
+    "size": 1722,
+    "path": "../public/_nuxt/Xt0GgwGd.js"
+  },
+  "/_nuxt/YGpyX2rP.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"3627-4zYy61TOwSIM6WSoUPb9dWrXZWU\"",
+    "mtime": "2025-10-05T15:29:59.011Z",
+    "size": 13863,
+    "path": "../public/_nuxt/YGpyX2rP.js"
+  },
+  "/_nuxt/aGzT-_H7.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"5687-JhEo3tARYgIwyUZWGiDNKDAheqw\"",
+    "mtime": "2025-10-05T15:29:59.016Z",
+    "size": 22151,
+    "path": "../public/_nuxt/aGzT-_H7.js"
+  },
+  "/_nuxt/dxPpLWON.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2cf-oAAoKyK+WqluQKTSHXLLbnUlep4\"",
+    "mtime": "2025-10-05T15:29:59.016Z",
+    "size": 719,
+    "path": "../public/_nuxt/dxPpLWON.js"
+  },
+  "/_nuxt/eiXyoLxS.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"4063-PuRAr4O5I8xdZFoqpg4UuES2mkU\"",
+    "mtime": "2025-10-05T15:29:59.016Z",
+    "size": 16483,
+    "path": "../public/_nuxt/eiXyoLxS.js"
+  },
+  "/_nuxt/entry.DZLUnaTx.css": {
+    "type": "text/css; charset=utf-8",
+    "etag": "\"2c085-APmvOvistzqXNKMtYP9h3j7qYM4\"",
+    "mtime": "2025-10-05T15:29:59.020Z",
+    "size": 180357,
+    "path": "../public/_nuxt/entry.DZLUnaTx.css"
+  },
+  "/_nuxt/error-404.DlVPZ4GE.css": {
+    "type": "text/css; charset=utf-8",
+    "etag": "\"980-mEKr2yDhHmG21upnVXydWBGkQJ0\"",
+    "mtime": "2025-10-05T15:29:59.016Z",
+    "size": 2432,
+    "path": "../public/_nuxt/error-404.DlVPZ4GE.css"
+  },
+  "/_nuxt/error-500.DjyirMQI.css": {
+    "type": "text/css; charset=utf-8",
+    "etag": "\"775-e/ssyla9fMU+TjO0KjMl5vd3xXk\"",
+    "mtime": "2025-10-05T15:29:59.016Z",
+    "size": 1909,
+    "path": "../public/_nuxt/error-500.DjyirMQI.css"
+  },
+  "/_nuxt/fM8xzmtz.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"139-rUu7yNsphDEabK33XNZH6TRsNmw\"",
+    "mtime": "2025-10-05T15:29:59.020Z",
+    "size": 313,
+    "path": "../public/_nuxt/fM8xzmtz.js"
+  },
+  "/_nuxt/fntxY4Hd.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"d0e-yeGqUWnTPAB0lI+p7c7IG9PHuTQ\"",
+    "mtime": "2025-10-05T15:29:59.020Z",
+    "size": 3342,
+    "path": "../public/_nuxt/fntxY4Hd.js"
+  },
+  "/_nuxt/hsPypIX1.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"2b20-x094n2b3uhOLbVs6wkfDKSOEJLk\"",
+    "mtime": "2025-10-05T15:29:59.020Z",
+    "size": 11040,
+    "path": "../public/_nuxt/hsPypIX1.js"
+  },
+  "/_nuxt/iVNTWZAy.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"45b7-WmqeiQJPmvqQL0Ioy+Hge2XsjUI\"",
+    "mtime": "2025-10-05T15:29:59.020Z",
+    "size": 17847,
+    "path": "../public/_nuxt/iVNTWZAy.js"
+  },
+  "/_nuxt/ik22JbZK.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"174b-7nbIEbiWeeNPzl9xsSq7Osm3wzw\"",
+    "mtime": "2025-10-05T15:29:59.020Z",
+    "size": 5963,
+    "path": "../public/_nuxt/ik22JbZK.js"
+  },
+  "/_nuxt/index.BZ5WCNW2.css": {
+    "type": "text/css; charset=utf-8",
+    "etag": "\"349-dz9PTwWdllNSaGqlLK8OcwpMEck\"",
+    "mtime": "2025-10-05T15:29:59.020Z",
+    "size": 841,
+    "path": "../public/_nuxt/index.BZ5WCNW2.css"
+  },
+  "/_nuxt/jFYhBC76.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"224-FHzXPBCuJL9jsLYPNEezdythwVM\"",
+    "mtime": "2025-10-05T15:29:59.024Z",
+    "size": 548,
+    "path": "../public/_nuxt/jFYhBC76.js"
+  },
+  "/_nuxt/kRIii9yh.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1f3-yYb3MkTdiuhHjcDfFDHvLT+nO3M\"",
+    "mtime": "2025-10-05T15:29:59.020Z",
+    "size": 499,
+    "path": "../public/_nuxt/kRIii9yh.js"
+  },
+  "/_nuxt/partner-list.phP7Mvgh.css": {
+    "type": "text/css; charset=utf-8",
+    "etag": "\"27c-UYcm/JERbzV/wmR6YOEolOKZrXE\"",
+    "mtime": "2025-10-05T15:29:59.024Z",
+    "size": 636,
+    "path": "../public/_nuxt/partner-list.phP7Mvgh.css"
+  },
+  "/_nuxt/password.D7e_onzx.css": {
+    "type": "text/css; charset=utf-8",
+    "etag": "\"1b-TMZKD6boIOYNoDcCE4aOxomJVYw\"",
+    "mtime": "2025-10-05T15:29:59.024Z",
+    "size": 27,
+    "path": "../public/_nuxt/password.D7e_onzx.css"
+  },
+  "/_nuxt/qpaNww9i.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"9c7-WDHvSLF6kMPN9PhZsdqfe8IplaQ\"",
+    "mtime": "2025-10-05T15:29:59.024Z",
+    "size": 2503,
+    "path": "../public/_nuxt/qpaNww9i.js"
+  },
+  "/_nuxt/rKi8OkKt.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"44a0-8oA7/32YS2+PBU7Ri5p4lLNHSWk\"",
+    "mtime": "2025-10-05T15:29:59.024Z",
+    "size": 17568,
+    "path": "../public/_nuxt/rKi8OkKt.js"
+  },
+  "/_nuxt/s3hmyILS.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"6e030-qyvX2TkfILcyGywaMJCtzipG1Wg\"",
+    "mtime": "2025-10-05T15:29:59.024Z",
+    "size": 450608,
+    "path": "../public/_nuxt/s3hmyILS.js"
+  },
+  "/_nuxt/tYuSvbSo.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"cf9-9dt/YqoCa5u/l+vY4SGT3b9e9SM\"",
+    "mtime": "2025-10-05T15:29:59.024Z",
+    "size": 3321,
+    "path": "../public/_nuxt/tYuSvbSo.js"
+  },
+  "/_nuxt/v-table.BzAvpRaz.css": {
+    "type": "text/css; charset=utf-8",
+    "etag": "\"ae-H2baAMXsbb/EWycGxLCR5QEoRb4\"",
+    "mtime": "2025-10-05T15:29:59.024Z",
+    "size": 174,
+    "path": "../public/_nuxt/v-table.BzAvpRaz.css"
+  },
+  "/_nuxt/vPzuxfr0.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"945-yzkmWayowTYz4qyeAIXnMSUs0Xo\"",
+    "mtime": "2025-10-05T15:29:59.024Z",
+    "size": 2373,
+    "path": "../public/_nuxt/vPzuxfr0.js"
+  },
+  "/_nuxt/vvKt0aL2.js": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"36e-osulGLPgmxl/ys1FSEcoUbREHE0\"",
+    "mtime": "2025-10-05T15:29:59.024Z",
+    "size": 878,
+    "path": "../public/_nuxt/vvKt0aL2.js"
   },
   "/img/icons/image.svg": {
     "type": "image/svg+xml",
     "etag": "\"541-JTG/7SZVoeezHaulFOUQN7KzPtw\"",
-    "mtime": "2025-09-29T10:55:25.557Z",
+    "mtime": "2025-10-05T15:29:59.127Z",
     "size": 1345,
     "path": "../public/img/icons/image.svg"
   },
   "/img/icons/pdf.svg": {
     "type": "image/svg+xml",
     "etag": "\"390-r8S/r1oYBetLWdj6tVdUo2Fq7jc\"",
-    "mtime": "2025-09-29T10:55:25.582Z",
+    "mtime": "2025-10-05T15:29:59.090Z",
     "size": 912,
     "path": "../public/img/icons/pdf.svg"
+  },
+  "/img/customers/executives.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"1868c-MtaFRjfWMSBA+WFCEkCWQftWnVs\"",
+    "mtime": "2025-10-05T15:29:59.127Z",
+    "size": 99980,
+    "path": "../public/img/customers/executives.jpg"
+  },
+  "/img/customers/investors.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"a0c2-Ump14YaHOpNKT0vmJMqpBpU3W1g\"",
+    "mtime": "2025-10-05T15:29:59.127Z",
+    "size": 41154,
+    "path": "../public/img/customers/investors.jpg"
+  },
+  "/img/customers/new-to-investing.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"adce-y0X23YMivRn0tr+/MO75W7QsLP8\"",
+    "mtime": "2025-10-05T15:29:59.090Z",
+    "size": 44494,
+    "path": "../public/img/customers/new-to-investing.jpg"
+  },
+  "/img/customers/private-clients.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"2ffca-FlC6bCaB0K9LpTdASmziTwO5bMo\"",
+    "mtime": "2025-10-05T15:29:59.131Z",
+    "size": 196554,
+    "path": "../public/img/customers/private-clients.jpg"
+  },
+  "/img/customers/retirees.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"569e-NPmoiG6327rGXeJU1qOeA+x5Vpc\"",
+    "mtime": "2025-10-05T15:29:59.131Z",
+    "size": 22174,
+    "path": "../public/img/customers/retirees.jpg"
   },
   "/img/loaders/initial-loader.gif": {
     "type": "image/gif",
     "etag": "\"a0300-GhC39hEBe/X9xt7jFMJTS1yUfL4\"",
-    "mtime": "2025-09-29T10:55:25.590Z",
+    "mtime": "2025-10-05T15:29:59.094Z",
     "size": 656128,
     "path": "../public/img/loaders/initial-loader.gif"
   },
   "/img/loaders/route-loader.gif": {
     "type": "image/gif",
     "etag": "\"78883-JeKg+np7l/lxSh59mOWmmhQNUYs\"",
-    "mtime": "2025-09-29T10:55:25.561Z",
+    "mtime": "2025-10-05T15:29:59.123Z",
     "size": 493699,
     "path": "../public/img/loaders/route-loader.gif"
   },
   "/img/partners/alphasense.png": {
     "type": "image/png",
     "etag": "\"1e26f7-FQrfkAqOBVazo/30gJUYVxaPoFE\"",
-    "mtime": "2025-09-29T10:55:25.574Z",
+    "mtime": "2025-10-05T15:29:59.156Z",
     "size": 1976055,
     "path": "../public/img/partners/alphasense.png"
   },
   "/img/partners/avaloq.svg": {
     "type": "image/svg+xml",
     "etag": "\"1694-vebQOUcyLRI/h28B8v69EHV/rKg\"",
-    "mtime": "2025-09-29T10:55:25.594Z",
+    "mtime": "2025-10-05T15:29:59.090Z",
     "size": 5780,
     "path": "../public/img/partners/avaloq.svg"
   },
   "/img/partners/holded.png": {
     "type": "image/png",
     "etag": "\"12a2-RXIdnMsdruk9AMzlqnNH2ygXiTw\"",
-    "mtime": "2025-09-29T10:55:25.594Z",
+    "mtime": "2025-10-05T15:29:59.144Z",
     "size": 4770,
     "path": "../public/img/partners/holded.png"
   },
   "/img/partners/metaco.png": {
     "type": "image/png",
     "etag": "\"23657-Xn/sVA+MPfd+26oRKOFEKJHEqgU\"",
-    "mtime": "2025-09-29T10:55:25.594Z",
+    "mtime": "2025-10-05T15:29:59.140Z",
     "size": 144983,
     "path": "../public/img/partners/metaco.png"
   },
   "/img/partners/monarch.png": {
     "type": "image/png",
     "etag": "\"1e01-/9gIes8F8ZEvI9ak0OqP2QukJgY\"",
-    "mtime": "2025-09-29T10:55:25.586Z",
+    "mtime": "2025-10-05T15:29:59.131Z",
     "size": 7681,
     "path": "../public/img/partners/monarch.png"
   },
   "/img/partners/otransfer.png": {
     "type": "image/png",
     "etag": "\"5b0b-aBjMePlDAkU3JjWk1kCNR20Z45Y\"",
-    "mtime": "2025-09-29T10:55:25.586Z",
+    "mtime": "2025-10-05T15:29:59.144Z",
     "size": 23307,
     "path": "../public/img/partners/otransfer.png"
   },
   "/img/partners/sygnum.png": {
     "type": "image/png",
     "etag": "\"114f-RPaAZ0PjUS+e3yLXz5w5peKJ1sU\"",
-    "mtime": "2025-09-29T10:55:25.590Z",
+    "mtime": "2025-10-05T15:29:59.140Z",
     "size": 4431,
     "path": "../public/img/partners/sygnum.png"
   },
   "/img/users/vEesX1QVV5dnpP44EFeUo9GzkiERJUHm-1753115855827.jpeg": {
     "type": "image/jpeg",
     "etag": "\"8556c-uPJpf4ktPLTsNevje8OCaiuaOPk\"",
-    "mtime": "2025-09-29T10:55:25.565Z",
+    "mtime": "2025-10-05T15:29:59.102Z",
     "size": 546156,
     "path": "../public/img/users/vEesX1QVV5dnpP44EFeUo9GzkiERJUHm-1753115855827.jpeg"
   },
-  "/_nuxt/builds/meta/fd682249-372c-4612-82fa-d1be24a4fe71.json": {
+  "/_nuxt/builds/latest.json": {
     "type": "application/json",
-    "etag": "\"8b-qSaxf2H7QuPwSIfiUKzOjBnuMjA\"",
-    "mtime": "2025-09-29T10:55:25.200Z",
-    "size": 139,
-    "path": "../public/_nuxt/builds/meta/fd682249-372c-4612-82fa-d1be24a4fe71.json"
-  },
-  "/img/pages/about/about-us.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"a9fa1-SNL3P8hkPR7CO4H1MQppDtVTWhk\"",
-    "mtime": "2025-09-29T10:55:25.644Z",
-    "size": 696225,
-    "path": "../public/img/pages/about/about-us.jpg"
-  },
-  "/img/pages/about/careers.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"a4299-FPFuI+liB/Mc13sQmeXsi2fKPL4\"",
-    "mtime": "2025-09-29T10:55:25.677Z",
-    "size": 672409,
-    "path": "../public/img/pages/about/careers.jpg"
-  },
-  "/img/pages/about/mission.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"6bbe-Tyd428zh5unz3GH9/C5XxWtp3Rk\"",
-    "mtime": "2025-09-29T10:55:25.599Z",
-    "size": 27582,
-    "path": "../public/img/pages/about/mission.jpg"
-  },
-  "/img/pages/about/our-journey.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"ac9b4-+szjHJWlwkclIj9ROWH55k28h60\"",
-    "mtime": "2025-09-29T10:55:25.682Z",
-    "size": 706996,
-    "path": "../public/img/pages/about/our-journey.jpg"
-  },
-  "/img/pages/about/partnerships.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"27096-pv3nqczIqE/xrGBZgo3d+s3EUo0\"",
-    "mtime": "2025-09-29T10:55:25.623Z",
-    "size": 159894,
-    "path": "../public/img/pages/about/partnerships.jpg"
-  },
-  "/img/pages/about/team-at-work.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"297cb-KaOYwy1XQ6HWeQ3QNYPSPk+n3ws\"",
-    "mtime": "2025-09-29T10:55:25.673Z",
-    "size": 169931,
-    "path": "../public/img/pages/about/team-at-work.jpg"
-  },
-  "/img/pages/investments/automated-investment-platform.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"19400-welsBPIRNsMQ8qpYzknf4B/vm1g\"",
-    "mtime": "2025-09-29T10:55:25.599Z",
-    "size": 103424,
-    "path": "../public/img/pages/investments/automated-investment-platform.jpg"
-  },
-  "/img/pages/investments/bond-certificate.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"35868-E5osCyvoZkVyylig145wmBLkAFc\"",
-    "mtime": "2025-09-29T10:55:25.607Z",
-    "size": 219240,
-    "path": "../public/img/pages/investments/bond-certificate.jpg"
-  },
-  "/img/pages/investments/bonds.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"1e32d-i2w0ja0w82e+WXiYPD0cAhM9OUE\"",
-    "mtime": "2025-09-29T10:55:25.607Z",
-    "size": 123693,
-    "path": "../public/img/pages/investments/bonds.jpg"
-  },
-  "/img/pages/investments/clock-tower.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"33e6e-1unJgSXnWTHweuiWaxJ06z11U8s\"",
-    "mtime": "2025-09-29T10:55:25.611Z",
-    "size": 212590,
-    "path": "../public/img/pages/investments/clock-tower.jpg"
-  },
-  "/img/pages/investments/commodities.webp": {
-    "type": "image/webp",
-    "etag": "\"6cc4-NYEa2neEzLKqCFAn2igEY2vlJSQ\"",
-    "mtime": "2025-09-29T10:55:25.607Z",
-    "size": 27844,
-    "path": "../public/img/pages/investments/commodities.webp"
-  },
-  "/img/pages/investments/commodity-etfs.webp": {
-    "type": "image/webp",
-    "etag": "\"179d6-x422jInOigsVzRBZw5NNGaPNTuo\"",
-    "mtime": "2025-09-29T10:55:25.611Z",
-    "size": 96726,
-    "path": "../public/img/pages/investments/commodity-etfs.webp"
-  },
-  "/img/pages/investments/commodity-types.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"760be-m257GjwlIabwUlXiYf1vQQCwT64\"",
-    "mtime": "2025-09-29T10:55:25.623Z",
-    "size": 483518,
-    "path": "../public/img/pages/investments/commodity-types.jpg"
-  },
-  "/img/pages/investments/commodity-types.svg": {
-    "type": "image/svg+xml",
-    "etag": "\"24b2f-YTC4gSuPWKIBEARrInYcYbnmfWA\"",
-    "mtime": "2025-09-29T10:55:25.619Z",
-    "size": 150319,
-    "path": "../public/img/pages/investments/commodity-types.svg"
-  },
-  "/img/pages/investments/crypto-dashboard.png": {
-    "type": "image/png",
-    "etag": "\"2b6da-ThUZzTFo6LDAWD15lqpnw5hyUL0\"",
-    "mtime": "2025-09-29T10:55:25.623Z",
-    "size": 177882,
-    "path": "../public/img/pages/investments/crypto-dashboard.png"
-  },
-  "/img/pages/investments/cryptocurrencies.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"297f8-khoYq0W7T8mfORde5wlWXqk/geE\"",
-    "mtime": "2025-09-29T10:55:25.632Z",
-    "size": 169976,
-    "path": "../public/img/pages/investments/cryptocurrencies.jpg"
-  },
-  "/img/pages/investments/diversified-portfolio.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"6f62-Wio5zYVcw87pGvQIiiCHvm9k+jk\"",
-    "mtime": "2025-09-29T10:55:25.632Z",
-    "size": 28514,
-    "path": "../public/img/pages/investments/diversified-portfolio.jpg"
-  },
-  "/img/pages/investments/expert-analyzing-data.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"ce31-+hXu/5Q+2S/ooN9AYNTXW1zYC3A\"",
-    "mtime": "2025-09-29T10:55:25.636Z",
-    "size": 52785,
-    "path": "../public/img/pages/investments/expert-analyzing-data.jpg"
-  },
-  "/img/pages/investments/financial-documents-and-calculator.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"c9be-Nhs5/v6NRyormbW6cWHAaVm3DN4\"",
-    "mtime": "2025-09-29T10:55:25.632Z",
-    "size": 51646,
-    "path": "../public/img/pages/investments/financial-documents-and-calculator.jpg"
-  },
-  "/img/pages/investments/financial-stability.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"2458f-FKT8An16AOuHv/1IjRnpgIuEfyk\"",
-    "mtime": "2025-09-29T10:55:25.636Z",
-    "size": 148879,
-    "path": "../public/img/pages/investments/financial-stability.jpg"
-  },
-  "/img/pages/investments/foreign-currencies.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"4b5b2-h0g8qMkwSMHiWgqG7JyNMkjjRhc\"",
-    "mtime": "2025-09-29T10:55:25.636Z",
-    "size": 308658,
-    "path": "../public/img/pages/investments/foreign-currencies.jpg"
-  },
-  "/img/pages/investments/forex.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"58ff-Y1QC3cZ2PyQ2hWAtKCeFVuOlSxU\"",
-    "mtime": "2025-09-29T10:55:25.640Z",
-    "size": 22783,
-    "path": "../public/img/pages/investments/forex.jpg"
-  },
-  "/img/pages/investments/global-economic-data.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"10b76-NnKs62bmzSyRNgRNvW8zxPjKf8U\"",
-    "mtime": "2025-09-29T10:55:25.640Z",
-    "size": 68470,
-    "path": "../public/img/pages/investments/global-economic-data.jpg"
-  },
-  "/img/pages/investments/global-stock-market.webp": {
-    "type": "image/webp",
-    "etag": "\"21ada-kMwFqs1R9pjWLhY32UNm+AzUCjw\"",
-    "mtime": "2025-09-29T10:55:25.648Z",
-    "size": 137946,
-    "path": "../public/img/pages/investments/global-stock-market.webp"
-  },
-  "/img/pages/investments/grains.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"13e61-+kY3r/Irw5nwLKlIYPaUNoDhXsU\"",
-    "mtime": "2025-09-29T10:55:25.640Z",
-    "size": 81505,
-    "path": "../public/img/pages/investments/grains.jpg"
-  },
-  "/img/pages/investments/high-liquidity.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"c0de-DYkcflvcL/nbPWCw2Y+1L4iH/Zw\"",
-    "mtime": "2025-09-29T10:55:25.648Z",
-    "size": 49374,
-    "path": "../public/img/pages/investments/high-liquidity.jpg"
-  },
-  "/img/pages/investments/investment-analyst.png": {
-    "type": "image/png",
-    "etag": "\"17e00-SZ8L+SSOxZ7TpPQjA7G88832ohA\"",
-    "mtime": "2025-09-29T10:55:25.648Z",
-    "size": 97792,
-    "path": "../public/img/pages/investments/investment-analyst.png"
-  },
-  "/img/pages/investments/leverage-scale.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"564f-CAWOmGdTwLY0QAlllY4hsZngMT4\"",
-    "mtime": "2025-09-29T10:55:25.648Z",
-    "size": 22095,
-    "path": "../public/img/pages/investments/leverage-scale.jpg"
-  },
-  "/img/pages/investments/mining-commodity.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"2c7d1-yIwrouz/MHSJC9FZ39S+skw2Gvk\"",
-    "mtime": "2025-09-29T10:55:25.653Z",
-    "size": 182225,
-    "path": "../public/img/pages/investments/mining-commodity.jpg"
-  },
-  "/img/pages/investments/property-types.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"35fca-qUpV4CA88l2U1Nheo3Ywi6hhJ9U\"",
-    "mtime": "2025-09-29T10:55:25.669Z",
-    "size": 221130,
-    "path": "../public/img/pages/investments/property-types.jpg"
-  },
-  "/img/pages/investments/secure-transaction.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"be4e-D60r51acizWay1CjfYcOhI0rhPc\"",
-    "mtime": "2025-09-29T10:55:25.653Z",
-    "size": 48718,
-    "path": "../public/img/pages/investments/secure-transaction.jpg"
-  },
-  "/img/pages/investments/steady-income-flow.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"369ea-/m52BJttkHAC3uD7T6wE7XjliEE\"",
-    "mtime": "2025-09-29T10:55:25.665Z",
-    "size": 223722,
-    "path": "../public/img/pages/investments/steady-income-flow.jpg"
-  },
-  "/img/pages/investments/stocks.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"c205-teNk7iOm46fU9mBULoDxwd0pMdo\"",
-    "mtime": "2025-09-29T10:55:25.657Z",
-    "size": 49669,
-    "path": "../public/img/pages/investments/stocks.jpg"
-  },
-  "/img/pages/investments/types-of-stocks.png": {
-    "type": "image/png",
-    "etag": "\"3e20f-Xljgp3ujIVcVNO/mB6yoz4Aqthg\"",
-    "mtime": "2025-09-29T10:55:25.665Z",
-    "size": 254479,
-    "path": "../public/img/pages/investments/types-of-stocks.png"
-  },
-  "/img/pages/investments/understanding-forex.jpg": {
-    "type": "image/jpeg",
-    "etag": "\"10463-0zl5uJki64VrcIWgZeRRYqAVAlE\"",
-    "mtime": "2025-09-29T10:55:25.661Z",
-    "size": 66659,
-    "path": "../public/img/pages/investments/understanding-forex.jpg"
-  },
-  "/img/pages/investments/what-are-stocks.svg": {
-    "type": "image/svg+xml",
-    "etag": "\"13602-DL0sEmq86UjFP8nT0+seEoQg5B0\"",
-    "mtime": "2025-09-29T10:55:25.669Z",
-    "size": 79362,
-    "path": "../public/img/pages/investments/what-are-stocks.svg"
-  },
-  "/img/pages/investments/what-is-cryptocurrency.png": {
-    "type": "image/png",
-    "etag": "\"9dcd3-awodgtmBrlETf1CLtnM/5B/mRJ4\"",
-    "mtime": "2025-09-29T10:55:25.677Z",
-    "size": 646355,
-    "path": "../public/img/pages/investments/what-is-cryptocurrency.png"
+    "etag": "\"47-tlCbUH7Uml5liq4Xehcbc/QBWjw\"",
+    "mtime": "2025-10-05T15:29:58.523Z",
+    "size": 71,
+    "path": "../public/_nuxt/builds/latest.json"
   },
   "/uploads/documents/users/EwcPw86780Z8jpa7AGzwFS8QCQz5BjJ0-1759135445914.webp": {
     "type": "image/webp",
     "etag": "\"26fda-eaWT7ApMfELlSVrwxI2rC//BoEU\"",
-    "mtime": "2025-09-29T10:55:25.686Z",
+    "mtime": "2025-10-05T15:29:59.247Z",
     "size": 159706,
     "path": "../public/uploads/documents/users/EwcPw86780Z8jpa7AGzwFS8QCQz5BjJ0-1759135445914.webp"
   },
   "/uploads/documents/users/vhPOfLNjbSiRb5RCgo8STKIrNPQpOC1g-1758498346131.pdf": {
     "type": "application/pdf",
     "etag": "\"3c1a2-vQLpt7iiwXhAe41vHC7WXrNeOao\"",
-    "mtime": "2025-09-29T10:55:25.690Z",
+    "mtime": "2025-10-05T15:29:59.243Z",
     "size": 246178,
     "path": "../public/uploads/documents/users/vhPOfLNjbSiRb5RCgo8STKIrNPQpOC1g-1758498346131.pdf"
+  },
+  "/img/pages/about/about-us.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"a9fa1-SNL3P8hkPR7CO4H1MQppDtVTWhk\"",
+    "mtime": "2025-10-05T15:29:59.202Z",
+    "size": 696225,
+    "path": "../public/img/pages/about/about-us.jpg"
+  },
+  "/img/pages/about/careers.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"a4299-FPFuI+liB/Mc13sQmeXsi2fKPL4\"",
+    "mtime": "2025-10-05T15:29:59.185Z",
+    "size": 672409,
+    "path": "../public/img/pages/about/careers.jpg"
+  },
+  "/img/pages/about/mission.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"6bbe-Tyd428zh5unz3GH9/C5XxWtp3Rk\"",
+    "mtime": "2025-10-05T15:29:59.148Z",
+    "size": 27582,
+    "path": "../public/img/pages/about/mission.jpg"
+  },
+  "/img/pages/about/our-journey.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"ac9b4-+szjHJWlwkclIj9ROWH55k28h60\"",
+    "mtime": "2025-10-05T15:29:59.256Z",
+    "size": 706996,
+    "path": "../public/img/pages/about/our-journey.jpg"
+  },
+  "/img/pages/about/partnerships.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"27096-pv3nqczIqE/xrGBZgo3d+s3EUo0\"",
+    "mtime": "2025-10-05T15:29:59.227Z",
+    "size": 159894,
+    "path": "../public/img/pages/about/partnerships.jpg"
+  },
+  "/img/pages/about/team-at-work.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"297cb-KaOYwy1XQ6HWeQ3QNYPSPk+n3ws\"",
+    "mtime": "2025-10-05T15:29:59.198Z",
+    "size": 169931,
+    "path": "../public/img/pages/about/team-at-work.jpg"
+  },
+  "/img/pages/investments/automated-investment-platform.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"19400-welsBPIRNsMQ8qpYzknf4B/vm1g\"",
+    "mtime": "2025-10-05T15:29:59.152Z",
+    "size": 103424,
+    "path": "../public/img/pages/investments/automated-investment-platform.jpg"
+  },
+  "/img/pages/investments/bond-certificate.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"35868-E5osCyvoZkVyylig145wmBLkAFc\"",
+    "mtime": "2025-10-05T15:29:59.160Z",
+    "size": 219240,
+    "path": "../public/img/pages/investments/bond-certificate.jpg"
+  },
+  "/img/pages/investments/bonds.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"1e32d-i2w0ja0w82e+WXiYPD0cAhM9OUE\"",
+    "mtime": "2025-10-05T15:29:59.160Z",
+    "size": 123693,
+    "path": "../public/img/pages/investments/bonds.jpg"
+  },
+  "/img/pages/investments/clock-tower.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"33e6e-1unJgSXnWTHweuiWaxJ06z11U8s\"",
+    "mtime": "2025-10-05T15:29:59.169Z",
+    "size": 212590,
+    "path": "../public/img/pages/investments/clock-tower.jpg"
+  },
+  "/img/pages/investments/commodities.webp": {
+    "type": "image/webp",
+    "etag": "\"6cc4-NYEa2neEzLKqCFAn2igEY2vlJSQ\"",
+    "mtime": "2025-10-05T15:29:59.165Z",
+    "size": 27844,
+    "path": "../public/img/pages/investments/commodities.webp"
+  },
+  "/img/pages/investments/commodity-etfs.webp": {
+    "type": "image/webp",
+    "etag": "\"179d6-x422jInOigsVzRBZw5NNGaPNTuo\"",
+    "mtime": "2025-10-05T15:29:59.165Z",
+    "size": 96726,
+    "path": "../public/img/pages/investments/commodity-etfs.webp"
+  },
+  "/img/pages/investments/commodity-types.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"760be-m257GjwlIabwUlXiYf1vQQCwT64\"",
+    "mtime": "2025-10-05T15:29:59.177Z",
+    "size": 483518,
+    "path": "../public/img/pages/investments/commodity-types.jpg"
+  },
+  "/img/pages/investments/commodity-types.svg": {
+    "type": "image/svg+xml",
+    "etag": "\"24b2f-YTC4gSuPWKIBEARrInYcYbnmfWA\"",
+    "mtime": "2025-10-05T15:29:59.173Z",
+    "size": 150319,
+    "path": "../public/img/pages/investments/commodity-types.svg"
+  },
+  "/img/pages/investments/crypto-dashboard.png": {
+    "type": "image/png",
+    "etag": "\"2b6da-ThUZzTFo6LDAWD15lqpnw5hyUL0\"",
+    "mtime": "2025-10-05T15:29:59.185Z",
+    "size": 177882,
+    "path": "../public/img/pages/investments/crypto-dashboard.png"
+  },
+  "/img/pages/investments/cryptocurrencies.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"297f8-khoYq0W7T8mfORde5wlWXqk/geE\"",
+    "mtime": "2025-10-05T15:29:59.181Z",
+    "size": 169976,
+    "path": "../public/img/pages/investments/cryptocurrencies.jpg"
+  },
+  "/img/pages/investments/diversified-portfolio.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"6f62-Wio5zYVcw87pGvQIiiCHvm9k+jk\"",
+    "mtime": "2025-10-05T15:29:59.177Z",
+    "size": 28514,
+    "path": "../public/img/pages/investments/diversified-portfolio.jpg"
+  },
+  "/img/pages/investments/expert-analyzing-data.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"ce31-+hXu/5Q+2S/ooN9AYNTXW1zYC3A\"",
+    "mtime": "2025-10-05T15:29:59.185Z",
+    "size": 52785,
+    "path": "../public/img/pages/investments/expert-analyzing-data.jpg"
+  },
+  "/img/pages/investments/financial-documents-and-calculator.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"c9be-Nhs5/v6NRyormbW6cWHAaVm3DN4\"",
+    "mtime": "2025-10-05T15:29:59.185Z",
+    "size": 51646,
+    "path": "../public/img/pages/investments/financial-documents-and-calculator.jpg"
+  },
+  "/img/pages/investments/financial-stability.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"2458f-FKT8An16AOuHv/1IjRnpgIuEfyk\"",
+    "mtime": "2025-10-05T15:29:59.189Z",
+    "size": 148879,
+    "path": "../public/img/pages/investments/financial-stability.jpg"
+  },
+  "/img/pages/investments/foreign-currencies.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"4b5b2-h0g8qMkwSMHiWgqG7JyNMkjjRhc\"",
+    "mtime": "2025-10-05T15:29:59.185Z",
+    "size": 308658,
+    "path": "../public/img/pages/investments/foreign-currencies.jpg"
+  },
+  "/img/pages/investments/forex.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"58ff-Y1QC3cZ2PyQ2hWAtKCeFVuOlSxU\"",
+    "mtime": "2025-10-05T15:29:59.185Z",
+    "size": 22783,
+    "path": "../public/img/pages/investments/forex.jpg"
+  },
+  "/img/pages/investments/global-economic-data.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"10b76-NnKs62bmzSyRNgRNvW8zxPjKf8U\"",
+    "mtime": "2025-10-05T15:29:59.185Z",
+    "size": 68470,
+    "path": "../public/img/pages/investments/global-economic-data.jpg"
+  },
+  "/img/pages/investments/global-stock-market.webp": {
+    "type": "image/webp",
+    "etag": "\"21ada-kMwFqs1R9pjWLhY32UNm+AzUCjw\"",
+    "mtime": "2025-10-05T15:29:59.193Z",
+    "size": 137946,
+    "path": "../public/img/pages/investments/global-stock-market.webp"
+  },
+  "/img/pages/investments/grains.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"13e61-+kY3r/Irw5nwLKlIYPaUNoDhXsU\"",
+    "mtime": "2025-10-05T15:29:59.235Z",
+    "size": 81505,
+    "path": "../public/img/pages/investments/grains.jpg"
+  },
+  "/img/pages/investments/high-liquidity.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"c0de-DYkcflvcL/nbPWCw2Y+1L4iH/Zw\"",
+    "mtime": "2025-10-05T15:29:59.193Z",
+    "size": 49374,
+    "path": "../public/img/pages/investments/high-liquidity.jpg"
+  },
+  "/img/pages/investments/investment-analyst.png": {
+    "type": "image/png",
+    "etag": "\"17e00-SZ8L+SSOxZ7TpPQjA7G88832ohA\"",
+    "mtime": "2025-10-05T15:29:59.227Z",
+    "size": 97792,
+    "path": "../public/img/pages/investments/investment-analyst.png"
+  },
+  "/img/pages/investments/leverage-scale.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"564f-CAWOmGdTwLY0QAlllY4hsZngMT4\"",
+    "mtime": "2025-10-05T15:29:59.198Z",
+    "size": 22095,
+    "path": "../public/img/pages/investments/leverage-scale.jpg"
+  },
+  "/img/pages/investments/mining-commodity.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"2c7d1-yIwrouz/MHSJC9FZ39S+skw2Gvk\"",
+    "mtime": "2025-10-05T15:29:59.202Z",
+    "size": 182225,
+    "path": "../public/img/pages/investments/mining-commodity.jpg"
+  },
+  "/img/pages/investments/property-types.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"35fca-qUpV4CA88l2U1Nheo3Ywi6hhJ9U\"",
+    "mtime": "2025-10-05T15:29:59.214Z",
+    "size": 221130,
+    "path": "../public/img/pages/investments/property-types.jpg"
+  },
+  "/img/pages/investments/secure-transaction.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"be4e-D60r51acizWay1CjfYcOhI0rhPc\"",
+    "mtime": "2025-10-05T15:29:59.202Z",
+    "size": 48718,
+    "path": "../public/img/pages/investments/secure-transaction.jpg"
+  },
+  "/img/pages/investments/steady-income-flow.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"369ea-/m52BJttkHAC3uD7T6wE7XjliEE\"",
+    "mtime": "2025-10-05T15:29:59.210Z",
+    "size": 223722,
+    "path": "../public/img/pages/investments/steady-income-flow.jpg"
+  },
+  "/img/pages/investments/stocks.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"c205-teNk7iOm46fU9mBULoDxwd0pMdo\"",
+    "mtime": "2025-10-05T15:29:59.206Z",
+    "size": 49669,
+    "path": "../public/img/pages/investments/stocks.jpg"
+  },
+  "/img/pages/investments/types-of-stocks.png": {
+    "type": "image/png",
+    "etag": "\"3e20f-Xljgp3ujIVcVNO/mB6yoz4Aqthg\"",
+    "mtime": "2025-10-05T15:29:59.210Z",
+    "size": 254479,
+    "path": "../public/img/pages/investments/types-of-stocks.png"
+  },
+  "/img/pages/investments/understanding-forex.jpg": {
+    "type": "image/jpeg",
+    "etag": "\"10463-0zl5uJki64VrcIWgZeRRYqAVAlE\"",
+    "mtime": "2025-10-05T15:29:59.210Z",
+    "size": 66659,
+    "path": "../public/img/pages/investments/understanding-forex.jpg"
+  },
+  "/img/pages/investments/what-are-stocks.svg": {
+    "type": "image/svg+xml",
+    "etag": "\"13602-DL0sEmq86UjFP8nT0+seEoQg5B0\"",
+    "mtime": "2025-10-05T15:29:59.214Z",
+    "size": 79362,
+    "path": "../public/img/pages/investments/what-are-stocks.svg"
+  },
+  "/img/pages/investments/what-is-cryptocurrency.png": {
+    "type": "image/png",
+    "etag": "\"9dcd3-awodgtmBrlETf1CLtnM/5B/mRJ4\"",
+    "mtime": "2025-10-05T15:29:59.231Z",
+    "size": 646355,
+    "path": "../public/img/pages/investments/what-is-cryptocurrency.png"
+  },
+  "/_nuxt/builds/meta/cc635cbb-9ae2-4f47-8bc7-f234d567e392.json": {
+    "type": "application/json",
+    "etag": "\"8b-onxFAZQ3Yp75IAOXCz6byu2wd1s\"",
+    "mtime": "2025-10-05T15:29:58.490Z",
+    "size": 139,
+    "path": "../public/_nuxt/builds/meta/cc635cbb-9ae2-4f47-8bc7-f234d567e392.json"
   },
   "/uploads/documents/business-profiles/0b7d3cc9-63b2-4568-afd9-d2fdb0d2fa9f/0b7d3cc9-63b2-4568-afd9-d2fdb0d2fa9f-1758552433034.pdf": {
     "type": "application/pdf",
     "etag": "\"473e5-4PduSVuOkXE0sk+NuTcSKqHex4U\"",
-    "mtime": "2025-09-29T10:55:25.686Z",
+    "mtime": "2025-10-05T15:29:59.256Z",
     "size": 291813,
     "path": "../public/uploads/documents/business-profiles/0b7d3cc9-63b2-4568-afd9-d2fdb0d2fa9f/0b7d3cc9-63b2-4568-afd9-d2fdb0d2fa9f-1758552433034.pdf"
   }
@@ -8141,6 +8213,129 @@ async function getJointAccountModApprovals(financialAccountId, creatorId, tx) {
   });
 }
 
+async function terminateInvestment(investmentId, options) {
+  options = options != null ? options : {
+    applyTerminationFee: true,
+    terminatedReason: null
+  };
+  const investment = await prisma.investment.findUnique({
+    where: {
+      id: investmentId
+    },
+    include: {
+      financialAccount: true,
+      investor: {
+        select: {
+          id: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true
+            }
+          }
+        }
+      }
+    }
+  });
+  if (!investment) {
+    throw createError$1({
+      statusCode: 404,
+      statusMessage: "Investment not found"
+    });
+  }
+  if (investment.status === "terminated" || investment.status === "closed") {
+    throw createError$1({
+      statusCode: 400,
+      statusMessage: `Investment already ${investment.status}`
+    });
+  }
+  const terminationFee = round(
+    options.applyTerminationFee ? investment.terminationFee : 0
+  );
+  const updatedBalance = round(investment.financialAccount.balance) + round(investment.totalProfit) - terminationFee;
+  if (updatedBalance < 0) {
+    throw createError$1({
+      statusCode: 400,
+      statusMessage: "Insufficient funds to terminate investment"
+    });
+  }
+  const investmentUpdates = {
+    status: "terminated",
+    terminatedReason: options.terminatedReason,
+    terminatedAt: /* @__PURE__ */ new Date(),
+    pausedAt: null,
+    pausedReason: null,
+    closedAt: null,
+    closedReason: null
+  };
+  await prisma.$transaction([
+    prisma.investment.update({
+      where: { id: investment.id },
+      data: investmentUpdates
+    }),
+    prisma.financialAccount.update({
+      where: {
+        id: investment.financialAccountId
+      },
+      data: {
+        balance: updatedBalance
+      }
+    }),
+    prisma.transaction.createMany({
+      data: [
+        {
+          amount: terminationFee,
+          USDAmount: terminationFee,
+          rate: 1,
+          charges: 0,
+          financialAccountId: investment.financialAccountId,
+          type: "withdrawal",
+          investmentId: investment.id,
+          status: "successfull",
+          approvedAt: /* @__PURE__ */ new Date(),
+          description: `Termination fee for investment with ID: ${investment.id}, Name: ${investment.investmentName}, and Category: (${investment.category})`
+        },
+        {
+          amount: investment.totalProfit,
+          USDAmount: investment.totalProfit,
+          rate: 1,
+          charges: 0,
+          financialAccountId: investment.financialAccountId,
+          type: "investment",
+          investmentId: investment.id,
+          status: "successfull",
+          approvedAt: /* @__PURE__ */ new Date(),
+          description: `Total profit for investment with ID: ${investment.id}, Name: ${investment.investmentName}, and Category: (${investment.category}) after termination`
+        }
+      ]
+    }),
+    prisma.notification.createMany({
+      data: [
+        {
+          title: "Investment Termination Fee",
+          body: `A termination fee of $${terminationFee.toLocaleString()} has been deducted from your account for the investment with ID: ${investment.id}, Name: ${investment.investmentName}, and Category: (${investment.category})`,
+          userId: investment.investor.user.id,
+          financialAccountId: investment.financialAccountId
+        },
+        {
+          title: "Investment Profit",
+          body: `The total profit of $${investment.totalProfit.toLocaleString()} has been added to your account for the investment with ID: ${investment.id}, Name: ${investment.investmentName}, and Category: (${investment.category}) after termination`,
+          userId: investment.investor.user.id,
+          financialAccountId: investment.financialAccountId
+        }
+      ]
+    })
+  ]);
+  notificationEmitter.emit("investment-status:update", {
+    user: investment.investor.user,
+    data: {
+      investment: { ...investment, ...investmentUpdates },
+      account: investment.financialAccount
+    }
+  });
+}
+
 const reverseTransaction = async (financialAccountId, transactionId, status, failReason) => {
   const transaction = await prisma.transaction.findUniqueOrThrow({
     where: {
@@ -8284,12 +8479,17 @@ const _lazy_RudbkS = () => import('../routes/api/admin/index.get2.mjs');
 const _lazy_ohQSD9 = () => import('../routes/api/admin/investment-plans/_investmentPlanId_.delete.mjs');
 const _lazy_h9te0s = () => import('../routes/api/admin/investment-plans/_investmentPlanId_.put.mjs');
 const _lazy_62mBwY = () => import('../routes/api/admin/index.post2.mjs');
+const _lazy_QEYYtR = () => import('../routes/api/admin/investments/index.delete.mjs');
+const _lazy_mu_lzB = () => import('../routes/api/admin/investments/index.get.mjs');
+const _lazy_IH3WqD = () => import('../routes/api/admin/investments/index.put.mjs');
+const _lazy_83IGT9 = () => import('../routes/api/admin/index.get3.mjs');
 const _lazy_UMmcor = () => import('../routes/api/admin/kyc-data/_profileId_.put.mjs');
-const _lazy_J8maUd = () => import('../routes/api/admin/index.get3.mjs');
+const _lazy_J8maUd = () => import('../routes/api/admin/index.get4.mjs');
 const _lazy_BuPG36 = () => import('../routes/api/admin/overview.mjs');
+const _lazy_vUDGXJ = () => import('../routes/api/admin/profits/_profitId_.put.mjs');
 const _lazy_FIVUJt = () => import('../routes/api/admin/index.put.mjs');
 const _lazy_2oIIss = () => import('../routes/api/admin/transactions/_transactionId_.put.mjs');
-const _lazy_l6qlDF = () => import('../routes/api/admin/index.get4.mjs');
+const _lazy_l6qlDF = () => import('../routes/api/admin/index.get5.mjs');
 const _lazy_fQHCnr = () => import('../routes/api/auth/_...all_.mjs');
 const _lazy_fhSWsE = () => import('../routes/api/index.get.mjs');
 const _lazy_MT_RDj = () => import('../routes/api/index.get2.mjs');
@@ -8302,6 +8502,7 @@ const _lazy_9QABdl = () => import('../routes/api/user/financial-accounts/index.g
 const _lazy_JwOzvQ = () => import('../routes/api/user/financial-accounts/index.put.mjs');
 const _lazy_0XKEqn = () => import('../routes/api/user/financial-accounts/_accountId/investments/index.get.mjs');
 const _lazy_AG0d35 = () => import('../routes/api/user/financial-accounts/_accountId/investments/_investmentId/profits.get.mjs');
+const _lazy_rA8hrk = () => import('../routes/api/user/financial-accounts/_accountId/investments/_investmentId/terminate.put.mjs');
 const _lazy_9fUm6G = () => import('../routes/api/user/financial-accounts/_accountId/index.get.mjs');
 const _lazy_nXfgS6 = () => import('../routes/api/user/financial-accounts/_accountId/index.post.mjs');
 const _lazy_EALpGU = () => import('../routes/api/user/financial-accounts/_accountId/join-requests.get.mjs');
@@ -8348,9 +8549,14 @@ const handlers = [
   { route: '/api/admin/investment-plans/:investmentPlanId', handler: _lazy_ohQSD9, lazy: true, middleware: false, method: "delete" },
   { route: '/api/admin/investment-plans/:investmentPlanId', handler: _lazy_h9te0s, lazy: true, middleware: false, method: "put" },
   { route: '/api/admin/investment-plans', handler: _lazy_62mBwY, lazy: true, middleware: false, method: "post" },
+  { route: '/api/admin/investments/:investmentId', handler: _lazy_QEYYtR, lazy: true, middleware: false, method: "delete" },
+  { route: '/api/admin/investments/:investmentId', handler: _lazy_mu_lzB, lazy: true, middleware: false, method: "get" },
+  { route: '/api/admin/investments/:investmentId', handler: _lazy_IH3WqD, lazy: true, middleware: false, method: "put" },
+  { route: '/api/admin/investments', handler: _lazy_83IGT9, lazy: true, middleware: false, method: "get" },
   { route: '/api/admin/kyc-data/:profileId', handler: _lazy_UMmcor, lazy: true, middleware: false, method: "put" },
   { route: '/api/admin/kyc-data', handler: _lazy_J8maUd, lazy: true, middleware: false, method: "get" },
   { route: '/api/admin/overview', handler: _lazy_BuPG36, lazy: true, middleware: false, method: undefined },
+  { route: '/api/admin/profits/:profitId', handler: _lazy_vUDGXJ, lazy: true, middleware: false, method: "put" },
   { route: '/api/admin/settings', handler: _lazy_FIVUJt, lazy: true, middleware: false, method: "put" },
   { route: '/api/admin/transactions/:transactionId', handler: _lazy_2oIIss, lazy: true, middleware: false, method: "put" },
   { route: '/api/admin/transactions', handler: _lazy_l6qlDF, lazy: true, middleware: false, method: "get" },
@@ -8366,6 +8572,7 @@ const handlers = [
   { route: '/api/user/financial-accounts/:accountId', handler: _lazy_JwOzvQ, lazy: true, middleware: false, method: "put" },
   { route: '/api/user/financial-accounts/:accountId/investments/:investmentId', handler: _lazy_0XKEqn, lazy: true, middleware: false, method: "get" },
   { route: '/api/user/financial-accounts/:accountId/investments/:investmentId/profits', handler: _lazy_AG0d35, lazy: true, middleware: false, method: "get" },
+  { route: '/api/user/financial-accounts/:accountId/investments/:investmentId/terminate', handler: _lazy_rA8hrk, lazy: true, middleware: false, method: "put" },
   { route: '/api/user/financial-accounts/:accountId/investments', handler: _lazy_9fUm6G, lazy: true, middleware: false, method: "get" },
   { route: '/api/user/financial-accounts/:accountId/investments', handler: _lazy_nXfgS6, lazy: true, middleware: false, method: "post" },
   { route: '/api/user/financial-accounts/:accountId/join-requests', handler: _lazy_EALpGU, lazy: true, middleware: false, method: "get" },
@@ -8815,5 +9022,5 @@ trapUnhandledNodeErrors();
 setupGracefulShutdown(listener, nitroApp);
 const nodeServer = {};
 
-export { $fetch$1 as $, getResponseStatusText as A, Button as B, getResponseStatus as C, defineRenderHandler as D, publicAssetsURL as E, getQuery as F, destr as G, getRouteRules as H, hasProtocol as I, relative as J, joinURL as K, Layout as L, useNitroApp as M, serialize$1 as N, defu as O, isEqual as P, parseQuery as Q, klona as R, defuFn as S, isScriptProtocol as T, withQuery as U, sanitizeStatusCode as V, withTrailingSlash as W, withoutTrailingSlash as X, getContext as Y, baseURL as Z, createHooks as _, getValidatedQuery as a, executeAsync as a0, toRouteMatcher as a1, createRouter$1 as a2, normalizeException as a3, upperFirst as a4, hash$1 as a5, getPercentagePeriodicReturn as a6, nodeServer as a7, auth as b, createError$1 as c, defineEventHandler as d, getRequestParam as e, getRouterParam as f, getRouterParams as g, removeFileByUrl as h, sendEmail as i, reverseTransaction as j, generateAccountNumber as k, removeUserImage as l, saveUserImage as m, notificationEmitter as n, eventHandler as o, prisma as p, setResponseStatus as q, readValidatedBody as r, saveFile as s, toWebRequest as t, getUpdatedCurrencyData as u, checkUserKycApproval as v, checkBusinessProfileApproval as w, getJointAccountModApprovals as x, buildAssetsURL as y, useRuntimeConfig as z };
+export { $fetch$1 as $, buildAssetsURL as A, Button as B, useRuntimeConfig as C, getResponseStatusText as D, getResponseStatus as E, defineRenderHandler as F, publicAssetsURL as G, getQuery as H, destr as I, getRouteRules as J, hasProtocol as K, Layout as L, relative as M, joinURL as N, useNitroApp as O, serialize$1 as P, defu as Q, isEqual as R, parseQuery as S, klona as T, defuFn as U, isScriptProtocol as V, withQuery as W, sanitizeStatusCode as X, withTrailingSlash as Y, withoutTrailingSlash as Z, getContext as _, getValidatedQuery as a, baseURL as a0, createHooks as a1, executeAsync as a2, toRouteMatcher as a3, createRouter$1 as a4, normalizeException as a5, upperFirst as a6, hash$1 as a7, getPercentagePeriodicReturn as a8, nodeServer as a9, auth as b, createError$1 as c, defineEventHandler as d, toWebRequest as e, getRequestParam as f, getRouterParams as g, getRouterParam as h, removeFileByUrl as i, round as j, sendEmail as k, reverseTransaction as l, generateAccountNumber as m, notificationEmitter as n, removeUserImage as o, prisma as p, saveUserImage as q, readValidatedBody as r, saveFile as s, terminateInvestment as t, eventHandler as u, setResponseStatus as v, getUpdatedCurrencyData as w, checkUserKycApproval as x, checkBusinessProfileApproval as y, getJointAccountModApprovals as z };
 //# sourceMappingURL=nitro.mjs.map

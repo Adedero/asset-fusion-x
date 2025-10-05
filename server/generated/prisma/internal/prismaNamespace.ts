@@ -402,6 +402,7 @@ export const ModelName = {
   JointAccountModRequestApproval: 'JointAccountModRequestApproval',
   InvestmentPlan: 'InvestmentPlan',
   Investment: 'Investment',
+  Profit: 'Profit',
   Transaction: 'Transaction',
   Notification: 'Notification',
   Currency: 'Currency',
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "profile" | "businessProfile" | "financialAccount" | "accountUser" | "jointAccountRequest" | "jointAccountModRequest" | "jointAccountModRequestApproval" | "investmentPlan" | "investment" | "transaction" | "notification" | "currency" | "settings"
+    modelProps: "user" | "session" | "account" | "verification" | "profile" | "businessProfile" | "financialAccount" | "accountUser" | "jointAccountRequest" | "jointAccountModRequest" | "jointAccountModRequestApproval" | "investmentPlan" | "investment" | "profit" | "transaction" | "notification" | "currency" | "settings"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1387,6 +1388,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Profit: {
+      payload: Prisma.$ProfitPayload<ExtArgs>
+      fields: Prisma.ProfitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProfitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProfitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfitPayload>
+        }
+        findFirst: {
+          args: Prisma.ProfitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProfitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfitPayload>
+        }
+        findMany: {
+          args: Prisma.ProfitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfitPayload>[]
+        }
+        create: {
+          args: Prisma.ProfitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfitPayload>
+        }
+        createMany: {
+          args: Prisma.ProfitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProfitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfitPayload>[]
+        }
+        delete: {
+          args: Prisma.ProfitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfitPayload>
+        }
+        update: {
+          args: Prisma.ProfitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfitPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProfitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProfitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProfitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfitPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProfitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfitPayload>
+        }
+        aggregate: {
+          args: Prisma.ProfitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProfit>
+        }
+        groupBy: {
+          args: Prisma.ProfitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProfitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProfitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProfitCountAggregateOutputType> | number
+        }
+      }
+    }
     Transaction: {
       payload: Prisma.$TransactionPayload<ExtArgs>
       fields: Prisma.TransactionFieldRefs
@@ -1949,6 +2024,21 @@ export const InvestmentScalarFieldEnum = {
 export type InvestmentScalarFieldEnum = (typeof InvestmentScalarFieldEnum)[keyof typeof InvestmentScalarFieldEnum]
 
 
+export const ProfitScalarFieldEnum = {
+  id: 'id',
+  investmentId: 'investmentId',
+  number: 'number',
+  intendedAmount: 'intendedAmount',
+  actualAmount: 'actualAmount',
+  isDistributed: 'isDistributed',
+  distributedAt: 'distributedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProfitScalarFieldEnum = (typeof ProfitScalarFieldEnum)[keyof typeof ProfitScalarFieldEnum]
+
+
 export const TransactionScalarFieldEnum = {
   id: 'id',
   amount: 'amount',
@@ -2287,6 +2377,7 @@ export type GlobalOmitConfig = {
   jointAccountModRequestApproval?: Prisma.JointAccountModRequestApprovalOmit
   investmentPlan?: Prisma.InvestmentPlanOmit
   investment?: Prisma.InvestmentOmit
+  profit?: Prisma.ProfitOmit
   transaction?: Prisma.TransactionOmit
   notification?: Prisma.NotificationOmit
   currency?: Prisma.CurrencyOmit

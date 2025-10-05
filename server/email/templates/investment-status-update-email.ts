@@ -37,6 +37,9 @@ export default function investmentStatusUpdateEmail(
     <p>Duration: <b>${data.investment.duration} days</b></p>
     <p>Account: <b>${data.account.name}</b></p>
     <p>The investment status is: <b>${data.investment.status}</b></p>
+    ${data.investment.status === "terminated" && `<p>Termination Reason: <b>${data.investment.terminatedReason}</b></p>`}
+    ${data.investment.status === "paused" && `<p>Termination Reason: <b>${data.investment.pausedReason}</b></p>`}
+    ${data.investment.status === "closed" && `<p>Termination Reason: <b>${data.investment.closedReason}</b></p>`}
   </section>
 
     <section>

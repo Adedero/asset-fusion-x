@@ -37,12 +37,11 @@ const next = () => {
 <template>
   <div class="w-full select-none">
     <div
-      class="w-full flex items-center justify-center gap-2 bg-white p-2 rounded-lg"
+      class="w-full flex items-center justify-center gap-2 bg-default p-2 rounded-lg"
     >
       <NuxtButton
         aria-label="Previous Page"
         :disabled="page < 1"
-        size="sm"
         color="neutral"
         variant="outline"
         icon="lucide:chevron-left"
@@ -72,7 +71,6 @@ const next = () => {
         :disabled="
           allLoaded || (totalPages !== undefined && page >= totalPages - 1)
         "
-        size="sm"
         color="neutral"
         variant="outline"
         trailing-icon="lucide:chevron-right"

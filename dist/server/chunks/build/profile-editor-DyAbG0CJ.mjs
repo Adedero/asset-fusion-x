@@ -7,7 +7,7 @@ import { g as useToast, c as _sfc_main$a, h as _sfc_main$4$1 } from './server.mj
 import { defineComponent, ref, withAsyncContext, reactive, computed, mergeProps, unref, withCtx, createVNode, createTextVNode, isRef, withModifiers, useSSRContext } from 'vue';
 import { ssrRenderComponent } from 'vue/server-renderer';
 import { P as ProfileSchema } from '../_/schemas.mjs';
-import { a3 as normalizeException } from '../nitro/nitro.mjs';
+import { a5 as normalizeException } from '../nitro/nitro.mjs';
 import { u as useFetch } from './fetch-CGkSb6cH.mjs';
 import './fetch-error-alert-NIQ5BlkS.mjs';
 import './Alert-CKjxjhE_.mjs';
@@ -37,7 +37,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';

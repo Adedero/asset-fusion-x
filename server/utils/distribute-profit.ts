@@ -1,4 +1,3 @@
-import { Decimal } from "decimal.js";
 import {
   AccountStatus,
   InvestmentStatus,
@@ -7,7 +6,7 @@ import {
   TransactionType
 } from "../generated/prisma/enums";
 import { prisma } from "../lib/prisma";
-import type { Investment } from "../generated/prisma/client";
+import type { Investment, Profit } from "../generated/prisma/client";
 import { notificationEmitter } from "../events/notifications/emitter";
 import type { PrismaPromise } from "../generated/prisma/internal/prismaNamespace";
 
@@ -29,7 +28,8 @@ export default async function distributeProfit() {
           select: {
             user: true
           }
-        }
+        },
+        profits: true
       }
     });
 
@@ -43,48 +43,35 @@ export default async function distributeProfit() {
           continue;
         }
 
-        const deposit = new Decimal(investment.deposit);
-
-        // Calculate expected totals
-        const expectedTotalProfit = deposit
-          .mul(investment.totalReturn)
-          .div(100);
-        const periodicProfit = deposit.mul(investment.periodicReturn).div(100);
-
-        let payout: Decimal;
-
-        const isLastCycle = investment.daysCompleted + 1 >= investment.duration;
-
-        if (isLastCycle) {
-          // Reconcile final payout
-          const remainingProfit = expectedTotalProfit.minus(
-            new Decimal(investment.totalProfit)
-          );
-          payout = remainingProfit.greaterThan(0)
-            ? remainingProfit
-            : new Decimal(0);
-        } else {
-          payout = periodicProfit;
-        }
-
-        // Ensure 2 decimal places (truncate or round policy)
-        payout = payout.toDecimalPlaces(2, Decimal.ROUND_HALF_UP);
-
-        const newTotalProfit = new Decimal(investment.totalProfit)
-          .plus(payout)
-          .toDecimalPlaces(2, Decimal.ROUND_HALF_UP);
-
-        const newBalance = new Decimal(investment.financialAccount.balance)
-          .plus(payout)
-          .toDecimalPlaces(2, Decimal.ROUND_HALF_UP);
-
-        const actualDaysCompleted = daysBetween(
-          new Date(investment.createdAt),
-          startOfToday
+        const nextProfit = investment.profits.find(
+          (profit) => profit.number - investment.profitCount === 1
         );
 
-        const updates: Partial<Investment> = {
-          totalProfit: newTotalProfit.toNumber(),
+        if (!nextProfit) {
+          // or maybe do the manual calculation
+          continue;
+        }
+
+        const payout = nextProfit.actualAmount;
+
+        const newTotalProfit = investment.totalProfit + payout;
+
+        const newBalance = round(
+          investment.financialAccount.balance + newTotalProfit
+        );
+
+        /* const actualDaysCompleted = daysBetween(
+          new Date(investment.createdAt),
+          startOfToday
+        ); */
+
+        const actualDaysCompleted = Math.max(
+          1,
+          daysBetween(new Date(investment.createdAt), startOfToday)
+        );
+
+        const investmentUpdates: Partial<Investment> = {
+          totalProfit: round(newTotalProfit),
           profitCount: investment.profitCount + 1,
           lastProfitDistributedAt: now,
           ...(actualDaysCompleted > investment.daysCompleted
@@ -92,10 +79,18 @@ export default async function distributeProfit() {
             : undefined)
         };
 
+        const profitUpdates: Partial<Profit> = {
+          isDistributed: true,
+          distributedAt: now
+        };
+
+        const isLastCycle =
+          (investmentUpdates.daysCompleted ?? 0) + 1 >= investment.duration;
+
         if (isLastCycle) {
-          updates.status = InvestmentStatus.closed;
-          updates.closedAt = now;
-          updates.closedReason = "Completed investment cycle";
+          investmentUpdates.status = InvestmentStatus.closed;
+          investmentUpdates.closedAt = now;
+          investmentUpdates.closedReason = "Investment cycle completed";
           //console.log(`Investment ${investment.id} closed after final payout.`);
 
           // emit investment closure
@@ -104,22 +99,28 @@ export default async function distributeProfit() {
             data: {
               investment: {
                 ...investment,
-                ...updates
+                ...investmentUpdates
               },
               account: investment.financialAccount
             }
           });
         }
 
-        const txs: PrismaPromise<unknown>[]= [
+        const txs: PrismaPromise<unknown>[] = [
           prisma.investment.update({
             where: { id: investment.id },
-            data: updates
+            data: investmentUpdates
+          }),
+          prisma.profit.update({
+            where: {
+              id: nextProfit.id
+            },
+            data: profitUpdates
           }),
           prisma.transaction.create({
             data: {
-              amount: payout.toNumber(),
-              USDAmount: payout.toNumber(),
+              amount: payout,
+              USDAmount: payout,
               type: TransactionType.profit,
               status: TransactionStatus.successfull,
               investmentId: investment.id,
@@ -128,16 +129,13 @@ export default async function distributeProfit() {
               description: `Profit distribution (${
                 isLastCycle ? "final" : investment.profitDistribution
               }) for ${investment.investmentName}`,
-              approvedAt: new Date()
+              approvedAt: now
             }
           }),
           prisma.notification.create({
             data: {
               title: "Profit Distribution",
-              body: `You have received a profit distribution of $${payout
-                .toDecimalPlaces(2)
-                .toNumber()
-                .toLocaleString()} on your investment ${
+              body: `You have received a profit distribution of $${payout.toLocaleString()} on your investment ${
                 investment.investmentName
               }`,
               financialAccountId: investment.financialAccountId,
@@ -150,18 +148,12 @@ export default async function distributeProfit() {
           txs.push(
             prisma.financialAccount.update({
               where: { id: investment.financialAccountId },
-              data: { balance: newBalance.toNumber() }
+              data: { balance: newBalance }
             })
           );
         }
 
         await prisma.$transaction(txs);
-
-        /*  console.log(
-          `Distributed ${payout.toFixed(2)} profit for investment ${
-            investment.id
-          }`
-        ); */
       } catch (error) {
         console.error(
           `Failed to process profit distribution for investment ${investment.id}:`,
@@ -194,7 +186,7 @@ function isDistributionDue(investment: Investment): boolean {
     case ProfitDistribution.bi_weekly:
       return !last || daysBetween(last, now) >= 14;
     case ProfitDistribution.monthly:
-      return !last || monthsBetween(last, now) >= 1;
+      return !last || daysBetween(last, now) >= 30;
     default:
       return false;
   }
@@ -207,14 +199,14 @@ function daysBetween(d1: Date, d2: Date): number {
   return Math.floor((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
 }
 
-function monthsBetween(d1: Date, d2: Date): number {
+/* function monthsBetween(d1: Date, d2: Date): number {
   return (
     d2.getUTCFullYear() * 12 +
     d2.getUTCMonth() -
     (d1.getUTCFullYear() * 12 + d1.getUTCMonth())
   );
 }
-
+ */
 function getStartOfTodayUTC(): Date {
   const now = new Date();
   return new Date(

@@ -20,9 +20,18 @@ export default defineEventHandler(async (event) => {
           }
         }
       },
+      profits: true,
       transactions: {
         where: {
-          type: "profit"
+          type: "profit",
+        },
+        select: {
+          id: true,
+          amount: true,
+          USDAmount: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true
         },
         take: 1,
         orderBy: {

@@ -10,7 +10,7 @@ import investmentStatusUpdateEmail from "~~/server/email/templates/investment-st
 export const onInvestmentStatusUpdate = (
   ctx: EventData<{ investment: Investment; account: FinancialAccount }>
 ) => {
-  const subject = "New Financial Investment";
+  const subject = "Financial Investment Status Update";
 
   const userEmail = investmentStatusUpdateEmail({
     role: "user",

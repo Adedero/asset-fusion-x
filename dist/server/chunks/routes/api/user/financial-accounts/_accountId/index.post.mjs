@@ -1,4 +1,4 @@
-import { d as defineEventHandler, f as getRouterParam, r as readValidatedBody, c as createError, p as prisma, n as notificationEmitter } from '../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, h as getRouterParam, r as readValidatedBody, c as createError, p as prisma, n as notificationEmitter, j as round } from '../../../../../nitro/nitro.mjs';
 import { I as InvestmentSchema } from '../../../../../_/index.mjs';
 import 'node:path';
 import 'fs/promises';
@@ -11,7 +11,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';
@@ -43,38 +42,65 @@ const index_post = defineEventHandler(async (event) => {
       statusMessage: "Not allowed"
     });
   }
-  const [investment, financialAccount] = await prisma.$transaction([
-    prisma.investment.create({ data }),
-    prisma.financialAccount.update({
-      where: {
-        id: data.financialAccountId
-      },
-      data: {
-        balance: {
-          decrement: data.deposit
+  const divider = getDivider(data.profitDistribution);
+  if (data.duration % divider !== 0) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Duration must align with profit distribution cycle. This is a bug. Please contact support for help."
+    });
+  }
+  const totalProfitCount = data.duration / divider;
+  const distributionArray = getProfitDistributionCycleAmountArray({
+    totalProfitCount,
+    deposit: data.deposit,
+    percentageReturn: data.totalReturn
+  });
+  const { investment, financialAccount } = await prisma.$transaction(
+    async (tx) => {
+      const inv = await tx.investment.create({ data });
+      await tx.profit.createMany({
+        data: distributionArray.map(({ number, amount }) => ({
+          investmentId: inv.id,
+          number,
+          intendedAmount: amount,
+          actualAmount: amount
+        }))
+      });
+      const finAccount = await tx.financialAccount.update({
+        where: {
+          id: data.financialAccountId
         },
-        totalInvestments: {
-          increment: 1
+        data: {
+          balance: {
+            decrement: data.deposit
+          },
+          totalInvestments: {
+            increment: 1
+          }
         }
-      }
-    }),
-    prisma.transaction.create({
-      data: {
-        amount: data.deposit,
-        currency: "USD",
-        USDAmount: data.deposit,
-        rate: 1,
-        charges: 0,
-        financialAccountId: data.financialAccountId,
-        investmentId: data.id,
-        type: "investment",
-        initiatorAccountId: data.investorId,
-        status: "successfull",
-        approvedAt: /* @__PURE__ */ new Date(),
-        description: `Investment deposit for ${data.investmentName} (${data.category})`
-      }
-    })
-  ]);
+      });
+      await tx.transaction.create({
+        data: {
+          amount: data.deposit,
+          currency: "USD",
+          USDAmount: data.deposit,
+          rate: 1,
+          charges: 0,
+          financialAccountId: data.financialAccountId,
+          investmentId: data.id,
+          type: "investment",
+          initiatorAccountId: data.investorId,
+          status: "successfull",
+          approvedAt: /* @__PURE__ */ new Date(),
+          description: `Investment deposit for ${data.investmentName} (${data.category})`
+        }
+      });
+      return {
+        investment: inv,
+        financialAccount: finAccount
+      };
+    }
+  );
   notificationEmitter.emit("investment:create", {
     user,
     data: {
@@ -87,6 +113,39 @@ const index_post = defineEventHandler(async (event) => {
     investment
   };
 });
+function getDivider(distribution) {
+  switch (distribution) {
+    case "daily":
+      return 1;
+    case "weekly":
+      return 7;
+    case "bi_weekly":
+      return 14;
+    case "monthly":
+      return 30;
+  }
+}
+function getProfitDistributionCycleAmountArray(options) {
+  const { totalProfitCount, deposit, percentageReturn } = options;
+  if (totalProfitCount <= 0) {
+    throw new Error("totalProfitCount must be greater than 0");
+  }
+  const expectedReturn = round(deposit * (percentageReturn / 100), 2);
+  const randoms = Array.from({ length: totalProfitCount }, () => Math.random());
+  const sumRandoms = randoms.reduce((acc, r) => acc + r, 0);
+  const results = randoms.map(
+    (r) => round(r / sumRandoms * expectedReturn, 2)
+  );
+  const diff = round(expectedReturn - results.reduce((a, b) => a + b, 0), 2);
+  if (diff !== 0) {
+    const idx = Math.floor(Math.random() * results.length);
+    results[idx] = round(results[idx] + diff, 2);
+  }
+  return results.map((amount, i) => ({
+    number: i + 1,
+    amount
+  }));
+}
 
 export { index_post as default };
 //# sourceMappingURL=index.post.mjs.map

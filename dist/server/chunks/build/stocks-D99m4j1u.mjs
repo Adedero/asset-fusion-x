@@ -1,7 +1,7 @@
 import { _ as __nuxt_component_0 } from './cta-banner-l70uETPS.mjs';
 import { defineComponent, unref, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderAttr, ssrRenderStyle, ssrRenderComponent } from 'vue/server-renderer';
-import { E as publicAssetsURL } from '../nitro/nitro.mjs';
+import { G as publicAssetsURL } from '../nitro/nitro.mjs';
 import { b as useRuntimeConfig } from './server.mjs';
 import './auth.store-VvkDhiyP.mjs';
 import 'node:path';
@@ -15,7 +15,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';

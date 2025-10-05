@@ -156,7 +156,7 @@ export default defineEventHandler(async (event) => {
   }
 
   notificationEmitter.emit("transaction-status:update", {
-    user: txn.initiator.user,
+    user: txn.initiator!.user,
     data: { transaction: { ...txn, status }, account: txn.financialAccount }
   });
 

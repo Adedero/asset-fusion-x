@@ -455,6 +455,11 @@ export type AccountUserScalarRelationFilter = {
   isNot?: Prisma.AccountUserWhereInput
 }
 
+export type AccountUserNullableScalarRelationFilter = {
+  is?: Prisma.AccountUserWhereInput | null
+  isNot?: Prisma.AccountUserWhereInput | null
+}
+
 export type AccountUserCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.AccountUserCreateWithoutUserInput, Prisma.AccountUserUncheckedCreateWithoutUserInput> | Prisma.AccountUserCreateWithoutUserInput[] | Prisma.AccountUserUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.AccountUserCreateOrConnectWithoutUserInput | Prisma.AccountUserCreateOrConnectWithoutUserInput[]
@@ -563,10 +568,12 @@ export type AccountUserCreateNestedOneWithoutTransactionsInput = {
   connect?: Prisma.AccountUserWhereUniqueInput
 }
 
-export type AccountUserUpdateOneRequiredWithoutTransactionsNestedInput = {
+export type AccountUserUpdateOneWithoutTransactionsNestedInput = {
   create?: Prisma.XOR<Prisma.AccountUserCreateWithoutTransactionsInput, Prisma.AccountUserUncheckedCreateWithoutTransactionsInput>
   connectOrCreate?: Prisma.AccountUserCreateOrConnectWithoutTransactionsInput
   upsert?: Prisma.AccountUserUpsertWithoutTransactionsInput
+  disconnect?: Prisma.AccountUserWhereInput | boolean
+  delete?: Prisma.AccountUserWhereInput | boolean
   connect?: Prisma.AccountUserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUserUpdateToOneWithWhereWithoutTransactionsInput, Prisma.AccountUserUpdateWithoutTransactionsInput>, Prisma.AccountUserUncheckedUpdateWithoutTransactionsInput>
 }

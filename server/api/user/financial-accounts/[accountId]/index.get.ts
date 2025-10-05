@@ -46,6 +46,7 @@ export default defineEventHandler(async (event) => {
   const users = account.accountUsers.map((au) => ({
     id: au.user.id,
     accountUserId: au.id,
+    ownership: au.ownership,
     name: au.user.name,
     image: au.user.image ?? null
   }));

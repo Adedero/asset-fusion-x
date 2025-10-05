@@ -124,7 +124,7 @@ const signOut = async () => {
             <NuxtBreadcrumb :items="breadcrumb" :ui="{ link: 'text-sm' }" />
           </div>
 
-          <div class="w-full h-full flex items-center gap-3 justify-end">
+          <div class="w-full h-full flex items-center gap-2 justify-end">
             <div>
               <NuxtChip :show="data?.hasUnreadNotifications">
                 <NuxtButton
@@ -140,6 +140,10 @@ const signOut = async () => {
 
             <div>
               <ColorModeToggler size="sm" />
+            </div>
+
+            <div>
+              <NuxtButton to="/" label="Exit" size="sm" trailing-icon="lucide:circle-arrow-left" />
             </div>
 
             <NuxtDropdownMenu

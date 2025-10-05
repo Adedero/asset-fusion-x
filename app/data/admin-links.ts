@@ -55,6 +55,12 @@ export const links = ({
       onSelect: () => close()
     },
     {
+      label: "Manage Investments",
+      icon: "lucide:pie-chart",
+      to: "/admin/investments",
+      onSelect: () => close()
+    },
+    {
       label: "Manage Accounts",
       icon: "lucide:square-user",
       to: "/admin/financial-accounts",

@@ -12,7 +12,7 @@ import { defineComponent, withAsyncContext, reactive, ref, mergeProps, unref, wi
 import { ssrRenderComponent, ssrRenderAttr } from 'vue/server-renderer';
 import { v7 } from 'uuid';
 import { B as BusinessProfileSchema } from '../_/schemas.mjs';
-import { a3 as normalizeException } from '../nitro/nitro.mjs';
+import { a5 as normalizeException } from '../nitro/nitro.mjs';
 import { u as useRouteData } from './use-route-data-zpNPSzN0.mjs';
 import { u as useFetch } from './fetch-CGkSb6cH.mjs';
 import 'reka-ui';
@@ -41,7 +41,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';

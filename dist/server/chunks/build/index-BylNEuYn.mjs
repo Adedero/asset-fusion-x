@@ -9,7 +9,7 @@ import { defineComponent, ref, reactive, unref, withCtx, createVNode, createText
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent } from 'vue/server-renderer';
 import z from 'zod';
 import { E as EmailSchema } from '../_/schemas.mjs';
-import { a3 as normalizeException } from '../nitro/nitro.mjs';
+import { a5 as normalizeException } from '../nitro/nitro.mjs';
 import '@vueuse/core';
 import 'reka-ui';
 import 'vue-router';
@@ -36,7 +36,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';

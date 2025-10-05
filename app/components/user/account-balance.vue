@@ -1,23 +1,40 @@
 <script setup lang="ts">
-const { accountId, class: itemClass = "" } = defineProps<{
+import round from "~~/shared/utils/round";
+
+const { accountId } = defineProps<{
   accountId: string;
-  class?: string;
 }>();
 
+interface Balance {
+  balance: number;
+  dividend: number;
+}
+
 const emit = defineEmits<{
-  update: [number];
+  update: [Balance | null];
 }>();
 
 const { pending, data, error, refresh } = useFetch(
   `/api/user/financial-accounts/${accountId}`,
   {
-    pick: ["balance"]
+    pick: ["balance", "primaryUser"]
   }
 );
 
+const balance = computed<Balance | null>(() => {
+  if (!data.value) return null;
+
+  return {
+    balance: data.value.balance,
+    dividend: round(
+      data.value.balance * ((data.value.primaryUser?.ownership ?? 0) / 100)
+    )
+  };
+});
+
 const update = async () => {
   await refresh();
-  emit("update", data.value?.balance ?? 0);
+  emit("update", balance.value);
 };
 
 onMounted(async () => {
@@ -41,5 +58,5 @@ onMounted(async () => {
     />
   </div>
 
-  <p v-else-if="data" :class="itemClass">{{ toDollar(data.balance) }}</p>
+  <slot v-else-if="balance" :balance />
 </template>

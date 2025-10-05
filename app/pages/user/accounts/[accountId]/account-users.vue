@@ -8,9 +8,11 @@ const accountId = useRouteData().getParams("accountId");
 const { data, error, refresh } = await useFetch(
   `/api/user/financial-accounts/${accountId}`,
   {
-    pick: ["id", "name", "type", "ownership", "status"]
+    pick: ["id", "name", "type", "ownership", "status", "balance"]
   }
 );
+
+const balance = computed(() => data.value?.balance ?? 0)
 </script>
 
 <template>
@@ -21,7 +23,7 @@ const { data, error, refresh } = await useFetch(
           <p class="card-title">Account Owners</p>
         </template>
         <div>
-          <UserFinancialAccountCurrentUsers />
+          <UserFinancialAccountCurrentUsers :balance />
         </div>
       </NuxtCard>
 

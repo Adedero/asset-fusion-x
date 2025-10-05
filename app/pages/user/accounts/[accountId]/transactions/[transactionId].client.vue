@@ -89,7 +89,7 @@ async function download(type: "pdf" | "img" = "img") {
             <div class="flex justify-between gap-4">
               <span>Name</span>
               <span class="capitalize text-right">{{
-                transaction.initiator.user.name
+                transaction.initiator?.user?.name ?? 'N/A: Transaction automated'
               }}</span>
             </div>
 

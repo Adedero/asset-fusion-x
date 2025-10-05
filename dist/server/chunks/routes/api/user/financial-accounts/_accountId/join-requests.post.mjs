@@ -1,4 +1,4 @@
-import { d as defineEventHandler, f as getRouterParam, c as createError, p as prisma, r as readValidatedBody, i as sendEmail } from '../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, h as getRouterParam, c as createError, p as prisma, r as readValidatedBody, k as sendEmail } from '../../../../../nitro/nitro.mjs';
 import z from 'zod';
 import { j as jointAccountRequestEmail } from '../../../../../_/joint-account-request-email.mjs';
 import { J as JointAccountRequestSchema } from '../../../../../_/schemas.mjs';
@@ -13,7 +13,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';

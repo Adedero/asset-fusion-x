@@ -1,5 +1,6 @@
 import { d as defineEventHandler, a as getValidatedQuery, c as createError, p as prisma } from '../../../nitro/nitro.mjs';
 import { p as paginationQuerySchema } from '../../../_/schemas.mjs';
+import { z } from 'zod';
 import 'node:path';
 import 'fs/promises';
 import 'axios';
@@ -11,7 +12,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';
@@ -22,52 +22,68 @@ import 'better-auth/adapters/prisma';
 import 'better-auth/plugins';
 import '@iconify/utils';
 import 'consola';
-import 'zod';
 
 const index_get = defineEventHandler(async (event) => {
-  const query = await getValidatedQuery(event, paginationQuerySchema.safeParse);
+  const schema = z.object({
+    ...paginationQuerySchema.shape,
+    status: z.enum(["open", "closed", "paused", "terminated"]).optional(),
+    category: z.enum([
+      "forex",
+      "stocks",
+      "real_estate",
+      "bonds",
+      "commodities",
+      "cryptocurrencies",
+      "derivatives"
+    ]).optional(),
+    distribution: z.enum(["daily", "weekly", "bi_weekly", "monthly"]).optional()
+  });
+  const query = await getValidatedQuery(event, schema.safeParse);
   if (!query.success) {
     throw createError({
       statusCode: 400,
       statusMessage: query.error.issues[0].message
     });
   }
-  const { search = "", page = 0, limit, skip } = query.data;
-  const profiles = await prisma.profile.findMany({
+  const { status, category, distribution, page = 0, limit } = query.data;
+  const investments = await prisma.investment.findMany({
     where: {
-      OR: [
-        { user: { name: { contains: search } } },
-        { user: { email: { contains: search } } }
+      AND: [
+        category ? { category } : {},
+        status ? { status } : {},
+        distribution ? { profitDistribution: distribution } : {}
       ]
     },
-    select: {
-      id: true,
-      kycStatus: true,
-      governmentIdType: true,
-      governmentId: true,
-      governmentIdExt: true,
-      user: {
+    include: {
+      investor: {
         select: {
-          id: true,
-          name: true,
-          email: true,
-          image: true
+          user: {
+            select: {
+              name: true,
+              email: true
+            }
+          }
+        }
+      },
+      financialAccount: {
+        select: {
+          name: true
         }
       }
     },
-    skip: skip != null ? skip : page * (limit != null ? limit : 0),
+    skip: page * (limit != null ? limit : 0),
     take: limit,
     orderBy: {
-      updatedAt: "desc"
+      createdAt: "desc"
     }
   });
-  return profiles.map((profile) => ({
-    ...profile,
-    userId: profile.user.id,
-    fullName: profile.user.name,
-    email: profile.user.email,
-    image: profile.user.image,
-    user: void 0
+  return investments.map((inv) => ({
+    ...inv,
+    investorName: inv.investor.user.name,
+    investorEmail: inv.investor.user.email,
+    financialAccountName: inv.financialAccount.name,
+    investor: void 0,
+    financialAccount: void 0
   }));
 });
 

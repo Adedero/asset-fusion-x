@@ -7,7 +7,7 @@ import { c as _sfc_main$a, i as authClient, n as navigateTo } from './server.mjs
 import { defineComponent, reactive, ref, unref, withCtx, createVNode, createTextVNode, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent } from 'vue/server-renderer';
 import { R as RegisterSchema } from '../_/schemas.mjs';
-import { a3 as normalizeException } from '../nitro/nitro.mjs';
+import { a5 as normalizeException } from '../nitro/nitro.mjs';
 import './Alert-CKjxjhE_.mjs';
 import 'reka-ui';
 import '@vueuse/core';
@@ -35,7 +35,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';

@@ -1,6 +1,6 @@
 generator client {
-  provider   = "prisma-client"
-  output     = "../server/generated/prisma"
+  provider      = "prisma-client"
+  output        = "../server/generated/prisma"
   binaryTargets = ["native", "debian-openssl-1.0.x"]
   //engineType = "client"
 }
@@ -380,30 +380,32 @@ model Investment {
   updatedAt               DateTime               @updatedAt
 
   // Relation
-  investor         AccountUser      @relation(fields: [investorId], references: [id], onDelete: Cascade)
-  // profits          Profit[]
-  transactions     Transaction[]
-  financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)
+  investor                 AccountUser               @relation(fields: [investorId], references: [id], onDelete: Cascade)
+  transactions             Transaction[]
+  financialAccount         FinancialAccount          @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)
+  profits Profit[]
 
   @@index([financialAccountId])
   @@index([status])
   @@map("investment")
 }
 
-/**
- * model Profit {
- * id                 String   @id @default(uuid())
- * financialAccountId String
- * investmentId       String
- * amount             Float
- * createdAt          DateTime @default(now())
- * updatedAt          DateTime @updatedAt
- * // Relation
- * investment       Investment       @relation(fields: [investmentId], references: [id], onDelete: Cascade)
- * financialAccount FinancialAccount @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)
- * @@map("profit")
- * }
- */
+model Profit {
+  id             String     @id @default(uuid())
+  investmentId   String
+  number         Int        
+  intendedAmount Float
+  actualAmount   Float
+  isDistributed  Boolean @default(false)
+  distributedAt  DateTime?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  // Relations
+  investment     Investment @relation(fields: [investmentId], references: [id], onDelete: Cascade)
+
+  @@map("profit")
+}
 
 enum TransactionType {
   deposit
@@ -434,7 +436,7 @@ model Transaction {
   charges                        Float             @default(0)
   financialAccountId             String
   type                           TransactionType
-  initiatorAccountId             String
+  initiatorAccountId             String?
   recipientAccountId             String?
   investmentId                   String?
   status                         TransactionStatus @default(pending)
@@ -452,7 +454,7 @@ model Transaction {
   createdAt                      DateTime          @default(now())
   updatedAt                      DateTime          @updatedAt
 
-  initiator               AccountUser              @relation(fields: [initiatorAccountId], references: [id])
+  initiator               AccountUser?              @relation(fields: [initiatorAccountId], references: [id])
   financialAccount        FinancialAccount         @relation(fields: [financialAccountId], references: [id], onDelete: Cascade)
   recipientAccount        FinancialAccount?        @relation("RecipientTransaction", fields: [recipientAccountId], references: [id])
   investment              Investment?              @relation(fields: [investmentId], references: [id], onDelete: Cascade)
@@ -487,22 +489,22 @@ model Notification {
 }
 
 model Currency {
-  id                           String    @id @default(uuid())
-  name                         String
-  symbol                       String    @unique
-  image                        String?
-  rate                         Float
-  rateUpdatedAt                DateTime?
-  walletAddress                String?
-  walletAddressNetwork         String?
+  id                                   String    @id @default(uuid())
+  name                                 String
+  symbol                               String    @unique
+  image                                String?
+  rate                                 Float
+  rateUpdatedAt                        DateTime?
+  walletAddress                        String?
+  walletAddressNetwork                 String?
   wireTransferDepositBankName          String?
   wireTransferDepositBankAccountNumber String?
-  allowWithdrawal              Boolean   @default(false)
-  allowDeposit                 Boolean   @default(true)
-  automaticallyUpdateRate      Boolean   @default(true)
-  withdrawalCharge             Float     @default(0)
-  createdAt                    DateTime  @default(now())
-  updatedAt                    DateTime  @updatedAt
+  allowWithdrawal                      Boolean   @default(false)
+  allowDeposit                         Boolean   @default(true)
+  automaticallyUpdateRate              Boolean   @default(true)
+  withdrawalCharge                     Float     @default(0)
+  createdAt                            DateTime  @default(now())
+  updatedAt                            DateTime  @updatedAt
 
   @@map("currency")
 }

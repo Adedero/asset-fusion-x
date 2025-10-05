@@ -82,6 +82,11 @@ export type InvestmentPlan = Prisma.InvestmentPlanModel
  */
 export type Investment = Prisma.InvestmentModel
 /**
+ * Model Profit
+ * 
+ */
+export type Profit = Prisma.ProfitModel
+/**
  * Model Transaction
  * 
  */

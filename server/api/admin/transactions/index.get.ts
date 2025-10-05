@@ -72,7 +72,7 @@ export default defineEventHandler(async (event) => {
 
   return transactions.map((txn) => ({
     ...txn,
-    initiator: txn.initiator.user.name,
+    initiator: txn.initiator!.user.name,
     financialAccountName: txn.financialAccount.name,
     financialAccount: undefined
   }));

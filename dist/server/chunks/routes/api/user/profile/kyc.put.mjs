@@ -1,4 +1,4 @@
-import { d as defineEventHandler, r as readValidatedBody, c as createError, p as prisma, h as removeFileByUrl, s as saveFile } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, r as readValidatedBody, c as createError, p as prisma, i as removeFileByUrl, s as saveFile } from '../../../../nitro/nitro.mjs';
 import { z } from 'zod';
 import 'node:path';
 import 'fs/promises';
@@ -11,7 +11,6 @@ import 'node:buffer';
 import 'node:fs';
 import 'node:crypto';
 import 'cron';
-import 'decimal.js';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';
