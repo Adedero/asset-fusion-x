@@ -40,7 +40,7 @@ const state = computed(() => {
       category: investmentPlanCategoryMap[plan.category] || plan.category,
       minDeposit: `$${plan.minimumDeposit.toLocaleString()}`,
       maxDeposit: `$${plan.maximumDeposit.toLocaleString()}`,
-      return: `${plan.percentagePeriodicReturn}%`,
+      return: `${plan.percentageTotalReturn}%`,
       duration: `${plan.duration} days`,
       profitDistribution:
         profitDistributionMap[plan.profitDistribution] ||
