@@ -60,7 +60,7 @@ const classes = computed(() => {
             class="cursor-pointer pointer-events-none rounded-full font-medium px-6 py-3 flex items-center gap-2 transition-colors"
             :class="classes.button"
           >
-            <p>{{ buttonLabel || !authStore.user.value ? "Create Account" : "Continue" }}</p>
+            <p>{{ buttonLabel || !authStore.user.value ? "Create Account" : "Continue on AssetFusionX" }}</p>
             <NuxtIcon
               :name="buttonIcon || 'lucide:circle-arrow-right'"
               size="1.2rem"

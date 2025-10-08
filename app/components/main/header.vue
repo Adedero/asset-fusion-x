@@ -46,7 +46,7 @@ const classes = computed(() => {
           <NuxtButton
             size="lg"
             icon="lucide:trending-up"
-            to="/sign-up"
+            to="/contact"
             label="Get An Advisor"
             class="shrink-0 rounded-full text-white"
           />

@@ -12,7 +12,7 @@ const { data, error, refresh } = await useFetch(
   }
 );
 
-const balance = computed(() => data.value?.balance ?? 0)
+const balance = computed(() => data.value?.balance ?? 0);
 </script>
 
 <template>

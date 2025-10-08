@@ -2,11 +2,13 @@
 import type { TableColumn, TableRow } from "@nuxt/ui";
 import normalizeException from "~~/shared/helpers/normalize-exception";
 import round from "~~/shared/utils/round";
+import { useAuthStore } from "~/stores/auth.store";
 
 const { balance } = defineProps<{
   balance: number;
 }>();
 
+const authStore = useAuthStore();
 const accountId = useRouteData().getParams("accountId");
 
 const { pending, data, error, refresh } = await useFetch(
@@ -34,6 +36,7 @@ const items = computed(() => {
 type AccountUser = (typeof items.value)[number];
 
 const Avatar = resolveComponent("NuxtAvatar");
+const Badge = resolveComponent("NuxtBadge");
 
 const columns: TableColumn<AccountUser>[] = [
   {
@@ -47,7 +50,16 @@ const columns: TableColumn<AccountUser>[] = [
   },
   {
     accessorKey: "name",
-    header: "Name"
+    header: "Name",
+    cell: ({ row }) => {
+      const name: string = row.getValue("name");
+      const isAuthUser = authStore.user?.value?.email === row.getValue("email");
+      return h("div", { class: "flex items-center gap-2" }, [
+        h("span", name),
+        isAuthUser &&
+          h(Badge, { label: "You", variant: "subtle", color: "error", size: "sm" })
+      ]);
+    }
   },
   {
     accessorKey: "email",

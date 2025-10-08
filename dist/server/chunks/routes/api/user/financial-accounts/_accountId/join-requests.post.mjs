@@ -1,4 +1,4 @@
-import { d as defineEventHandler, h as getRouterParam, c as createError, p as prisma, r as readValidatedBody, k as sendEmail } from '../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, h as getRouterParam, c as createError, p as prisma, r as readValidatedBody, s as sendEmail } from '../../../../../nitro/nitro.mjs';
 import z from 'zod';
 import { j as jointAccountRequestEmail } from '../../../../../_/joint-account-request-email.mjs';
 import { J as JointAccountRequestSchema } from '../../../../../_/schemas.mjs';

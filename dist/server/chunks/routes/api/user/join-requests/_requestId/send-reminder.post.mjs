@@ -1,4 +1,4 @@
-import { d as defineEventHandler, f as getRequestParam, p as prisma, k as sendEmail } from '../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, f as getRequestParam, p as prisma, s as sendEmail } from '../../../../../nitro/nitro.mjs';
 import { j as jointAccountRequestEmail } from '../../../../../_/joint-account-request-email.mjs';
 import 'node:path';
 import 'fs/promises';

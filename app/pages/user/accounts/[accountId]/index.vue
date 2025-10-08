@@ -182,6 +182,12 @@ const { data, error } = await useFetch(
 
       <div>
         <NuxtCard>
+          <UserFinancialAccountCurrentUsers :balance="data.balance" />
+        </NuxtCard>
+      </div>
+
+      <div>
+        <NuxtCard>
           <div>
             <div class="flex flex-wrap items-center gap-2 justify-between mb-4">
               <div>

@@ -497,8 +497,16 @@ async function getRouteRules(arg) {
     return defu({}, ..._routeRulesMatcher.matchAll(path).reverse());
   }
 }
-const __nuxt_page_meta$$ = {
+const __nuxt_page_meta$10 = {
   layout: "main"
+};
+const __nuxt_page_meta$$ = {
+  layout: "user",
+  breadcrumb: [
+    {
+      label: "Dashboard"
+    }
+  ]
 };
 const __nuxt_page_meta$_ = {
   layout: "user",
@@ -512,14 +520,6 @@ const __nuxt_page_meta$Z = {
   layout: "user",
   breadcrumb: [
     {
-      label: "Dashboard"
-    }
-  ]
-};
-const __nuxt_page_meta$Y = {
-  layout: "user",
-  breadcrumb: [
-    {
       label: "Dashboard",
       to: "/admin"
     },
@@ -527,6 +527,9 @@ const __nuxt_page_meta$Y = {
       label: "Users"
     }
   ]
+};
+const __nuxt_page_meta$Y = {
+  layout: "main"
 };
 const __nuxt_page_meta$X = {
   layout: "user",
@@ -897,38 +900,39 @@ const __nuxt_page_meta = {
 };
 let _createClientPage;
 async function createClientPage(loader) {
-  _createClientPage ||= await import('./client-component-BavYKIcL.mjs').then((r) => r.createClientPage);
+  _createClientPage ||= await import('./client-component-KGbGqY4U.mjs').then((r) => r.createClientPage);
   return _createClientPage(loader);
 }
 const _routes = [
   {
     name: "index",
     path: "/",
-    meta: __nuxt_page_meta$$ || {},
-    component: () => import('./index-C9iMiYGw.mjs')
+    meta: __nuxt_page_meta$10 || {},
+    component: () => import('./index-CzalHPYs.mjs')
   },
   {
     name: "user",
     path: "/user",
-    meta: __nuxt_page_meta$_ || {},
+    meta: __nuxt_page_meta$$ || {},
     component: () => import('./index-CF6Nb_A9.mjs')
   },
   {
     name: "admin",
     path: "/admin",
-    meta: __nuxt_page_meta$Z || {},
+    meta: __nuxt_page_meta$_ || {},
     component: () => import('./index-DoAk858A.mjs')
   },
   {
     name: "admin-users",
     path: "/admin/users",
-    meta: __nuxt_page_meta$Y || {},
+    meta: __nuxt_page_meta$Z || {},
     component: () => import('./users-Cqt2q4sG.mjs')
   },
   {
     name: "contact",
     path: "/contact",
-    component: () => import('./contact-CDZ7EEWs.mjs')
+    meta: __nuxt_page_meta$Y || {},
+    component: () => import('./contact-DsiyCV2q.mjs')
   },
   {
     name: "admin-kyc-data",
@@ -952,7 +956,7 @@ const _routes = [
     name: "about-story",
     path: "/about/story",
     meta: __nuxt_page_meta$U || {},
-    component: () => import('./story-2NdD63Ig.mjs')
+    component: () => import('./story-kE3oja_o.mjs')
   },
   {
     name: "admin-transactions",
@@ -1019,19 +1023,19 @@ const _routes = [
     name: "about-careers",
     path: "/about/careers",
     meta: __nuxt_page_meta$L || {},
-    component: () => import('./careers-B3-Q51oL.mjs')
+    component: () => import('./careers-Bl-SfnPb.mjs')
   },
   {
     name: "about-mission",
     path: "/about/mission",
     meta: __nuxt_page_meta$K || {},
-    component: () => import('./mission-yGejWd57.mjs')
+    component: () => import('./mission-CJyppWBI.mjs')
   },
   {
     name: "impact-reviews",
     path: "/impact/reviews",
     meta: __nuxt_page_meta$J || {},
-    component: () => import('./reviews-tIr-jlf7.mjs')
+    component: () => import('./reviews-CeyuOct8.mjs')
   },
   {
     name: "user-accounts-nav-list",
@@ -1066,19 +1070,19 @@ const _routes = [
     name: "investments-bonds",
     path: "/investments/bonds",
     meta: __nuxt_page_meta$E || {},
-    component: () => import('./bonds-B39s1IOg.mjs')
+    component: () => import('./bonds-PgYz1Q67.mjs')
   },
   {
     name: "investments-forex",
     path: "/investments/forex",
     meta: __nuxt_page_meta$D || {},
-    component: () => import('./forex-CHhGXDX3.mjs')
+    component: () => import('./forex-Bhp75IYI.mjs')
   },
   {
     name: "investments-reits",
     path: "/investments/reits",
     meta: __nuxt_page_meta$C || {},
-    component: () => import('./reits-DYWQciiK.mjs')
+    component: () => import('./reits-dPUVsHF8.mjs')
   },
   {
     name: "admin-financial-accounts",
@@ -1102,13 +1106,13 @@ const _routes = [
     name: "about-partnerships",
     path: "/about/partnerships",
     meta: __nuxt_page_meta$y || {},
-    component: () => import('./partnerships-DaJNHQBP.mjs')
+    component: () => import('./partnerships-BitZeVGi.mjs')
   },
   {
     name: "investments-stocks",
     path: "/investments/stocks",
     meta: __nuxt_page_meta$x || {},
-    component: () => import('./stocks-D99m4j1u.mjs')
+    component: () => import('./stocks-BtCPo5dp.mjs')
   },
   {
     name: "legal-terms-of-use",
@@ -1125,7 +1129,7 @@ const _routes = [
       {
         name: "user-accounts-accountId",
         path: "",
-        component: () => import('./index-BsPMSROK.mjs')
+        component: () => import('./index-CjgJGiZE.mjs')
       },
       {
         name: "user-accounts-accountId-deposit",
@@ -1165,7 +1169,7 @@ const _routes = [
         name: "user-accounts-accountId-account-users",
         path: "account-users",
         meta: __nuxt_page_meta$r || {},
-        component: () => import('./account-users-BWal5SdR.mjs')
+        component: () => import('./account-users-Cq2YzPsp.mjs')
       },
       {
         name: "user-accounts-accountId-notifications",
@@ -1207,7 +1211,7 @@ const _routes = [
     name: "impact-track-record",
     path: "/impact/track-record",
     meta: __nuxt_page_meta$l || {},
-    component: () => import('./track-record-D8vkS9pT.mjs')
+    component: () => import('./track-record-Cxk_WOx4.mjs')
   },
   {
     name: "user-change-password",
@@ -1241,7 +1245,7 @@ const _routes = [
     name: "resources-strategies",
     path: "/resources/strategies",
     meta: __nuxt_page_meta$h || {},
-    component: () => import('./strategies-CJpIsLKg.mjs')
+    component: () => import('./strategies-DNlsvkIY.mjs')
   },
   {
     name: "user-investment-plans",
@@ -1259,7 +1263,7 @@ const _routes = [
     name: "impact-sustainability",
     path: "/impact/sustainability",
     meta: __nuxt_page_meta$e || {},
-    component: () => import('./sustainability-DmJD0cS8.mjs')
+    component: () => import('./sustainability-D_X2uTvs.mjs')
   },
   {
     name: "token-validation",
@@ -1271,19 +1275,19 @@ const _routes = [
     name: "resources-walkthroughs",
     path: "/resources/walkthroughs",
     meta: __nuxt_page_meta$c || {},
-    component: () => import('./walkthroughs-nhhD3RaW.mjs')
+    component: () => import('./walkthroughs-DzOIK_ET.mjs')
   },
   {
     name: "investments-commodities",
     path: "/investments/commodities",
     meta: __nuxt_page_meta$b || {},
-    component: () => import('./commodities-CKGDLjrF.mjs')
+    component: () => import('./commodities-BjkY9Psy.mjs')
   },
   {
     name: "investments-derivatives",
     path: "/investments/derivatives",
     meta: __nuxt_page_meta$a || {},
-    component: () => import('./derivatives-EDQc2pJ5.mjs')
+    component: () => import('./derivatives-Dnc_qA6-.mjs')
   },
   {
     name: "user-change-email-verification",
@@ -1301,13 +1305,13 @@ const _routes = [
     name: "resources-market-insights",
     path: "/resources/market-insights",
     meta: __nuxt_page_meta$7 || {},
-    component: () => import('./market-insights-BFM6c0kK.mjs')
+    component: () => import('./market-insights-Ctc4l8Ek.mjs')
   },
   {
     name: "resources-risk-disclosure",
     path: "/resources/risk-disclosure",
     meta: __nuxt_page_meta$6 || {},
-    component: () => import('./risk-disclosure-DojXSW23.mjs')
+    component: () => import('./risk-disclosure-CIEO8H8b.mjs')
   },
   {
     name: __nuxt_page_meta$5?.name,
@@ -1336,19 +1340,19 @@ const _routes = [
     name: "impact-social-responsibility",
     path: "/impact/social-responsibility",
     meta: __nuxt_page_meta$4 || {},
-    component: () => import('./social-responsibility-CZacjEW4.mjs')
+    component: () => import('./social-responsibility-DoOG13AC.mjs')
   },
   {
     name: "investments-cryptocurrencies",
     path: "/investments/cryptocurrencies",
     meta: __nuxt_page_meta$3 || {},
-    component: () => import('./cryptocurrencies-C6LpDdzn.mjs')
+    component: () => import('./cryptocurrencies-C25qNOVq.mjs')
   },
   {
     name: "resources-investor-education",
     path: "/resources/investor-education",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./investor-education-C8oHK3M1.mjs')
+    component: () => import('./investor-education-CRfnwOLa.mjs')
   },
   {
     name: "user-profile-components-name-changer",
@@ -2176,7 +2180,7 @@ const plugins = [
   plugin_server_9Ca9_HhnjAGwBWpwAydRauMHxWoxTDY60BrArRnXN_A,
   plugin_MeUvTuoKUi51yb_kBguab6hdcExVXeTtZtTg9TZZBB8
 ];
-const __nuxt_component_4 = defineComponent({
+const __nuxt_component_5 = defineComponent({
   name: "ServerPlaceholder",
   render() {
     return createElementBlock("div");
@@ -6812,7 +6816,7 @@ _sfc_main$3.setup = (props, ctx) => {
 const __nuxt_component_2 = Object.assign(_sfc_main$3, { __name: "NuxtConfirmDialog" });
 const layouts = {
   auth: defineAsyncComponent(() => import('./auth-B5GXobQQ.mjs').then((m) => m.default || m)),
-  main: defineAsyncComponent(() => import('./main-MJ1PXA9j.mjs').then((m) => m.default || m)),
+  main: defineAsyncComponent(() => import('./main-BiBNdUb6.mjs').then((m) => m.default || m)),
   user: defineAsyncComponent(() => import('./user-Cdm7APt3.mjs').then((m) => m.default || m))
 };
 const LayoutLoader = defineComponent({
@@ -7034,23 +7038,22 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
         {
           type: "text/javascript",
           innerHTML() {
-            return `var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+            return `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
         (function(){
-          var s1 = document.createElement("script"),
-              s0 = document.getElementsByTagName("script")[0];
-          s1.async = true;
-          s1.src = 'https://embed.tawk.to/686f79f8ca9b1d190e69dbe5/1ivpn8t56';
-          s1.charset = 'UTF-8';
-          s1.setAttribute('crossorigin', '*');
-          s0.parentNode.insertBefore(s1, s0);
-        })();`;
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/68e5a4630b10cd194e33e7ff/1j70gk9fm';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+        })()`;
           },
           tagPosition: "bodyOpen"
         }
       ]
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_NuxtRouteAnnouncer = __nuxt_component_4;
+      const _component_NuxtRouteAnnouncer = __nuxt_component_5;
       const _component_NuxtApp = __nuxt_component_1;
       const _component_NuxtConfirmDialog = __nuxt_component_2;
       const _component_NuxtLayout = __nuxt_component_3;
@@ -7200,5 +7203,5 @@ let entry;
 }
 const entry$1 = (ssrContext) => entry(ssrContext);
 
-export { get as A, _sfc_main$e as B, getDisplayValue as C, formBusInjectionKey as D, formStateInjectionKey as E, formErrorsInjectionKey as F, formInputsInjectionKey as G, formLoadingInjectionKey as H, formOptionsInjectionKey as I, inputIdInjectionKey as J, formFieldInjectionKey as K, omit as L, _sfc_main$b as M, pickLinkProps as N, _sfc_main$c as O, compare as P, avatarGroupInjectionKey as Q, useRoute as R, createError as S, useRouter as T, __nuxt_component_1$1 as U, __nuxt_component_0 as _, __nuxt_component_4 as a, useRuntimeConfig as b, _sfc_main$a as c, _sfc_main$f as d, entry$1 as default, useLocale as e, useAppConfig as f, useToast as g, _sfc_main$4 as h, authClient as i, useConfirm as j, _sfc_main$d as k, useFormField as l, __nuxt_component_12 as m, navigateTo as n, useFieldGroup as o, useComponentIcons as p, useState as q, useNuxtApp as r, fetchDefaults as s, tv as t, useHead as u, useAsyncData as v, fieldGroupInjectionKey as w, looseToNumber as x, usePortal as y, isArrayOfArray as z };
+export { get as A, _sfc_main$e as B, getDisplayValue as C, formBusInjectionKey as D, formStateInjectionKey as E, formErrorsInjectionKey as F, formInputsInjectionKey as G, formLoadingInjectionKey as H, formOptionsInjectionKey as I, inputIdInjectionKey as J, formFieldInjectionKey as K, omit as L, _sfc_main$b as M, pickLinkProps as N, _sfc_main$c as O, compare as P, avatarGroupInjectionKey as Q, useRoute as R, createError as S, useRouter as T, __nuxt_component_1$1 as U, __nuxt_component_0 as _, __nuxt_component_5 as a, useRuntimeConfig as b, _sfc_main$a as c, _sfc_main$f as d, entry$1 as default, useLocale as e, useAppConfig as f, useToast as g, _sfc_main$4 as h, authClient as i, useConfirm as j, _sfc_main$d as k, useFormField as l, __nuxt_component_12 as m, navigateTo as n, useFieldGroup as o, useComponentIcons as p, useState as q, useNuxtApp as r, fetchDefaults as s, tv as t, useHead as u, useAsyncData as v, fieldGroupInjectionKey as w, looseToNumber as x, usePortal as y, isArrayOfArray as z };
 //# sourceMappingURL=server.mjs.map

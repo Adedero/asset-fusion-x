@@ -11,7 +11,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #000;
+      background-color: #030303;
     "
   >
     <img

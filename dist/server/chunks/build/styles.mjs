@@ -1,13 +1,13 @@
 const interopDefault = r => r.default || r || [];
 const styles = {
-  "pages/admin/investments/[investmentId]/index.vue": () => import('./index-styles.DH3jzqHc.mjs').then(interopDefault),
   "pages/admin/investments/[investmentId]/settings.vue": () => import('./settings-styles.ByjDvg-W.mjs').then(interopDefault),
+  "pages/admin/investments/[investmentId]/index.vue": () => import('./index-styles.DH3jzqHc.mjs').then(interopDefault),
   "../node_modules/nuxt/dist/app/components/error-404.vue": () => import('./error-404-styles.GnMPI7ZQ.mjs').then(interopDefault),
   "../node_modules/nuxt/dist/app/components/error-500.vue": () => import('./error-500-styles.EkaOGJD2.mjs').then(interopDefault),
   "../node_modules/nuxt/dist/app/components/error-404.vue?vue&type=style&index=0&scoped=dec70bd4&lang.css": () => import('./error-404-styles.BNO8FbGI.mjs').then(interopDefault),
   "../node_modules/nuxt/dist/app/components/error-500.vue?vue&type=style&index=0&scoped=d08fec65&lang.css": () => import('./error-500-styles.D_atcFgn.mjs').then(interopDefault),
-  "pages/admin/investments/[investmentId]/index.vue?vue&type=style&index=0&soped=true&lang.css": () => import('./index-styles.DmsDBMV3.mjs').then(interopDefault),
   "pages/admin/investments/[investmentId]/settings.vue?vue&type=style&index=0&soped=true&lang.css": () => import('./settings-styles.oTDXli3W.mjs').then(interopDefault),
+  "pages/admin/investments/[investmentId]/index.vue?vue&type=style&index=0&soped=true&lang.css": () => import('./index-styles.DmsDBMV3.mjs').then(interopDefault),
   "components/nuxt/password.vue": () => import('./password-styles.CfmirJQH.mjs').then(interopDefault),
   "components/nuxt/password.vue?vue&type=style&index=0&lang.css": () => import('./password-styles.BwJ6_GpL.mjs').then(interopDefault),
   "../node_modules/@nuxt/ui/dist/runtime/components/Marquee.vue": () => import('./Marquee-styles.qV9SAnmZ.mjs').then(interopDefault),

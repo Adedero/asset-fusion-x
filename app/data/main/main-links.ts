@@ -29,9 +29,16 @@ const mainLinks = ref<NavigationMenuItem[]>([
         to: "/about/partnerships",
         icon: "i-lucide-handshake",
         description: "Explore partnership opportunities with us."
+      },
+      {
+        label: "Contact Us",
+        icon: "i-lucide-mail",
+        description: "Have questions? Reach out to us.",
+        to: "/contact"
       }
     ]
   },
+
   {
     label: "Investments",
     icon: "i-lucide-line-chart",
