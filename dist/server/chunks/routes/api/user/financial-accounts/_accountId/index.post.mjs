@@ -1,4 +1,4 @@
-import { d as defineEventHandler, h as getRouterParam, r as readValidatedBody, c as createError, p as prisma, n as notificationEmitter, k as round } from '../../../../../nitro/nitro.mjs';
+import { c as defineEventHandler, m as getRouterParam, v as checkUserKycApproval, e as createError, r as readValidatedBody, p as prisma, n as notificationEmitter, w as round } from '../../../../../_/nitro.mjs';
 import { I as InvestmentSchema } from '../../../../../_/index.mjs';
 import 'node:path';
 import 'fs/promises';
@@ -8,24 +8,28 @@ import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
-import 'node:fs';
-import 'node:crypto';
 import 'cron';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';
 import 'nodemailer';
 import 'dotenv';
+import 'node:fs';
 import 'better-auth';
 import 'better-auth/adapters/prisma';
 import 'better-auth/plugins';
 import '@iconify/utils';
+import 'node:crypto';
 import 'consola';
 import 'zod';
 
 const index_post = defineEventHandler(async (event) => {
   const user = event.context.user;
   const accountId = getRouterParam(event, "accountId");
+  const res = await checkUserKycApproval(user.id);
+  if (!res.success) {
+    throw createError(res.error);
+  }
   const { success, error, data } = await readValidatedBody(
     event,
     InvestmentSchema.safeParse

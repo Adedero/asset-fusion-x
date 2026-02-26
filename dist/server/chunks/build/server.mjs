@@ -1,5 +1,5 @@
-import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { defineComponent, mergeModels, useModel, computed, unref, mergeProps, withCtx, renderSlot, createVNode, createBlock, createCommentVNode, openBlock, createTextVNode, toDisplayString, hasInjectionContext, inject, shallowRef, getCurrentInstance, provide, cloneVNode, h, createElementBlock, resolveComponent, useSlots, ref, resolveDynamicComponent, toRef, toHandlers, watch, Suspense, toValue, isRef, onServerPrefetch, shallowReactive, Fragment, nextTick, defineAsyncComponent, useSSRContext, createApp, renderList, useId, onErrorCaptured, reactive, effectScope, isReadonly, isShallow, isReactive, toRaw, withModifiers, getCurrentScope, markRaw } from 'vue';
-import { P as serialize, Q as defu, R as isEqual, c as createError$1, S as parseQuery, T as klona, U as defuFn, K as hasProtocol, V as isScriptProtocol, N as joinURL, W as withQuery, X as sanitizeStatusCode, Y as withTrailingSlash, Z as withoutTrailingSlash, _ as getContext, $ as $fetch$1, a0 as baseURL, a1 as createHooks, a2 as executeAsync, a3 as toRouteMatcher, a4 as createRouter$1 } from '../nitro/nitro.mjs';
+import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { useModel, computed, unref, mergeProps, withCtx, renderSlot, createVNode, openBlock, createBlock, createTextVNode, toDisplayString, createCommentVNode, mergeModels, hasInjectionContext, inject, defineComponent, shallowRef, getCurrentInstance, provide, cloneVNode, h, createElementBlock, useSlots, ref, resolveDynamicComponent, toRef, toHandlers, watch, Suspense, toValue, isRef, onServerPrefetch, resolveComponent, Fragment, nextTick, shallowReactive, defineAsyncComponent, useSSRContext, createApp, renderList, useId, onErrorCaptured, reactive, effectScope, withModifiers, getCurrentScope, markRaw, isReadonly, isShallow, isReactive, toRaw } from 'vue';
+import { Q as serialize, R as defu, S as isEqual, e as createError$1, T as klona, U as hasProtocol, V as isScriptProtocol, P as joinURL, W as parseQuery, X as defuFn, Y as withQuery, Z as sanitizeStatusCode, _ as parseURL, $ as encodePath, a0 as decodePath, a1 as getContext, a2 as withTrailingSlash, a3 as withoutTrailingSlash, a4 as $fetch$1, a5 as baseURL, a6 as createHooks, a7 as executeAsync } from '../_/nitro.mjs';
 import { RouterView, useRoute as useRoute$1, createMemoryHistory, createRouter, START_LOCATION } from 'vue-router';
 import { createAuthClient } from 'better-auth/vue';
 import { adminClient, inferAdditionalFields } from 'better-auth/client/plugins';
@@ -10,7 +10,6 @@ import { Primitive, Slot, useForwardProps, useForwardPropsEmits, DialogRoot, Dia
 import { reactiveOmit, reactivePick, useDebounceFn, createSharedComposable } from '@vueuse/core';
 import { createTV } from 'tailwind-variants';
 import { getIconCSS } from '@iconify/utils/lib/css/icon';
-import { debounce } from 'perfect-debounce';
 import { u as useHead$1, h as headSymbol } from '../routes/renderer.mjs';
 import 'node:path';
 import 'fs/promises';
@@ -20,18 +19,18 @@ import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
-import 'node:fs';
-import 'node:crypto';
 import 'cron';
 import 'node:process';
 import 'node:url';
 import '@prisma/client/runtime/library';
 import 'nodemailer';
 import 'dotenv';
+import 'node:fs';
 import 'better-auth';
 import 'better-auth/adapters/prisma';
 import 'better-auth/plugins';
 import '@iconify/utils';
+import 'node:crypto';
 import 'consola';
 import 'vue-bundle-renderer/runtime';
 import 'unhead/server';
@@ -126,6 +125,93 @@ class DiffHashedObject {
   }
 }
 
+//#region src/index.ts
+const DEBOUNCE_DEFAULTS = { trailing: true };
+/**
+Debounce functions
+@param fn - Promise-returning/async function to debounce.
+@param wait - Milliseconds to wait before calling `fn`. Default value is 25ms
+@returns A function that delays calling `fn` until after `wait` milliseconds have elapsed since the last time it was called.
+@example
+```
+import { debounce } from 'perfect-debounce';
+const expensiveCall = async input => input;
+const debouncedFn = debounce(expensiveCall, 200);
+for (const number of [1, 2, 3]) {
+console.log(await debouncedFn(number));
+}
+//=> 1
+//=> 2
+//=> 3
+```
+*/
+function debounce(fn, wait = 25, options = {}) {
+	options = {
+		...DEBOUNCE_DEFAULTS,
+		...options
+	};
+	if (!Number.isFinite(wait)) throw new TypeError("Expected `wait` to be a finite number");
+	let leadingValue;
+	let timeout;
+	let resolveList = [];
+	let currentPromise;
+	let trailingArgs;
+	const applyFn = (_this, args) => {
+		currentPromise = _applyPromised(fn, _this, args);
+		currentPromise.finally(() => {
+			currentPromise = null;
+			if (options.trailing && trailingArgs && !timeout) {
+				const promise = applyFn(_this, trailingArgs);
+				trailingArgs = null;
+				return promise;
+			}
+		});
+		return currentPromise;
+	};
+	const debounced = function(...args) {
+		if (options.trailing) trailingArgs = args;
+		if (currentPromise) return currentPromise;
+		return new Promise((resolve) => {
+			const shouldCallNow = !timeout && options.leading;
+			clearTimeout(timeout);
+			timeout = setTimeout(() => {
+				timeout = null;
+				const promise = options.leading ? leadingValue : applyFn(this, args);
+				trailingArgs = null;
+				for (const _resolve of resolveList) _resolve(promise);
+				resolveList = [];
+			}, wait);
+			if (shouldCallNow) {
+				leadingValue = applyFn(this, args);
+				resolve(leadingValue);
+			} else resolveList.push(resolve);
+		});
+	};
+	const _clearTimeout = (timer) => {
+		if (timer) {
+			clearTimeout(timer);
+			timeout = null;
+		}
+	};
+	debounced.isPending = () => !!timeout;
+	debounced.cancel = () => {
+		_clearTimeout(timeout);
+		resolveList = [];
+		trailingArgs = null;
+	};
+	debounced.flush = () => {
+		_clearTimeout(timeout);
+		if (!trailingArgs || currentPromise) return;
+		const args = trailingArgs;
+		trailingArgs = null;
+		return applyFn(this, args);
+	};
+	return debounced;
+}
+async function _applyPromised(fn, _this, args) {
+	return await fn.apply(_this, args);
+}
+
 if (!globalThis.$fetch) {
   globalThis.$fetch = $fetch$1.create({
     baseURL: baseURL()
@@ -153,7 +239,7 @@ function createNuxtApp(options) {
     provide: void 0,
     versions: {
       get nuxt() {
-        return "4.1.2";
+        return "4.3.1";
       },
       get vue() {
         return nuxtApp.vueApp.version;
@@ -352,8 +438,8 @@ function defineGetter(obj, key, val) {
 function defineAppConfig(config2) {
   return config2;
 }
-const LayoutMetaSymbol = Symbol("layout-meta");
-const PageRouteSymbol = Symbol("route");
+const LayoutMetaSymbol = /* @__PURE__ */ Symbol("layout-meta");
+const PageRouteSymbol = /* @__PURE__ */ Symbol("route");
 globalThis._importMeta_.url.replace(/\/app\/.*$/, "/");
 const useRouter = () => {
   return useNuxtApp()?.$router;
@@ -404,7 +490,7 @@ const navigateTo = (to, options) => {
         await nuxtApp.callHook("app:redirected");
         const encodedLoc = location2.replace(URL_QUOTE_RE, "%22");
         const encodedHeader = encodeURL(location2, isExternalHost);
-        nuxtApp.ssrContext._renderResponse = {
+        nuxtApp.ssrContext["~renderResponse"] = {
           statusCode: sanitizeStatusCode(options?.redirectCode || 302, 302),
           body: `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=${encodedLoc}"></head></html>`,
           headers: { location: encodedHeader }
@@ -437,7 +523,8 @@ const navigateTo = (to, options) => {
     }
     return Promise.resolve();
   }
-  return options?.replace ? router.replace(to) : router.push(to);
+  const encodedTo = typeof to === "string" ? encodeRoutePath(to) : to;
+  return options?.replace ? router.replace(encodedTo) : router.push(encodedTo);
 };
 function resolveRouteObject(to) {
   return withQuery(to.path || "", to.query || {}) + (to.hash || "");
@@ -452,13 +539,16 @@ function encodeURL(location2, isExternalHost = false) {
   }
   return url.toString();
 }
+function encodeRoutePath(url) {
+  const parsed = parseURL(url);
+  return encodePath(decodePath(parsed.pathname)) + parsed.search + parsed.hash;
+}
 const NUXT_ERROR_SIGNATURE = "__nuxt_error";
-const useError = () => toRef(useNuxtApp().payload, "error");
+const useError = /* @__NO_SIDE_EFFECTS__ */ () => toRef(useNuxtApp().payload, "error");
 const showError = (error) => {
   const nuxtError = createError(error);
   try {
-    const nuxtApp = useNuxtApp();
-    const error2 = useError();
+    const error2 = /* @__PURE__ */ useError();
     if (false) ;
     error2.value ||= nuxtError;
   } catch {
@@ -468,11 +558,24 @@ const showError = (error) => {
 };
 const isNuxtError = (error) => !!error && typeof error === "object" && NUXT_ERROR_SIGNATURE in error;
 const createError = (error) => {
+  if (typeof error !== "string" && error.statusText) {
+    error.message ??= error.statusText;
+  }
   const nuxtError = createError$1(error);
   Object.defineProperty(nuxtError, NUXT_ERROR_SIGNATURE, {
     value: true,
     configurable: false,
     writable: false
+  });
+  Object.defineProperty(nuxtError, "status", {
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
+    get: () => nuxtError.statusCode,
+    configurable: true
+  });
+  Object.defineProperty(nuxtError, "statusText", {
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
+    get: () => nuxtError.statusMessage,
+    configurable: true
   });
   return nuxtError;
 };
@@ -487,14 +590,18 @@ const unhead_k2P3m_ZDyjlr2mMYnoDPwavjsDN8hBlk9cFai0bbopU = /* @__PURE__ */ defin
 function toArray(value) {
   return Array.isArray(value) ? value : [value];
 }
-async function getRouteRules(arg) {
+const matcher = (m, p) => {
+  return [];
+};
+const _routeRulesMatcher = (path) => defu({}, ...matcher().map((r) => r.data).reverse());
+const routeRulesMatcher$1 = _routeRulesMatcher;
+function getRouteRules(arg) {
   const path = typeof arg === "string" ? arg : arg.path;
-  {
-    useNuxtApp().ssrContext._preloadManifest = true;
-    const _routeRulesMatcher = toRouteMatcher(
-      createRouter$1({ routes: (/* @__PURE__ */ useRuntimeConfig()).nitro.routeRules })
-    );
-    return defu({}, ..._routeRulesMatcher.matchAll(path).reverse());
+  try {
+    return routeRulesMatcher$1(path);
+  } catch (e) {
+    console.error("[nuxt] Error matching route rules.", e);
+    return {};
   }
 }
 const __nuxt_page_meta$10 = {
@@ -900,7 +1007,7 @@ const __nuxt_page_meta = {
 };
 let _createClientPage;
 async function createClientPage(loader) {
-  _createClientPage ||= await import('./client-component-KGbGqY4U.mjs').then((r) => r.createClientPage);
+  _createClientPage ||= await import('./client-component-DtRxzRli.mjs').then((r) => r.createClientPage);
   return _createClientPage(loader);
 }
 const _routes = [
@@ -908,84 +1015,84 @@ const _routes = [
     name: "index",
     path: "/",
     meta: __nuxt_page_meta$10 || {},
-    component: () => import('./index-CzalHPYs.mjs')
+    component: () => import('./index-kjLpiErK.mjs')
   },
   {
     name: "user",
     path: "/user",
     meta: __nuxt_page_meta$$ || {},
-    component: () => import('./index-CF6Nb_A9.mjs')
+    component: () => import('./index-CjnGbD_1.mjs')
   },
   {
     name: "admin",
     path: "/admin",
     meta: __nuxt_page_meta$_ || {},
-    component: () => import('./index-DoAk858A.mjs')
+    component: () => import('./index-bVzxDlVb.mjs')
   },
   {
     name: "admin-users",
     path: "/admin/users",
     meta: __nuxt_page_meta$Z || {},
-    component: () => import('./users-Cqt2q4sG.mjs')
+    component: () => import('./users-Cx31_yDV.mjs')
   },
   {
     name: "contact",
     path: "/contact",
-    meta: __nuxt_page_meta$Y || {},
-    component: () => import('./contact-DsiyCV2q.mjs')
+    meta: { ...__nuxt_page_meta$Y || {}, ...{ "groups": ["main"] } },
+    component: () => import('./contact-CYaYeSw7.mjs')
   },
   {
     name: "admin-kyc-data",
     path: "/admin/kyc-data",
     meta: __nuxt_page_meta$X || {},
-    component: () => import('./kyc-data-DBFGnpKb.mjs')
+    component: () => import('./kyc-data-Bvk2sKkm.mjs')
   },
   {
     name: "admin-settings",
     path: "/admin/settings",
     meta: __nuxt_page_meta$W || {},
-    component: () => import('./settings-DGS7C6kk.mjs')
+    component: () => import('./settings-Cnbdia53.mjs')
   },
   {
     name: "admin-currencies",
     path: "/admin/currencies",
     meta: __nuxt_page_meta$V || {},
-    component: () => import('./currencies-soe436x9.mjs')
+    component: () => import('./currencies-DYewFAEH.mjs')
   },
   {
     name: "about-story",
     path: "/about/story",
-    meta: __nuxt_page_meta$U || {},
-    component: () => import('./story-kE3oja_o.mjs')
+    meta: { ...__nuxt_page_meta$U || {}, ...{ "groups": ["main"] } },
+    component: () => import('./story-QtNKUh3h.mjs')
   },
   {
     name: "admin-transactions",
     path: "/admin/transactions",
     meta: __nuxt_page_meta$T || {},
-    component: () => import('./transactions-DEsYbBrJ.mjs')
+    component: () => import('./transactions-BsX84z1M.mjs')
   },
   {
     name: "user-contact",
     path: "/user/contact",
     meta: __nuxt_page_meta$S || {},
-    component: () => import('./index-CqXpPFiu.mjs')
+    component: () => import('./index-Cff0ibpy.mjs')
   },
   {
     name: __nuxt_page_meta$P?.name,
     path: "/user/profile",
-    component: () => import('./index-CL9k9gj5.mjs'),
+    component: () => import('./index-BjY6vnAx.mjs'),
     children: [
       {
         name: "user-profile-index-kyc",
         path: "kyc",
         meta: __nuxt_page_meta$R || {},
-        component: () => import('./kyc-BXp691nh.mjs')
+        component: () => import('./kyc-DvH2egVm.mjs')
       },
       {
         name: "",
         path: "",
         meta: __nuxt_page_meta$Q || {},
-        component: () => import('./index-C4eFH6XT.mjs')
+        component: () => import('./index-b6qYBoFx.mjs')
       }
     ]
   },
@@ -993,49 +1100,49 @@ const _routes = [
     name: __nuxt_page_meta$O?.name,
     path: "/user/accounts",
     meta: __nuxt_page_meta$O || {},
-    component: () => import('./index-d8IjhF3U.mjs'),
+    component: () => import('./index-DH09-7Pg.mjs'),
     children: [
       {
         name: "user-accounts-index",
         path: "",
-        component: () => import('./index-ChkDWCHt.mjs')
+        component: () => import('./index-EfI2ZscP.mjs')
       },
       {
         name: "user-accounts-index-join-requests",
         path: "join-requests",
-        component: () => import('./join-requests-Cwo8kcnD.mjs')
+        component: () => import('./join-requests-7Lrkj63c.mjs')
       }
     ]
   },
   {
     name: "sign-in",
     path: "/sign-in",
-    meta: __nuxt_page_meta$N || {},
-    component: () => import('./index-BcInRXPz.mjs')
+    meta: { ...__nuxt_page_meta$N || {}, ...{ "groups": ["auth"] } },
+    component: () => import('./index-DREDLL0j.mjs')
   },
   {
     name: "sign-up",
     path: "/sign-up",
-    meta: __nuxt_page_meta$M || {},
-    component: () => import('./index-B4XJyvlN.mjs')
+    meta: { ...__nuxt_page_meta$M || {}, ...{ "groups": ["auth"] } },
+    component: () => import('./index-DvNIQWrv.mjs')
   },
   {
     name: "about-careers",
     path: "/about/careers",
-    meta: __nuxt_page_meta$L || {},
-    component: () => import('./careers-Bl-SfnPb.mjs')
+    meta: { ...__nuxt_page_meta$L || {}, ...{ "groups": ["main"] } },
+    component: () => import('./careers-ucysjYK3.mjs')
   },
   {
     name: "about-mission",
     path: "/about/mission",
-    meta: __nuxt_page_meta$K || {},
-    component: () => import('./mission-CJyppWBI.mjs')
+    meta: { ...__nuxt_page_meta$K || {}, ...{ "groups": ["main"] } },
+    component: () => import('./mission-BPKLkyOY.mjs')
   },
   {
     name: "impact-reviews",
     path: "/impact/reviews",
-    meta: __nuxt_page_meta$J || {},
-    component: () => import('./reviews-CeyuOct8.mjs')
+    meta: { ...__nuxt_page_meta$J || {}, ...{ "groups": ["main"] } },
+    component: () => import('./reviews-Bo4alO2C.mjs')
   },
   {
     name: "user-accounts-nav-list",
@@ -1046,345 +1153,348 @@ const _routes = [
     name: "admin-investment-plans",
     path: "/admin/investment-plans",
     meta: __nuxt_page_meta$I || {},
-    component: () => import('./investment-plans-DMW6vaXJ.mjs')
+    component: () => import('./investment-plans-BydcdI3h.mjs')
   },
   {
     name: "admin-business-profiles",
     path: "/admin/business-profiles",
     meta: __nuxt_page_meta$H || {},
-    component: () => import('./business-profiles-DeoBM9cz.mjs')
+    component: () => import('./business-profiles-DNOxMnug.mjs')
   },
   {
     name: "admin-investments",
     path: "/admin/investments",
     meta: __nuxt_page_meta$G || {},
-    component: () => import('./index-OP3I0oF6.mjs')
+    component: () => import('./index-C-ojBGVg.mjs')
   },
   {
     name: "user-change-email",
     path: "/user/change-email",
     meta: __nuxt_page_meta$F || {},
-    component: () => import('./index-BFkkRSav.mjs')
+    component: () => import('./index-BPB2ZkZ_.mjs')
   },
   {
     name: "investments-bonds",
     path: "/investments/bonds",
-    meta: __nuxt_page_meta$E || {},
-    component: () => import('./bonds-PgYz1Q67.mjs')
+    meta: { ...__nuxt_page_meta$E || {}, ...{ "groups": ["main"] } },
+    component: () => import('./bonds-vptsxOjz.mjs')
   },
   {
     name: "investments-forex",
     path: "/investments/forex",
-    meta: __nuxt_page_meta$D || {},
-    component: () => import('./forex-Bhp75IYI.mjs')
+    meta: { ...__nuxt_page_meta$D || {}, ...{ "groups": ["main"] } },
+    component: () => import('./forex-DnXzxtVm.mjs')
   },
   {
     name: "investments-reits",
     path: "/investments/reits",
-    meta: __nuxt_page_meta$C || {},
-    component: () => import('./reits-dPUVsHF8.mjs')
+    meta: { ...__nuxt_page_meta$C || {}, ...{ "groups": ["main"] } },
+    component: () => import('./reits-P1XODQEZ.mjs')
   },
   {
     name: "admin-financial-accounts",
     path: "/admin/financial-accounts",
     meta: __nuxt_page_meta$B || {},
-    component: () => import('./financial-accounts-CUJMO50z.mjs')
+    component: () => import('./financial-accounts-D96mpSmL.mjs')
   },
   {
     name: "user-accounts-open",
     path: "/user/accounts/open",
     meta: __nuxt_page_meta$A || {},
-    component: () => import('./index-DVqJ-F41.mjs')
+    component: () => import('./index-BwVMR47b.mjs')
   },
   {
     name: "user-notifications",
     path: "/user/notifications",
     meta: __nuxt_page_meta$z || {},
-    component: () => import('./index-CmIpd7l0.mjs')
+    component: () => import('./index-CJRmxr1K.mjs')
   },
   {
     name: "about-partnerships",
     path: "/about/partnerships",
-    meta: __nuxt_page_meta$y || {},
-    component: () => import('./partnerships-BitZeVGi.mjs')
+    meta: { ...__nuxt_page_meta$y || {}, ...{ "groups": ["main"] } },
+    component: () => import('./partnerships-B-R7TMY-.mjs')
   },
   {
     name: "investments-stocks",
     path: "/investments/stocks",
-    meta: __nuxt_page_meta$x || {},
-    component: () => import('./stocks-BtCPo5dp.mjs')
+    meta: { ...__nuxt_page_meta$x || {}, ...{ "groups": ["main"] } },
+    component: () => import('./stocks-C7ANk9gp.mjs')
   },
   {
     name: "legal-terms-of-use",
     path: "/legal/terms-of-use",
-    meta: __nuxt_page_meta$w || {},
-    component: () => import('./terms-of-use-Bc4ZYX2H.mjs')
+    meta: { ...__nuxt_page_meta$w || {}, ...{ "groups": ["main"] } },
+    component: () => import('./terms-of-use-CfQfGzLV.mjs')
   },
   {
     name: __nuxt_page_meta$m?.name,
     path: "/user/accounts/:accountId()",
     meta: __nuxt_page_meta$m || {},
-    component: () => import('./_accountId_-DZtskoI2.mjs'),
+    component: () => import('./_accountId_-7-Dc-3vG.mjs'),
     children: [
       {
         name: "user-accounts-accountId",
         path: "",
-        component: () => import('./index-CjgJGiZE.mjs')
+        component: () => import('./index-BWe_RTu4.mjs')
       },
       {
         name: "user-accounts-accountId-deposit",
         path: "deposit",
         meta: __nuxt_page_meta$v || {},
-        component: () => import('./deposit-DTTF8oGG.mjs')
+        component: () => import('./deposit-5avlgCID.mjs')
       },
       {
         name: "user-accounts-accountId-requests",
         path: "requests",
-        component: () => import('./requests-BrZ5_5G1.mjs')
+        component: () => import('./requests-bbkH44tA.mjs')
       },
       {
         name: "user-accounts-accountId-settings",
         path: "settings",
-        component: () => import('./settings-Bw5XQDV4.mjs')
+        component: () => import('./settings-CcnpHvEA.mjs')
       },
       {
         name: "user-accounts-accountId-transfer",
         path: "transfer",
         meta: __nuxt_page_meta$u || {},
-        component: () => import('./transfer-BMEtD6av.mjs')
+        component: () => import('./transfer-E-WNhhUt.mjs')
       },
       {
         name: "user-accounts-accountId-withdraw",
         path: "withdraw",
         meta: __nuxt_page_meta$t || {},
-        component: () => import('./withdraw-oQwr_PsV.mjs')
+        component: () => import('./withdraw-BejAYBEJ.mjs')
       },
       {
         name: "user-accounts-accountId-documents",
         path: "documents",
         meta: __nuxt_page_meta$s || {},
-        component: () => import('./documents-_m93K0uV.mjs')
+        component: () => import('./documents-BqHvHGCX.mjs')
       },
       {
         name: "user-accounts-accountId-account-users",
         path: "account-users",
         meta: __nuxt_page_meta$r || {},
-        component: () => import('./account-users-Cq2YzPsp.mjs')
+        component: () => import('./account-users-CaCzQDTT.mjs')
       },
       {
         name: "user-accounts-accountId-notifications",
         path: "notifications",
         meta: __nuxt_page_meta$q || {},
-        component: () => import('./notifications-CPdtfiAe.mjs')
+        component: () => import('./notifications-BulZhXhi.mjs')
       },
       {
         name: "user-accounts-accountId-business-profile",
         path: "business-profile",
-        component: () => import('./business-profile-OaSkcOqY.mjs')
+        component: () => import('./business-profile-CQrV0wgE.mjs')
       },
       {
         name: "user-accounts-accountId-investments",
         path: "investments",
         meta: __nuxt_page_meta$p || {},
-        component: () => import('./index-YZZ7XpeW.mjs')
+        component: () => import('./index-BawMWmr-.mjs')
       },
       {
         name: "user-accounts-accountId-transactions",
         path: "transactions",
         meta: __nuxt_page_meta$o || {},
-        component: () => import('./index-DiEMu8jD.mjs')
+        component: () => import('./index-DnpboNi8.mjs')
       },
       {
         name: "user-accounts-accountId-investments-investmentId",
         path: "investments/:investmentId()",
         meta: __nuxt_page_meta$n || {},
-        component: () => import('./_investmentId_-VDJCLVUI.mjs')
+        component: () => import('./_investmentId_-S0n04qfp.mjs')
       },
       {
         name: "user-accounts-accountId-transactions-transactionId",
         path: "transactions/:transactionId()",
-        component: () => createClientPage(() => import('./_transactionId_.client-BykTT7S2.mjs'))
+        component: () => createClientPage(() => import('./_transactionId_.client-BvxJsFrv.mjs'))
       }
     ]
   },
   {
     name: "impact-track-record",
     path: "/impact/track-record",
-    meta: __nuxt_page_meta$l || {},
-    component: () => import('./track-record-Cxk_WOx4.mjs')
+    meta: { ...__nuxt_page_meta$l || {}, ...{ "groups": ["main"] } },
+    component: () => import('./track-record-DJQp8Y_r.mjs')
   },
   {
     name: "user-change-password",
     path: "/user/change-password",
     meta: __nuxt_page_meta$k || {},
-    component: () => import('./index-CFCYHsXG.mjs')
+    component: () => import('./index-Ck-pEZy7.mjs')
   },
   {
     name: "reset-password",
     path: "/reset-password",
-    meta: __nuxt_page_meta$j || {},
-    component: () => import('./index-BpITTGFM.mjs')
+    meta: { ...__nuxt_page_meta$j || {}, ...{ "groups": ["auth"] } },
+    component: () => import('./index-DYT9Hrsm.mjs')
   },
   {
     name: "sign-in-sign-in-form",
     path: "/sign-in/sign-in-form",
-    component: () => import('./sign-in-form-DlCAHAt2.mjs')
+    meta: { "groups": ["auth"] },
+    component: () => import('./sign-in-form-DwQA534I.mjs')
   },
   {
     name: "sign-up-sign-up-form",
     path: "/sign-up/sign-up-form",
-    component: () => import('./sign-up-form-geT-cfET.mjs')
+    meta: { "groups": ["auth"] },
+    component: () => import('./sign-up-form-D71ozQJx.mjs')
   },
   {
     name: "legal-privacy-policy",
     path: "/legal/privacy-policy",
-    meta: __nuxt_page_meta$i || {},
-    component: () => import('./privacy-policy-ifOriwEI.mjs')
+    meta: { ...__nuxt_page_meta$i || {}, ...{ "groups": ["main"] } },
+    component: () => import('./privacy-policy-8PaDibA_.mjs')
   },
   {
     name: "resources-strategies",
     path: "/resources/strategies",
-    meta: __nuxt_page_meta$h || {},
-    component: () => import('./strategies-DNlsvkIY.mjs')
+    meta: { ...__nuxt_page_meta$h || {}, ...{ "groups": ["main"] } },
+    component: () => import('./strategies-Cdo_NzRW.mjs')
   },
   {
     name: "user-investment-plans",
     path: "/user/investment-plans",
     meta: __nuxt_page_meta$g || {},
-    component: () => import('./index-vfZqv1wt.mjs')
+    component: () => import('./index-DnVLiZqZ.mjs')
   },
   {
     name: "forgot-password",
     path: "/forgot-password",
-    meta: __nuxt_page_meta$f || {},
-    component: () => import('./index-BylNEuYn.mjs')
+    meta: { ...__nuxt_page_meta$f || {}, ...{ "groups": ["auth"] } },
+    component: () => import('./index-JpPZEwJt.mjs')
   },
   {
     name: "impact-sustainability",
     path: "/impact/sustainability",
-    meta: __nuxt_page_meta$e || {},
-    component: () => import('./sustainability-D_X2uTvs.mjs')
+    meta: { ...__nuxt_page_meta$e || {}, ...{ "groups": ["main"] } },
+    component: () => import('./sustainability-D-Qf-MhL.mjs')
   },
   {
     name: "token-validation",
     path: "/token-validation",
-    meta: __nuxt_page_meta$d || {},
-    component: () => import('./index-C22-9LEC.mjs')
+    meta: { ...__nuxt_page_meta$d || {}, ...{ "groups": ["auth"] } },
+    component: () => import('./index-JVoOwGTL.mjs')
   },
   {
     name: "resources-walkthroughs",
     path: "/resources/walkthroughs",
-    meta: __nuxt_page_meta$c || {},
-    component: () => import('./walkthroughs-DzOIK_ET.mjs')
+    meta: { ...__nuxt_page_meta$c || {}, ...{ "groups": ["main"] } },
+    component: () => import('./walkthroughs-CfvpKvML.mjs')
   },
   {
     name: "investments-commodities",
     path: "/investments/commodities",
-    meta: __nuxt_page_meta$b || {},
-    component: () => import('./commodities-BjkY9Psy.mjs')
+    meta: { ...__nuxt_page_meta$b || {}, ...{ "groups": ["main"] } },
+    component: () => import('./commodities-BxxErFU2.mjs')
   },
   {
     name: "investments-derivatives",
     path: "/investments/derivatives",
-    meta: __nuxt_page_meta$a || {},
-    component: () => import('./derivatives-Dnc_qA6-.mjs')
+    meta: { ...__nuxt_page_meta$a || {}, ...{ "groups": ["main"] } },
+    component: () => import('./derivatives-WssDsrPC.mjs')
   },
   {
     name: "user-change-email-verification",
     path: "/user/change-email/verification",
     meta: __nuxt_page_meta$9 || {},
-    component: () => import('./verification-GKeczifr.mjs')
+    component: () => import('./verification-CpM-rLjJ.mjs')
   },
   {
     name: "email-verification",
     path: "/email-verification",
-    meta: __nuxt_page_meta$8 || {},
-    component: () => import('./index-D3xSc810.mjs')
+    meta: { ...__nuxt_page_meta$8 || {}, ...{ "groups": ["auth"] } },
+    component: () => import('./index-Beshs5-a.mjs')
   },
   {
     name: "resources-market-insights",
     path: "/resources/market-insights",
-    meta: __nuxt_page_meta$7 || {},
-    component: () => import('./market-insights-Ctc4l8Ek.mjs')
+    meta: { ...__nuxt_page_meta$7 || {}, ...{ "groups": ["main"] } },
+    component: () => import('./market-insights-DHCdIN2o.mjs')
   },
   {
     name: "resources-risk-disclosure",
     path: "/resources/risk-disclosure",
-    meta: __nuxt_page_meta$6 || {},
-    component: () => import('./risk-disclosure-CIEO8H8b.mjs')
+    meta: { ...__nuxt_page_meta$6 || {}, ...{ "groups": ["main"] } },
+    component: () => import('./risk-disclosure-BYeQzfGU.mjs')
   },
   {
     name: __nuxt_page_meta$5?.name,
     path: "/admin/investments/:investmentId()",
     meta: __nuxt_page_meta$5 || {},
-    component: () => import('./_investmentId_-pUXJcCAU.mjs'),
+    component: () => import('./_investmentId_-CmOFZmGH.mjs'),
     children: [
       {
         name: "admin-investments-investmentId",
         path: "",
-        component: () => import('./index-rQmOkd_H.mjs')
+        component: () => import('./index-C0hGXg4H.mjs')
       },
       {
         name: "admin-investments-investmentId-profits",
         path: "profits",
-        component: () => import('./profits-BJ_sTIpk.mjs')
+        component: () => import('./profits-CXXfw6Jp.mjs')
       },
       {
         name: "admin-investments-investmentId-settings",
         path: "settings",
-        component: () => import('./settings-CdcdBHZ-.mjs')
+        component: () => import('./settings-DrYw1Q0O.mjs')
       }
     ]
   },
   {
     name: "impact-social-responsibility",
     path: "/impact/social-responsibility",
-    meta: __nuxt_page_meta$4 || {},
-    component: () => import('./social-responsibility-DoOG13AC.mjs')
+    meta: { ...__nuxt_page_meta$4 || {}, ...{ "groups": ["main"] } },
+    component: () => import('./social-responsibility-DZCYpJOm.mjs')
   },
   {
     name: "investments-cryptocurrencies",
     path: "/investments/cryptocurrencies",
-    meta: __nuxt_page_meta$3 || {},
-    component: () => import('./cryptocurrencies-C25qNOVq.mjs')
+    meta: { ...__nuxt_page_meta$3 || {}, ...{ "groups": ["main"] } },
+    component: () => import('./cryptocurrencies-C1Wzdj06.mjs')
   },
   {
     name: "resources-investor-education",
     path: "/resources/investor-education",
-    meta: __nuxt_page_meta$2 || {},
-    component: () => import('./investor-education-CRfnwOLa.mjs')
+    meta: { ...__nuxt_page_meta$2 || {}, ...{ "groups": ["main"] } },
+    component: () => import('./investor-education-om8CnLn9.mjs')
   },
   {
     name: "user-profile-components-name-changer",
     path: "/user/profile/components/name-changer",
-    component: () => import('./name-changer-DYScsXv3.mjs')
+    component: () => import('./name-changer-DqzvLjTN.mjs')
   },
   {
     name: "user-profile-components-image-changer",
     path: "/user/profile/components/image-changer",
-    component: () => import('./image-changer-B5CO4O6j.mjs')
+    component: () => import('./image-changer-DHlaWa5D.mjs')
   },
   {
     name: "user-accounts-open-accountType",
     path: "/user/accounts/open/:accountType()",
     meta: __nuxt_page_meta$1 || {},
-    component: () => import('./index-jzE8LaZb.mjs')
+    component: () => import('./index-Bjh0zU1B.mjs')
   },
   {
     name: "user-profile-components-profile-editor",
     path: "/user/profile/components/profile-editor",
-    component: () => import('./profile-editor-DyAbG0CJ.mjs')
+    component: () => import('./profile-editor-BUzlpwMF.mjs')
   },
   {
     name: "reset-password-reset-password-form",
     path: "/reset-password/reset-password-form",
-    component: () => import('./reset-password-form-DBxEOhH4.mjs')
+    meta: { "groups": ["auth"] },
+    component: () => import('./reset-password-form-DFOUoysH.mjs')
   },
   {
     name: "user-accounts-open-accountType-accountOwnership",
     path: "/user/accounts/open/:accountType()/:accountOwnership()",
     meta: __nuxt_page_meta || {},
-    component: () => import('./index-CnVg2lXQ.mjs')
+    component: () => import('./index-DTI3gqPV.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -1416,7 +1526,7 @@ const routerOptions0 = {
   scrollBehavior(to, from, savedPosition) {
     const nuxtApp = useNuxtApp();
     const hashScrollBehaviour = useRouter().options?.scrollBehaviorType ?? "auto";
-    if (to.path === from.path) {
+    if (to.path.replace(/\/$/, "") === from.path.replace(/\/$/, "")) {
       if (from.hash && !to.hash) {
         return { left: 0, top: 0 };
       }
@@ -1487,8 +1597,10 @@ const validate = /* @__PURE__ */ defineNuxtRouteMiddleware(async (to, from) => {
   }
   const error = createError({
     fatal: false,
-    statusCode: result && result.statusCode || 404,
-    statusMessage: result && result.statusMessage || `Page Not Found: ${to.fullPath}`,
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
+    status: result && (result.status || result.statusCode) || 404,
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
+    statusText: result && (result.statusText || result.statusMessage) || `Page Not Found: ${to.fullPath}`,
     data: {
       path: to.fullPath
     }
@@ -1542,7 +1654,7 @@ const auth_45global = /* @__PURE__ */ defineNuxtRouteMiddleware(async (to) => {
     return;
   }
 });
-const manifest_45route_45rule = /* @__PURE__ */ defineNuxtRouteMiddleware(async (to) => {
+const manifest_45route_45rule = /* @__PURE__ */ defineNuxtRouteMiddleware((to) => {
   {
     return;
   }
@@ -1596,13 +1708,12 @@ const plugin = /* @__PURE__ */ defineNuxtPlugin({
     const syncCurrentRoute = () => {
       _route.value = router.currentRoute.value;
     };
-    nuxtApp.hook("page:finish", syncCurrentRoute);
     router.afterEach((to, from) => {
-      if (to.matched[to.matched.length - 1]?.components?.default === from.matched[from.matched.length - 1]?.components?.default) {
+      if (to.matched.at(-1)?.components?.default === from.matched.at(-1)?.components?.default) {
         syncCurrentRoute();
       }
     });
-    const route = {};
+    const route = { sync: syncCurrentRoute };
     for (const key in _route.value) {
       Object.defineProperty(route, key, {
         get: () => _route.value[key],
@@ -1614,7 +1725,7 @@ const plugin = /* @__PURE__ */ defineNuxtPlugin({
       global: [],
       named: {}
     };
-    useError();
+    const error = /* @__PURE__ */ useError();
     if (!nuxtApp.ssrContext?.islandContext) {
       router.afterEach(async (to, _from, failure) => {
         delete nuxtApp._processingMiddleware;
@@ -1665,15 +1776,13 @@ const plugin = /* @__PURE__ */ defineNuxtPlugin({
             middlewareEntries.add(entry2);
           }
         }
-        {
-          const routeRules = await nuxtApp.runWithContext(() => getRouteRules({ path: to.path }));
-          if (routeRules.appMiddleware) {
-            for (const key in routeRules.appMiddleware) {
-              if (routeRules.appMiddleware[key]) {
-                middlewareEntries.add(key);
-              } else {
-                middlewareEntries.delete(key);
-              }
+        const routeRules = getRouteRules({ path: to.path });
+        if (routeRules.appMiddleware) {
+          for (const key in routeRules.appMiddleware) {
+            if (routeRules.appMiddleware[key]) {
+              middlewareEntries.add(key);
+            } else {
+              middlewareEntries.delete(key);
             }
           }
         }
@@ -1688,8 +1797,8 @@ const plugin = /* @__PURE__ */ defineNuxtPlugin({
             if (true) {
               if (result === false || result instanceof Error) {
                 const error2 = result || createError({
-                  statusCode: 404,
-                  statusMessage: `Page Not Found: ${initialURL}`
+                  status: 404,
+                  statusText: `Page Not Found: ${initialURL}`
                 });
                 await nuxtApp.runWithContext(() => showError(error2));
                 return false;
@@ -1722,11 +1831,11 @@ const plugin = /* @__PURE__ */ defineNuxtPlugin({
       await nuxtApp.callHook("page:loading:end");
     });
     router.afterEach((to) => {
-      if (to.matched.length === 0) {
+      if (to.matched.length === 0 && !error.value) {
         return nuxtApp.runWithContext(() => showError(createError({
-          statusCode: 404,
+          status: 404,
           fatal: false,
-          statusMessage: `Page not found: ${to.fullPath}`,
+          statusText: `Page not found: ${to.fullPath}`,
           data: {
             path: to.fullPath
           }
@@ -1763,12 +1872,12 @@ function injectHead(nuxtApp) {
   });
 }
 function useHead(input, options = {}) {
-  const head = injectHead(options.nuxt);
+  const head = options.head || injectHead(options.nuxt);
   return useHead$1(input, { head, ...options });
 }
 function definePayloadReducer(name, reduce) {
   {
-    useNuxtApp().ssrContext._payloadReducers[name] = reduce;
+    useNuxtApp().ssrContext["~payloadReducers"][name] = reduce;
   }
 }
 const reducers = [
@@ -1904,13 +2013,17 @@ const inlineConfig = {
       "circle-flags",
       "circum",
       "clarity",
+      "codex",
       "codicon",
       "covid",
       "cryptocurrency",
       "cryptocurrency-color",
+      "cuida",
       "dashicons",
       "devicon",
       "devicon-plain",
+      "dinkie-icons",
+      "duo-icons",
       "ei",
       "el",
       "emojione",
@@ -1930,7 +2043,11 @@ const inlineConfig = {
       "fa6-brands",
       "fa6-regular",
       "fa6-solid",
+      "fa7-brands",
+      "fa7-regular",
+      "fa7-solid",
       "fad",
+      "famicons",
       "fe",
       "feather",
       "file-icons",
@@ -1940,6 +2057,7 @@ const inlineConfig = {
       "flat-ui",
       "flowbite",
       "fluent",
+      "fluent-color",
       "fluent-emoji",
       "fluent-emoji-flat",
       "fluent-emoji-high-contrast",
@@ -1951,6 +2069,7 @@ const inlineConfig = {
       "fxemoji",
       "gala",
       "game-icons",
+      "garden",
       "geo",
       "gg",
       "gis",
@@ -1976,12 +2095,15 @@ const inlineConfig = {
       "il",
       "ion",
       "iwwa",
+      "ix",
       "jam",
       "la",
       "lets-icons",
       "line-md",
+      "lineicons",
       "logos",
       "ls",
+      "lsicon",
       "lucide",
       "lucide-lab",
       "mage",
@@ -1989,6 +2111,7 @@ const inlineConfig = {
       "maki",
       "map",
       "marketeq",
+      "material-icon-theme",
       "material-symbols",
       "material-symbols-light",
       "mdi",
@@ -1996,6 +2119,7 @@ const inlineConfig = {
       "medical-icon",
       "memory",
       "meteocons",
+      "meteor-icons",
       "mi",
       "mingcute",
       "mono-icons",
@@ -2004,6 +2128,7 @@ const inlineConfig = {
       "nonicons",
       "noto",
       "noto-v1",
+      "nrk",
       "octicon",
       "oi",
       "ooui",
@@ -2015,27 +2140,54 @@ const inlineConfig = {
       "pepicons-pop",
       "pepicons-print",
       "ph",
+      "picon",
+      "pixel",
       "pixelarticons",
       "prime",
+      "proicons",
       "ps",
+      "qlementine-icons",
       "quill",
       "radix-icons",
       "raphael",
       "ri",
       "rivet-icons",
+      "roentgen",
+      "si",
       "si-glyph",
+      "sidekickicons",
       "simple-icons",
       "simple-line-icons",
       "skill-icons",
       "solar",
+      "stash",
       "streamline",
+      "streamline-block",
+      "streamline-color",
+      "streamline-cyber",
+      "streamline-cyber-color",
       "streamline-emojis",
+      "streamline-flex",
+      "streamline-flex-color",
+      "streamline-freehand",
+      "streamline-freehand-color",
+      "streamline-kameleon-color",
+      "streamline-logos",
+      "streamline-pixel",
+      "streamline-plump",
+      "streamline-plump-color",
+      "streamline-sharp",
+      "streamline-sharp-color",
+      "streamline-stickies-color",
+      "streamline-ultimate",
+      "streamline-ultimate-color",
       "subway",
       "svg-spinners",
       "system-uicons",
       "tabler",
       "tdesign",
       "teenyicons",
+      "temaki",
       "token",
       "token-branded",
       "topcoat",
@@ -2445,13 +2597,13 @@ const en = /* @__PURE__ */ defineLocale({
     }
   }
 });
-const localeContextInjectionKey = Symbol.for("nuxt-ui.locale-context");
+const localeContextInjectionKey = /* @__PURE__ */ Symbol.for("nuxt-ui.locale-context");
 const _useLocale = (localeOverrides) => {
   const locale = localeOverrides || toRef(inject(localeContextInjectionKey, en));
   return buildLocaleContext(computed(() => locale.value || en));
 };
 const useLocale = _useLocale;
-const portalTargetInjectionKey = Symbol("nuxt-ui.portal-target");
+const portalTargetInjectionKey = /* @__PURE__ */ Symbol("nuxt-ui.portal-target");
 function usePortal(portal) {
   const portalTarget = inject(portalTargetInjectionKey, void 0);
   const to = computed(() => {
@@ -2647,7 +2799,7 @@ const NuxtIconCss = /* @__PURE__ */ defineComponent({
     return () => h("span", { class: ["iconify", cssClass.value] });
   }
 });
-const clientOnlySymbol = Symbol.for("nuxt:client-only");
+const clientOnlySymbol = /* @__PURE__ */ Symbol.for("nuxt:client-only");
 const __nuxt_component_1$1 = defineComponent({
   name: "ClientOnly",
   inheritAttrs: false,
@@ -2701,14 +2853,17 @@ function useAsyncData(...args) {
   options.dedupe ??= "cancel";
   options._functionName || "useAsyncData";
   nuxtApp._asyncData[key.value];
-  const initialFetchOptions = { cause: "initial", dedupe: options.dedupe };
-  if (!nuxtApp._asyncData[key.value]?._init) {
-    initialFetchOptions.cachedData = options.getCachedData(key.value, nuxtApp, { cause: "initial" });
-    nuxtApp._asyncData[key.value] = createAsyncData(nuxtApp, key.value, _handler, options, initialFetchOptions.cachedData);
+  function createInitialFetch() {
+    const initialFetchOptions = { cause: "initial", dedupe: options.dedupe };
+    if (!nuxtApp._asyncData[key.value]?._init) {
+      initialFetchOptions.cachedData = options.getCachedData(key.value, nuxtApp, { cause: "initial" });
+      nuxtApp._asyncData[key.value] = createAsyncData(nuxtApp, key.value, _handler, options, initialFetchOptions.cachedData);
+    }
+    return () => nuxtApp._asyncData[key.value].execute(initialFetchOptions);
   }
+  const initialFetch = createInitialFetch();
   const asyncData = nuxtApp._asyncData[key.value];
   asyncData._deps++;
-  const initialFetch = () => nuxtApp._asyncData[key.value].execute(initialFetchOptions);
   const fetchOnServer = options.server !== false && nuxtApp.payload.serverRendered;
   if (fetchOnServer && options.immediate) {
     const promise = initialFetch();
@@ -2725,9 +2880,25 @@ function useAsyncData(...args) {
     pending: writableComputedRef(() => nuxtApp._asyncData[key.value]?.pending),
     status: writableComputedRef(() => nuxtApp._asyncData[key.value]?.status),
     error: writableComputedRef(() => nuxtApp._asyncData[key.value]?.error),
-    refresh: (...args2) => nuxtApp._asyncData[key.value].execute(...args2),
-    execute: (...args2) => nuxtApp._asyncData[key.value].execute(...args2),
-    clear: () => clearNuxtDataByKey(nuxtApp, key.value)
+    refresh: (...args2) => {
+      if (!nuxtApp._asyncData[key.value]?._init) {
+        const initialFetch2 = createInitialFetch();
+        return initialFetch2();
+      }
+      return nuxtApp._asyncData[key.value].execute(...args2);
+    },
+    execute: (...args2) => asyncReturn.refresh(...args2),
+    clear: () => {
+      const entry2 = nuxtApp._asyncData[key.value];
+      if (entry2?._abortController) {
+        try {
+          entry2._abortController.abort(new DOMException("AsyncData aborted by user.", "AbortError"));
+        } finally {
+          entry2._abortController = void 0;
+        }
+      }
+      clearNuxtDataByKey(nuxtApp, key.value);
+    }
   };
   const asyncDataPromise = Promise.resolve(nuxtApp._asyncDataPromises[key.value]).then(() => asyncReturn);
   Object.assign(asyncDataPromise, asyncReturn);
@@ -2771,9 +2942,6 @@ function clearNuxtDataByKey(nuxtApp, key) {
     nuxtApp._asyncData[key].status.value = "idle";
   }
   if (key in nuxtApp._asyncDataPromises) {
-    if (nuxtApp._asyncDataPromises[key]) {
-      nuxtApp._asyncDataPromises[key].cancelled = true;
-    }
     nuxtApp._asyncDataPromises[key] = void 0;
   }
 }
@@ -2807,7 +2975,6 @@ function createAsyncData(nuxtApp, key, _handler, options, initialCachedData) {
         if ((opts.dedupe ?? options.dedupe) === "defer") {
           return nuxtApp._asyncDataPromises[key];
         }
-        nuxtApp._asyncDataPromises[key].cancelled = true;
       }
       {
         const cachedData = "cachedData" in opts ? opts.cachedData : options.getCachedData(key, nuxtApp, { cause: opts.cause ?? "refresh:manual" });
@@ -2818,19 +2985,32 @@ function createAsyncData(nuxtApp, key, _handler, options, initialCachedData) {
           return Promise.resolve(cachedData);
         }
       }
+      if (asyncData._abortController) {
+        asyncData._abortController.abort(new DOMException("AsyncData request cancelled by deduplication", "AbortError"));
+      }
+      asyncData._abortController = new AbortController();
       asyncData.status.value = "pending";
+      const cleanupController = new AbortController();
       const promise = new Promise(
         (resolve, reject) => {
           try {
-            resolve(handler(nuxtApp));
+            const timeout = opts.timeout ?? options.timeout;
+            const mergedSignal = mergeAbortSignals([asyncData._abortController?.signal, opts?.signal], cleanupController.signal, timeout);
+            if (mergedSignal.aborted) {
+              const reason = mergedSignal.reason;
+              reject(reason instanceof Error ? reason : new DOMException(String(reason ?? "Aborted"), "AbortError"));
+              return;
+            }
+            mergedSignal.addEventListener("abort", () => {
+              const reason = mergedSignal.reason;
+              reject(reason instanceof Error ? reason : new DOMException(String(reason ?? "Aborted"), "AbortError"));
+            }, { once: true, signal: cleanupController.signal });
+            return Promise.resolve(handler(nuxtApp, { signal: mergedSignal })).then(resolve, reject);
           } catch (err) {
             reject(err);
           }
         }
       ).then(async (_result) => {
-        if (promise.cancelled) {
-          return nuxtApp._asyncDataPromises[key];
-        }
         let result = _result;
         if (options.transform) {
           result = await options.transform(_result);
@@ -2843,16 +3023,21 @@ function createAsyncData(nuxtApp, key, _handler, options, initialCachedData) {
         asyncData.error.value = void 0;
         asyncData.status.value = "success";
       }).catch((error) => {
-        if (promise.cancelled) {
+        if (nuxtApp._asyncDataPromises[key] && nuxtApp._asyncDataPromises[key] !== promise) {
+          return nuxtApp._asyncDataPromises[key];
+        }
+        if (asyncData._abortController?.signal.aborted) {
+          return nuxtApp._asyncDataPromises[key];
+        }
+        if (typeof DOMException !== "undefined" && error instanceof DOMException && error.name === "AbortError") {
+          asyncData.status.value = "idle";
           return nuxtApp._asyncDataPromises[key];
         }
         asyncData.error.value = createError(error);
         asyncData.data.value = unref(options.default());
         asyncData.status.value = "error";
       }).finally(() => {
-        if (promise.cancelled) {
-          return;
-        }
+        cleanupController.abort();
         delete nuxtApp._asyncDataPromises[key];
       });
       nuxtApp._asyncDataPromises[key] = promise;
@@ -2889,6 +3074,43 @@ const getDefaultCachedData = (key, nuxtApp, ctx) => {
     return nuxtApp.static.data[key];
   }
 };
+function mergeAbortSignals(signals, cleanupSignal, timeout) {
+  const list = signals.filter((s) => !!s);
+  if (typeof timeout === "number" && timeout >= 0) {
+    const timeoutSignal = AbortSignal.timeout?.(timeout);
+    if (timeoutSignal) {
+      list.push(timeoutSignal);
+    }
+  }
+  if (AbortSignal.any) {
+    return AbortSignal.any(list);
+  }
+  const controller = new AbortController();
+  for (const sig of list) {
+    if (sig.aborted) {
+      const reason = sig.reason ?? new DOMException("Aborted", "AbortError");
+      try {
+        controller.abort(reason);
+      } catch {
+        controller.abort();
+      }
+      return controller.signal;
+    }
+  }
+  const onAbort = () => {
+    const abortedSignal = list.find((s) => s.aborted);
+    const reason = abortedSignal?.reason ?? new DOMException("Aborted", "AbortError");
+    try {
+      controller.abort(reason);
+    } catch {
+      controller.abort();
+    }
+  };
+  for (const sig of list) {
+    sig.addEventListener?.("abort", onAbort, { once: true, signal: cleanupSignal });
+  }
+  return controller.signal;
+}
 const NuxtIconSvg = /* @__PURE__ */ defineComponent({
   name: "NuxtIconSvg",
   props: {
@@ -3006,7 +3228,7 @@ _sfc_main$f.setup = (props, ctx) => {
   return _sfc_setup$f ? _sfc_setup$f(props, ctx) : void 0;
 };
 const ImageComponent = "img";
-const avatarGroupInjectionKey = Symbol("nuxt-ui.avatar-group");
+const avatarGroupInjectionKey = /* @__PURE__ */ Symbol("nuxt-ui.avatar-group");
 function useAvatarGroup(props) {
   const avatarGroup = inject(avatarGroupInjectionKey, void 0);
   const size = computed(() => props.size ?? avatarGroup?.value.size);
@@ -3370,7 +3592,7 @@ function useComponentIcons(componentProps) {
     trailingIconName
   };
 }
-const fieldGroupInjectionKey = Symbol("nuxt-ui.field-group");
+const fieldGroupInjectionKey = /* @__PURE__ */ Symbol("nuxt-ui.field-group");
 function useFieldGroup(props) {
   const fieldGroup = inject(fieldGroupInjectionKey, void 0);
   return {
@@ -3378,14 +3600,14 @@ function useFieldGroup(props) {
     size: computed(() => props?.size ?? fieldGroup?.value.size)
   };
 }
-const formOptionsInjectionKey = Symbol("nuxt-ui.form-options");
-const formBusInjectionKey = Symbol("nuxt-ui.form-events");
-const formStateInjectionKey = Symbol("nuxt-ui.form-state");
-const formFieldInjectionKey = Symbol("nuxt-ui.form-field");
-const inputIdInjectionKey = Symbol("nuxt-ui.input-id");
-const formInputsInjectionKey = Symbol("nuxt-ui.form-inputs");
-const formLoadingInjectionKey = Symbol("nuxt-ui.form-loading");
-const formErrorsInjectionKey = Symbol("nuxt-ui.form-errors");
+const formOptionsInjectionKey = /* @__PURE__ */ Symbol("nuxt-ui.form-options");
+const formBusInjectionKey = /* @__PURE__ */ Symbol("nuxt-ui.form-events");
+const formStateInjectionKey = /* @__PURE__ */ Symbol("nuxt-ui.form-state");
+const formFieldInjectionKey = /* @__PURE__ */ Symbol("nuxt-ui.form-field");
+const inputIdInjectionKey = /* @__PURE__ */ Symbol("nuxt-ui.input-id");
+const formInputsInjectionKey = /* @__PURE__ */ Symbol("nuxt-ui.form-inputs");
+const formLoadingInjectionKey = /* @__PURE__ */ Symbol("nuxt-ui.form-loading");
+const formErrorsInjectionKey = /* @__PURE__ */ Symbol("nuxt-ui.form-errors");
 function useFormField(props, opts) {
   const formOptions = inject(formOptionsInjectionKey, void 0);
   const formBus = inject(formBusInjectionKey, void 0);
@@ -3746,17 +3968,20 @@ function defineNuxtLink(options) {
           // converts `""` to `null` to prevent the attribute from being added as empty (`href=""`)
           rel,
           target,
-          onClick: (event) => {
+          onClick: async (event) => {
             if (isExternal.value || hasTarget.value) {
               return;
             }
             event.preventDefault();
-            return props.replace ? router.replace(href.value) : router.push(href.value);
+            try {
+              const encodedHref = encodeRoutePath(href.value);
+              return await (props.replace ? router.replace(encodedHref) : router.push(encodedHref));
+            } finally {
+            }
           }
         }, slots.default?.());
       };
     }
-    // }) as unknown as DefineComponent<NuxtLinkProps, object, object, ComputedOptions, MethodOptions, object, object, EmitsOptions, string, object, NuxtLinkProps, object, SlotsType<NuxtLinkSlots>>
   });
 }
 const __nuxt_component_0 = /* @__PURE__ */ defineNuxtLink(nuxtLinkDefaults);
@@ -5806,7 +6031,7 @@ function _useOverlay() {
   const create = (component, _options) => {
     const { props, defaultOpen, destroyOnClose } = _options || {};
     const options = reactive({
-      id: Symbol(""),
+      id: /* @__PURE__ */ Symbol(""),
       isOpen: !!defaultOpen,
       component: markRaw(component),
       isMounted: !!defaultOpen,
@@ -6815,10 +7040,11 @@ _sfc_main$3.setup = (props, ctx) => {
 };
 const __nuxt_component_2 = Object.assign(_sfc_main$3, { __name: "NuxtConfirmDialog" });
 const layouts = {
-  auth: defineAsyncComponent(() => import('./auth-B5GXobQQ.mjs').then((m) => m.default || m)),
-  main: defineAsyncComponent(() => import('./main-BiBNdUb6.mjs').then((m) => m.default || m)),
-  user: defineAsyncComponent(() => import('./user-Cdm7APt3.mjs').then((m) => m.default || m))
+  auth: defineAsyncComponent(() => import('./auth-7od8UXpO.mjs').then((m) => m.default || m)),
+  main: defineAsyncComponent(() => import('./main-EEmuOxzo.mjs').then((m) => m.default || m)),
+  user: defineAsyncComponent(() => import('./user-DqJTVNUk.mjs').then((m) => m.default || m))
 };
+const routeRulesMatcher = _routeRulesMatcher;
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",
   inheritAttrs: false,
@@ -6850,7 +7076,7 @@ const __nuxt_component_3 = defineComponent({
     const shouldUseEagerRoute = !injectedRoute || injectedRoute === useRoute();
     const route = shouldUseEagerRoute ? useRoute$1() : injectedRoute;
     const layout = computed(() => {
-      let layout2 = unref(props.name) ?? route?.meta.layout ?? "default";
+      let layout2 = unref(props.name) ?? route?.meta.layout ?? routeRulesMatcher(route?.path).appLayout ?? "default";
       if (layout2 && !(layout2 in layouts)) {
         if (props.fallback) {
           layout2 = unref(props.fallback);
@@ -6874,7 +7100,7 @@ const __nuxt_component_3 = defineComponent({
           default: () => h(
             LayoutProvider,
             {
-              layoutProps: mergeProps(context.attrs, { ref: layoutRef }),
+              layoutProps: mergeProps(context.attrs, route.meta.layoutProps ?? {}, { ref: layoutRef }),
               key: layout.value || void 0,
               name: layout.value,
               shouldProvide: !props.name,
@@ -6915,7 +7141,8 @@ const LayoutProvider = defineComponent({
     const name = props.name;
     if (props.shouldProvide) {
       provide(LayoutMetaSymbol, {
-        isCurrent: (route) => name === (route.meta.layout ?? "default")
+        // When name=false, always return true so NuxtPage doesn't skip rendering
+        isCurrent: (route) => name === false || name === (route.meta.layout ?? routeRulesMatcher(route.path).appLayout ?? "default")
       });
     }
     const injectedRoute = inject(PageRouteSymbol);
@@ -7109,23 +7336,16 @@ const _sfc_main$1 = {
   setup(__props) {
     const props = __props;
     const _error = props.error;
-    _error.stack ? _error.stack.split("\n").splice(1).map((line) => {
-      const text = line.replace("webpack:/", "").replace(".vue", ".js").trim();
-      return {
-        text,
-        internal: line.includes("node_modules") && !line.includes(".cache") || line.includes("internal") || line.includes("new Promise")
-      };
-    }).map((i) => `<span class="stack${i.internal ? " internal" : ""}">${i.text}</span>`).join("\n") : "";
-    const statusCode = Number(_error.statusCode || 500);
-    const is404 = statusCode === 404;
-    const statusMessage = _error.statusMessage ?? (is404 ? "Page Not Found" : "Internal Server Error");
+    const status = Number(_error.statusCode || 500);
+    const is404 = status === 404;
+    const statusText = _error.statusMessage ?? (is404 ? "Page Not Found" : "Internal Server Error");
     const description = _error.message || _error.toString();
     const stack = void 0;
-    const _Error404 = defineAsyncComponent(() => import('./error-404-CiQiUWio.mjs'));
-    const _Error = defineAsyncComponent(() => import('./error-500-CEbooTQ8.mjs'));
+    const _Error404 = defineAsyncComponent(() => import('./error-404-Cw6U0Fwd.mjs'));
+    const _Error = defineAsyncComponent(() => import('./error-500-DDFcB8p-.mjs'));
     const ErrorTemplate = is404 ? _Error404 : _Error;
     return (_ctx, _push, _parent, _attrs) => {
-      _push(ssrRenderComponent(unref(ErrorTemplate), mergeProps({ statusCode: unref(statusCode), statusMessage: unref(statusMessage), description: unref(description), stack: unref(stack) }, _attrs), null, _parent));
+      _push(ssrRenderComponent(unref(ErrorTemplate), mergeProps({ status: unref(status), statusText: unref(statusText), statusCode: unref(status), statusMessage: unref(statusText), description: unref(description), stack: unref(stack) }, _attrs), null, _parent));
     };
   }
 };
@@ -7146,7 +7366,7 @@ const _sfc_main = {
     const SingleRenderer = false;
     provide(PageRouteSymbol, useRoute());
     nuxtApp.hooks.callHookWith((hooks) => hooks.map((hook) => hook()), "vue:setup");
-    const error = useError();
+    const error = /* @__PURE__ */ useError();
     const abortRender = error.value && !nuxtApp.ssrContext.error;
     onErrorCaptured((err, target, info) => {
       nuxtApp.hooks.callHook("vue:error", err, target, info).catch((hookError) => console.error("[nuxt] Error in `vue:error` hook", hookError));
@@ -7195,13 +7415,13 @@ let entry;
       await nuxt.hooks.callHook("app:error", error);
       nuxt.payload.error ||= createError(error);
     }
-    if (ssrContext?._renderResponse) {
+    if (ssrContext && (ssrContext["~renderResponse"] || ssrContext._renderResponse)) {
       throw new Error("skipping render");
     }
     return vueApp;
   };
 }
-const entry$1 = (ssrContext) => entry(ssrContext);
+const entry_default = ((ssrContext) => entry(ssrContext));
 
-export { get as A, _sfc_main$e as B, getDisplayValue as C, formBusInjectionKey as D, formStateInjectionKey as E, formErrorsInjectionKey as F, formInputsInjectionKey as G, formLoadingInjectionKey as H, formOptionsInjectionKey as I, inputIdInjectionKey as J, formFieldInjectionKey as K, omit as L, _sfc_main$b as M, pickLinkProps as N, _sfc_main$c as O, compare as P, avatarGroupInjectionKey as Q, useRoute as R, createError as S, useRouter as T, __nuxt_component_1$1 as U, __nuxt_component_0 as _, __nuxt_component_5 as a, useRuntimeConfig as b, _sfc_main$a as c, _sfc_main$f as d, entry$1 as default, useLocale as e, useAppConfig as f, useToast as g, _sfc_main$4 as h, authClient as i, useConfirm as j, _sfc_main$d as k, useFormField as l, __nuxt_component_12 as m, navigateTo as n, useFieldGroup as o, useComponentIcons as p, useState as q, useNuxtApp as r, fetchDefaults as s, tv as t, useHead as u, useAsyncData as v, fieldGroupInjectionKey as w, looseToNumber as x, usePortal as y, isArrayOfArray as z };
+export { get as A, _sfc_main$e as B, getDisplayValue as C, formBusInjectionKey as D, formStateInjectionKey as E, formErrorsInjectionKey as F, formInputsInjectionKey as G, formLoadingInjectionKey as H, formOptionsInjectionKey as I, inputIdInjectionKey as J, formFieldInjectionKey as K, _sfc_main$b as L, pickLinkProps as M, _sfc_main$c as N, omit as O, compare as P, avatarGroupInjectionKey as Q, useRoute as R, createError as S, useRouter as T, __nuxt_component_1$1 as U, __nuxt_component_0 as _, __nuxt_component_5 as a, _sfc_main$a as b, useRuntimeConfig as c, _sfc_main$f as d, entry_default as default, useLocale as e, useAppConfig as f, useToast as g, _sfc_main$4 as h, authClient as i, useConfirm as j, _sfc_main$d as k, useFormField as l, __nuxt_component_12 as m, navigateTo as n, useFieldGroup as o, useComponentIcons as p, useState as q, useNuxtApp as r, fetchDefaults as s, tv as t, useHead as u, useAsyncData as v, fieldGroupInjectionKey as w, looseToNumber as x, usePortal as y, isArrayOfArray as z };
 //# sourceMappingURL=server.mjs.map

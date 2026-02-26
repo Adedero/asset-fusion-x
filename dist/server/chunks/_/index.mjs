@@ -39,7 +39,7 @@ z.enum(["wire", "crypto"]);
 const NotificationBodyTypeSchema = z.enum(["string", "html"]);
 z.object({
   role: UserRoleSchema,
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -51,7 +51,7 @@ z.object({
   updatedAt: z.coerce.date()
 });
 z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   userId: z.string(),
   token: z.string(),
   expiresAt: z.coerce.date(),
@@ -62,7 +62,7 @@ z.object({
   updatedAt: z.coerce.date()
 });
 z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   userId: z.string(),
   accountId: z.string(),
   providerId: z.string(),
@@ -77,7 +77,7 @@ z.object({
   updatedAt: z.coerce.date()
 });
 z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   identifier: z.string(),
   value: z.string(),
   expiresAt: z.coerce.date(),
@@ -87,7 +87,7 @@ z.object({
 z.object({
   governmentIdType: GovernmentIdTypeSchema.nullable(),
   kycStatus: KycStatusSchema.nullable(),
-  id: z.string().uuid(),
+  id: z.uuid(),
   userId: z.string(),
   address: z.string().nullable(),
   country: z.string().nullable(),
@@ -100,7 +100,7 @@ z.object({
   updatedAt: z.coerce.date()
 });
 z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   financialAccountId: z.string(),
   address: z.string().nullable(),
   creationMonth: z.string().nullable(),
@@ -117,7 +117,7 @@ const FinancialAccountSchema = z.object({
   status: AccountStatusSchema,
   type: AccountTypeSchema,
   ownership: AccountOwnershipSchema,
-  id: z.string().uuid(),
+  id: z.uuid(),
   creatorId: z.string(),
   name: z.string(),
   number: z.string(),
@@ -133,7 +133,7 @@ const FinancialAccountSchema = z.object({
 });
 z.object({
   role: AccountUserRoleSchema,
-  id: z.string().uuid(),
+  id: z.uuid(),
   userId: z.string(),
   financialAccountId: z.string(),
   ownership: z.number(),
@@ -144,7 +144,7 @@ z.object({
 z.object({
   role: AccountUserRoleSchema,
   status: JointAccountRequestStatusSchema,
-  id: z.string().uuid(),
+  id: z.uuid(),
   creatorId: z.string(),
   recipientName: z.string(),
   recipientEmail: z.string(),
@@ -159,7 +159,7 @@ z.object({
 });
 z.object({
   type: JointAccountModRequestTypeSchema,
-  id: z.string().uuid(),
+  id: z.uuid(),
   creatorId: z.string(),
   financialAccountId: z.string(),
   transactionId: z.string().nullable(),
@@ -169,7 +169,7 @@ z.object({
 });
 z.object({
   status: JointAccountRequestStatusSchema,
-  id: z.string().uuid(),
+  id: z.uuid(),
   jointAccountModRequestId: z.string(),
   approverId: z.string(),
   createdAt: z.coerce.date(),
@@ -178,7 +178,7 @@ z.object({
 z.object({
   category: InvestmentPlanCategorySchema,
   profitDistribution: ProfitDistributionSchema,
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: z.string(),
   minimumDeposit: z.number(),
   maximumDeposit: z.number(),
@@ -193,7 +193,7 @@ const InvestmentSchema = z.object({
   status: InvestmentStatusSchema,
   category: InvestmentPlanCategorySchema,
   profitDistribution: ProfitDistributionSchema,
-  id: z.string().uuid(),
+  id: z.uuid(),
   financialAccountId: z.string(),
   investorId: z.string(),
   deposit: z.number(),
@@ -216,7 +216,7 @@ const InvestmentSchema = z.object({
   updatedAt: z.coerce.date()
 });
 z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   investmentId: z.string(),
   number: z.number().int(),
   intendedAmount: z.number(),
@@ -229,7 +229,7 @@ z.object({
 z.object({
   type: TransactionTypeSchema,
   status: TransactionStatusSchema,
-  id: z.string().uuid(),
+  id: z.uuid(),
   amount: z.number(),
   currency: z.string(),
   USDAmount: z.number(),
@@ -255,7 +255,7 @@ z.object({
 });
 z.object({
   bodyType: NotificationBodyTypeSchema,
-  id: z.string().uuid(),
+  id: z.uuid(),
   title: z.string(),
   body: z.string(),
   userId: z.string().nullable(),
@@ -266,7 +266,7 @@ z.object({
   updatedAt: z.coerce.date()
 });
 z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: z.string(),
   symbol: z.string(),
   image: z.string().nullable(),
@@ -284,7 +284,7 @@ z.object({
   updatedAt: z.coerce.date()
 });
 const SettingsSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   allowWithdrawals: z.boolean()
 });
 const UserIncludeSchema = z.object({
@@ -786,7 +786,7 @@ const SettingsSelectSchema = z.object({
   id: z.boolean().optional(),
   allowWithdrawals: z.boolean().optional()
 }).strict();
-const UserWhereInputSchema = z.object({
+const UserWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => UserWhereInputSchema), z.lazy(() => UserWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => UserWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => UserWhereInputSchema), z.lazy(() => UserWhereInputSchema).array()]).optional(),
@@ -811,8 +811,8 @@ const UserWhereInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestListRelationFilterSchema).optional(),
   notifications: z.lazy(() => NotificationListRelationFilterSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalListRelationFilterSchema).optional()
-}).strict();
-const UserOrderByWithRelationInputSchema = z.object({
+});
+const UserOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   email: z.lazy(() => SortOrderSchema).optional(),
@@ -834,20 +834,20 @@ const UserOrderByWithRelationInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestOrderByRelationAggregateInputSchema).optional(),
   notifications: z.lazy(() => NotificationOrderByRelationAggregateInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalOrderByRelationAggregateInputSchema).optional()
-}).strict();
+});
 const UserWhereUniqueInputSchema = z.union([
   z.object({
-    id: z.string().uuid(),
+    id: z.uuid(),
     email: z.string()
   }),
   z.object({
-    id: z.string().uuid()
+    id: z.uuid()
   }),
   z.object({
     email: z.string()
   })
-]).and(z.object({
-  id: z.string().uuid().optional(),
+]).and(z.strictObject({
+  id: z.uuid().optional(),
   email: z.string().optional(),
   AND: z.union([z.lazy(() => UserWhereInputSchema), z.lazy(() => UserWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => UserWhereInputSchema).array().optional(),
@@ -871,8 +871,8 @@ const UserWhereUniqueInputSchema = z.union([
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestListRelationFilterSchema).optional(),
   notifications: z.lazy(() => NotificationListRelationFilterSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalListRelationFilterSchema).optional()
-}).strict());
-const UserOrderByWithAggregationInputSchema = z.object({
+}));
+const UserOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   email: z.lazy(() => SortOrderSchema).optional(),
@@ -887,8 +887,8 @@ const UserOrderByWithAggregationInputSchema = z.object({
   _count: z.lazy(() => UserCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => UserMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => UserMinOrderByAggregateInputSchema).optional()
-}).strict();
-const UserScalarWhereWithAggregatesInputSchema = z.object({
+});
+const UserScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => UserScalarWhereWithAggregatesInputSchema), z.lazy(() => UserScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => UserScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => UserScalarWhereWithAggregatesInputSchema), z.lazy(() => UserScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -903,8 +903,8 @@ const UserScalarWhereWithAggregatesInputSchema = z.object({
   banExpires: z.union([z.lazy(() => DateTimeNullableWithAggregatesFilterSchema), z.coerce.date()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const SessionWhereInputSchema = z.object({
+});
+const SessionWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => SessionWhereInputSchema), z.lazy(() => SessionWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => SessionWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => SessionWhereInputSchema), z.lazy(() => SessionWhereInputSchema).array()]).optional(),
@@ -918,8 +918,8 @@ const SessionWhereInputSchema = z.object({
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   user: z.union([z.lazy(() => UserScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional()
-}).strict();
-const SessionOrderByWithRelationInputSchema = z.object({
+});
+const SessionOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   token: z.lazy(() => SortOrderSchema).optional(),
@@ -930,20 +930,20 @@ const SessionOrderByWithRelationInputSchema = z.object({
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   user: z.lazy(() => UserOrderByWithRelationInputSchema).optional()
-}).strict();
+});
 const SessionWhereUniqueInputSchema = z.union([
   z.object({
-    id: z.string().uuid(),
+    id: z.uuid(),
     token: z.string()
   }),
   z.object({
-    id: z.string().uuid()
+    id: z.uuid()
   }),
   z.object({
     token: z.string()
   })
-]).and(z.object({
-  id: z.string().uuid().optional(),
+]).and(z.strictObject({
+  id: z.uuid().optional(),
   token: z.string().optional(),
   AND: z.union([z.lazy(() => SessionWhereInputSchema), z.lazy(() => SessionWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => SessionWhereInputSchema).array().optional(),
@@ -956,8 +956,8 @@ const SessionWhereUniqueInputSchema = z.union([
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   user: z.union([z.lazy(() => UserScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional()
-}).strict());
-const SessionOrderByWithAggregationInputSchema = z.object({
+}));
+const SessionOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   token: z.lazy(() => SortOrderSchema).optional(),
@@ -970,8 +970,8 @@ const SessionOrderByWithAggregationInputSchema = z.object({
   _count: z.lazy(() => SessionCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => SessionMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => SessionMinOrderByAggregateInputSchema).optional()
-}).strict();
-const SessionScalarWhereWithAggregatesInputSchema = z.object({
+});
+const SessionScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => SessionScalarWhereWithAggregatesInputSchema), z.lazy(() => SessionScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => SessionScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => SessionScalarWhereWithAggregatesInputSchema), z.lazy(() => SessionScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -984,8 +984,8 @@ const SessionScalarWhereWithAggregatesInputSchema = z.object({
   impersonatedBy: z.union([z.lazy(() => StringNullableWithAggregatesFilterSchema), z.string()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const AccountWhereInputSchema = z.object({
+});
+const AccountWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => AccountWhereInputSchema), z.lazy(() => AccountWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => AccountWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => AccountWhereInputSchema), z.lazy(() => AccountWhereInputSchema).array()]).optional(),
@@ -1003,8 +1003,8 @@ const AccountWhereInputSchema = z.object({
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   user: z.union([z.lazy(() => UserScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional()
-}).strict();
-const AccountOrderByWithRelationInputSchema = z.object({
+});
+const AccountOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   accountId: z.lazy(() => SortOrderSchema).optional(),
@@ -1019,11 +1019,11 @@ const AccountOrderByWithRelationInputSchema = z.object({
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   user: z.lazy(() => UserOrderByWithRelationInputSchema).optional()
-}).strict();
+});
 const AccountWhereUniqueInputSchema = z.object({
-  id: z.string().uuid()
-}).and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.uuid()
+}).and(z.strictObject({
+  id: z.uuid().optional(),
   AND: z.union([z.lazy(() => AccountWhereInputSchema), z.lazy(() => AccountWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => AccountWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => AccountWhereInputSchema), z.lazy(() => AccountWhereInputSchema).array()]).optional(),
@@ -1040,8 +1040,8 @@ const AccountWhereUniqueInputSchema = z.object({
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   user: z.union([z.lazy(() => UserScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional()
-}).strict());
-const AccountOrderByWithAggregationInputSchema = z.object({
+}));
+const AccountOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   accountId: z.lazy(() => SortOrderSchema).optional(),
@@ -1058,8 +1058,8 @@ const AccountOrderByWithAggregationInputSchema = z.object({
   _count: z.lazy(() => AccountCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => AccountMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => AccountMinOrderByAggregateInputSchema).optional()
-}).strict();
-const AccountScalarWhereWithAggregatesInputSchema = z.object({
+});
+const AccountScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => AccountScalarWhereWithAggregatesInputSchema), z.lazy(() => AccountScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => AccountScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => AccountScalarWhereWithAggregatesInputSchema), z.lazy(() => AccountScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -1076,8 +1076,8 @@ const AccountScalarWhereWithAggregatesInputSchema = z.object({
   password: z.union([z.lazy(() => StringNullableWithAggregatesFilterSchema), z.string()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const VerificationWhereInputSchema = z.object({
+});
+const VerificationWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => VerificationWhereInputSchema), z.lazy(() => VerificationWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => VerificationWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => VerificationWhereInputSchema), z.lazy(() => VerificationWhereInputSchema).array()]).optional(),
@@ -1087,19 +1087,19 @@ const VerificationWhereInputSchema = z.object({
   expiresAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const VerificationOrderByWithRelationInputSchema = z.object({
+});
+const VerificationOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   identifier: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
   expiresAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
+});
 const VerificationWhereUniqueInputSchema = z.object({
-  id: z.string().uuid()
-}).and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.uuid()
+}).and(z.strictObject({
+  id: z.uuid().optional(),
   AND: z.union([z.lazy(() => VerificationWhereInputSchema), z.lazy(() => VerificationWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => VerificationWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => VerificationWhereInputSchema), z.lazy(() => VerificationWhereInputSchema).array()]).optional(),
@@ -1108,8 +1108,8 @@ const VerificationWhereUniqueInputSchema = z.object({
   expiresAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict());
-const VerificationOrderByWithAggregationInputSchema = z.object({
+}));
+const VerificationOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   identifier: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
@@ -1119,8 +1119,8 @@ const VerificationOrderByWithAggregationInputSchema = z.object({
   _count: z.lazy(() => VerificationCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => VerificationMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => VerificationMinOrderByAggregateInputSchema).optional()
-}).strict();
-const VerificationScalarWhereWithAggregatesInputSchema = z.object({
+});
+const VerificationScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => VerificationScalarWhereWithAggregatesInputSchema), z.lazy(() => VerificationScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => VerificationScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => VerificationScalarWhereWithAggregatesInputSchema), z.lazy(() => VerificationScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -1130,8 +1130,8 @@ const VerificationScalarWhereWithAggregatesInputSchema = z.object({
   expiresAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const ProfileWhereInputSchema = z.object({
+});
+const ProfileWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => ProfileWhereInputSchema), z.lazy(() => ProfileWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => ProfileWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => ProfileWhereInputSchema), z.lazy(() => ProfileWhereInputSchema).array()]).optional(),
@@ -1149,8 +1149,8 @@ const ProfileWhereInputSchema = z.object({
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   user: z.union([z.lazy(() => UserScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional()
-}).strict();
-const ProfileOrderByWithRelationInputSchema = z.object({
+});
+const ProfileOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   address: z.union([z.lazy(() => SortOrderSchema), z.lazy(() => SortOrderInputSchema)]).optional(),
@@ -1165,20 +1165,20 @@ const ProfileOrderByWithRelationInputSchema = z.object({
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   user: z.lazy(() => UserOrderByWithRelationInputSchema).optional()
-}).strict();
+});
 const ProfileWhereUniqueInputSchema = z.union([
   z.object({
-    id: z.string().uuid(),
+    id: z.uuid(),
     userId: z.string()
   }),
   z.object({
-    id: z.string().uuid()
+    id: z.uuid()
   }),
   z.object({
     userId: z.string()
   })
-]).and(z.object({
-  id: z.string().uuid().optional(),
+]).and(z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string().optional(),
   AND: z.union([z.lazy(() => ProfileWhereInputSchema), z.lazy(() => ProfileWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => ProfileWhereInputSchema).array().optional(),
@@ -1195,8 +1195,8 @@ const ProfileWhereUniqueInputSchema = z.union([
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   user: z.union([z.lazy(() => UserScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional()
-}).strict());
-const ProfileOrderByWithAggregationInputSchema = z.object({
+}));
+const ProfileOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   address: z.union([z.lazy(() => SortOrderSchema), z.lazy(() => SortOrderInputSchema)]).optional(),
@@ -1213,8 +1213,8 @@ const ProfileOrderByWithAggregationInputSchema = z.object({
   _count: z.lazy(() => ProfileCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => ProfileMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => ProfileMinOrderByAggregateInputSchema).optional()
-}).strict();
-const ProfileScalarWhereWithAggregatesInputSchema = z.object({
+});
+const ProfileScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => ProfileScalarWhereWithAggregatesInputSchema), z.lazy(() => ProfileScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => ProfileScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => ProfileScalarWhereWithAggregatesInputSchema), z.lazy(() => ProfileScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -1231,8 +1231,8 @@ const ProfileScalarWhereWithAggregatesInputSchema = z.object({
   kycStatus: z.union([z.lazy(() => EnumKycStatusNullableWithAggregatesFilterSchema), z.lazy(() => KycStatusSchema)]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const BusinessProfileWhereInputSchema = z.object({
+});
+const BusinessProfileWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => BusinessProfileWhereInputSchema), z.lazy(() => BusinessProfileWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => BusinessProfileWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => BusinessProfileWhereInputSchema), z.lazy(() => BusinessProfileWhereInputSchema).array()]).optional(),
@@ -1249,8 +1249,8 @@ const BusinessProfileWhereInputSchema = z.object({
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   account: z.union([z.lazy(() => FinancialAccountScalarRelationFilterSchema), z.lazy(() => FinancialAccountWhereInputSchema)]).optional()
-}).strict();
-const BusinessProfileOrderByWithRelationInputSchema = z.object({
+});
+const BusinessProfileOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
   address: z.union([z.lazy(() => SortOrderSchema), z.lazy(() => SortOrderInputSchema)]).optional(),
@@ -1264,20 +1264,20 @@ const BusinessProfileOrderByWithRelationInputSchema = z.object({
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   account: z.lazy(() => FinancialAccountOrderByWithRelationInputSchema).optional()
-}).strict();
+});
 const BusinessProfileWhereUniqueInputSchema = z.union([
   z.object({
-    id: z.string().uuid(),
+    id: z.uuid(),
     financialAccountId: z.string()
   }),
   z.object({
-    id: z.string().uuid()
+    id: z.uuid()
   }),
   z.object({
     financialAccountId: z.string()
   })
-]).and(z.object({
-  id: z.string().uuid().optional(),
+]).and(z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string().optional(),
   AND: z.union([z.lazy(() => BusinessProfileWhereInputSchema), z.lazy(() => BusinessProfileWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => BusinessProfileWhereInputSchema).array().optional(),
@@ -1293,8 +1293,8 @@ const BusinessProfileWhereUniqueInputSchema = z.union([
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   account: z.union([z.lazy(() => FinancialAccountScalarRelationFilterSchema), z.lazy(() => FinancialAccountWhereInputSchema)]).optional()
-}).strict());
-const BusinessProfileOrderByWithAggregationInputSchema = z.object({
+}));
+const BusinessProfileOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
   address: z.union([z.lazy(() => SortOrderSchema), z.lazy(() => SortOrderInputSchema)]).optional(),
@@ -1312,8 +1312,8 @@ const BusinessProfileOrderByWithAggregationInputSchema = z.object({
   _max: z.lazy(() => BusinessProfileMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => BusinessProfileMinOrderByAggregateInputSchema).optional(),
   _sum: z.lazy(() => BusinessProfileSumOrderByAggregateInputSchema).optional()
-}).strict();
-const BusinessProfileScalarWhereWithAggregatesInputSchema = z.object({
+});
+const BusinessProfileScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => BusinessProfileScalarWhereWithAggregatesInputSchema), z.lazy(() => BusinessProfileScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => BusinessProfileScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => BusinessProfileScalarWhereWithAggregatesInputSchema), z.lazy(() => BusinessProfileScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -1329,8 +1329,8 @@ const BusinessProfileScalarWhereWithAggregatesInputSchema = z.object({
   approved: z.union([z.lazy(() => BoolWithAggregatesFilterSchema), z.boolean()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const FinancialAccountWhereInputSchema = z.object({
+});
+const FinancialAccountWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => FinancialAccountWhereInputSchema), z.lazy(() => FinancialAccountWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => FinancialAccountWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => FinancialAccountWhereInputSchema), z.lazy(() => FinancialAccountWhereInputSchema).array()]).optional(),
@@ -1359,8 +1359,8 @@ const FinancialAccountWhereInputSchema = z.object({
   transactions: z.lazy(() => TransactionListRelationFilterSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionListRelationFilterSchema).optional(),
   investments: z.lazy(() => InvestmentListRelationFilterSchema).optional()
-}).strict();
-const FinancialAccountOrderByWithRelationInputSchema = z.object({
+});
+const FinancialAccountOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
@@ -1386,11 +1386,11 @@ const FinancialAccountOrderByWithRelationInputSchema = z.object({
   transactions: z.lazy(() => TransactionOrderByRelationAggregateInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionOrderByRelationAggregateInputSchema).optional(),
   investments: z.lazy(() => InvestmentOrderByRelationAggregateInputSchema).optional()
-}).strict();
+});
 const FinancialAccountWhereUniqueInputSchema = z.object({
-  id: z.string().uuid()
-}).and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.uuid()
+}).and(z.strictObject({
+  id: z.uuid().optional(),
   AND: z.union([z.lazy(() => FinancialAccountWhereInputSchema), z.lazy(() => FinancialAccountWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => FinancialAccountWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => FinancialAccountWhereInputSchema), z.lazy(() => FinancialAccountWhereInputSchema).array()]).optional(),
@@ -1418,8 +1418,8 @@ const FinancialAccountWhereUniqueInputSchema = z.object({
   transactions: z.lazy(() => TransactionListRelationFilterSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionListRelationFilterSchema).optional(),
   investments: z.lazy(() => InvestmentListRelationFilterSchema).optional()
-}).strict());
-const FinancialAccountOrderByWithAggregationInputSchema = z.object({
+}));
+const FinancialAccountOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
@@ -1441,8 +1441,8 @@ const FinancialAccountOrderByWithAggregationInputSchema = z.object({
   _max: z.lazy(() => FinancialAccountMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => FinancialAccountMinOrderByAggregateInputSchema).optional(),
   _sum: z.lazy(() => FinancialAccountSumOrderByAggregateInputSchema).optional()
-}).strict();
-const FinancialAccountScalarWhereWithAggregatesInputSchema = z.object({
+});
+const FinancialAccountScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => FinancialAccountScalarWhereWithAggregatesInputSchema), z.lazy(() => FinancialAccountScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => FinancialAccountScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => FinancialAccountScalarWhereWithAggregatesInputSchema), z.lazy(() => FinancialAccountScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -1462,8 +1462,8 @@ const FinancialAccountScalarWhereWithAggregatesInputSchema = z.object({
   dormantAt: z.union([z.lazy(() => DateTimeNullableWithAggregatesFilterSchema), z.coerce.date()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const AccountUserWhereInputSchema = z.object({
+});
+const AccountUserWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => AccountUserWhereInputSchema), z.lazy(() => AccountUserWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => AccountUserWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => AccountUserWhereInputSchema), z.lazy(() => AccountUserWhereInputSchema).array()]).optional(),
@@ -1479,8 +1479,8 @@ const AccountUserWhereInputSchema = z.object({
   financialAccount: z.union([z.lazy(() => FinancialAccountScalarRelationFilterSchema), z.lazy(() => FinancialAccountWhereInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionListRelationFilterSchema).optional(),
   investments: z.lazy(() => InvestmentListRelationFilterSchema).optional()
-}).strict();
-const AccountUserOrderByWithRelationInputSchema = z.object({
+});
+const AccountUserOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
@@ -1493,20 +1493,20 @@ const AccountUserOrderByWithRelationInputSchema = z.object({
   financialAccount: z.lazy(() => FinancialAccountOrderByWithRelationInputSchema).optional(),
   transactions: z.lazy(() => TransactionOrderByRelationAggregateInputSchema).optional(),
   investments: z.lazy(() => InvestmentOrderByRelationAggregateInputSchema).optional()
-}).strict();
+});
 const AccountUserWhereUniqueInputSchema = z.union([
   z.object({
-    id: z.string().uuid(),
+    id: z.uuid(),
     userId_financialAccountId: z.lazy(() => AccountUserUserIdFinancialAccountIdCompoundUniqueInputSchema)
   }),
   z.object({
-    id: z.string().uuid()
+    id: z.uuid()
   }),
   z.object({
     userId_financialAccountId: z.lazy(() => AccountUserUserIdFinancialAccountIdCompoundUniqueInputSchema)
   })
-]).and(z.object({
-  id: z.string().uuid().optional(),
+]).and(z.strictObject({
+  id: z.uuid().optional(),
   userId_financialAccountId: z.lazy(() => AccountUserUserIdFinancialAccountIdCompoundUniqueInputSchema).optional(),
   AND: z.union([z.lazy(() => AccountUserWhereInputSchema), z.lazy(() => AccountUserWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => AccountUserWhereInputSchema).array().optional(),
@@ -1522,8 +1522,8 @@ const AccountUserWhereUniqueInputSchema = z.union([
   financialAccount: z.union([z.lazy(() => FinancialAccountScalarRelationFilterSchema), z.lazy(() => FinancialAccountWhereInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionListRelationFilterSchema).optional(),
   investments: z.lazy(() => InvestmentListRelationFilterSchema).optional()
-}).strict());
-const AccountUserOrderByWithAggregationInputSchema = z.object({
+}));
+const AccountUserOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
@@ -1537,8 +1537,8 @@ const AccountUserOrderByWithAggregationInputSchema = z.object({
   _max: z.lazy(() => AccountUserMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => AccountUserMinOrderByAggregateInputSchema).optional(),
   _sum: z.lazy(() => AccountUserSumOrderByAggregateInputSchema).optional()
-}).strict();
-const AccountUserScalarWhereWithAggregatesInputSchema = z.object({
+});
+const AccountUserScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => AccountUserScalarWhereWithAggregatesInputSchema), z.lazy(() => AccountUserScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => AccountUserScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => AccountUserScalarWhereWithAggregatesInputSchema), z.lazy(() => AccountUserScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -1550,8 +1550,8 @@ const AccountUserScalarWhereWithAggregatesInputSchema = z.object({
   autosign: z.union([z.lazy(() => BoolWithAggregatesFilterSchema), z.boolean()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const JointAccountRequestWhereInputSchema = z.object({
+});
+const JointAccountRequestWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => JointAccountRequestWhereInputSchema), z.lazy(() => JointAccountRequestWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => JointAccountRequestWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => JointAccountRequestWhereInputSchema), z.lazy(() => JointAccountRequestWhereInputSchema).array()]).optional(),
@@ -1572,8 +1572,8 @@ const JointAccountRequestWhereInputSchema = z.object({
   creator: z.union([z.lazy(() => UserScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional(),
   recipient: z.union([z.lazy(() => UserNullableScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional().nullable(),
   financialAccount: z.union([z.lazy(() => FinancialAccountScalarRelationFilterSchema), z.lazy(() => FinancialAccountWhereInputSchema)]).optional()
-}).strict();
-const JointAccountRequestOrderByWithRelationInputSchema = z.object({
+});
+const JointAccountRequestOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   recipientName: z.lazy(() => SortOrderSchema).optional(),
@@ -1591,11 +1591,11 @@ const JointAccountRequestOrderByWithRelationInputSchema = z.object({
   creator: z.lazy(() => UserOrderByWithRelationInputSchema).optional(),
   recipient: z.lazy(() => UserOrderByWithRelationInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountOrderByWithRelationInputSchema).optional()
-}).strict();
+});
 const JointAccountRequestWhereUniqueInputSchema = z.object({
-  id: z.string().uuid()
-}).and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.uuid()
+}).and(z.strictObject({
+  id: z.uuid().optional(),
   AND: z.union([z.lazy(() => JointAccountRequestWhereInputSchema), z.lazy(() => JointAccountRequestWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => JointAccountRequestWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => JointAccountRequestWhereInputSchema), z.lazy(() => JointAccountRequestWhereInputSchema).array()]).optional(),
@@ -1615,8 +1615,8 @@ const JointAccountRequestWhereUniqueInputSchema = z.object({
   creator: z.union([z.lazy(() => UserScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional(),
   recipient: z.union([z.lazy(() => UserNullableScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional().nullable(),
   financialAccount: z.union([z.lazy(() => FinancialAccountScalarRelationFilterSchema), z.lazy(() => FinancialAccountWhereInputSchema)]).optional()
-}).strict());
-const JointAccountRequestOrderByWithAggregationInputSchema = z.object({
+}));
+const JointAccountRequestOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   recipientName: z.lazy(() => SortOrderSchema).optional(),
@@ -1636,8 +1636,8 @@ const JointAccountRequestOrderByWithAggregationInputSchema = z.object({
   _max: z.lazy(() => JointAccountRequestMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => JointAccountRequestMinOrderByAggregateInputSchema).optional(),
   _sum: z.lazy(() => JointAccountRequestSumOrderByAggregateInputSchema).optional()
-}).strict();
-const JointAccountRequestScalarWhereWithAggregatesInputSchema = z.object({
+});
+const JointAccountRequestScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => JointAccountRequestScalarWhereWithAggregatesInputSchema), z.lazy(() => JointAccountRequestScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => JointAccountRequestScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => JointAccountRequestScalarWhereWithAggregatesInputSchema), z.lazy(() => JointAccountRequestScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -1655,8 +1655,8 @@ const JointAccountRequestScalarWhereWithAggregatesInputSchema = z.object({
   status: z.union([z.lazy(() => EnumJointAccountRequestStatusWithAggregatesFilterSchema), z.lazy(() => JointAccountRequestStatusSchema)]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const JointAccountModRequestWhereInputSchema = z.object({
+});
+const JointAccountModRequestWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => JointAccountModRequestWhereInputSchema), z.lazy(() => JointAccountModRequestWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => JointAccountModRequestWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => JointAccountModRequestWhereInputSchema), z.lazy(() => JointAccountModRequestWhereInputSchema).array()]).optional(),
@@ -1672,8 +1672,8 @@ const JointAccountModRequestWhereInputSchema = z.object({
   account: z.union([z.lazy(() => FinancialAccountScalarRelationFilterSchema), z.lazy(() => FinancialAccountWhereInputSchema)]).optional(),
   transaction: z.union([z.lazy(() => TransactionNullableScalarRelationFilterSchema), z.lazy(() => TransactionWhereInputSchema)]).optional().nullable(),
   approvals: z.lazy(() => JointAccountModRequestApprovalListRelationFilterSchema).optional()
-}).strict();
-const JointAccountModRequestOrderByWithRelationInputSchema = z.object({
+});
+const JointAccountModRequestOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
@@ -1686,11 +1686,11 @@ const JointAccountModRequestOrderByWithRelationInputSchema = z.object({
   account: z.lazy(() => FinancialAccountOrderByWithRelationInputSchema).optional(),
   transaction: z.lazy(() => TransactionOrderByWithRelationInputSchema).optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalOrderByRelationAggregateInputSchema).optional()
-}).strict();
+});
 const JointAccountModRequestWhereUniqueInputSchema = z.object({
-  id: z.string().uuid()
-}).and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.uuid()
+}).and(z.strictObject({
+  id: z.uuid().optional(),
   AND: z.union([z.lazy(() => JointAccountModRequestWhereInputSchema), z.lazy(() => JointAccountModRequestWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => JointAccountModRequestWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => JointAccountModRequestWhereInputSchema), z.lazy(() => JointAccountModRequestWhereInputSchema).array()]).optional(),
@@ -1705,8 +1705,8 @@ const JointAccountModRequestWhereUniqueInputSchema = z.object({
   account: z.union([z.lazy(() => FinancialAccountScalarRelationFilterSchema), z.lazy(() => FinancialAccountWhereInputSchema)]).optional(),
   transaction: z.union([z.lazy(() => TransactionNullableScalarRelationFilterSchema), z.lazy(() => TransactionWhereInputSchema)]).optional().nullable(),
   approvals: z.lazy(() => JointAccountModRequestApprovalListRelationFilterSchema).optional()
-}).strict());
-const JointAccountModRequestOrderByWithAggregationInputSchema = z.object({
+}));
+const JointAccountModRequestOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
@@ -1718,8 +1718,8 @@ const JointAccountModRequestOrderByWithAggregationInputSchema = z.object({
   _count: z.lazy(() => JointAccountModRequestCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => JointAccountModRequestMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => JointAccountModRequestMinOrderByAggregateInputSchema).optional()
-}).strict();
-const JointAccountModRequestScalarWhereWithAggregatesInputSchema = z.object({
+});
+const JointAccountModRequestScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => JointAccountModRequestScalarWhereWithAggregatesInputSchema), z.lazy(() => JointAccountModRequestScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => JointAccountModRequestScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => JointAccountModRequestScalarWhereWithAggregatesInputSchema), z.lazy(() => JointAccountModRequestScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -1731,8 +1731,8 @@ const JointAccountModRequestScalarWhereWithAggregatesInputSchema = z.object({
   description: z.union([z.lazy(() => StringNullableWithAggregatesFilterSchema), z.string()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const JointAccountModRequestApprovalWhereInputSchema = z.object({
+});
+const JointAccountModRequestApprovalWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => JointAccountModRequestApprovalWhereInputSchema), z.lazy(() => JointAccountModRequestApprovalWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => JointAccountModRequestApprovalWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => JointAccountModRequestApprovalWhereInputSchema), z.lazy(() => JointAccountModRequestApprovalWhereInputSchema).array()]).optional(),
@@ -1744,8 +1744,8 @@ const JointAccountModRequestApprovalWhereInputSchema = z.object({
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   request: z.union([z.lazy(() => JointAccountModRequestScalarRelationFilterSchema), z.lazy(() => JointAccountModRequestWhereInputSchema)]).optional(),
   approver: z.union([z.lazy(() => UserScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestApprovalOrderByWithRelationInputSchema = z.object({
+});
+const JointAccountModRequestApprovalOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   jointAccountModRequestId: z.lazy(() => SortOrderSchema).optional(),
   approverId: z.lazy(() => SortOrderSchema).optional(),
@@ -1754,11 +1754,11 @@ const JointAccountModRequestApprovalOrderByWithRelationInputSchema = z.object({
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   request: z.lazy(() => JointAccountModRequestOrderByWithRelationInputSchema).optional(),
   approver: z.lazy(() => UserOrderByWithRelationInputSchema).optional()
-}).strict();
+});
 const JointAccountModRequestApprovalWhereUniqueInputSchema = z.object({
-  id: z.string().uuid()
-}).and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.uuid()
+}).and(z.strictObject({
+  id: z.uuid().optional(),
   AND: z.union([z.lazy(() => JointAccountModRequestApprovalWhereInputSchema), z.lazy(() => JointAccountModRequestApprovalWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => JointAccountModRequestApprovalWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => JointAccountModRequestApprovalWhereInputSchema), z.lazy(() => JointAccountModRequestApprovalWhereInputSchema).array()]).optional(),
@@ -1769,8 +1769,8 @@ const JointAccountModRequestApprovalWhereUniqueInputSchema = z.object({
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   request: z.union([z.lazy(() => JointAccountModRequestScalarRelationFilterSchema), z.lazy(() => JointAccountModRequestWhereInputSchema)]).optional(),
   approver: z.union([z.lazy(() => UserScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional()
-}).strict());
-const JointAccountModRequestApprovalOrderByWithAggregationInputSchema = z.object({
+}));
+const JointAccountModRequestApprovalOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   jointAccountModRequestId: z.lazy(() => SortOrderSchema).optional(),
   approverId: z.lazy(() => SortOrderSchema).optional(),
@@ -1780,8 +1780,8 @@ const JointAccountModRequestApprovalOrderByWithAggregationInputSchema = z.object
   _count: z.lazy(() => JointAccountModRequestApprovalCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => JointAccountModRequestApprovalMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => JointAccountModRequestApprovalMinOrderByAggregateInputSchema).optional()
-}).strict();
-const JointAccountModRequestApprovalScalarWhereWithAggregatesInputSchema = z.object({
+});
+const JointAccountModRequestApprovalScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => JointAccountModRequestApprovalScalarWhereWithAggregatesInputSchema), z.lazy(() => JointAccountModRequestApprovalScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => JointAccountModRequestApprovalScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => JointAccountModRequestApprovalScalarWhereWithAggregatesInputSchema), z.lazy(() => JointAccountModRequestApprovalScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -1791,8 +1791,8 @@ const JointAccountModRequestApprovalScalarWhereWithAggregatesInputSchema = z.obj
   status: z.union([z.lazy(() => EnumJointAccountRequestStatusWithAggregatesFilterSchema), z.lazy(() => JointAccountRequestStatusSchema)]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const InvestmentPlanWhereInputSchema = z.object({
+});
+const InvestmentPlanWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => InvestmentPlanWhereInputSchema), z.lazy(() => InvestmentPlanWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => InvestmentPlanWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => InvestmentPlanWhereInputSchema), z.lazy(() => InvestmentPlanWhereInputSchema).array()]).optional(),
@@ -1808,8 +1808,8 @@ const InvestmentPlanWhereInputSchema = z.object({
   terminationFee: z.union([z.lazy(() => FloatFilterSchema), z.number()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const InvestmentPlanOrderByWithRelationInputSchema = z.object({
+});
+const InvestmentPlanOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   category: z.lazy(() => SortOrderSchema).optional(),
@@ -1822,20 +1822,20 @@ const InvestmentPlanOrderByWithRelationInputSchema = z.object({
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
+});
 const InvestmentPlanWhereUniqueInputSchema = z.union([
   z.object({
-    id: z.string().uuid(),
+    id: z.uuid(),
     category_name: z.lazy(() => InvestmentPlanCategoryNameCompoundUniqueInputSchema)
   }),
   z.object({
-    id: z.string().uuid()
+    id: z.uuid()
   }),
   z.object({
     category_name: z.lazy(() => InvestmentPlanCategoryNameCompoundUniqueInputSchema)
   })
-]).and(z.object({
-  id: z.string().uuid().optional(),
+]).and(z.strictObject({
+  id: z.uuid().optional(),
   category_name: z.lazy(() => InvestmentPlanCategoryNameCompoundUniqueInputSchema).optional(),
   AND: z.union([z.lazy(() => InvestmentPlanWhereInputSchema), z.lazy(() => InvestmentPlanWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => InvestmentPlanWhereInputSchema).array().optional(),
@@ -1851,8 +1851,8 @@ const InvestmentPlanWhereUniqueInputSchema = z.union([
   terminationFee: z.union([z.lazy(() => FloatFilterSchema), z.number()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict());
-const InvestmentPlanOrderByWithAggregationInputSchema = z.object({
+}));
+const InvestmentPlanOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   category: z.lazy(() => SortOrderSchema).optional(),
@@ -1870,8 +1870,8 @@ const InvestmentPlanOrderByWithAggregationInputSchema = z.object({
   _max: z.lazy(() => InvestmentPlanMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => InvestmentPlanMinOrderByAggregateInputSchema).optional(),
   _sum: z.lazy(() => InvestmentPlanSumOrderByAggregateInputSchema).optional()
-}).strict();
-const InvestmentPlanScalarWhereWithAggregatesInputSchema = z.object({
+});
+const InvestmentPlanScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => InvestmentPlanScalarWhereWithAggregatesInputSchema), z.lazy(() => InvestmentPlanScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => InvestmentPlanScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => InvestmentPlanScalarWhereWithAggregatesInputSchema), z.lazy(() => InvestmentPlanScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -1887,8 +1887,8 @@ const InvestmentPlanScalarWhereWithAggregatesInputSchema = z.object({
   terminationFee: z.union([z.lazy(() => FloatWithAggregatesFilterSchema), z.number()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const InvestmentWhereInputSchema = z.object({
+});
+const InvestmentWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => InvestmentWhereInputSchema), z.lazy(() => InvestmentWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => InvestmentWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => InvestmentWhereInputSchema), z.lazy(() => InvestmentWhereInputSchema).array()]).optional(),
@@ -1920,8 +1920,8 @@ const InvestmentWhereInputSchema = z.object({
   transactions: z.lazy(() => TransactionListRelationFilterSchema).optional(),
   financialAccount: z.union([z.lazy(() => FinancialAccountScalarRelationFilterSchema), z.lazy(() => FinancialAccountWhereInputSchema)]).optional(),
   profits: z.lazy(() => ProfitListRelationFilterSchema).optional()
-}).strict();
-const InvestmentOrderByWithRelationInputSchema = z.object({
+});
+const InvestmentOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
   investorId: z.lazy(() => SortOrderSchema).optional(),
@@ -1950,11 +1950,11 @@ const InvestmentOrderByWithRelationInputSchema = z.object({
   transactions: z.lazy(() => TransactionOrderByRelationAggregateInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountOrderByWithRelationInputSchema).optional(),
   profits: z.lazy(() => ProfitOrderByRelationAggregateInputSchema).optional()
-}).strict();
+});
 const InvestmentWhereUniqueInputSchema = z.object({
-  id: z.string().uuid()
-}).and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.uuid()
+}).and(z.strictObject({
+  id: z.uuid().optional(),
   AND: z.union([z.lazy(() => InvestmentWhereInputSchema), z.lazy(() => InvestmentWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => InvestmentWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => InvestmentWhereInputSchema), z.lazy(() => InvestmentWhereInputSchema).array()]).optional(),
@@ -1985,8 +1985,8 @@ const InvestmentWhereUniqueInputSchema = z.object({
   transactions: z.lazy(() => TransactionListRelationFilterSchema).optional(),
   financialAccount: z.union([z.lazy(() => FinancialAccountScalarRelationFilterSchema), z.lazy(() => FinancialAccountWhereInputSchema)]).optional(),
   profits: z.lazy(() => ProfitListRelationFilterSchema).optional()
-}).strict());
-const InvestmentOrderByWithAggregationInputSchema = z.object({
+}));
+const InvestmentOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
   investorId: z.lazy(() => SortOrderSchema).optional(),
@@ -2016,8 +2016,8 @@ const InvestmentOrderByWithAggregationInputSchema = z.object({
   _max: z.lazy(() => InvestmentMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => InvestmentMinOrderByAggregateInputSchema).optional(),
   _sum: z.lazy(() => InvestmentSumOrderByAggregateInputSchema).optional()
-}).strict();
-const InvestmentScalarWhereWithAggregatesInputSchema = z.object({
+});
+const InvestmentScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => InvestmentScalarWhereWithAggregatesInputSchema), z.lazy(() => InvestmentScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => InvestmentScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => InvestmentScalarWhereWithAggregatesInputSchema), z.lazy(() => InvestmentScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -2045,8 +2045,8 @@ const InvestmentScalarWhereWithAggregatesInputSchema = z.object({
   lastProfitDistributedAt: z.union([z.lazy(() => DateTimeNullableWithAggregatesFilterSchema), z.coerce.date()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const ProfitWhereInputSchema = z.object({
+});
+const ProfitWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => ProfitWhereInputSchema), z.lazy(() => ProfitWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => ProfitWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => ProfitWhereInputSchema), z.lazy(() => ProfitWhereInputSchema).array()]).optional(),
@@ -2060,8 +2060,8 @@ const ProfitWhereInputSchema = z.object({
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   investment: z.union([z.lazy(() => InvestmentScalarRelationFilterSchema), z.lazy(() => InvestmentWhereInputSchema)]).optional()
-}).strict();
-const ProfitOrderByWithRelationInputSchema = z.object({
+});
+const ProfitOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   investmentId: z.lazy(() => SortOrderSchema).optional(),
   number: z.lazy(() => SortOrderSchema).optional(),
@@ -2072,11 +2072,11 @@ const ProfitOrderByWithRelationInputSchema = z.object({
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   investment: z.lazy(() => InvestmentOrderByWithRelationInputSchema).optional()
-}).strict();
+});
 const ProfitWhereUniqueInputSchema = z.object({
-  id: z.string().uuid()
-}).and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.uuid()
+}).and(z.strictObject({
+  id: z.uuid().optional(),
   AND: z.union([z.lazy(() => ProfitWhereInputSchema), z.lazy(() => ProfitWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => ProfitWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => ProfitWhereInputSchema), z.lazy(() => ProfitWhereInputSchema).array()]).optional(),
@@ -2089,8 +2089,8 @@ const ProfitWhereUniqueInputSchema = z.object({
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   investment: z.union([z.lazy(() => InvestmentScalarRelationFilterSchema), z.lazy(() => InvestmentWhereInputSchema)]).optional()
-}).strict());
-const ProfitOrderByWithAggregationInputSchema = z.object({
+}));
+const ProfitOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   investmentId: z.lazy(() => SortOrderSchema).optional(),
   number: z.lazy(() => SortOrderSchema).optional(),
@@ -2105,8 +2105,8 @@ const ProfitOrderByWithAggregationInputSchema = z.object({
   _max: z.lazy(() => ProfitMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => ProfitMinOrderByAggregateInputSchema).optional(),
   _sum: z.lazy(() => ProfitSumOrderByAggregateInputSchema).optional()
-}).strict();
-const ProfitScalarWhereWithAggregatesInputSchema = z.object({
+});
+const ProfitScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => ProfitScalarWhereWithAggregatesInputSchema), z.lazy(() => ProfitScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => ProfitScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => ProfitScalarWhereWithAggregatesInputSchema), z.lazy(() => ProfitScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -2119,8 +2119,8 @@ const ProfitScalarWhereWithAggregatesInputSchema = z.object({
   distributedAt: z.union([z.lazy(() => DateTimeNullableWithAggregatesFilterSchema), z.coerce.date()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const TransactionWhereInputSchema = z.object({
+});
+const TransactionWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => TransactionWhereInputSchema), z.lazy(() => TransactionWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => TransactionWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => TransactionWhereInputSchema), z.lazy(() => TransactionWhereInputSchema).array()]).optional(),
@@ -2156,8 +2156,8 @@ const TransactionWhereInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestListRelationFilterSchema).optional(),
   parentTransaction: z.union([z.lazy(() => TransactionNullableScalarRelationFilterSchema), z.lazy(() => TransactionWhereInputSchema)]).optional().nullable(),
   childTransactions: z.lazy(() => TransactionListRelationFilterSchema).optional()
-}).strict();
-const TransactionOrderByWithRelationInputSchema = z.object({
+});
+const TransactionOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional(),
   currency: z.lazy(() => SortOrderSchema).optional(),
@@ -2190,11 +2190,11 @@ const TransactionOrderByWithRelationInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestOrderByRelationAggregateInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionOrderByWithRelationInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionOrderByRelationAggregateInputSchema).optional()
-}).strict();
+});
 const TransactionWhereUniqueInputSchema = z.object({
-  id: z.string().uuid()
-}).and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.uuid()
+}).and(z.strictObject({
+  id: z.uuid().optional(),
   AND: z.union([z.lazy(() => TransactionWhereInputSchema), z.lazy(() => TransactionWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => TransactionWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => TransactionWhereInputSchema), z.lazy(() => TransactionWhereInputSchema).array()]).optional(),
@@ -2229,8 +2229,8 @@ const TransactionWhereUniqueInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestListRelationFilterSchema).optional(),
   parentTransaction: z.union([z.lazy(() => TransactionNullableScalarRelationFilterSchema), z.lazy(() => TransactionWhereInputSchema)]).optional().nullable(),
   childTransactions: z.lazy(() => TransactionListRelationFilterSchema).optional()
-}).strict());
-const TransactionOrderByWithAggregationInputSchema = z.object({
+}));
+const TransactionOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional(),
   currency: z.lazy(() => SortOrderSchema).optional(),
@@ -2261,8 +2261,8 @@ const TransactionOrderByWithAggregationInputSchema = z.object({
   _max: z.lazy(() => TransactionMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => TransactionMinOrderByAggregateInputSchema).optional(),
   _sum: z.lazy(() => TransactionSumOrderByAggregateInputSchema).optional()
-}).strict();
-const TransactionScalarWhereWithAggregatesInputSchema = z.object({
+});
+const TransactionScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => TransactionScalarWhereWithAggregatesInputSchema), z.lazy(() => TransactionScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => TransactionScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => TransactionScalarWhereWithAggregatesInputSchema), z.lazy(() => TransactionScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -2291,8 +2291,8 @@ const TransactionScalarWhereWithAggregatesInputSchema = z.object({
   description: z.union([z.lazy(() => StringNullableWithAggregatesFilterSchema), z.string()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const NotificationWhereInputSchema = z.object({
+});
+const NotificationWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => NotificationWhereInputSchema), z.lazy(() => NotificationWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => NotificationWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => NotificationWhereInputSchema), z.lazy(() => NotificationWhereInputSchema).array()]).optional(),
@@ -2308,8 +2308,8 @@ const NotificationWhereInputSchema = z.object({
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   user: z.union([z.lazy(() => UserNullableScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional().nullable(),
   financialAccount: z.union([z.lazy(() => FinancialAccountNullableScalarRelationFilterSchema), z.lazy(() => FinancialAccountWhereInputSchema)]).optional().nullable()
-}).strict();
-const NotificationOrderByWithRelationInputSchema = z.object({
+});
+const NotificationOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   title: z.lazy(() => SortOrderSchema).optional(),
   body: z.lazy(() => SortOrderSchema).optional(),
@@ -2322,11 +2322,11 @@ const NotificationOrderByWithRelationInputSchema = z.object({
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   user: z.lazy(() => UserOrderByWithRelationInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountOrderByWithRelationInputSchema).optional()
-}).strict();
+});
 const NotificationWhereUniqueInputSchema = z.object({
-  id: z.string().uuid()
-}).and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.uuid()
+}).and(z.strictObject({
+  id: z.uuid().optional(),
   AND: z.union([z.lazy(() => NotificationWhereInputSchema), z.lazy(() => NotificationWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => NotificationWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => NotificationWhereInputSchema), z.lazy(() => NotificationWhereInputSchema).array()]).optional(),
@@ -2341,8 +2341,8 @@ const NotificationWhereUniqueInputSchema = z.object({
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   user: z.union([z.lazy(() => UserNullableScalarRelationFilterSchema), z.lazy(() => UserWhereInputSchema)]).optional().nullable(),
   financialAccount: z.union([z.lazy(() => FinancialAccountNullableScalarRelationFilterSchema), z.lazy(() => FinancialAccountWhereInputSchema)]).optional().nullable()
-}).strict());
-const NotificationOrderByWithAggregationInputSchema = z.object({
+}));
+const NotificationOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   title: z.lazy(() => SortOrderSchema).optional(),
   body: z.lazy(() => SortOrderSchema).optional(),
@@ -2356,8 +2356,8 @@ const NotificationOrderByWithAggregationInputSchema = z.object({
   _count: z.lazy(() => NotificationCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => NotificationMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => NotificationMinOrderByAggregateInputSchema).optional()
-}).strict();
-const NotificationScalarWhereWithAggregatesInputSchema = z.object({
+});
+const NotificationScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => NotificationScalarWhereWithAggregatesInputSchema), z.lazy(() => NotificationScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => NotificationScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => NotificationScalarWhereWithAggregatesInputSchema), z.lazy(() => NotificationScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -2371,8 +2371,8 @@ const NotificationScalarWhereWithAggregatesInputSchema = z.object({
   isRead: z.union([z.lazy(() => BoolWithAggregatesFilterSchema), z.boolean()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const CurrencyWhereInputSchema = z.object({
+});
+const CurrencyWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => CurrencyWhereInputSchema), z.lazy(() => CurrencyWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => CurrencyWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => CurrencyWhereInputSchema), z.lazy(() => CurrencyWhereInputSchema).array()]).optional(),
@@ -2392,8 +2392,8 @@ const CurrencyWhereInputSchema = z.object({
   withdrawalCharge: z.union([z.lazy(() => FloatFilterSchema), z.number()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const CurrencyOrderByWithRelationInputSchema = z.object({
+});
+const CurrencyOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   symbol: z.lazy(() => SortOrderSchema).optional(),
@@ -2410,20 +2410,20 @@ const CurrencyOrderByWithRelationInputSchema = z.object({
   withdrawalCharge: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
+});
 const CurrencyWhereUniqueInputSchema = z.union([
   z.object({
-    id: z.string().uuid(),
+    id: z.uuid(),
     symbol: z.string()
   }),
   z.object({
-    id: z.string().uuid()
+    id: z.uuid()
   }),
   z.object({
     symbol: z.string()
   })
-]).and(z.object({
-  id: z.string().uuid().optional(),
+]).and(z.strictObject({
+  id: z.uuid().optional(),
   symbol: z.string().optional(),
   AND: z.union([z.lazy(() => CurrencyWhereInputSchema), z.lazy(() => CurrencyWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => CurrencyWhereInputSchema).array().optional(),
@@ -2442,8 +2442,8 @@ const CurrencyWhereUniqueInputSchema = z.union([
   withdrawalCharge: z.union([z.lazy(() => FloatFilterSchema), z.number()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict());
-const CurrencyOrderByWithAggregationInputSchema = z.object({
+}));
+const CurrencyOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   symbol: z.lazy(() => SortOrderSchema).optional(),
@@ -2465,8 +2465,8 @@ const CurrencyOrderByWithAggregationInputSchema = z.object({
   _max: z.lazy(() => CurrencyMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => CurrencyMinOrderByAggregateInputSchema).optional(),
   _sum: z.lazy(() => CurrencySumOrderByAggregateInputSchema).optional()
-}).strict();
-const CurrencyScalarWhereWithAggregatesInputSchema = z.object({
+});
+const CurrencyScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => CurrencyScalarWhereWithAggregatesInputSchema), z.lazy(() => CurrencyScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => CurrencyScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => CurrencyScalarWhereWithAggregatesInputSchema), z.lazy(() => CurrencyScalarWhereWithAggregatesInputSchema).array()]).optional(),
@@ -2486,43 +2486,43 @@ const CurrencyScalarWhereWithAggregatesInputSchema = z.object({
   withdrawalCharge: z.union([z.lazy(() => FloatWithAggregatesFilterSchema), z.number()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const SettingsWhereInputSchema = z.object({
+});
+const SettingsWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => SettingsWhereInputSchema), z.lazy(() => SettingsWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => SettingsWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => SettingsWhereInputSchema), z.lazy(() => SettingsWhereInputSchema).array()]).optional(),
   id: z.union([z.lazy(() => StringFilterSchema), z.string()]).optional(),
   allowWithdrawals: z.union([z.lazy(() => BoolFilterSchema), z.boolean()]).optional()
-}).strict();
-const SettingsOrderByWithRelationInputSchema = z.object({
+});
+const SettingsOrderByWithRelationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   allowWithdrawals: z.lazy(() => SortOrderSchema).optional()
-}).strict();
+});
 const SettingsWhereUniqueInputSchema = z.object({
-  id: z.string().uuid()
-}).and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.uuid()
+}).and(z.strictObject({
+  id: z.uuid().optional(),
   AND: z.union([z.lazy(() => SettingsWhereInputSchema), z.lazy(() => SettingsWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => SettingsWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => SettingsWhereInputSchema), z.lazy(() => SettingsWhereInputSchema).array()]).optional(),
   allowWithdrawals: z.union([z.lazy(() => BoolFilterSchema), z.boolean()]).optional()
-}).strict());
-const SettingsOrderByWithAggregationInputSchema = z.object({
+}));
+const SettingsOrderByWithAggregationInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   allowWithdrawals: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => SettingsCountOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => SettingsMaxOrderByAggregateInputSchema).optional(),
   _min: z.lazy(() => SettingsMinOrderByAggregateInputSchema).optional()
-}).strict();
-const SettingsScalarWhereWithAggregatesInputSchema = z.object({
+});
+const SettingsScalarWhereWithAggregatesInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => SettingsScalarWhereWithAggregatesInputSchema), z.lazy(() => SettingsScalarWhereWithAggregatesInputSchema).array()]).optional(),
   OR: z.lazy(() => SettingsScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => SettingsScalarWhereWithAggregatesInputSchema), z.lazy(() => SettingsScalarWhereWithAggregatesInputSchema).array()]).optional(),
   id: z.union([z.lazy(() => StringWithAggregatesFilterSchema), z.string()]).optional(),
   allowWithdrawals: z.union([z.lazy(() => BoolWithAggregatesFilterSchema), z.boolean()]).optional()
-}).strict();
-const UserCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -2543,9 +2543,9 @@ const UserCreateInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -2566,9 +2566,9 @@ const UserUncheckedCreateInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -2589,9 +2589,9 @@ const UserUpdateInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -2612,9 +2612,9 @@ const UserUncheckedUpdateInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -2625,9 +2625,9 @@ const UserCreateManyInputSchema = z.object({
   banExpires: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const UserUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -2638,9 +2638,9 @@ const UserUpdateManyMutationInputSchema = z.object({
   banExpires: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const UserUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -2651,9 +2651,9 @@ const UserUncheckedUpdateManyInputSchema = z.object({
   banExpires: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const SessionCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const SessionCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   token: z.string(),
   expiresAt: z.coerce.date(),
   ipAddress: z.string().optional().nullable(),
@@ -2662,9 +2662,9 @@ const SessionCreateInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutSessionsInputSchema)
-}).strict();
-const SessionUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const SessionUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string(),
   token: z.string(),
   expiresAt: z.coerce.date(),
@@ -2673,9 +2673,9 @@ const SessionUncheckedCreateInputSchema = z.object({
   impersonatedBy: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const SessionUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const SessionUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   token: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   expiresAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   ipAddress: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -2684,9 +2684,9 @@ const SessionUpdateInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutSessionsNestedInputSchema).optional()
-}).strict();
-const SessionUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const SessionUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   userId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   token: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   expiresAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
@@ -2695,9 +2695,9 @@ const SessionUncheckedUpdateInputSchema = z.object({
   impersonatedBy: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const SessionCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const SessionCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string(),
   token: z.string(),
   expiresAt: z.coerce.date(),
@@ -2706,9 +2706,9 @@ const SessionCreateManyInputSchema = z.object({
   impersonatedBy: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const SessionUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const SessionUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   token: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   expiresAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   ipAddress: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -2716,9 +2716,9 @@ const SessionUpdateManyMutationInputSchema = z.object({
   impersonatedBy: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const SessionUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const SessionUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   userId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   token: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   expiresAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
@@ -2727,9 +2727,9 @@ const SessionUncheckedUpdateManyInputSchema = z.object({
   impersonatedBy: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const AccountCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   accountId: z.string(),
   providerId: z.string(),
   accessToken: z.string().optional().nullable(),
@@ -2742,9 +2742,9 @@ const AccountCreateInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutAccountsInputSchema)
-}).strict();
-const AccountUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string(),
   accountId: z.string(),
   providerId: z.string(),
@@ -2757,9 +2757,9 @@ const AccountUncheckedCreateInputSchema = z.object({
   password: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const AccountUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   accountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   providerId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   accessToken: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -2772,9 +2772,9 @@ const AccountUpdateInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutAccountsNestedInputSchema).optional()
-}).strict();
-const AccountUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   userId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   accountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   providerId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -2787,9 +2787,9 @@ const AccountUncheckedUpdateInputSchema = z.object({
   password: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const AccountCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string(),
   accountId: z.string(),
   providerId: z.string(),
@@ -2802,9 +2802,9 @@ const AccountCreateManyInputSchema = z.object({
   password: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const AccountUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   accountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   providerId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   accessToken: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -2816,9 +2816,9 @@ const AccountUpdateManyMutationInputSchema = z.object({
   password: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const AccountUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   userId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   accountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   providerId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -2831,65 +2831,65 @@ const AccountUncheckedUpdateManyInputSchema = z.object({
   password: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const VerificationCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const VerificationCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   identifier: z.string(),
   value: z.string(),
   expiresAt: z.coerce.date(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const VerificationUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const VerificationUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   identifier: z.string(),
   value: z.string(),
   expiresAt: z.coerce.date(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const VerificationUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const VerificationUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   identifier: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   value: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   expiresAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const VerificationUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const VerificationUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   identifier: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   value: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   expiresAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const VerificationCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const VerificationCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   identifier: z.string(),
   value: z.string(),
   expiresAt: z.coerce.date(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const VerificationUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const VerificationUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   identifier: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   value: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   expiresAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const VerificationUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const VerificationUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   identifier: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   value: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   expiresAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const ProfileCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const ProfileCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   address: z.string().optional().nullable(),
   country: z.string().optional().nullable(),
   state: z.string().optional().nullable(),
@@ -2902,9 +2902,9 @@ const ProfileCreateInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutProfileInputSchema)
-}).strict();
-const ProfileUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const ProfileUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string(),
   address: z.string().optional().nullable(),
   country: z.string().optional().nullable(),
@@ -2917,9 +2917,9 @@ const ProfileUncheckedCreateInputSchema = z.object({
   kycStatus: z.lazy(() => KycStatusSchema).optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const ProfileUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfileUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   address: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   country: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   state: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -2932,9 +2932,9 @@ const ProfileUpdateInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutProfileNestedInputSchema).optional()
-}).strict();
-const ProfileUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfileUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   userId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   address: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   country: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -2947,9 +2947,9 @@ const ProfileUncheckedUpdateInputSchema = z.object({
   kycStatus: z.union([z.lazy(() => KycStatusSchema), z.lazy(() => NullableEnumKycStatusFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const ProfileCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const ProfileCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string(),
   address: z.string().optional().nullable(),
   country: z.string().optional().nullable(),
@@ -2962,9 +2962,9 @@ const ProfileCreateManyInputSchema = z.object({
   kycStatus: z.lazy(() => KycStatusSchema).optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const ProfileUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfileUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   address: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   country: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   state: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -2976,9 +2976,9 @@ const ProfileUpdateManyMutationInputSchema = z.object({
   kycStatus: z.union([z.lazy(() => KycStatusSchema), z.lazy(() => NullableEnumKycStatusFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const ProfileUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfileUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   userId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   address: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   country: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -2991,9 +2991,9 @@ const ProfileUncheckedUpdateManyInputSchema = z.object({
   kycStatus: z.union([z.lazy(() => KycStatusSchema), z.lazy(() => NullableEnumKycStatusFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const BusinessProfileCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const BusinessProfileCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   address: z.string().optional().nullable(),
   creationMonth: z.string().optional().nullable(),
   creationYear: z.number().int().optional().nullable(),
@@ -3005,9 +3005,9 @@ const BusinessProfileCreateInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   account: z.lazy(() => FinancialAccountCreateNestedOneWithoutBusinessProfileInputSchema)
-}).strict();
-const BusinessProfileUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const BusinessProfileUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string(),
   address: z.string().optional().nullable(),
   creationMonth: z.string().optional().nullable(),
@@ -3019,9 +3019,9 @@ const BusinessProfileUncheckedCreateInputSchema = z.object({
   approved: z.boolean(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const BusinessProfileUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const BusinessProfileUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   address: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   creationMonth: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   creationYear: z.union([z.number().int(), z.lazy(() => NullableIntFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -3033,9 +3033,9 @@ const BusinessProfileUpdateInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   account: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutBusinessProfileNestedInputSchema).optional()
-}).strict();
-const BusinessProfileUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const BusinessProfileUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   address: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   creationMonth: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -3047,9 +3047,9 @@ const BusinessProfileUncheckedUpdateInputSchema = z.object({
   approved: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const BusinessProfileCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const BusinessProfileCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string(),
   address: z.string().optional().nullable(),
   creationMonth: z.string().optional().nullable(),
@@ -3061,9 +3061,9 @@ const BusinessProfileCreateManyInputSchema = z.object({
   approved: z.boolean(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const BusinessProfileUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const BusinessProfileUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   address: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   creationMonth: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   creationYear: z.union([z.number().int(), z.lazy(() => NullableIntFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -3074,9 +3074,9 @@ const BusinessProfileUpdateManyMutationInputSchema = z.object({
   approved: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const BusinessProfileUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const BusinessProfileUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   address: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   creationMonth: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -3088,9 +3088,9 @@ const BusinessProfileUncheckedUpdateManyInputSchema = z.object({
   approved: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const FinancialAccountCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   number: z.string(),
   status: z.lazy(() => AccountStatusSchema).optional(),
@@ -3114,9 +3114,9 @@ const FinancialAccountCreateInputSchema = z.object({
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   name: z.string(),
   number: z.string(),
@@ -3140,9 +3140,9 @@ const FinancialAccountUncheckedCreateInputSchema = z.object({
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -3166,9 +3166,9 @@ const FinancialAccountUpdateInputSchema = z.object({
   transactions: z.lazy(() => TransactionUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -3192,9 +3192,9 @@ const FinancialAccountUncheckedUpdateInputSchema = z.object({
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   name: z.string(),
   number: z.string(),
@@ -3210,9 +3210,9 @@ const FinancialAccountCreateManyInputSchema = z.object({
   dormantAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const FinancialAccountUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -3227,9 +3227,9 @@ const FinancialAccountUpdateManyMutationInputSchema = z.object({
   dormantAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -3245,9 +3245,9 @@ const FinancialAccountUncheckedUpdateManyInputSchema = z.object({
   dormantAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const AccountUserCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
   ownership: z.number().optional(),
   autosign: z.boolean().optional(),
@@ -3257,9 +3257,9 @@ const AccountUserCreateInputSchema = z.object({
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutAccountUsersInputSchema),
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutInitiatorInputSchema).optional(),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutInvestorInputSchema).optional()
-}).strict();
-const AccountUserUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string(),
   financialAccountId: z.string(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
@@ -3269,9 +3269,9 @@ const AccountUserUncheckedCreateInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInitiatorInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutInvestorInputSchema).optional()
-}).strict();
-const AccountUserUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
   ownership: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   autosign: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -3281,9 +3281,9 @@ const AccountUserUpdateInputSchema = z.object({
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutAccountUsersNestedInputSchema).optional(),
   transactions: z.lazy(() => TransactionUpdateManyWithoutInitiatorNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutInvestorNestedInputSchema).optional()
-}).strict();
-const AccountUserUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   userId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
@@ -3293,9 +3293,9 @@ const AccountUserUncheckedUpdateInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInitiatorNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutInvestorNestedInputSchema).optional()
-}).strict();
-const AccountUserCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string(),
   financialAccountId: z.string(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
@@ -3303,17 +3303,17 @@ const AccountUserCreateManyInputSchema = z.object({
   autosign: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const AccountUserUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
   ownership: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   autosign: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const AccountUserUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   userId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
@@ -3321,9 +3321,9 @@ const AccountUserUncheckedUpdateManyInputSchema = z.object({
   autosign: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountRequestCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountRequestCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   recipientName: z.string(),
   recipientEmail: z.string(),
   role: z.lazy(() => AccountUserRoleSchema),
@@ -3337,9 +3337,9 @@ const JointAccountRequestCreateInputSchema = z.object({
   creator: z.lazy(() => UserCreateNestedOneWithoutCreatedJointAccountRequestsInputSchema),
   recipient: z.lazy(() => UserCreateNestedOneWithoutReceivedJointAccountRequestsInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutJointAccountRequestsInputSchema)
-}).strict();
-const JointAccountRequestUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountRequestUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   recipientName: z.string(),
   recipientEmail: z.string(),
@@ -3353,9 +3353,9 @@ const JointAccountRequestUncheckedCreateInputSchema = z.object({
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountRequestUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
@@ -3369,9 +3369,9 @@ const JointAccountRequestUpdateInputSchema = z.object({
   creator: z.lazy(() => UserUpdateOneRequiredWithoutCreatedJointAccountRequestsNestedInputSchema).optional(),
   recipient: z.lazy(() => UserUpdateOneWithoutReceivedJointAccountRequestsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutJointAccountRequestsNestedInputSchema).optional()
-}).strict();
-const JointAccountRequestUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -3385,9 +3385,9 @@ const JointAccountRequestUncheckedUpdateInputSchema = z.object({
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountRequestCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountRequestCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   recipientName: z.string(),
   recipientEmail: z.string(),
@@ -3401,9 +3401,9 @@ const JointAccountRequestCreateManyInputSchema = z.object({
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountRequestUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
@@ -3414,9 +3414,9 @@ const JointAccountRequestUpdateManyMutationInputSchema = z.object({
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountRequestUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -3430,9 +3430,9 @@ const JointAccountRequestUncheckedUpdateManyInputSchema = z.object({
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -3441,9 +3441,9 @@ const JointAccountModRequestCreateInputSchema = z.object({
   account: z.lazy(() => FinancialAccountCreateNestedOneWithoutJointAccountModRequestsInputSchema),
   transaction: z.lazy(() => TransactionCreateNestedOneWithoutJointAccountModRequestsInputSchema).optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutRequestInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   financialAccountId: z.string(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
@@ -3452,9 +3452,9 @@ const JointAccountModRequestUncheckedCreateInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutRequestInputSchema).optional()
-}).strict();
-const JointAccountModRequestUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
@@ -3463,9 +3463,9 @@ const JointAccountModRequestUpdateInputSchema = z.object({
   account: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutJointAccountModRequestsNestedInputSchema).optional(),
   transaction: z.lazy(() => TransactionUpdateOneWithoutJointAccountModRequestsNestedInputSchema).optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutRequestNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -3474,9 +3474,9 @@ const JointAccountModRequestUncheckedUpdateInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutRequestNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   financialAccountId: z.string(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
@@ -3484,16 +3484,16 @@ const JointAccountModRequestCreateManyInputSchema = z.object({
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountModRequestUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -3501,63 +3501,63 @@ const JointAccountModRequestUncheckedUpdateManyInputSchema = z.object({
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestApprovalCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestApprovalCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   request: z.lazy(() => JointAccountModRequestCreateNestedOneWithoutApprovalsInputSchema),
   approver: z.lazy(() => UserCreateNestedOneWithoutApprovedJointAccountModRequestsInputSchema)
-}).strict();
-const JointAccountModRequestApprovalUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestApprovalUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   jointAccountModRequestId: z.string(),
   approverId: z.string(),
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountModRequestApprovalUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestApprovalUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   request: z.lazy(() => JointAccountModRequestUpdateOneRequiredWithoutApprovalsNestedInputSchema).optional(),
   approver: z.lazy(() => UserUpdateOneRequiredWithoutApprovedJointAccountModRequestsNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestApprovalUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestApprovalUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   jointAccountModRequestId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   approverId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestApprovalCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestApprovalCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   jointAccountModRequestId: z.string(),
   approverId: z.string(),
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountModRequestApprovalUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestApprovalUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestApprovalUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestApprovalUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   jointAccountModRequestId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   approverId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const InvestmentPlanCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentPlanCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   category: z.lazy(() => InvestmentPlanCategorySchema),
   minimumDeposit: z.number(),
@@ -3569,9 +3569,9 @@ const InvestmentPlanCreateInputSchema = z.object({
   terminationFee: z.number().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const InvestmentPlanUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentPlanUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   category: z.lazy(() => InvestmentPlanCategorySchema),
   minimumDeposit: z.number(),
@@ -3583,9 +3583,9 @@ const InvestmentPlanUncheckedCreateInputSchema = z.object({
   terminationFee: z.number().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const InvestmentPlanUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentPlanUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   category: z.union([z.lazy(() => InvestmentPlanCategorySchema), z.lazy(() => EnumInvestmentPlanCategoryFieldUpdateOperationsInputSchema)]).optional(),
   minimumDeposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -3597,9 +3597,9 @@ const InvestmentPlanUpdateInputSchema = z.object({
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const InvestmentPlanUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentPlanUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   category: z.union([z.lazy(() => InvestmentPlanCategorySchema), z.lazy(() => EnumInvestmentPlanCategoryFieldUpdateOperationsInputSchema)]).optional(),
   minimumDeposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -3611,9 +3611,9 @@ const InvestmentPlanUncheckedUpdateInputSchema = z.object({
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const InvestmentPlanCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentPlanCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   category: z.lazy(() => InvestmentPlanCategorySchema),
   minimumDeposit: z.number(),
@@ -3625,9 +3625,9 @@ const InvestmentPlanCreateManyInputSchema = z.object({
   terminationFee: z.number().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const InvestmentPlanUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentPlanUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   category: z.union([z.lazy(() => InvestmentPlanCategorySchema), z.lazy(() => EnumInvestmentPlanCategoryFieldUpdateOperationsInputSchema)]).optional(),
   minimumDeposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -3639,9 +3639,9 @@ const InvestmentPlanUpdateManyMutationInputSchema = z.object({
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const InvestmentPlanUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentPlanUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   category: z.union([z.lazy(() => InvestmentPlanCategorySchema), z.lazy(() => EnumInvestmentPlanCategoryFieldUpdateOperationsInputSchema)]).optional(),
   minimumDeposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -3653,9 +3653,9 @@ const InvestmentPlanUncheckedUpdateManyInputSchema = z.object({
   terminationFee: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const InvestmentCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   deposit: z.number(),
   investmentName: z.string(),
   totalProfit: z.number().optional(),
@@ -3681,9 +3681,9 @@ const InvestmentCreateInputSchema = z.object({
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutInvestmentInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema),
   profits: z.lazy(() => ProfitCreateNestedManyWithoutInvestmentInputSchema).optional()
-}).strict();
-const InvestmentUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string(),
   investorId: z.string(),
   deposit: z.number(),
@@ -3709,9 +3709,9 @@ const InvestmentUncheckedCreateInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional(),
   profits: z.lazy(() => ProfitUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
-}).strict();
-const InvestmentUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   investmentName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   totalProfit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -3737,9 +3737,9 @@ const InvestmentUpdateInputSchema = z.object({
   transactions: z.lazy(() => TransactionUpdateManyWithoutInvestmentNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
   profits: z.lazy(() => ProfitUpdateManyWithoutInvestmentNestedInputSchema).optional()
-}).strict();
-const InvestmentUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   investorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -3765,9 +3765,9 @@ const InvestmentUncheckedUpdateInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional(),
   profits: z.lazy(() => ProfitUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
-}).strict();
-const InvestmentCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string(),
   investorId: z.string(),
   deposit: z.number(),
@@ -3791,9 +3791,9 @@ const InvestmentCreateManyInputSchema = z.object({
   lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const InvestmentUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   investmentName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   totalProfit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -3815,9 +3815,9 @@ const InvestmentUpdateManyMutationInputSchema = z.object({
   lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const InvestmentUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   investorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -3841,9 +3841,9 @@ const InvestmentUncheckedUpdateManyInputSchema = z.object({
   lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const ProfitCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const ProfitCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   number: z.number().int(),
   intendedAmount: z.number(),
   actualAmount: z.number(),
@@ -3852,9 +3852,9 @@ const ProfitCreateInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   investment: z.lazy(() => InvestmentCreateNestedOneWithoutProfitsInputSchema)
-}).strict();
-const ProfitUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const ProfitUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   investmentId: z.string(),
   number: z.number().int(),
   intendedAmount: z.number(),
@@ -3863,9 +3863,9 @@ const ProfitUncheckedCreateInputSchema = z.object({
   distributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const ProfitUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfitUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputSchema)]).optional(),
   intendedAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   actualAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -3874,9 +3874,9 @@ const ProfitUpdateInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   investment: z.lazy(() => InvestmentUpdateOneRequiredWithoutProfitsNestedInputSchema).optional()
-}).strict();
-const ProfitUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfitUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   investmentId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputSchema)]).optional(),
   intendedAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -3885,9 +3885,9 @@ const ProfitUncheckedUpdateInputSchema = z.object({
   distributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const ProfitCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const ProfitCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   investmentId: z.string(),
   number: z.number().int(),
   intendedAmount: z.number(),
@@ -3896,9 +3896,9 @@ const ProfitCreateManyInputSchema = z.object({
   distributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const ProfitUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfitUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputSchema)]).optional(),
   intendedAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   actualAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -3906,9 +3906,9 @@ const ProfitUpdateManyMutationInputSchema = z.object({
   distributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const ProfitUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfitUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   investmentId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputSchema)]).optional(),
   intendedAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -3917,9 +3917,9 @@ const ProfitUncheckedUpdateManyInputSchema = z.object({
   distributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const TransactionCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -3946,9 +3946,9 @@ const TransactionCreateInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutTransactionInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionCreateNestedOneWithoutChildTransactionsInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -3975,9 +3975,9 @@ const TransactionUncheckedCreateInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutTransactionInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -4004,9 +4004,9 @@ const TransactionUpdateInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionUpdateOneWithoutChildTransactionsNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -4033,9 +4033,9 @@ const TransactionUncheckedUpdateInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutTransactionNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -4060,9 +4060,9 @@ const TransactionCreateManyInputSchema = z.object({
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const TransactionUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -4082,9 +4082,9 @@ const TransactionUpdateManyMutationInputSchema = z.object({
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const TransactionUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -4109,9 +4109,9 @@ const TransactionUncheckedUpdateManyInputSchema = z.object({
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const NotificationCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const NotificationCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   title: z.string(),
   body: z.string(),
   bodyType: z.lazy(() => NotificationBodyTypeSchema).optional(),
@@ -4121,9 +4121,9 @@ const NotificationCreateInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutNotificationsInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutNotificationsInputSchema).optional()
-}).strict();
-const NotificationUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const NotificationUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   title: z.string(),
   body: z.string(),
   bodyType: z.lazy(() => NotificationBodyTypeSchema).optional(),
@@ -4133,9 +4133,9 @@ const NotificationUncheckedCreateInputSchema = z.object({
   isRead: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const NotificationUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const NotificationUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   body: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   bodyType: z.union([z.lazy(() => NotificationBodyTypeSchema), z.lazy(() => EnumNotificationBodyTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -4145,9 +4145,9 @@ const NotificationUpdateInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   user: z.lazy(() => UserUpdateOneWithoutNotificationsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneWithoutNotificationsNestedInputSchema).optional()
-}).strict();
-const NotificationUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const NotificationUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   body: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   bodyType: z.union([z.lazy(() => NotificationBodyTypeSchema), z.lazy(() => EnumNotificationBodyTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -4157,9 +4157,9 @@ const NotificationUncheckedUpdateInputSchema = z.object({
   isRead: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const NotificationCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const NotificationCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   title: z.string(),
   body: z.string(),
   bodyType: z.lazy(() => NotificationBodyTypeSchema).optional(),
@@ -4169,9 +4169,9 @@ const NotificationCreateManyInputSchema = z.object({
   isRead: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const NotificationUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const NotificationUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   body: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   bodyType: z.union([z.lazy(() => NotificationBodyTypeSchema), z.lazy(() => EnumNotificationBodyTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -4179,9 +4179,9 @@ const NotificationUpdateManyMutationInputSchema = z.object({
   isRead: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const NotificationUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const NotificationUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   body: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   bodyType: z.union([z.lazy(() => NotificationBodyTypeSchema), z.lazy(() => EnumNotificationBodyTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -4191,9 +4191,9 @@ const NotificationUncheckedUpdateManyInputSchema = z.object({
   isRead: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const CurrencyCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const CurrencyCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   symbol: z.string(),
   image: z.string().optional().nullable(),
@@ -4209,9 +4209,9 @@ const CurrencyCreateInputSchema = z.object({
   withdrawalCharge: z.number().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const CurrencyUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const CurrencyUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   symbol: z.string(),
   image: z.string().optional().nullable(),
@@ -4227,9 +4227,9 @@ const CurrencyUncheckedCreateInputSchema = z.object({
   withdrawalCharge: z.number().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const CurrencyUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const CurrencyUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   symbol: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   image: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -4245,9 +4245,9 @@ const CurrencyUpdateInputSchema = z.object({
   withdrawalCharge: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const CurrencyUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const CurrencyUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   symbol: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   image: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -4263,9 +4263,9 @@ const CurrencyUncheckedUpdateInputSchema = z.object({
   withdrawalCharge: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const CurrencyCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const CurrencyCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   symbol: z.string(),
   image: z.string().optional().nullable(),
@@ -4281,9 +4281,9 @@ const CurrencyCreateManyInputSchema = z.object({
   withdrawalCharge: z.number().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const CurrencyUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const CurrencyUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   symbol: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   image: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -4299,9 +4299,9 @@ const CurrencyUpdateManyMutationInputSchema = z.object({
   withdrawalCharge: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const CurrencyUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const CurrencyUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   symbol: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   image: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -4317,36 +4317,36 @@ const CurrencyUncheckedUpdateManyInputSchema = z.object({
   withdrawalCharge: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const SettingsCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const SettingsCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   allowWithdrawals: z.boolean()
-}).strict();
-const SettingsUncheckedCreateInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const SettingsUncheckedCreateInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   allowWithdrawals: z.boolean()
-}).strict();
-const SettingsUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const SettingsUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   allowWithdrawals: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const SettingsUncheckedUpdateInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const SettingsUncheckedUpdateInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   allowWithdrawals: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const SettingsCreateManyInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const SettingsCreateManyInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   allowWithdrawals: z.boolean()
-}).strict();
-const SettingsUpdateManyMutationInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const SettingsUpdateManyMutationInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   allowWithdrawals: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const SettingsUncheckedUpdateManyInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const SettingsUncheckedUpdateManyInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   allowWithdrawals: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const StringFilterSchema = z.object({
+});
+const StringFilterSchema = z.strictObject({
   equals: z.string().optional(),
   in: z.string().array().optional(),
   notIn: z.string().array().optional(),
@@ -4358,12 +4358,12 @@ const StringFilterSchema = z.object({
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
   not: z.union([z.string(), z.lazy(() => NestedStringFilterSchema)]).optional()
-}).strict();
-const BoolFilterSchema = z.object({
+});
+const BoolFilterSchema = z.strictObject({
   equals: z.boolean().optional(),
   not: z.union([z.boolean(), z.lazy(() => NestedBoolFilterSchema)]).optional()
-}).strict();
-const StringNullableFilterSchema = z.object({
+});
+const StringNullableFilterSchema = z.strictObject({
   equals: z.string().optional().nullable(),
   in: z.string().array().optional().nullable(),
   notIn: z.string().array().optional().nullable(),
@@ -4375,18 +4375,18 @@ const StringNullableFilterSchema = z.object({
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
   not: z.union([z.string(), z.lazy(() => NestedStringNullableFilterSchema)]).optional().nullable()
-}).strict();
-const EnumUserRoleFilterSchema = z.object({
+});
+const EnumUserRoleFilterSchema = z.strictObject({
   equals: z.lazy(() => UserRoleSchema).optional(),
   in: z.lazy(() => UserRoleSchema).array().optional(),
   notIn: z.lazy(() => UserRoleSchema).array().optional(),
   not: z.union([z.lazy(() => UserRoleSchema), z.lazy(() => NestedEnumUserRoleFilterSchema)]).optional()
-}).strict();
-const BoolNullableFilterSchema = z.object({
+});
+const BoolNullableFilterSchema = z.strictObject({
   equals: z.boolean().optional().nullable(),
   not: z.union([z.boolean(), z.lazy(() => NestedBoolNullableFilterSchema)]).optional().nullable()
-}).strict();
-const DateTimeNullableFilterSchema = z.object({
+});
+const DateTimeNullableFilterSchema = z.strictObject({
   equals: z.coerce.date().optional().nullable(),
   in: z.coerce.date().array().optional().nullable(),
   notIn: z.coerce.date().array().optional().nullable(),
@@ -4395,8 +4395,8 @@ const DateTimeNullableFilterSchema = z.object({
   gt: z.coerce.date().optional(),
   gte: z.coerce.date().optional(),
   not: z.union([z.coerce.date(), z.lazy(() => NestedDateTimeNullableFilterSchema)]).optional().nullable()
-}).strict();
-const DateTimeFilterSchema = z.object({
+});
+const DateTimeFilterSchema = z.strictObject({
   equals: z.coerce.date().optional(),
   in: z.coerce.date().array().optional(),
   notIn: z.coerce.date().array().optional(),
@@ -4405,80 +4405,80 @@ const DateTimeFilterSchema = z.object({
   gt: z.coerce.date().optional(),
   gte: z.coerce.date().optional(),
   not: z.union([z.coerce.date(), z.lazy(() => NestedDateTimeFilterSchema)]).optional()
-}).strict();
-const ProfileNullableScalarRelationFilterSchema = z.object({
+});
+const ProfileNullableScalarRelationFilterSchema = z.strictObject({
   is: z.lazy(() => ProfileWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => ProfileWhereInputSchema).optional().nullable()
-}).strict();
-const SessionListRelationFilterSchema = z.object({
+});
+const SessionListRelationFilterSchema = z.strictObject({
   every: z.lazy(() => SessionWhereInputSchema).optional(),
   some: z.lazy(() => SessionWhereInputSchema).optional(),
   none: z.lazy(() => SessionWhereInputSchema).optional()
-}).strict();
-const AccountListRelationFilterSchema = z.object({
+});
+const AccountListRelationFilterSchema = z.strictObject({
   every: z.lazy(() => AccountWhereInputSchema).optional(),
   some: z.lazy(() => AccountWhereInputSchema).optional(),
   none: z.lazy(() => AccountWhereInputSchema).optional()
-}).strict();
-const FinancialAccountListRelationFilterSchema = z.object({
+});
+const FinancialAccountListRelationFilterSchema = z.strictObject({
   every: z.lazy(() => FinancialAccountWhereInputSchema).optional(),
   some: z.lazy(() => FinancialAccountWhereInputSchema).optional(),
   none: z.lazy(() => FinancialAccountWhereInputSchema).optional()
-}).strict();
-const AccountUserListRelationFilterSchema = z.object({
+});
+const AccountUserListRelationFilterSchema = z.strictObject({
   every: z.lazy(() => AccountUserWhereInputSchema).optional(),
   some: z.lazy(() => AccountUserWhereInputSchema).optional(),
   none: z.lazy(() => AccountUserWhereInputSchema).optional()
-}).strict();
-const JointAccountRequestListRelationFilterSchema = z.object({
+});
+const JointAccountRequestListRelationFilterSchema = z.strictObject({
   every: z.lazy(() => JointAccountRequestWhereInputSchema).optional(),
   some: z.lazy(() => JointAccountRequestWhereInputSchema).optional(),
   none: z.lazy(() => JointAccountRequestWhereInputSchema).optional()
-}).strict();
-const JointAccountModRequestListRelationFilterSchema = z.object({
+});
+const JointAccountModRequestListRelationFilterSchema = z.strictObject({
   every: z.lazy(() => JointAccountModRequestWhereInputSchema).optional(),
   some: z.lazy(() => JointAccountModRequestWhereInputSchema).optional(),
   none: z.lazy(() => JointAccountModRequestWhereInputSchema).optional()
-}).strict();
-const NotificationListRelationFilterSchema = z.object({
+});
+const NotificationListRelationFilterSchema = z.strictObject({
   every: z.lazy(() => NotificationWhereInputSchema).optional(),
   some: z.lazy(() => NotificationWhereInputSchema).optional(),
   none: z.lazy(() => NotificationWhereInputSchema).optional()
-}).strict();
-const JointAccountModRequestApprovalListRelationFilterSchema = z.object({
+});
+const JointAccountModRequestApprovalListRelationFilterSchema = z.strictObject({
   every: z.lazy(() => JointAccountModRequestApprovalWhereInputSchema).optional(),
   some: z.lazy(() => JointAccountModRequestApprovalWhereInputSchema).optional(),
   none: z.lazy(() => JointAccountModRequestApprovalWhereInputSchema).optional()
-}).strict();
-const SortOrderInputSchema = z.object({
+});
+const SortOrderInputSchema = z.strictObject({
   sort: z.lazy(() => SortOrderSchema),
   nulls: z.lazy(() => NullsOrderSchema).optional()
-}).strict();
-const SessionOrderByRelationAggregateInputSchema = z.object({
+});
+const SessionOrderByRelationAggregateInputSchema = z.strictObject({
   _count: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const AccountOrderByRelationAggregateInputSchema = z.object({
+});
+const AccountOrderByRelationAggregateInputSchema = z.strictObject({
   _count: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const FinancialAccountOrderByRelationAggregateInputSchema = z.object({
+});
+const FinancialAccountOrderByRelationAggregateInputSchema = z.strictObject({
   _count: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const AccountUserOrderByRelationAggregateInputSchema = z.object({
+});
+const AccountUserOrderByRelationAggregateInputSchema = z.strictObject({
   _count: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const JointAccountRequestOrderByRelationAggregateInputSchema = z.object({
+});
+const JointAccountRequestOrderByRelationAggregateInputSchema = z.strictObject({
   _count: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const JointAccountModRequestOrderByRelationAggregateInputSchema = z.object({
+});
+const JointAccountModRequestOrderByRelationAggregateInputSchema = z.strictObject({
   _count: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const NotificationOrderByRelationAggregateInputSchema = z.object({
+});
+const NotificationOrderByRelationAggregateInputSchema = z.strictObject({
   _count: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const JointAccountModRequestApprovalOrderByRelationAggregateInputSchema = z.object({
+});
+const JointAccountModRequestApprovalOrderByRelationAggregateInputSchema = z.strictObject({
   _count: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const UserCountOrderByAggregateInputSchema = z.object({
+});
+const UserCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   email: z.lazy(() => SortOrderSchema).optional(),
@@ -4490,8 +4490,8 @@ const UserCountOrderByAggregateInputSchema = z.object({
   banExpires: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const UserMaxOrderByAggregateInputSchema = z.object({
+});
+const UserMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   email: z.lazy(() => SortOrderSchema).optional(),
@@ -4503,8 +4503,8 @@ const UserMaxOrderByAggregateInputSchema = z.object({
   banExpires: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const UserMinOrderByAggregateInputSchema = z.object({
+});
+const UserMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   email: z.lazy(() => SortOrderSchema).optional(),
@@ -4516,8 +4516,8 @@ const UserMinOrderByAggregateInputSchema = z.object({
   banExpires: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const StringWithAggregatesFilterSchema = z.object({
+});
+const StringWithAggregatesFilterSchema = z.strictObject({
   equals: z.string().optional(),
   in: z.string().array().optional(),
   notIn: z.string().array().optional(),
@@ -4532,15 +4532,15 @@ const StringWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedStringFilterSchema).optional(),
   _max: z.lazy(() => NestedStringFilterSchema).optional()
-}).strict();
-const BoolWithAggregatesFilterSchema = z.object({
+});
+const BoolWithAggregatesFilterSchema = z.strictObject({
   equals: z.boolean().optional(),
   not: z.union([z.boolean(), z.lazy(() => NestedBoolWithAggregatesFilterSchema)]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedBoolFilterSchema).optional(),
   _max: z.lazy(() => NestedBoolFilterSchema).optional()
-}).strict();
-const StringNullableWithAggregatesFilterSchema = z.object({
+});
+const StringNullableWithAggregatesFilterSchema = z.strictObject({
   equals: z.string().optional().nullable(),
   in: z.string().array().optional().nullable(),
   notIn: z.string().array().optional().nullable(),
@@ -4555,8 +4555,8 @@ const StringNullableWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedStringNullableFilterSchema).optional()
-}).strict();
-const EnumUserRoleWithAggregatesFilterSchema = z.object({
+});
+const EnumUserRoleWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => UserRoleSchema).optional(),
   in: z.lazy(() => UserRoleSchema).array().optional(),
   notIn: z.lazy(() => UserRoleSchema).array().optional(),
@@ -4564,15 +4564,15 @@ const EnumUserRoleWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumUserRoleFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumUserRoleFilterSchema).optional()
-}).strict();
-const BoolNullableWithAggregatesFilterSchema = z.object({
+});
+const BoolNullableWithAggregatesFilterSchema = z.strictObject({
   equals: z.boolean().optional().nullable(),
   not: z.union([z.boolean(), z.lazy(() => NestedBoolNullableWithAggregatesFilterSchema)]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedBoolNullableFilterSchema).optional()
-}).strict();
-const DateTimeNullableWithAggregatesFilterSchema = z.object({
+});
+const DateTimeNullableWithAggregatesFilterSchema = z.strictObject({
   equals: z.coerce.date().optional().nullable(),
   in: z.coerce.date().array().optional().nullable(),
   notIn: z.coerce.date().array().optional().nullable(),
@@ -4584,8 +4584,8 @@ const DateTimeNullableWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedDateTimeNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedDateTimeNullableFilterSchema).optional()
-}).strict();
-const DateTimeWithAggregatesFilterSchema = z.object({
+});
+const DateTimeWithAggregatesFilterSchema = z.strictObject({
   equals: z.coerce.date().optional(),
   in: z.coerce.date().array().optional(),
   notIn: z.coerce.date().array().optional(),
@@ -4597,12 +4597,12 @@ const DateTimeWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedDateTimeFilterSchema).optional(),
   _max: z.lazy(() => NestedDateTimeFilterSchema).optional()
-}).strict();
-const UserScalarRelationFilterSchema = z.object({
+});
+const UserScalarRelationFilterSchema = z.strictObject({
   is: z.lazy(() => UserWhereInputSchema).optional(),
   isNot: z.lazy(() => UserWhereInputSchema).optional()
-}).strict();
-const SessionCountOrderByAggregateInputSchema = z.object({
+});
+const SessionCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   token: z.lazy(() => SortOrderSchema).optional(),
@@ -4612,8 +4612,8 @@ const SessionCountOrderByAggregateInputSchema = z.object({
   impersonatedBy: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const SessionMaxOrderByAggregateInputSchema = z.object({
+});
+const SessionMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   token: z.lazy(() => SortOrderSchema).optional(),
@@ -4623,8 +4623,8 @@ const SessionMaxOrderByAggregateInputSchema = z.object({
   impersonatedBy: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const SessionMinOrderByAggregateInputSchema = z.object({
+});
+const SessionMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   token: z.lazy(() => SortOrderSchema).optional(),
@@ -4634,8 +4634,8 @@ const SessionMinOrderByAggregateInputSchema = z.object({
   impersonatedBy: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const AccountCountOrderByAggregateInputSchema = z.object({
+});
+const AccountCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   accountId: z.lazy(() => SortOrderSchema).optional(),
@@ -4649,8 +4649,8 @@ const AccountCountOrderByAggregateInputSchema = z.object({
   password: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const AccountMaxOrderByAggregateInputSchema = z.object({
+});
+const AccountMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   accountId: z.lazy(() => SortOrderSchema).optional(),
@@ -4664,8 +4664,8 @@ const AccountMaxOrderByAggregateInputSchema = z.object({
   password: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const AccountMinOrderByAggregateInputSchema = z.object({
+});
+const AccountMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   accountId: z.lazy(() => SortOrderSchema).optional(),
@@ -4679,44 +4679,44 @@ const AccountMinOrderByAggregateInputSchema = z.object({
   password: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const VerificationCountOrderByAggregateInputSchema = z.object({
+});
+const VerificationCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   identifier: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
   expiresAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const VerificationMaxOrderByAggregateInputSchema = z.object({
+});
+const VerificationMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   identifier: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
   expiresAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const VerificationMinOrderByAggregateInputSchema = z.object({
+});
+const VerificationMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   identifier: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
   expiresAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const EnumGovernmentIdTypeNullableFilterSchema = z.object({
+});
+const EnumGovernmentIdTypeNullableFilterSchema = z.strictObject({
   equals: z.lazy(() => GovernmentIdTypeSchema).optional().nullable(),
   in: z.lazy(() => GovernmentIdTypeSchema).array().optional().nullable(),
   notIn: z.lazy(() => GovernmentIdTypeSchema).array().optional().nullable(),
   not: z.union([z.lazy(() => GovernmentIdTypeSchema), z.lazy(() => NestedEnumGovernmentIdTypeNullableFilterSchema)]).optional().nullable()
-}).strict();
-const EnumKycStatusNullableFilterSchema = z.object({
+});
+const EnumKycStatusNullableFilterSchema = z.strictObject({
   equals: z.lazy(() => KycStatusSchema).optional().nullable(),
   in: z.lazy(() => KycStatusSchema).array().optional().nullable(),
   notIn: z.lazy(() => KycStatusSchema).array().optional().nullable(),
   not: z.union([z.lazy(() => KycStatusSchema), z.lazy(() => NestedEnumKycStatusNullableFilterSchema)]).optional().nullable()
-}).strict();
-const ProfileCountOrderByAggregateInputSchema = z.object({
+});
+const ProfileCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   address: z.lazy(() => SortOrderSchema).optional(),
@@ -4730,8 +4730,8 @@ const ProfileCountOrderByAggregateInputSchema = z.object({
   kycStatus: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const ProfileMaxOrderByAggregateInputSchema = z.object({
+});
+const ProfileMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   address: z.lazy(() => SortOrderSchema).optional(),
@@ -4745,8 +4745,8 @@ const ProfileMaxOrderByAggregateInputSchema = z.object({
   kycStatus: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const ProfileMinOrderByAggregateInputSchema = z.object({
+});
+const ProfileMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   address: z.lazy(() => SortOrderSchema).optional(),
@@ -4760,8 +4760,8 @@ const ProfileMinOrderByAggregateInputSchema = z.object({
   kycStatus: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const EnumGovernmentIdTypeNullableWithAggregatesFilterSchema = z.object({
+});
+const EnumGovernmentIdTypeNullableWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => GovernmentIdTypeSchema).optional().nullable(),
   in: z.lazy(() => GovernmentIdTypeSchema).array().optional().nullable(),
   notIn: z.lazy(() => GovernmentIdTypeSchema).array().optional().nullable(),
@@ -4769,8 +4769,8 @@ const EnumGovernmentIdTypeNullableWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumGovernmentIdTypeNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumGovernmentIdTypeNullableFilterSchema).optional()
-}).strict();
-const EnumKycStatusNullableWithAggregatesFilterSchema = z.object({
+});
+const EnumKycStatusNullableWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => KycStatusSchema).optional().nullable(),
   in: z.lazy(() => KycStatusSchema).array().optional().nullable(),
   notIn: z.lazy(() => KycStatusSchema).array().optional().nullable(),
@@ -4778,8 +4778,8 @@ const EnumKycStatusNullableWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumKycStatusNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumKycStatusNullableFilterSchema).optional()
-}).strict();
-const IntNullableFilterSchema = z.object({
+});
+const IntNullableFilterSchema = z.strictObject({
   equals: z.number().optional().nullable(),
   in: z.number().array().optional().nullable(),
   notIn: z.number().array().optional().nullable(),
@@ -4788,12 +4788,12 @@ const IntNullableFilterSchema = z.object({
   gt: z.number().optional(),
   gte: z.number().optional(),
   not: z.union([z.number(), z.lazy(() => NestedIntNullableFilterSchema)]).optional().nullable()
-}).strict();
-const FinancialAccountScalarRelationFilterSchema = z.object({
+});
+const FinancialAccountScalarRelationFilterSchema = z.strictObject({
   is: z.lazy(() => FinancialAccountWhereInputSchema).optional(),
   isNot: z.lazy(() => FinancialAccountWhereInputSchema).optional()
-}).strict();
-const BusinessProfileCountOrderByAggregateInputSchema = z.object({
+});
+const BusinessProfileCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
   address: z.lazy(() => SortOrderSchema).optional(),
@@ -4806,11 +4806,11 @@ const BusinessProfileCountOrderByAggregateInputSchema = z.object({
   approved: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const BusinessProfileAvgOrderByAggregateInputSchema = z.object({
+});
+const BusinessProfileAvgOrderByAggregateInputSchema = z.strictObject({
   creationYear: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const BusinessProfileMaxOrderByAggregateInputSchema = z.object({
+});
+const BusinessProfileMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
   address: z.lazy(() => SortOrderSchema).optional(),
@@ -4823,8 +4823,8 @@ const BusinessProfileMaxOrderByAggregateInputSchema = z.object({
   approved: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const BusinessProfileMinOrderByAggregateInputSchema = z.object({
+});
+const BusinessProfileMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
   address: z.lazy(() => SortOrderSchema).optional(),
@@ -4837,11 +4837,11 @@ const BusinessProfileMinOrderByAggregateInputSchema = z.object({
   approved: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const BusinessProfileSumOrderByAggregateInputSchema = z.object({
+});
+const BusinessProfileSumOrderByAggregateInputSchema = z.strictObject({
   creationYear: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const IntNullableWithAggregatesFilterSchema = z.object({
+});
+const IntNullableWithAggregatesFilterSchema = z.strictObject({
   equals: z.number().optional().nullable(),
   in: z.number().array().optional().nullable(),
   notIn: z.number().array().optional().nullable(),
@@ -4855,26 +4855,26 @@ const IntNullableWithAggregatesFilterSchema = z.object({
   _sum: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedIntNullableFilterSchema).optional()
-}).strict();
-const EnumAccountStatusFilterSchema = z.object({
+});
+const EnumAccountStatusFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountStatusSchema).optional(),
   in: z.lazy(() => AccountStatusSchema).array().optional(),
   notIn: z.lazy(() => AccountStatusSchema).array().optional(),
   not: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => NestedEnumAccountStatusFilterSchema)]).optional()
-}).strict();
-const EnumAccountTypeFilterSchema = z.object({
+});
+const EnumAccountTypeFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountTypeSchema).optional(),
   in: z.lazy(() => AccountTypeSchema).array().optional(),
   notIn: z.lazy(() => AccountTypeSchema).array().optional(),
   not: z.union([z.lazy(() => AccountTypeSchema), z.lazy(() => NestedEnumAccountTypeFilterSchema)]).optional()
-}).strict();
-const EnumAccountOwnershipFilterSchema = z.object({
+});
+const EnumAccountOwnershipFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountOwnershipSchema).optional(),
   in: z.lazy(() => AccountOwnershipSchema).array().optional(),
   notIn: z.lazy(() => AccountOwnershipSchema).array().optional(),
   not: z.union([z.lazy(() => AccountOwnershipSchema), z.lazy(() => NestedEnumAccountOwnershipFilterSchema)]).optional()
-}).strict();
-const FloatFilterSchema = z.object({
+});
+const FloatFilterSchema = z.strictObject({
   equals: z.number().optional(),
   in: z.number().array().optional(),
   notIn: z.number().array().optional(),
@@ -4883,8 +4883,8 @@ const FloatFilterSchema = z.object({
   gt: z.number().optional(),
   gte: z.number().optional(),
   not: z.union([z.number(), z.lazy(() => NestedFloatFilterSchema)]).optional()
-}).strict();
-const IntFilterSchema = z.object({
+});
+const IntFilterSchema = z.strictObject({
   equals: z.number().optional(),
   in: z.number().array().optional(),
   notIn: z.number().array().optional(),
@@ -4893,28 +4893,28 @@ const IntFilterSchema = z.object({
   gt: z.number().optional(),
   gte: z.number().optional(),
   not: z.union([z.number(), z.lazy(() => NestedIntFilterSchema)]).optional()
-}).strict();
-const BusinessProfileNullableScalarRelationFilterSchema = z.object({
+});
+const BusinessProfileNullableScalarRelationFilterSchema = z.strictObject({
   is: z.lazy(() => BusinessProfileWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => BusinessProfileWhereInputSchema).optional().nullable()
-}).strict();
-const TransactionListRelationFilterSchema = z.object({
+});
+const TransactionListRelationFilterSchema = z.strictObject({
   every: z.lazy(() => TransactionWhereInputSchema).optional(),
   some: z.lazy(() => TransactionWhereInputSchema).optional(),
   none: z.lazy(() => TransactionWhereInputSchema).optional()
-}).strict();
-const InvestmentListRelationFilterSchema = z.object({
+});
+const InvestmentListRelationFilterSchema = z.strictObject({
   every: z.lazy(() => InvestmentWhereInputSchema).optional(),
   some: z.lazy(() => InvestmentWhereInputSchema).optional(),
   none: z.lazy(() => InvestmentWhereInputSchema).optional()
-}).strict();
-const TransactionOrderByRelationAggregateInputSchema = z.object({
+});
+const TransactionOrderByRelationAggregateInputSchema = z.strictObject({
   _count: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const InvestmentOrderByRelationAggregateInputSchema = z.object({
+});
+const InvestmentOrderByRelationAggregateInputSchema = z.strictObject({
   _count: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const FinancialAccountCountOrderByAggregateInputSchema = z.object({
+});
+const FinancialAccountCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
@@ -4931,13 +4931,13 @@ const FinancialAccountCountOrderByAggregateInputSchema = z.object({
   dormantAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const FinancialAccountAvgOrderByAggregateInputSchema = z.object({
+});
+const FinancialAccountAvgOrderByAggregateInputSchema = z.strictObject({
   balance: z.lazy(() => SortOrderSchema).optional(),
   totalTransactions: z.lazy(() => SortOrderSchema).optional(),
   totalInvestments: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const FinancialAccountMaxOrderByAggregateInputSchema = z.object({
+});
+const FinancialAccountMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
@@ -4954,8 +4954,8 @@ const FinancialAccountMaxOrderByAggregateInputSchema = z.object({
   dormantAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const FinancialAccountMinOrderByAggregateInputSchema = z.object({
+});
+const FinancialAccountMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
@@ -4972,13 +4972,13 @@ const FinancialAccountMinOrderByAggregateInputSchema = z.object({
   dormantAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const FinancialAccountSumOrderByAggregateInputSchema = z.object({
+});
+const FinancialAccountSumOrderByAggregateInputSchema = z.strictObject({
   balance: z.lazy(() => SortOrderSchema).optional(),
   totalTransactions: z.lazy(() => SortOrderSchema).optional(),
   totalInvestments: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const EnumAccountStatusWithAggregatesFilterSchema = z.object({
+});
+const EnumAccountStatusWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountStatusSchema).optional(),
   in: z.lazy(() => AccountStatusSchema).array().optional(),
   notIn: z.lazy(() => AccountStatusSchema).array().optional(),
@@ -4986,8 +4986,8 @@ const EnumAccountStatusWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumAccountStatusFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumAccountStatusFilterSchema).optional()
-}).strict();
-const EnumAccountTypeWithAggregatesFilterSchema = z.object({
+});
+const EnumAccountTypeWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountTypeSchema).optional(),
   in: z.lazy(() => AccountTypeSchema).array().optional(),
   notIn: z.lazy(() => AccountTypeSchema).array().optional(),
@@ -4995,8 +4995,8 @@ const EnumAccountTypeWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumAccountTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumAccountTypeFilterSchema).optional()
-}).strict();
-const EnumAccountOwnershipWithAggregatesFilterSchema = z.object({
+});
+const EnumAccountOwnershipWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountOwnershipSchema).optional(),
   in: z.lazy(() => AccountOwnershipSchema).array().optional(),
   notIn: z.lazy(() => AccountOwnershipSchema).array().optional(),
@@ -5004,8 +5004,8 @@ const EnumAccountOwnershipWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumAccountOwnershipFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumAccountOwnershipFilterSchema).optional()
-}).strict();
-const FloatWithAggregatesFilterSchema = z.object({
+});
+const FloatWithAggregatesFilterSchema = z.strictObject({
   equals: z.number().optional(),
   in: z.number().array().optional(),
   notIn: z.number().array().optional(),
@@ -5019,8 +5019,8 @@ const FloatWithAggregatesFilterSchema = z.object({
   _sum: z.lazy(() => NestedFloatFilterSchema).optional(),
   _min: z.lazy(() => NestedFloatFilterSchema).optional(),
   _max: z.lazy(() => NestedFloatFilterSchema).optional()
-}).strict();
-const IntWithAggregatesFilterSchema = z.object({
+});
+const IntWithAggregatesFilterSchema = z.strictObject({
   equals: z.number().optional(),
   in: z.number().array().optional(),
   notIn: z.number().array().optional(),
@@ -5034,18 +5034,18 @@ const IntWithAggregatesFilterSchema = z.object({
   _sum: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedIntFilterSchema).optional(),
   _max: z.lazy(() => NestedIntFilterSchema).optional()
-}).strict();
-const EnumAccountUserRoleFilterSchema = z.object({
+});
+const EnumAccountUserRoleFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountUserRoleSchema).optional(),
   in: z.lazy(() => AccountUserRoleSchema).array().optional(),
   notIn: z.lazy(() => AccountUserRoleSchema).array().optional(),
   not: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => NestedEnumAccountUserRoleFilterSchema)]).optional()
-}).strict();
-const AccountUserUserIdFinancialAccountIdCompoundUniqueInputSchema = z.object({
+});
+const AccountUserUserIdFinancialAccountIdCompoundUniqueInputSchema = z.strictObject({
   userId: z.string(),
   financialAccountId: z.string()
-}).strict();
-const AccountUserCountOrderByAggregateInputSchema = z.object({
+});
+const AccountUserCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
@@ -5054,11 +5054,11 @@ const AccountUserCountOrderByAggregateInputSchema = z.object({
   autosign: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const AccountUserAvgOrderByAggregateInputSchema = z.object({
+});
+const AccountUserAvgOrderByAggregateInputSchema = z.strictObject({
   ownership: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const AccountUserMaxOrderByAggregateInputSchema = z.object({
+});
+const AccountUserMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
@@ -5067,8 +5067,8 @@ const AccountUserMaxOrderByAggregateInputSchema = z.object({
   autosign: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const AccountUserMinOrderByAggregateInputSchema = z.object({
+});
+const AccountUserMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
@@ -5077,11 +5077,11 @@ const AccountUserMinOrderByAggregateInputSchema = z.object({
   autosign: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const AccountUserSumOrderByAggregateInputSchema = z.object({
+});
+const AccountUserSumOrderByAggregateInputSchema = z.strictObject({
   ownership: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const EnumAccountUserRoleWithAggregatesFilterSchema = z.object({
+});
+const EnumAccountUserRoleWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountUserRoleSchema).optional(),
   in: z.lazy(() => AccountUserRoleSchema).array().optional(),
   notIn: z.lazy(() => AccountUserRoleSchema).array().optional(),
@@ -5089,18 +5089,18 @@ const EnumAccountUserRoleWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumAccountUserRoleFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumAccountUserRoleFilterSchema).optional()
-}).strict();
-const EnumJointAccountRequestStatusFilterSchema = z.object({
+});
+const EnumJointAccountRequestStatusFilterSchema = z.strictObject({
   equals: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   in: z.lazy(() => JointAccountRequestStatusSchema).array().optional(),
   notIn: z.lazy(() => JointAccountRequestStatusSchema).array().optional(),
   not: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => NestedEnumJointAccountRequestStatusFilterSchema)]).optional()
-}).strict();
-const UserNullableScalarRelationFilterSchema = z.object({
+});
+const UserNullableScalarRelationFilterSchema = z.strictObject({
   is: z.lazy(() => UserWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => UserWhereInputSchema).optional().nullable()
-}).strict();
-const JointAccountRequestCountOrderByAggregateInputSchema = z.object({
+});
+const JointAccountRequestCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   recipientName: z.lazy(() => SortOrderSchema).optional(),
@@ -5115,12 +5115,12 @@ const JointAccountRequestCountOrderByAggregateInputSchema = z.object({
   status: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const JointAccountRequestAvgOrderByAggregateInputSchema = z.object({
+});
+const JointAccountRequestAvgOrderByAggregateInputSchema = z.strictObject({
   ownership: z.lazy(() => SortOrderSchema).optional(),
   reminderCount: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const JointAccountRequestMaxOrderByAggregateInputSchema = z.object({
+});
+const JointAccountRequestMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   recipientName: z.lazy(() => SortOrderSchema).optional(),
@@ -5135,8 +5135,8 @@ const JointAccountRequestMaxOrderByAggregateInputSchema = z.object({
   status: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const JointAccountRequestMinOrderByAggregateInputSchema = z.object({
+});
+const JointAccountRequestMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   recipientName: z.lazy(() => SortOrderSchema).optional(),
@@ -5151,12 +5151,12 @@ const JointAccountRequestMinOrderByAggregateInputSchema = z.object({
   status: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const JointAccountRequestSumOrderByAggregateInputSchema = z.object({
+});
+const JointAccountRequestSumOrderByAggregateInputSchema = z.strictObject({
   ownership: z.lazy(() => SortOrderSchema).optional(),
   reminderCount: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const EnumJointAccountRequestStatusWithAggregatesFilterSchema = z.object({
+});
+const EnumJointAccountRequestStatusWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   in: z.lazy(() => JointAccountRequestStatusSchema).array().optional(),
   notIn: z.lazy(() => JointAccountRequestStatusSchema).array().optional(),
@@ -5164,18 +5164,18 @@ const EnumJointAccountRequestStatusWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumJointAccountRequestStatusFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumJointAccountRequestStatusFilterSchema).optional()
-}).strict();
-const EnumJointAccountModRequestTypeFilterSchema = z.object({
+});
+const EnumJointAccountModRequestTypeFilterSchema = z.strictObject({
   equals: z.lazy(() => JointAccountModRequestTypeSchema).optional(),
   in: z.lazy(() => JointAccountModRequestTypeSchema).array().optional(),
   notIn: z.lazy(() => JointAccountModRequestTypeSchema).array().optional(),
   not: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => NestedEnumJointAccountModRequestTypeFilterSchema)]).optional()
-}).strict();
-const TransactionNullableScalarRelationFilterSchema = z.object({
+});
+const TransactionNullableScalarRelationFilterSchema = z.strictObject({
   is: z.lazy(() => TransactionWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => TransactionWhereInputSchema).optional().nullable()
-}).strict();
-const JointAccountModRequestCountOrderByAggregateInputSchema = z.object({
+});
+const JointAccountModRequestCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
@@ -5184,8 +5184,8 @@ const JointAccountModRequestCountOrderByAggregateInputSchema = z.object({
   description: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const JointAccountModRequestMaxOrderByAggregateInputSchema = z.object({
+});
+const JointAccountModRequestMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
@@ -5194,8 +5194,8 @@ const JointAccountModRequestMaxOrderByAggregateInputSchema = z.object({
   description: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const JointAccountModRequestMinOrderByAggregateInputSchema = z.object({
+});
+const JointAccountModRequestMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   creatorId: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
@@ -5204,8 +5204,8 @@ const JointAccountModRequestMinOrderByAggregateInputSchema = z.object({
   description: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const EnumJointAccountModRequestTypeWithAggregatesFilterSchema = z.object({
+});
+const EnumJointAccountModRequestTypeWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => JointAccountModRequestTypeSchema).optional(),
   in: z.lazy(() => JointAccountModRequestTypeSchema).array().optional(),
   notIn: z.lazy(() => JointAccountModRequestTypeSchema).array().optional(),
@@ -5213,52 +5213,52 @@ const EnumJointAccountModRequestTypeWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumJointAccountModRequestTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumJointAccountModRequestTypeFilterSchema).optional()
-}).strict();
-const JointAccountModRequestScalarRelationFilterSchema = z.object({
+});
+const JointAccountModRequestScalarRelationFilterSchema = z.strictObject({
   is: z.lazy(() => JointAccountModRequestWhereInputSchema).optional(),
   isNot: z.lazy(() => JointAccountModRequestWhereInputSchema).optional()
-}).strict();
-const JointAccountModRequestApprovalCountOrderByAggregateInputSchema = z.object({
+});
+const JointAccountModRequestApprovalCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   jointAccountModRequestId: z.lazy(() => SortOrderSchema).optional(),
   approverId: z.lazy(() => SortOrderSchema).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const JointAccountModRequestApprovalMaxOrderByAggregateInputSchema = z.object({
+});
+const JointAccountModRequestApprovalMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   jointAccountModRequestId: z.lazy(() => SortOrderSchema).optional(),
   approverId: z.lazy(() => SortOrderSchema).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const JointAccountModRequestApprovalMinOrderByAggregateInputSchema = z.object({
+});
+const JointAccountModRequestApprovalMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   jointAccountModRequestId: z.lazy(() => SortOrderSchema).optional(),
   approverId: z.lazy(() => SortOrderSchema).optional(),
   status: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const EnumInvestmentPlanCategoryFilterSchema = z.object({
+});
+const EnumInvestmentPlanCategoryFilterSchema = z.strictObject({
   equals: z.lazy(() => InvestmentPlanCategorySchema).optional(),
   in: z.lazy(() => InvestmentPlanCategorySchema).array().optional(),
   notIn: z.lazy(() => InvestmentPlanCategorySchema).array().optional(),
   not: z.union([z.lazy(() => InvestmentPlanCategorySchema), z.lazy(() => NestedEnumInvestmentPlanCategoryFilterSchema)]).optional()
-}).strict();
-const EnumProfitDistributionFilterSchema = z.object({
+});
+const EnumProfitDistributionFilterSchema = z.strictObject({
   equals: z.lazy(() => ProfitDistributionSchema).optional(),
   in: z.lazy(() => ProfitDistributionSchema).array().optional(),
   notIn: z.lazy(() => ProfitDistributionSchema).array().optional(),
   not: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => NestedEnumProfitDistributionFilterSchema)]).optional()
-}).strict();
-const InvestmentPlanCategoryNameCompoundUniqueInputSchema = z.object({
+});
+const InvestmentPlanCategoryNameCompoundUniqueInputSchema = z.strictObject({
   category: z.lazy(() => InvestmentPlanCategorySchema),
   name: z.string()
-}).strict();
-const InvestmentPlanCountOrderByAggregateInputSchema = z.object({
+});
+const InvestmentPlanCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   category: z.lazy(() => SortOrderSchema).optional(),
@@ -5271,16 +5271,16 @@ const InvestmentPlanCountOrderByAggregateInputSchema = z.object({
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const InvestmentPlanAvgOrderByAggregateInputSchema = z.object({
+});
+const InvestmentPlanAvgOrderByAggregateInputSchema = z.strictObject({
   minimumDeposit: z.lazy(() => SortOrderSchema).optional(),
   maximumDeposit: z.lazy(() => SortOrderSchema).optional(),
   duration: z.lazy(() => SortOrderSchema).optional(),
   percentageTotalReturn: z.lazy(() => SortOrderSchema).optional(),
   percentagePeriodicReturn: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const InvestmentPlanMaxOrderByAggregateInputSchema = z.object({
+});
+const InvestmentPlanMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   category: z.lazy(() => SortOrderSchema).optional(),
@@ -5293,8 +5293,8 @@ const InvestmentPlanMaxOrderByAggregateInputSchema = z.object({
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const InvestmentPlanMinOrderByAggregateInputSchema = z.object({
+});
+const InvestmentPlanMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   category: z.lazy(() => SortOrderSchema).optional(),
@@ -5307,16 +5307,16 @@ const InvestmentPlanMinOrderByAggregateInputSchema = z.object({
   terminationFee: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const InvestmentPlanSumOrderByAggregateInputSchema = z.object({
+});
+const InvestmentPlanSumOrderByAggregateInputSchema = z.strictObject({
   minimumDeposit: z.lazy(() => SortOrderSchema).optional(),
   maximumDeposit: z.lazy(() => SortOrderSchema).optional(),
   duration: z.lazy(() => SortOrderSchema).optional(),
   percentageTotalReturn: z.lazy(() => SortOrderSchema).optional(),
   percentagePeriodicReturn: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const EnumInvestmentPlanCategoryWithAggregatesFilterSchema = z.object({
+});
+const EnumInvestmentPlanCategoryWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => InvestmentPlanCategorySchema).optional(),
   in: z.lazy(() => InvestmentPlanCategorySchema).array().optional(),
   notIn: z.lazy(() => InvestmentPlanCategorySchema).array().optional(),
@@ -5324,8 +5324,8 @@ const EnumInvestmentPlanCategoryWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumInvestmentPlanCategoryFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumInvestmentPlanCategoryFilterSchema).optional()
-}).strict();
-const EnumProfitDistributionWithAggregatesFilterSchema = z.object({
+});
+const EnumProfitDistributionWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => ProfitDistributionSchema).optional(),
   in: z.lazy(() => ProfitDistributionSchema).array().optional(),
   notIn: z.lazy(() => ProfitDistributionSchema).array().optional(),
@@ -5333,26 +5333,26 @@ const EnumProfitDistributionWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumProfitDistributionFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumProfitDistributionFilterSchema).optional()
-}).strict();
-const EnumInvestmentStatusFilterSchema = z.object({
+});
+const EnumInvestmentStatusFilterSchema = z.strictObject({
   equals: z.lazy(() => InvestmentStatusSchema).optional(),
   in: z.lazy(() => InvestmentStatusSchema).array().optional(),
   notIn: z.lazy(() => InvestmentStatusSchema).array().optional(),
   not: z.union([z.lazy(() => InvestmentStatusSchema), z.lazy(() => NestedEnumInvestmentStatusFilterSchema)]).optional()
-}).strict();
-const AccountUserScalarRelationFilterSchema = z.object({
+});
+const AccountUserScalarRelationFilterSchema = z.strictObject({
   is: z.lazy(() => AccountUserWhereInputSchema).optional(),
   isNot: z.lazy(() => AccountUserWhereInputSchema).optional()
-}).strict();
-const ProfitListRelationFilterSchema = z.object({
+});
+const ProfitListRelationFilterSchema = z.strictObject({
   every: z.lazy(() => ProfitWhereInputSchema).optional(),
   some: z.lazy(() => ProfitWhereInputSchema).optional(),
   none: z.lazy(() => ProfitWhereInputSchema).optional()
-}).strict();
-const ProfitOrderByRelationAggregateInputSchema = z.object({
+});
+const ProfitOrderByRelationAggregateInputSchema = z.strictObject({
   _count: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const InvestmentCountOrderByAggregateInputSchema = z.object({
+});
+const InvestmentCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
   investorId: z.lazy(() => SortOrderSchema).optional(),
@@ -5377,8 +5377,8 @@ const InvestmentCountOrderByAggregateInputSchema = z.object({
   lastProfitDistributedAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const InvestmentAvgOrderByAggregateInputSchema = z.object({
+});
+const InvestmentAvgOrderByAggregateInputSchema = z.strictObject({
   deposit: z.lazy(() => SortOrderSchema).optional(),
   totalProfit: z.lazy(() => SortOrderSchema).optional(),
   profitCount: z.lazy(() => SortOrderSchema).optional(),
@@ -5387,8 +5387,8 @@ const InvestmentAvgOrderByAggregateInputSchema = z.object({
   totalReturn: z.lazy(() => SortOrderSchema).optional(),
   periodicReturn: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const InvestmentMaxOrderByAggregateInputSchema = z.object({
+});
+const InvestmentMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
   investorId: z.lazy(() => SortOrderSchema).optional(),
@@ -5413,8 +5413,8 @@ const InvestmentMaxOrderByAggregateInputSchema = z.object({
   lastProfitDistributedAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const InvestmentMinOrderByAggregateInputSchema = z.object({
+});
+const InvestmentMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   financialAccountId: z.lazy(() => SortOrderSchema).optional(),
   investorId: z.lazy(() => SortOrderSchema).optional(),
@@ -5439,8 +5439,8 @@ const InvestmentMinOrderByAggregateInputSchema = z.object({
   lastProfitDistributedAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const InvestmentSumOrderByAggregateInputSchema = z.object({
+});
+const InvestmentSumOrderByAggregateInputSchema = z.strictObject({
   deposit: z.lazy(() => SortOrderSchema).optional(),
   totalProfit: z.lazy(() => SortOrderSchema).optional(),
   profitCount: z.lazy(() => SortOrderSchema).optional(),
@@ -5449,8 +5449,8 @@ const InvestmentSumOrderByAggregateInputSchema = z.object({
   totalReturn: z.lazy(() => SortOrderSchema).optional(),
   periodicReturn: z.lazy(() => SortOrderSchema).optional(),
   terminationFee: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const EnumInvestmentStatusWithAggregatesFilterSchema = z.object({
+});
+const EnumInvestmentStatusWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => InvestmentStatusSchema).optional(),
   in: z.lazy(() => InvestmentStatusSchema).array().optional(),
   notIn: z.lazy(() => InvestmentStatusSchema).array().optional(),
@@ -5458,12 +5458,12 @@ const EnumInvestmentStatusWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumInvestmentStatusFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumInvestmentStatusFilterSchema).optional()
-}).strict();
-const InvestmentScalarRelationFilterSchema = z.object({
+});
+const InvestmentScalarRelationFilterSchema = z.strictObject({
   is: z.lazy(() => InvestmentWhereInputSchema).optional(),
   isNot: z.lazy(() => InvestmentWhereInputSchema).optional()
-}).strict();
-const ProfitCountOrderByAggregateInputSchema = z.object({
+});
+const ProfitCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   investmentId: z.lazy(() => SortOrderSchema).optional(),
   number: z.lazy(() => SortOrderSchema).optional(),
@@ -5473,13 +5473,13 @@ const ProfitCountOrderByAggregateInputSchema = z.object({
   distributedAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const ProfitAvgOrderByAggregateInputSchema = z.object({
+});
+const ProfitAvgOrderByAggregateInputSchema = z.strictObject({
   number: z.lazy(() => SortOrderSchema).optional(),
   intendedAmount: z.lazy(() => SortOrderSchema).optional(),
   actualAmount: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const ProfitMaxOrderByAggregateInputSchema = z.object({
+});
+const ProfitMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   investmentId: z.lazy(() => SortOrderSchema).optional(),
   number: z.lazy(() => SortOrderSchema).optional(),
@@ -5489,8 +5489,8 @@ const ProfitMaxOrderByAggregateInputSchema = z.object({
   distributedAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const ProfitMinOrderByAggregateInputSchema = z.object({
+});
+const ProfitMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   investmentId: z.lazy(() => SortOrderSchema).optional(),
   number: z.lazy(() => SortOrderSchema).optional(),
@@ -5500,37 +5500,37 @@ const ProfitMinOrderByAggregateInputSchema = z.object({
   distributedAt: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const ProfitSumOrderByAggregateInputSchema = z.object({
+});
+const ProfitSumOrderByAggregateInputSchema = z.strictObject({
   number: z.lazy(() => SortOrderSchema).optional(),
   intendedAmount: z.lazy(() => SortOrderSchema).optional(),
   actualAmount: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const EnumTransactionTypeFilterSchema = z.object({
+});
+const EnumTransactionTypeFilterSchema = z.strictObject({
   equals: z.lazy(() => TransactionTypeSchema).optional(),
   in: z.lazy(() => TransactionTypeSchema).array().optional(),
   notIn: z.lazy(() => TransactionTypeSchema).array().optional(),
   not: z.union([z.lazy(() => TransactionTypeSchema), z.lazy(() => NestedEnumTransactionTypeFilterSchema)]).optional()
-}).strict();
-const EnumTransactionStatusFilterSchema = z.object({
+});
+const EnumTransactionStatusFilterSchema = z.strictObject({
   equals: z.lazy(() => TransactionStatusSchema).optional(),
   in: z.lazy(() => TransactionStatusSchema).array().optional(),
   notIn: z.lazy(() => TransactionStatusSchema).array().optional(),
   not: z.union([z.lazy(() => TransactionStatusSchema), z.lazy(() => NestedEnumTransactionStatusFilterSchema)]).optional()
-}).strict();
-const AccountUserNullableScalarRelationFilterSchema = z.object({
+});
+const AccountUserNullableScalarRelationFilterSchema = z.strictObject({
   is: z.lazy(() => AccountUserWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => AccountUserWhereInputSchema).optional().nullable()
-}).strict();
-const FinancialAccountNullableScalarRelationFilterSchema = z.object({
+});
+const FinancialAccountNullableScalarRelationFilterSchema = z.strictObject({
   is: z.lazy(() => FinancialAccountWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => FinancialAccountWhereInputSchema).optional().nullable()
-}).strict();
-const InvestmentNullableScalarRelationFilterSchema = z.object({
+});
+const InvestmentNullableScalarRelationFilterSchema = z.strictObject({
   is: z.lazy(() => InvestmentWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => InvestmentWhereInputSchema).optional().nullable()
-}).strict();
-const TransactionCountOrderByAggregateInputSchema = z.object({
+});
+const TransactionCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional(),
   currency: z.lazy(() => SortOrderSchema).optional(),
@@ -5556,14 +5556,14 @@ const TransactionCountOrderByAggregateInputSchema = z.object({
   description: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const TransactionAvgOrderByAggregateInputSchema = z.object({
+});
+const TransactionAvgOrderByAggregateInputSchema = z.strictObject({
   amount: z.lazy(() => SortOrderSchema).optional(),
   USDAmount: z.lazy(() => SortOrderSchema).optional(),
   rate: z.lazy(() => SortOrderSchema).optional(),
   charges: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const TransactionMaxOrderByAggregateInputSchema = z.object({
+});
+const TransactionMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional(),
   currency: z.lazy(() => SortOrderSchema).optional(),
@@ -5589,8 +5589,8 @@ const TransactionMaxOrderByAggregateInputSchema = z.object({
   description: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const TransactionMinOrderByAggregateInputSchema = z.object({
+});
+const TransactionMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   amount: z.lazy(() => SortOrderSchema).optional(),
   currency: z.lazy(() => SortOrderSchema).optional(),
@@ -5616,14 +5616,14 @@ const TransactionMinOrderByAggregateInputSchema = z.object({
   description: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const TransactionSumOrderByAggregateInputSchema = z.object({
+});
+const TransactionSumOrderByAggregateInputSchema = z.strictObject({
   amount: z.lazy(() => SortOrderSchema).optional(),
   USDAmount: z.lazy(() => SortOrderSchema).optional(),
   rate: z.lazy(() => SortOrderSchema).optional(),
   charges: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const EnumTransactionTypeWithAggregatesFilterSchema = z.object({
+});
+const EnumTransactionTypeWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => TransactionTypeSchema).optional(),
   in: z.lazy(() => TransactionTypeSchema).array().optional(),
   notIn: z.lazy(() => TransactionTypeSchema).array().optional(),
@@ -5631,8 +5631,8 @@ const EnumTransactionTypeWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumTransactionTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumTransactionTypeFilterSchema).optional()
-}).strict();
-const EnumTransactionStatusWithAggregatesFilterSchema = z.object({
+});
+const EnumTransactionStatusWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => TransactionStatusSchema).optional(),
   in: z.lazy(() => TransactionStatusSchema).array().optional(),
   notIn: z.lazy(() => TransactionStatusSchema).array().optional(),
@@ -5640,14 +5640,14 @@ const EnumTransactionStatusWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumTransactionStatusFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumTransactionStatusFilterSchema).optional()
-}).strict();
-const EnumNotificationBodyTypeFilterSchema = z.object({
+});
+const EnumNotificationBodyTypeFilterSchema = z.strictObject({
   equals: z.lazy(() => NotificationBodyTypeSchema).optional(),
   in: z.lazy(() => NotificationBodyTypeSchema).array().optional(),
   notIn: z.lazy(() => NotificationBodyTypeSchema).array().optional(),
   not: z.union([z.lazy(() => NotificationBodyTypeSchema), z.lazy(() => NestedEnumNotificationBodyTypeFilterSchema)]).optional()
-}).strict();
-const NotificationCountOrderByAggregateInputSchema = z.object({
+});
+const NotificationCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   title: z.lazy(() => SortOrderSchema).optional(),
   body: z.lazy(() => SortOrderSchema).optional(),
@@ -5658,8 +5658,8 @@ const NotificationCountOrderByAggregateInputSchema = z.object({
   isRead: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const NotificationMaxOrderByAggregateInputSchema = z.object({
+});
+const NotificationMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   title: z.lazy(() => SortOrderSchema).optional(),
   body: z.lazy(() => SortOrderSchema).optional(),
@@ -5670,8 +5670,8 @@ const NotificationMaxOrderByAggregateInputSchema = z.object({
   isRead: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const NotificationMinOrderByAggregateInputSchema = z.object({
+});
+const NotificationMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   title: z.lazy(() => SortOrderSchema).optional(),
   body: z.lazy(() => SortOrderSchema).optional(),
@@ -5682,8 +5682,8 @@ const NotificationMinOrderByAggregateInputSchema = z.object({
   isRead: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const EnumNotificationBodyTypeWithAggregatesFilterSchema = z.object({
+});
+const EnumNotificationBodyTypeWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => NotificationBodyTypeSchema).optional(),
   in: z.lazy(() => NotificationBodyTypeSchema).array().optional(),
   notIn: z.lazy(() => NotificationBodyTypeSchema).array().optional(),
@@ -5691,8 +5691,8 @@ const EnumNotificationBodyTypeWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumNotificationBodyTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumNotificationBodyTypeFilterSchema).optional()
-}).strict();
-const CurrencyCountOrderByAggregateInputSchema = z.object({
+});
+const CurrencyCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   symbol: z.lazy(() => SortOrderSchema).optional(),
@@ -5709,12 +5709,12 @@ const CurrencyCountOrderByAggregateInputSchema = z.object({
   withdrawalCharge: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const CurrencyAvgOrderByAggregateInputSchema = z.object({
+});
+const CurrencyAvgOrderByAggregateInputSchema = z.strictObject({
   rate: z.lazy(() => SortOrderSchema).optional(),
   withdrawalCharge: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const CurrencyMaxOrderByAggregateInputSchema = z.object({
+});
+const CurrencyMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   symbol: z.lazy(() => SortOrderSchema).optional(),
@@ -5731,8 +5731,8 @@ const CurrencyMaxOrderByAggregateInputSchema = z.object({
   withdrawalCharge: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const CurrencyMinOrderByAggregateInputSchema = z.object({
+});
+const CurrencyMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   symbol: z.lazy(() => SortOrderSchema).optional(),
@@ -5749,163 +5749,163 @@ const CurrencyMinOrderByAggregateInputSchema = z.object({
   withdrawalCharge: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const CurrencySumOrderByAggregateInputSchema = z.object({
+});
+const CurrencySumOrderByAggregateInputSchema = z.strictObject({
   rate: z.lazy(() => SortOrderSchema).optional(),
   withdrawalCharge: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const SettingsCountOrderByAggregateInputSchema = z.object({
+});
+const SettingsCountOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   allowWithdrawals: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const SettingsMaxOrderByAggregateInputSchema = z.object({
+});
+const SettingsMaxOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   allowWithdrawals: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const SettingsMinOrderByAggregateInputSchema = z.object({
+});
+const SettingsMinOrderByAggregateInputSchema = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   allowWithdrawals: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-const ProfileCreateNestedOneWithoutUserInputSchema = z.object({
+});
+const ProfileCreateNestedOneWithoutUserInputSchema = z.strictObject({
   create: z.union([z.lazy(() => ProfileCreateWithoutUserInputSchema), z.lazy(() => ProfileUncheckedCreateWithoutUserInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => ProfileCreateOrConnectWithoutUserInputSchema).optional(),
   connect: z.lazy(() => ProfileWhereUniqueInputSchema).optional()
-}).strict();
-const SessionCreateNestedManyWithoutUserInputSchema = z.object({
+});
+const SessionCreateNestedManyWithoutUserInputSchema = z.strictObject({
   create: z.union([z.lazy(() => SessionCreateWithoutUserInputSchema), z.lazy(() => SessionCreateWithoutUserInputSchema).array(), z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema), z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => SessionCreateOrConnectWithoutUserInputSchema), z.lazy(() => SessionCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   createMany: z.lazy(() => SessionCreateManyUserInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => SessionWhereUniqueInputSchema), z.lazy(() => SessionWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const AccountCreateNestedManyWithoutUserInputSchema = z.object({
+});
+const AccountCreateNestedManyWithoutUserInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountCreateWithoutUserInputSchema), z.lazy(() => AccountCreateWithoutUserInputSchema).array(), z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema), z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => AccountCreateOrConnectWithoutUserInputSchema), z.lazy(() => AccountCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   createMany: z.lazy(() => AccountCreateManyUserInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => AccountWhereUniqueInputSchema), z.lazy(() => AccountWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const FinancialAccountCreateNestedManyWithoutCreatorInputSchema = z.object({
+});
+const FinancialAccountCreateNestedManyWithoutCreatorInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutCreatorInputSchema), z.lazy(() => FinancialAccountCreateWithoutCreatorInputSchema).array(), z.lazy(() => FinancialAccountUncheckedCreateWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutCreatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => FinancialAccountCreateOrConnectWithoutCreatorInputSchema), z.lazy(() => FinancialAccountCreateOrConnectWithoutCreatorInputSchema).array()]).optional(),
   createMany: z.lazy(() => FinancialAccountCreateManyCreatorInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => FinancialAccountWhereUniqueInputSchema), z.lazy(() => FinancialAccountWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const AccountUserCreateNestedManyWithoutUserInputSchema = z.object({
+});
+const AccountUserCreateNestedManyWithoutUserInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountUserCreateWithoutUserInputSchema), z.lazy(() => AccountUserCreateWithoutUserInputSchema).array(), z.lazy(() => AccountUserUncheckedCreateWithoutUserInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => AccountUserCreateOrConnectWithoutUserInputSchema), z.lazy(() => AccountUserCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   createMany: z.lazy(() => AccountUserCreateManyUserInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => AccountUserWhereUniqueInputSchema), z.lazy(() => AccountUserWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountRequestCreateNestedManyWithoutCreatorInputSchema = z.object({
+});
+const JointAccountRequestCreateNestedManyWithoutCreatorInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestCreateWithoutCreatorInputSchema).array(), z.lazy(() => JointAccountRequestUncheckedCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutCreatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountRequestCreateOrConnectWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestCreateOrConnectWithoutCreatorInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountRequestCreateManyCreatorInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountRequestWhereUniqueInputSchema), z.lazy(() => JointAccountRequestWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountRequestCreateNestedManyWithoutRecipientInputSchema = z.object({
+});
+const JointAccountRequestCreateNestedManyWithoutRecipientInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestCreateWithoutRecipientInputSchema).array(), z.lazy(() => JointAccountRequestUncheckedCreateWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutRecipientInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountRequestCreateOrConnectWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestCreateOrConnectWithoutRecipientInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountRequestCreateManyRecipientInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountRequestWhereUniqueInputSchema), z.lazy(() => JointAccountRequestWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestCreateNestedManyWithoutCreatorInputSchema = z.object({
+});
+const JointAccountModRequestCreateNestedManyWithoutCreatorInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestCreateWithoutCreatorInputSchema).array(), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestCreateOrConnectWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestCreateOrConnectWithoutCreatorInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountModRequestCreateManyCreatorInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountModRequestWhereUniqueInputSchema), z.lazy(() => JointAccountModRequestWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const NotificationCreateNestedManyWithoutUserInputSchema = z.object({
+});
+const NotificationCreateNestedManyWithoutUserInputSchema = z.strictObject({
   create: z.union([z.lazy(() => NotificationCreateWithoutUserInputSchema), z.lazy(() => NotificationCreateWithoutUserInputSchema).array(), z.lazy(() => NotificationUncheckedCreateWithoutUserInputSchema), z.lazy(() => NotificationUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => NotificationCreateOrConnectWithoutUserInputSchema), z.lazy(() => NotificationCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   createMany: z.lazy(() => NotificationCreateManyUserInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => NotificationWhereUniqueInputSchema), z.lazy(() => NotificationWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestApprovalCreateNestedManyWithoutApproverInputSchema = z.object({
+});
+const JointAccountModRequestApprovalCreateNestedManyWithoutApproverInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestApprovalCreateWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateWithoutApproverInputSchema).array(), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutApproverInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutApproverInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountModRequestApprovalCreateManyApproverInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema), z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const ProfileUncheckedCreateNestedOneWithoutUserInputSchema = z.object({
+});
+const ProfileUncheckedCreateNestedOneWithoutUserInputSchema = z.strictObject({
   create: z.union([z.lazy(() => ProfileCreateWithoutUserInputSchema), z.lazy(() => ProfileUncheckedCreateWithoutUserInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => ProfileCreateOrConnectWithoutUserInputSchema).optional(),
   connect: z.lazy(() => ProfileWhereUniqueInputSchema).optional()
-}).strict();
-const SessionUncheckedCreateNestedManyWithoutUserInputSchema = z.object({
+});
+const SessionUncheckedCreateNestedManyWithoutUserInputSchema = z.strictObject({
   create: z.union([z.lazy(() => SessionCreateWithoutUserInputSchema), z.lazy(() => SessionCreateWithoutUserInputSchema).array(), z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema), z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => SessionCreateOrConnectWithoutUserInputSchema), z.lazy(() => SessionCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   createMany: z.lazy(() => SessionCreateManyUserInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => SessionWhereUniqueInputSchema), z.lazy(() => SessionWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const AccountUncheckedCreateNestedManyWithoutUserInputSchema = z.object({
+});
+const AccountUncheckedCreateNestedManyWithoutUserInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountCreateWithoutUserInputSchema), z.lazy(() => AccountCreateWithoutUserInputSchema).array(), z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema), z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => AccountCreateOrConnectWithoutUserInputSchema), z.lazy(() => AccountCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   createMany: z.lazy(() => AccountCreateManyUserInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => AccountWhereUniqueInputSchema), z.lazy(() => AccountWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const FinancialAccountUncheckedCreateNestedManyWithoutCreatorInputSchema = z.object({
+});
+const FinancialAccountUncheckedCreateNestedManyWithoutCreatorInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutCreatorInputSchema), z.lazy(() => FinancialAccountCreateWithoutCreatorInputSchema).array(), z.lazy(() => FinancialAccountUncheckedCreateWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutCreatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => FinancialAccountCreateOrConnectWithoutCreatorInputSchema), z.lazy(() => FinancialAccountCreateOrConnectWithoutCreatorInputSchema).array()]).optional(),
   createMany: z.lazy(() => FinancialAccountCreateManyCreatorInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => FinancialAccountWhereUniqueInputSchema), z.lazy(() => FinancialAccountWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const AccountUserUncheckedCreateNestedManyWithoutUserInputSchema = z.object({
+});
+const AccountUserUncheckedCreateNestedManyWithoutUserInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountUserCreateWithoutUserInputSchema), z.lazy(() => AccountUserCreateWithoutUserInputSchema).array(), z.lazy(() => AccountUserUncheckedCreateWithoutUserInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => AccountUserCreateOrConnectWithoutUserInputSchema), z.lazy(() => AccountUserCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   createMany: z.lazy(() => AccountUserCreateManyUserInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => AccountUserWhereUniqueInputSchema), z.lazy(() => AccountUserWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountRequestUncheckedCreateNestedManyWithoutCreatorInputSchema = z.object({
+});
+const JointAccountRequestUncheckedCreateNestedManyWithoutCreatorInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestCreateWithoutCreatorInputSchema).array(), z.lazy(() => JointAccountRequestUncheckedCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutCreatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountRequestCreateOrConnectWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestCreateOrConnectWithoutCreatorInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountRequestCreateManyCreatorInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountRequestWhereUniqueInputSchema), z.lazy(() => JointAccountRequestWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountRequestUncheckedCreateNestedManyWithoutRecipientInputSchema = z.object({
+});
+const JointAccountRequestUncheckedCreateNestedManyWithoutRecipientInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestCreateWithoutRecipientInputSchema).array(), z.lazy(() => JointAccountRequestUncheckedCreateWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutRecipientInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountRequestCreateOrConnectWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestCreateOrConnectWithoutRecipientInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountRequestCreateManyRecipientInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountRequestWhereUniqueInputSchema), z.lazy(() => JointAccountRequestWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestUncheckedCreateNestedManyWithoutCreatorInputSchema = z.object({
+});
+const JointAccountModRequestUncheckedCreateNestedManyWithoutCreatorInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestCreateWithoutCreatorInputSchema).array(), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestCreateOrConnectWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestCreateOrConnectWithoutCreatorInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountModRequestCreateManyCreatorInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountModRequestWhereUniqueInputSchema), z.lazy(() => JointAccountModRequestWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const NotificationUncheckedCreateNestedManyWithoutUserInputSchema = z.object({
+});
+const NotificationUncheckedCreateNestedManyWithoutUserInputSchema = z.strictObject({
   create: z.union([z.lazy(() => NotificationCreateWithoutUserInputSchema), z.lazy(() => NotificationCreateWithoutUserInputSchema).array(), z.lazy(() => NotificationUncheckedCreateWithoutUserInputSchema), z.lazy(() => NotificationUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => NotificationCreateOrConnectWithoutUserInputSchema), z.lazy(() => NotificationCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   createMany: z.lazy(() => NotificationCreateManyUserInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => NotificationWhereUniqueInputSchema), z.lazy(() => NotificationWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutApproverInputSchema = z.object({
+});
+const JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutApproverInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestApprovalCreateWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateWithoutApproverInputSchema).array(), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutApproverInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutApproverInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountModRequestApprovalCreateManyApproverInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema), z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const StringFieldUpdateOperationsInputSchema = z.object({
+});
+const StringFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.string().optional()
-}).strict();
-const BoolFieldUpdateOperationsInputSchema = z.object({
+});
+const BoolFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.boolean().optional()
-}).strict();
-const NullableStringFieldUpdateOperationsInputSchema = z.object({
+});
+const NullableStringFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.string().optional().nullable()
-}).strict();
-const EnumUserRoleFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumUserRoleFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => UserRoleSchema).optional()
-}).strict();
-const NullableBoolFieldUpdateOperationsInputSchema = z.object({
+});
+const NullableBoolFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.boolean().optional().nullable()
-}).strict();
-const NullableDateTimeFieldUpdateOperationsInputSchema = z.object({
+});
+const NullableDateTimeFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.coerce.date().optional().nullable()
-}).strict();
-const DateTimeFieldUpdateOperationsInputSchema = z.object({
+});
+const DateTimeFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.coerce.date().optional()
-}).strict();
-const ProfileUpdateOneWithoutUserNestedInputSchema = z.object({
+});
+const ProfileUpdateOneWithoutUserNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => ProfileCreateWithoutUserInputSchema), z.lazy(() => ProfileUncheckedCreateWithoutUserInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => ProfileCreateOrConnectWithoutUserInputSchema).optional(),
   upsert: z.lazy(() => ProfileUpsertWithoutUserInputSchema).optional(),
@@ -5913,8 +5913,8 @@ const ProfileUpdateOneWithoutUserNestedInputSchema = z.object({
   delete: z.union([z.boolean(), z.lazy(() => ProfileWhereInputSchema)]).optional(),
   connect: z.lazy(() => ProfileWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => ProfileUpdateToOneWithWhereWithoutUserInputSchema), z.lazy(() => ProfileUpdateWithoutUserInputSchema), z.lazy(() => ProfileUncheckedUpdateWithoutUserInputSchema)]).optional()
-}).strict();
-const SessionUpdateManyWithoutUserNestedInputSchema = z.object({
+});
+const SessionUpdateManyWithoutUserNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => SessionCreateWithoutUserInputSchema), z.lazy(() => SessionCreateWithoutUserInputSchema).array(), z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema), z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => SessionCreateOrConnectWithoutUserInputSchema), z.lazy(() => SessionCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => SessionUpsertWithWhereUniqueWithoutUserInputSchema), z.lazy(() => SessionUpsertWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
@@ -5926,8 +5926,8 @@ const SessionUpdateManyWithoutUserNestedInputSchema = z.object({
   update: z.union([z.lazy(() => SessionUpdateWithWhereUniqueWithoutUserInputSchema), z.lazy(() => SessionUpdateWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => SessionUpdateManyWithWhereWithoutUserInputSchema), z.lazy(() => SessionUpdateManyWithWhereWithoutUserInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => SessionScalarWhereInputSchema), z.lazy(() => SessionScalarWhereInputSchema).array()]).optional()
-}).strict();
-const AccountUpdateManyWithoutUserNestedInputSchema = z.object({
+});
+const AccountUpdateManyWithoutUserNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountCreateWithoutUserInputSchema), z.lazy(() => AccountCreateWithoutUserInputSchema).array(), z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema), z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => AccountCreateOrConnectWithoutUserInputSchema), z.lazy(() => AccountCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => AccountUpsertWithWhereUniqueWithoutUserInputSchema), z.lazy(() => AccountUpsertWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
@@ -5939,8 +5939,8 @@ const AccountUpdateManyWithoutUserNestedInputSchema = z.object({
   update: z.union([z.lazy(() => AccountUpdateWithWhereUniqueWithoutUserInputSchema), z.lazy(() => AccountUpdateWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => AccountUpdateManyWithWhereWithoutUserInputSchema), z.lazy(() => AccountUpdateManyWithWhereWithoutUserInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => AccountScalarWhereInputSchema), z.lazy(() => AccountScalarWhereInputSchema).array()]).optional()
-}).strict();
-const FinancialAccountUpdateManyWithoutCreatorNestedInputSchema = z.object({
+});
+const FinancialAccountUpdateManyWithoutCreatorNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutCreatorInputSchema), z.lazy(() => FinancialAccountCreateWithoutCreatorInputSchema).array(), z.lazy(() => FinancialAccountUncheckedCreateWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutCreatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => FinancialAccountCreateOrConnectWithoutCreatorInputSchema), z.lazy(() => FinancialAccountCreateOrConnectWithoutCreatorInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => FinancialAccountUpsertWithWhereUniqueWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUpsertWithWhereUniqueWithoutCreatorInputSchema).array()]).optional(),
@@ -5952,8 +5952,8 @@ const FinancialAccountUpdateManyWithoutCreatorNestedInputSchema = z.object({
   update: z.union([z.lazy(() => FinancialAccountUpdateWithWhereUniqueWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUpdateWithWhereUniqueWithoutCreatorInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => FinancialAccountUpdateManyWithWhereWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUpdateManyWithWhereWithoutCreatorInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => FinancialAccountScalarWhereInputSchema), z.lazy(() => FinancialAccountScalarWhereInputSchema).array()]).optional()
-}).strict();
-const AccountUserUpdateManyWithoutUserNestedInputSchema = z.object({
+});
+const AccountUserUpdateManyWithoutUserNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountUserCreateWithoutUserInputSchema), z.lazy(() => AccountUserCreateWithoutUserInputSchema).array(), z.lazy(() => AccountUserUncheckedCreateWithoutUserInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => AccountUserCreateOrConnectWithoutUserInputSchema), z.lazy(() => AccountUserCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => AccountUserUpsertWithWhereUniqueWithoutUserInputSchema), z.lazy(() => AccountUserUpsertWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
@@ -5965,8 +5965,8 @@ const AccountUserUpdateManyWithoutUserNestedInputSchema = z.object({
   update: z.union([z.lazy(() => AccountUserUpdateWithWhereUniqueWithoutUserInputSchema), z.lazy(() => AccountUserUpdateWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => AccountUserUpdateManyWithWhereWithoutUserInputSchema), z.lazy(() => AccountUserUpdateManyWithWhereWithoutUserInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => AccountUserScalarWhereInputSchema), z.lazy(() => AccountUserScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountRequestUpdateManyWithoutCreatorNestedInputSchema = z.object({
+});
+const JointAccountRequestUpdateManyWithoutCreatorNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestCreateWithoutCreatorInputSchema).array(), z.lazy(() => JointAccountRequestUncheckedCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutCreatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountRequestCreateOrConnectWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestCreateOrConnectWithoutCreatorInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountRequestUpsertWithWhereUniqueWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUpsertWithWhereUniqueWithoutCreatorInputSchema).array()]).optional(),
@@ -5978,8 +5978,8 @@ const JointAccountRequestUpdateManyWithoutCreatorNestedInputSchema = z.object({
   update: z.union([z.lazy(() => JointAccountRequestUpdateWithWhereUniqueWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUpdateWithWhereUniqueWithoutCreatorInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountRequestUpdateManyWithWhereWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUpdateManyWithWhereWithoutCreatorInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountRequestScalarWhereInputSchema), z.lazy(() => JointAccountRequestScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountRequestUpdateManyWithoutRecipientNestedInputSchema = z.object({
+});
+const JointAccountRequestUpdateManyWithoutRecipientNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestCreateWithoutRecipientInputSchema).array(), z.lazy(() => JointAccountRequestUncheckedCreateWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutRecipientInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountRequestCreateOrConnectWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestCreateOrConnectWithoutRecipientInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountRequestUpsertWithWhereUniqueWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUpsertWithWhereUniqueWithoutRecipientInputSchema).array()]).optional(),
@@ -5991,8 +5991,8 @@ const JointAccountRequestUpdateManyWithoutRecipientNestedInputSchema = z.object(
   update: z.union([z.lazy(() => JointAccountRequestUpdateWithWhereUniqueWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUpdateWithWhereUniqueWithoutRecipientInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountRequestUpdateManyWithWhereWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUpdateManyWithWhereWithoutRecipientInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountRequestScalarWhereInputSchema), z.lazy(() => JointAccountRequestScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema = z.object({
+});
+const JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestCreateWithoutCreatorInputSchema).array(), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestCreateOrConnectWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestCreateOrConnectWithoutCreatorInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountModRequestUpsertWithWhereUniqueWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUpsertWithWhereUniqueWithoutCreatorInputSchema).array()]).optional(),
@@ -6004,8 +6004,8 @@ const JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema = z.object
   update: z.union([z.lazy(() => JointAccountModRequestUpdateWithWhereUniqueWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUpdateWithWhereUniqueWithoutCreatorInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountModRequestUpdateManyWithWhereWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUpdateManyWithWhereWithoutCreatorInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountModRequestScalarWhereInputSchema), z.lazy(() => JointAccountModRequestScalarWhereInputSchema).array()]).optional()
-}).strict();
-const NotificationUpdateManyWithoutUserNestedInputSchema = z.object({
+});
+const NotificationUpdateManyWithoutUserNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => NotificationCreateWithoutUserInputSchema), z.lazy(() => NotificationCreateWithoutUserInputSchema).array(), z.lazy(() => NotificationUncheckedCreateWithoutUserInputSchema), z.lazy(() => NotificationUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => NotificationCreateOrConnectWithoutUserInputSchema), z.lazy(() => NotificationCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => NotificationUpsertWithWhereUniqueWithoutUserInputSchema), z.lazy(() => NotificationUpsertWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
@@ -6017,8 +6017,8 @@ const NotificationUpdateManyWithoutUserNestedInputSchema = z.object({
   update: z.union([z.lazy(() => NotificationUpdateWithWhereUniqueWithoutUserInputSchema), z.lazy(() => NotificationUpdateWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => NotificationUpdateManyWithWhereWithoutUserInputSchema), z.lazy(() => NotificationUpdateManyWithWhereWithoutUserInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => NotificationScalarWhereInputSchema), z.lazy(() => NotificationScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema = z.object({
+});
+const JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestApprovalCreateWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateWithoutApproverInputSchema).array(), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutApproverInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutApproverInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutApproverInputSchema).array()]).optional(),
@@ -6030,8 +6030,8 @@ const JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema =
   update: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateWithWhereUniqueWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUpdateWithWhereUniqueWithoutApproverInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateManyWithWhereWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUpdateManyWithWhereWithoutApproverInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema), z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema).array()]).optional()
-}).strict();
-const ProfileUncheckedUpdateOneWithoutUserNestedInputSchema = z.object({
+});
+const ProfileUncheckedUpdateOneWithoutUserNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => ProfileCreateWithoutUserInputSchema), z.lazy(() => ProfileUncheckedCreateWithoutUserInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => ProfileCreateOrConnectWithoutUserInputSchema).optional(),
   upsert: z.lazy(() => ProfileUpsertWithoutUserInputSchema).optional(),
@@ -6039,8 +6039,8 @@ const ProfileUncheckedUpdateOneWithoutUserNestedInputSchema = z.object({
   delete: z.union([z.boolean(), z.lazy(() => ProfileWhereInputSchema)]).optional(),
   connect: z.lazy(() => ProfileWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => ProfileUpdateToOneWithWhereWithoutUserInputSchema), z.lazy(() => ProfileUpdateWithoutUserInputSchema), z.lazy(() => ProfileUncheckedUpdateWithoutUserInputSchema)]).optional()
-}).strict();
-const SessionUncheckedUpdateManyWithoutUserNestedInputSchema = z.object({
+});
+const SessionUncheckedUpdateManyWithoutUserNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => SessionCreateWithoutUserInputSchema), z.lazy(() => SessionCreateWithoutUserInputSchema).array(), z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema), z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => SessionCreateOrConnectWithoutUserInputSchema), z.lazy(() => SessionCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => SessionUpsertWithWhereUniqueWithoutUserInputSchema), z.lazy(() => SessionUpsertWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
@@ -6052,8 +6052,8 @@ const SessionUncheckedUpdateManyWithoutUserNestedInputSchema = z.object({
   update: z.union([z.lazy(() => SessionUpdateWithWhereUniqueWithoutUserInputSchema), z.lazy(() => SessionUpdateWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => SessionUpdateManyWithWhereWithoutUserInputSchema), z.lazy(() => SessionUpdateManyWithWhereWithoutUserInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => SessionScalarWhereInputSchema), z.lazy(() => SessionScalarWhereInputSchema).array()]).optional()
-}).strict();
-const AccountUncheckedUpdateManyWithoutUserNestedInputSchema = z.object({
+});
+const AccountUncheckedUpdateManyWithoutUserNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountCreateWithoutUserInputSchema), z.lazy(() => AccountCreateWithoutUserInputSchema).array(), z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema), z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => AccountCreateOrConnectWithoutUserInputSchema), z.lazy(() => AccountCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => AccountUpsertWithWhereUniqueWithoutUserInputSchema), z.lazy(() => AccountUpsertWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
@@ -6065,8 +6065,8 @@ const AccountUncheckedUpdateManyWithoutUserNestedInputSchema = z.object({
   update: z.union([z.lazy(() => AccountUpdateWithWhereUniqueWithoutUserInputSchema), z.lazy(() => AccountUpdateWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => AccountUpdateManyWithWhereWithoutUserInputSchema), z.lazy(() => AccountUpdateManyWithWhereWithoutUserInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => AccountScalarWhereInputSchema), z.lazy(() => AccountScalarWhereInputSchema).array()]).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateManyWithoutCreatorNestedInputSchema = z.object({
+});
+const FinancialAccountUncheckedUpdateManyWithoutCreatorNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutCreatorInputSchema), z.lazy(() => FinancialAccountCreateWithoutCreatorInputSchema).array(), z.lazy(() => FinancialAccountUncheckedCreateWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutCreatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => FinancialAccountCreateOrConnectWithoutCreatorInputSchema), z.lazy(() => FinancialAccountCreateOrConnectWithoutCreatorInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => FinancialAccountUpsertWithWhereUniqueWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUpsertWithWhereUniqueWithoutCreatorInputSchema).array()]).optional(),
@@ -6078,8 +6078,8 @@ const FinancialAccountUncheckedUpdateManyWithoutCreatorNestedInputSchema = z.obj
   update: z.union([z.lazy(() => FinancialAccountUpdateWithWhereUniqueWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUpdateWithWhereUniqueWithoutCreatorInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => FinancialAccountUpdateManyWithWhereWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUpdateManyWithWhereWithoutCreatorInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => FinancialAccountScalarWhereInputSchema), z.lazy(() => FinancialAccountScalarWhereInputSchema).array()]).optional()
-}).strict();
-const AccountUserUncheckedUpdateManyWithoutUserNestedInputSchema = z.object({
+});
+const AccountUserUncheckedUpdateManyWithoutUserNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountUserCreateWithoutUserInputSchema), z.lazy(() => AccountUserCreateWithoutUserInputSchema).array(), z.lazy(() => AccountUserUncheckedCreateWithoutUserInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => AccountUserCreateOrConnectWithoutUserInputSchema), z.lazy(() => AccountUserCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => AccountUserUpsertWithWhereUniqueWithoutUserInputSchema), z.lazy(() => AccountUserUpsertWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
@@ -6091,8 +6091,8 @@ const AccountUserUncheckedUpdateManyWithoutUserNestedInputSchema = z.object({
   update: z.union([z.lazy(() => AccountUserUpdateWithWhereUniqueWithoutUserInputSchema), z.lazy(() => AccountUserUpdateWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => AccountUserUpdateManyWithWhereWithoutUserInputSchema), z.lazy(() => AccountUserUpdateManyWithWhereWithoutUserInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => AccountUserScalarWhereInputSchema), z.lazy(() => AccountUserScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema = z.object({
+});
+const JointAccountRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestCreateWithoutCreatorInputSchema).array(), z.lazy(() => JointAccountRequestUncheckedCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutCreatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountRequestCreateOrConnectWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestCreateOrConnectWithoutCreatorInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountRequestUpsertWithWhereUniqueWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUpsertWithWhereUniqueWithoutCreatorInputSchema).array()]).optional(),
@@ -6104,8 +6104,8 @@ const JointAccountRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema = z.
   update: z.union([z.lazy(() => JointAccountRequestUpdateWithWhereUniqueWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUpdateWithWhereUniqueWithoutCreatorInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountRequestUpdateManyWithWhereWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUpdateManyWithWhereWithoutCreatorInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountRequestScalarWhereInputSchema), z.lazy(() => JointAccountRequestScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountRequestUncheckedUpdateManyWithoutRecipientNestedInputSchema = z.object({
+});
+const JointAccountRequestUncheckedUpdateManyWithoutRecipientNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestCreateWithoutRecipientInputSchema).array(), z.lazy(() => JointAccountRequestUncheckedCreateWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutRecipientInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountRequestCreateOrConnectWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestCreateOrConnectWithoutRecipientInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountRequestUpsertWithWhereUniqueWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUpsertWithWhereUniqueWithoutRecipientInputSchema).array()]).optional(),
@@ -6117,8 +6117,8 @@ const JointAccountRequestUncheckedUpdateManyWithoutRecipientNestedInputSchema = 
   update: z.union([z.lazy(() => JointAccountRequestUpdateWithWhereUniqueWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUpdateWithWhereUniqueWithoutRecipientInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountRequestUpdateManyWithWhereWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUpdateManyWithWhereWithoutRecipientInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountRequestScalarWhereInputSchema), z.lazy(() => JointAccountRequestScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema = z.object({
+});
+const JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestCreateWithoutCreatorInputSchema).array(), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestCreateOrConnectWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestCreateOrConnectWithoutCreatorInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountModRequestUpsertWithWhereUniqueWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUpsertWithWhereUniqueWithoutCreatorInputSchema).array()]).optional(),
@@ -6130,8 +6130,8 @@ const JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema =
   update: z.union([z.lazy(() => JointAccountModRequestUpdateWithWhereUniqueWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUpdateWithWhereUniqueWithoutCreatorInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountModRequestUpdateManyWithWhereWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUpdateManyWithWhereWithoutCreatorInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountModRequestScalarWhereInputSchema), z.lazy(() => JointAccountModRequestScalarWhereInputSchema).array()]).optional()
-}).strict();
-const NotificationUncheckedUpdateManyWithoutUserNestedInputSchema = z.object({
+});
+const NotificationUncheckedUpdateManyWithoutUserNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => NotificationCreateWithoutUserInputSchema), z.lazy(() => NotificationCreateWithoutUserInputSchema).array(), z.lazy(() => NotificationUncheckedCreateWithoutUserInputSchema), z.lazy(() => NotificationUncheckedCreateWithoutUserInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => NotificationCreateOrConnectWithoutUserInputSchema), z.lazy(() => NotificationCreateOrConnectWithoutUserInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => NotificationUpsertWithWhereUniqueWithoutUserInputSchema), z.lazy(() => NotificationUpsertWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
@@ -6143,8 +6143,8 @@ const NotificationUncheckedUpdateManyWithoutUserNestedInputSchema = z.object({
   update: z.union([z.lazy(() => NotificationUpdateWithWhereUniqueWithoutUserInputSchema), z.lazy(() => NotificationUpdateWithWhereUniqueWithoutUserInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => NotificationUpdateManyWithWhereWithoutUserInputSchema), z.lazy(() => NotificationUpdateManyWithWhereWithoutUserInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => NotificationScalarWhereInputSchema), z.lazy(() => NotificationScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInputSchema = z.object({
+});
+const JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestApprovalCreateWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateWithoutApproverInputSchema).array(), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutApproverInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutApproverInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutApproverInputSchema).array()]).optional(),
@@ -6156,198 +6156,198 @@ const JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInpu
   update: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateWithWhereUniqueWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUpdateWithWhereUniqueWithoutApproverInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateManyWithWhereWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUpdateManyWithWhereWithoutApproverInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema), z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema).array()]).optional()
-}).strict();
-const UserCreateNestedOneWithoutSessionsInputSchema = z.object({
+});
+const UserCreateNestedOneWithoutSessionsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutSessionsInputSchema), z.lazy(() => UserUncheckedCreateWithoutSessionsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutSessionsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
-}).strict();
-const UserUpdateOneRequiredWithoutSessionsNestedInputSchema = z.object({
+});
+const UserUpdateOneRequiredWithoutSessionsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutSessionsInputSchema), z.lazy(() => UserUncheckedCreateWithoutSessionsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutSessionsInputSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutSessionsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutSessionsInputSchema), z.lazy(() => UserUpdateWithoutSessionsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutSessionsInputSchema)]).optional()
-}).strict();
-const UserCreateNestedOneWithoutAccountsInputSchema = z.object({
+});
+const UserCreateNestedOneWithoutAccountsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutAccountsInputSchema), z.lazy(() => UserUncheckedCreateWithoutAccountsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutAccountsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
-}).strict();
-const UserUpdateOneRequiredWithoutAccountsNestedInputSchema = z.object({
+});
+const UserUpdateOneRequiredWithoutAccountsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutAccountsInputSchema), z.lazy(() => UserUncheckedCreateWithoutAccountsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutAccountsInputSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutAccountsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutAccountsInputSchema), z.lazy(() => UserUpdateWithoutAccountsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutAccountsInputSchema)]).optional()
-}).strict();
-const UserCreateNestedOneWithoutProfileInputSchema = z.object({
+});
+const UserCreateNestedOneWithoutProfileInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutProfileInputSchema), z.lazy(() => UserUncheckedCreateWithoutProfileInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutProfileInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
-}).strict();
-const NullableEnumGovernmentIdTypeFieldUpdateOperationsInputSchema = z.object({
+});
+const NullableEnumGovernmentIdTypeFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => GovernmentIdTypeSchema).optional().nullable()
-}).strict();
-const NullableEnumKycStatusFieldUpdateOperationsInputSchema = z.object({
+});
+const NullableEnumKycStatusFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => KycStatusSchema).optional().nullable()
-}).strict();
-const UserUpdateOneRequiredWithoutProfileNestedInputSchema = z.object({
+});
+const UserUpdateOneRequiredWithoutProfileNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutProfileInputSchema), z.lazy(() => UserUncheckedCreateWithoutProfileInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutProfileInputSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutProfileInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutProfileInputSchema), z.lazy(() => UserUpdateWithoutProfileInputSchema), z.lazy(() => UserUncheckedUpdateWithoutProfileInputSchema)]).optional()
-}).strict();
-const FinancialAccountCreateNestedOneWithoutBusinessProfileInputSchema = z.object({
+});
+const FinancialAccountCreateNestedOneWithoutBusinessProfileInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutBusinessProfileInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutBusinessProfileInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutBusinessProfileInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional()
-}).strict();
-const NullableIntFieldUpdateOperationsInputSchema = z.object({
+});
+const NullableIntFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.number().optional().nullable(),
   increment: z.number().optional(),
   decrement: z.number().optional(),
   multiply: z.number().optional(),
   divide: z.number().optional()
-}).strict();
-const FinancialAccountUpdateOneRequiredWithoutBusinessProfileNestedInputSchema = z.object({
+});
+const FinancialAccountUpdateOneRequiredWithoutBusinessProfileNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutBusinessProfileInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutBusinessProfileInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutBusinessProfileInputSchema).optional(),
   upsert: z.lazy(() => FinancialAccountUpsertWithoutBusinessProfileInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => FinancialAccountUpdateToOneWithWhereWithoutBusinessProfileInputSchema), z.lazy(() => FinancialAccountUpdateWithoutBusinessProfileInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutBusinessProfileInputSchema)]).optional()
-}).strict();
-const UserCreateNestedOneWithoutCreatedAccountsInputSchema = z.object({
+});
+const UserCreateNestedOneWithoutCreatedAccountsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutCreatedAccountsInputSchema), z.lazy(() => UserUncheckedCreateWithoutCreatedAccountsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutCreatedAccountsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
-}).strict();
-const BusinessProfileCreateNestedOneWithoutAccountInputSchema = z.object({
+});
+const BusinessProfileCreateNestedOneWithoutAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => BusinessProfileCreateWithoutAccountInputSchema), z.lazy(() => BusinessProfileUncheckedCreateWithoutAccountInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => BusinessProfileCreateOrConnectWithoutAccountInputSchema).optional(),
   connect: z.lazy(() => BusinessProfileWhereUniqueInputSchema).optional()
-}).strict();
-const AccountUserCreateNestedManyWithoutFinancialAccountInputSchema = z.object({
+});
+const AccountUserCreateNestedManyWithoutFinancialAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountUserCreateWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => AccountUserUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => AccountUserCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => AccountUserCreateManyFinancialAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => AccountUserWhereUniqueInputSchema), z.lazy(() => AccountUserWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountRequestCreateNestedManyWithoutFinancialAccountInputSchema = z.object({
+});
+const JointAccountRequestCreateNestedManyWithoutFinancialAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountRequestCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountRequestCreateManyFinancialAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountRequestWhereUniqueInputSchema), z.lazy(() => JointAccountRequestWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestCreateNestedManyWithoutAccountInputSchema = z.object({
+});
+const JointAccountModRequestCreateNestedManyWithoutAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestCreateWithoutAccountInputSchema).array(), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestCreateOrConnectWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestCreateOrConnectWithoutAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountModRequestCreateManyAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountModRequestWhereUniqueInputSchema), z.lazy(() => JointAccountModRequestWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const NotificationCreateNestedManyWithoutFinancialAccountInputSchema = z.object({
+});
+const NotificationCreateNestedManyWithoutFinancialAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => NotificationCreateWithoutFinancialAccountInputSchema), z.lazy(() => NotificationCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => NotificationUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => NotificationCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => NotificationCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => NotificationCreateManyFinancialAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => NotificationWhereUniqueInputSchema), z.lazy(() => NotificationWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const TransactionCreateNestedManyWithoutFinancialAccountInputSchema = z.object({
+});
+const TransactionCreateNestedManyWithoutFinancialAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutFinancialAccountInputSchema), z.lazy(() => TransactionCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => TransactionCreateManyFinancialAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => TransactionWhereUniqueInputSchema), z.lazy(() => TransactionWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const TransactionCreateNestedManyWithoutRecipientAccountInputSchema = z.object({
+});
+const TransactionCreateNestedManyWithoutRecipientAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutRecipientAccountInputSchema), z.lazy(() => TransactionCreateWithoutRecipientAccountInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutRecipientAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutRecipientAccountInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutRecipientAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => TransactionCreateManyRecipientAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => TransactionWhereUniqueInputSchema), z.lazy(() => TransactionWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const InvestmentCreateNestedManyWithoutFinancialAccountInputSchema = z.object({
+});
+const InvestmentCreateNestedManyWithoutFinancialAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => InvestmentCreateWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => InvestmentUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => InvestmentCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => InvestmentCreateManyFinancialAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => InvestmentWhereUniqueInputSchema), z.lazy(() => InvestmentWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const BusinessProfileUncheckedCreateNestedOneWithoutAccountInputSchema = z.object({
+});
+const BusinessProfileUncheckedCreateNestedOneWithoutAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => BusinessProfileCreateWithoutAccountInputSchema), z.lazy(() => BusinessProfileUncheckedCreateWithoutAccountInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => BusinessProfileCreateOrConnectWithoutAccountInputSchema).optional(),
   connect: z.lazy(() => BusinessProfileWhereUniqueInputSchema).optional()
-}).strict();
-const AccountUserUncheckedCreateNestedManyWithoutFinancialAccountInputSchema = z.object({
+});
+const AccountUserUncheckedCreateNestedManyWithoutFinancialAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountUserCreateWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => AccountUserUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => AccountUserCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => AccountUserCreateManyFinancialAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => AccountUserWhereUniqueInputSchema), z.lazy(() => AccountUserWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountRequestUncheckedCreateNestedManyWithoutFinancialAccountInputSchema = z.object({
+});
+const JointAccountRequestUncheckedCreateNestedManyWithoutFinancialAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountRequestCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountRequestCreateManyFinancialAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountRequestWhereUniqueInputSchema), z.lazy(() => JointAccountRequestWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestUncheckedCreateNestedManyWithoutAccountInputSchema = z.object({
+});
+const JointAccountModRequestUncheckedCreateNestedManyWithoutAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestCreateWithoutAccountInputSchema).array(), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestCreateOrConnectWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestCreateOrConnectWithoutAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountModRequestCreateManyAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountModRequestWhereUniqueInputSchema), z.lazy(() => JointAccountModRequestWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const NotificationUncheckedCreateNestedManyWithoutFinancialAccountInputSchema = z.object({
+});
+const NotificationUncheckedCreateNestedManyWithoutFinancialAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => NotificationCreateWithoutFinancialAccountInputSchema), z.lazy(() => NotificationCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => NotificationUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => NotificationCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => NotificationCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => NotificationCreateManyFinancialAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => NotificationWhereUniqueInputSchema), z.lazy(() => NotificationWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const TransactionUncheckedCreateNestedManyWithoutFinancialAccountInputSchema = z.object({
+});
+const TransactionUncheckedCreateNestedManyWithoutFinancialAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutFinancialAccountInputSchema), z.lazy(() => TransactionCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => TransactionCreateManyFinancialAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => TransactionWhereUniqueInputSchema), z.lazy(() => TransactionWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const TransactionUncheckedCreateNestedManyWithoutRecipientAccountInputSchema = z.object({
+});
+const TransactionUncheckedCreateNestedManyWithoutRecipientAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutRecipientAccountInputSchema), z.lazy(() => TransactionCreateWithoutRecipientAccountInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutRecipientAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutRecipientAccountInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutRecipientAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => TransactionCreateManyRecipientAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => TransactionWhereUniqueInputSchema), z.lazy(() => TransactionWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const InvestmentUncheckedCreateNestedManyWithoutFinancialAccountInputSchema = z.object({
+});
+const InvestmentUncheckedCreateNestedManyWithoutFinancialAccountInputSchema = z.strictObject({
   create: z.union([z.lazy(() => InvestmentCreateWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => InvestmentUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => InvestmentCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   createMany: z.lazy(() => InvestmentCreateManyFinancialAccountInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => InvestmentWhereUniqueInputSchema), z.lazy(() => InvestmentWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const EnumAccountStatusFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumAccountStatusFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => AccountStatusSchema).optional()
-}).strict();
-const EnumAccountTypeFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumAccountTypeFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => AccountTypeSchema).optional()
-}).strict();
-const EnumAccountOwnershipFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumAccountOwnershipFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => AccountOwnershipSchema).optional()
-}).strict();
-const FloatFieldUpdateOperationsInputSchema = z.object({
+});
+const FloatFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.number().optional(),
   increment: z.number().optional(),
   decrement: z.number().optional(),
   multiply: z.number().optional(),
   divide: z.number().optional()
-}).strict();
-const IntFieldUpdateOperationsInputSchema = z.object({
+});
+const IntFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.number().optional(),
   increment: z.number().optional(),
   decrement: z.number().optional(),
   multiply: z.number().optional(),
   divide: z.number().optional()
-}).strict();
-const UserUpdateOneRequiredWithoutCreatedAccountsNestedInputSchema = z.object({
+});
+const UserUpdateOneRequiredWithoutCreatedAccountsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutCreatedAccountsInputSchema), z.lazy(() => UserUncheckedCreateWithoutCreatedAccountsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutCreatedAccountsInputSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutCreatedAccountsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutCreatedAccountsInputSchema), z.lazy(() => UserUpdateWithoutCreatedAccountsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutCreatedAccountsInputSchema)]).optional()
-}).strict();
-const BusinessProfileUpdateOneWithoutAccountNestedInputSchema = z.object({
+});
+const BusinessProfileUpdateOneWithoutAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => BusinessProfileCreateWithoutAccountInputSchema), z.lazy(() => BusinessProfileUncheckedCreateWithoutAccountInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => BusinessProfileCreateOrConnectWithoutAccountInputSchema).optional(),
   upsert: z.lazy(() => BusinessProfileUpsertWithoutAccountInputSchema).optional(),
@@ -6355,8 +6355,8 @@ const BusinessProfileUpdateOneWithoutAccountNestedInputSchema = z.object({
   delete: z.union([z.boolean(), z.lazy(() => BusinessProfileWhereInputSchema)]).optional(),
   connect: z.lazy(() => BusinessProfileWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => BusinessProfileUpdateToOneWithWhereWithoutAccountInputSchema), z.lazy(() => BusinessProfileUpdateWithoutAccountInputSchema), z.lazy(() => BusinessProfileUncheckedUpdateWithoutAccountInputSchema)]).optional()
-}).strict();
-const AccountUserUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
+});
+const AccountUserUpdateManyWithoutFinancialAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountUserCreateWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => AccountUserUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => AccountUserCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => AccountUserUpsertWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUpsertWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
@@ -6368,8 +6368,8 @@ const AccountUserUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
   update: z.union([z.lazy(() => AccountUserUpdateWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUpdateWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => AccountUserUpdateManyWithWhereWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUpdateManyWithWhereWithoutFinancialAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => AccountUserScalarWhereInputSchema), z.lazy(() => AccountUserScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountRequestUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
+});
+const JointAccountRequestUpdateManyWithoutFinancialAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountRequestCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountRequestUpsertWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUpsertWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
@@ -6381,8 +6381,8 @@ const JointAccountRequestUpdateManyWithoutFinancialAccountNestedInputSchema = z.
   update: z.union([z.lazy(() => JointAccountRequestUpdateWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUpdateWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountRequestUpdateManyWithWhereWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUpdateManyWithWhereWithoutFinancialAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountRequestScalarWhereInputSchema), z.lazy(() => JointAccountRequestScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestUpdateManyWithoutAccountNestedInputSchema = z.object({
+});
+const JointAccountModRequestUpdateManyWithoutAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestCreateWithoutAccountInputSchema).array(), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestCreateOrConnectWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestCreateOrConnectWithoutAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountModRequestUpsertWithWhereUniqueWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUpsertWithWhereUniqueWithoutAccountInputSchema).array()]).optional(),
@@ -6394,8 +6394,8 @@ const JointAccountModRequestUpdateManyWithoutAccountNestedInputSchema = z.object
   update: z.union([z.lazy(() => JointAccountModRequestUpdateWithWhereUniqueWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUpdateWithWhereUniqueWithoutAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountModRequestUpdateManyWithWhereWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUpdateManyWithWhereWithoutAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountModRequestScalarWhereInputSchema), z.lazy(() => JointAccountModRequestScalarWhereInputSchema).array()]).optional()
-}).strict();
-const NotificationUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
+});
+const NotificationUpdateManyWithoutFinancialAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => NotificationCreateWithoutFinancialAccountInputSchema), z.lazy(() => NotificationCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => NotificationUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => NotificationCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => NotificationCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => NotificationUpsertWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUpsertWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
@@ -6407,8 +6407,8 @@ const NotificationUpdateManyWithoutFinancialAccountNestedInputSchema = z.object(
   update: z.union([z.lazy(() => NotificationUpdateWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUpdateWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => NotificationUpdateManyWithWhereWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUpdateManyWithWhereWithoutFinancialAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => NotificationScalarWhereInputSchema), z.lazy(() => NotificationScalarWhereInputSchema).array()]).optional()
-}).strict();
-const TransactionUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
+});
+const TransactionUpdateManyWithoutFinancialAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutFinancialAccountInputSchema), z.lazy(() => TransactionCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => TransactionUpsertWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUpsertWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
@@ -6420,8 +6420,8 @@ const TransactionUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
   update: z.union([z.lazy(() => TransactionUpdateWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUpdateWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => TransactionUpdateManyWithWhereWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUpdateManyWithWhereWithoutFinancialAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => TransactionScalarWhereInputSchema), z.lazy(() => TransactionScalarWhereInputSchema).array()]).optional()
-}).strict();
-const TransactionUpdateManyWithoutRecipientAccountNestedInputSchema = z.object({
+});
+const TransactionUpdateManyWithoutRecipientAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutRecipientAccountInputSchema), z.lazy(() => TransactionCreateWithoutRecipientAccountInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutRecipientAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutRecipientAccountInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutRecipientAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => TransactionUpsertWithWhereUniqueWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUpsertWithWhereUniqueWithoutRecipientAccountInputSchema).array()]).optional(),
@@ -6433,8 +6433,8 @@ const TransactionUpdateManyWithoutRecipientAccountNestedInputSchema = z.object({
   update: z.union([z.lazy(() => TransactionUpdateWithWhereUniqueWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUpdateWithWhereUniqueWithoutRecipientAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => TransactionUpdateManyWithWhereWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUpdateManyWithWhereWithoutRecipientAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => TransactionScalarWhereInputSchema), z.lazy(() => TransactionScalarWhereInputSchema).array()]).optional()
-}).strict();
-const InvestmentUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
+});
+const InvestmentUpdateManyWithoutFinancialAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => InvestmentCreateWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => InvestmentUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => InvestmentCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => InvestmentUpsertWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUpsertWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
@@ -6446,8 +6446,8 @@ const InvestmentUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
   update: z.union([z.lazy(() => InvestmentUpdateWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUpdateWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => InvestmentUpdateManyWithWhereWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUpdateManyWithWhereWithoutFinancialAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => InvestmentScalarWhereInputSchema), z.lazy(() => InvestmentScalarWhereInputSchema).array()]).optional()
-}).strict();
-const BusinessProfileUncheckedUpdateOneWithoutAccountNestedInputSchema = z.object({
+});
+const BusinessProfileUncheckedUpdateOneWithoutAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => BusinessProfileCreateWithoutAccountInputSchema), z.lazy(() => BusinessProfileUncheckedCreateWithoutAccountInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => BusinessProfileCreateOrConnectWithoutAccountInputSchema).optional(),
   upsert: z.lazy(() => BusinessProfileUpsertWithoutAccountInputSchema).optional(),
@@ -6455,8 +6455,8 @@ const BusinessProfileUncheckedUpdateOneWithoutAccountNestedInputSchema = z.objec
   delete: z.union([z.boolean(), z.lazy(() => BusinessProfileWhereInputSchema)]).optional(),
   connect: z.lazy(() => BusinessProfileWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => BusinessProfileUpdateToOneWithWhereWithoutAccountInputSchema), z.lazy(() => BusinessProfileUpdateWithoutAccountInputSchema), z.lazy(() => BusinessProfileUncheckedUpdateWithoutAccountInputSchema)]).optional()
-}).strict();
-const AccountUserUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
+});
+const AccountUserUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountUserCreateWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => AccountUserUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => AccountUserCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => AccountUserUpsertWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUpsertWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
@@ -6468,8 +6468,8 @@ const AccountUserUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z
   update: z.union([z.lazy(() => AccountUserUpdateWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUpdateWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => AccountUserUpdateManyWithWhereWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUpdateManyWithWhereWithoutFinancialAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => AccountUserScalarWhereInputSchema), z.lazy(() => AccountUserScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountRequestUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
+});
+const JointAccountRequestUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountRequestCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountRequestUpsertWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUpsertWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
@@ -6481,8 +6481,8 @@ const JointAccountRequestUncheckedUpdateManyWithoutFinancialAccountNestedInputSc
   update: z.union([z.lazy(() => JointAccountRequestUpdateWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUpdateWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountRequestUpdateManyWithWhereWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUpdateManyWithWhereWithoutFinancialAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountRequestScalarWhereInputSchema), z.lazy(() => JointAccountRequestScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestUncheckedUpdateManyWithoutAccountNestedInputSchema = z.object({
+});
+const JointAccountModRequestUncheckedUpdateManyWithoutAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestCreateWithoutAccountInputSchema).array(), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestCreateOrConnectWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestCreateOrConnectWithoutAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountModRequestUpsertWithWhereUniqueWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUpsertWithWhereUniqueWithoutAccountInputSchema).array()]).optional(),
@@ -6494,8 +6494,8 @@ const JointAccountModRequestUncheckedUpdateManyWithoutAccountNestedInputSchema =
   update: z.union([z.lazy(() => JointAccountModRequestUpdateWithWhereUniqueWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUpdateWithWhereUniqueWithoutAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountModRequestUpdateManyWithWhereWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUpdateManyWithWhereWithoutAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountModRequestScalarWhereInputSchema), z.lazy(() => JointAccountModRequestScalarWhereInputSchema).array()]).optional()
-}).strict();
-const NotificationUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
+});
+const NotificationUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => NotificationCreateWithoutFinancialAccountInputSchema), z.lazy(() => NotificationCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => NotificationUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => NotificationCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => NotificationCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => NotificationUpsertWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUpsertWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
@@ -6507,8 +6507,8 @@ const NotificationUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = 
   update: z.union([z.lazy(() => NotificationUpdateWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUpdateWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => NotificationUpdateManyWithWhereWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUpdateManyWithWhereWithoutFinancialAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => NotificationScalarWhereInputSchema), z.lazy(() => NotificationScalarWhereInputSchema).array()]).optional()
-}).strict();
-const TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
+});
+const TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutFinancialAccountInputSchema), z.lazy(() => TransactionCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => TransactionUpsertWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUpsertWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
@@ -6520,8 +6520,8 @@ const TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z
   update: z.union([z.lazy(() => TransactionUpdateWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUpdateWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => TransactionUpdateManyWithWhereWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUpdateManyWithWhereWithoutFinancialAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => TransactionScalarWhereInputSchema), z.lazy(() => TransactionScalarWhereInputSchema).array()]).optional()
-}).strict();
-const TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema = z.object({
+});
+const TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutRecipientAccountInputSchema), z.lazy(() => TransactionCreateWithoutRecipientAccountInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutRecipientAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutRecipientAccountInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutRecipientAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => TransactionUpsertWithWhereUniqueWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUpsertWithWhereUniqueWithoutRecipientAccountInputSchema).array()]).optional(),
@@ -6533,8 +6533,8 @@ const TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema = z
   update: z.union([z.lazy(() => TransactionUpdateWithWhereUniqueWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUpdateWithWhereUniqueWithoutRecipientAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => TransactionUpdateManyWithWhereWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUpdateManyWithWhereWithoutRecipientAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => TransactionScalarWhereInputSchema), z.lazy(() => TransactionScalarWhereInputSchema).array()]).optional()
-}).strict();
-const InvestmentUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z.object({
+});
+const InvestmentUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => InvestmentCreateWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentCreateWithoutFinancialAccountInputSchema).array(), z.lazy(() => InvestmentUncheckedCreateWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutFinancialAccountInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => InvestmentCreateOrConnectWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentCreateOrConnectWithoutFinancialAccountInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => InvestmentUpsertWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUpsertWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
@@ -6546,59 +6546,59 @@ const InvestmentUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema = z.
   update: z.union([z.lazy(() => InvestmentUpdateWithWhereUniqueWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUpdateWithWhereUniqueWithoutFinancialAccountInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => InvestmentUpdateManyWithWhereWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUpdateManyWithWhereWithoutFinancialAccountInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => InvestmentScalarWhereInputSchema), z.lazy(() => InvestmentScalarWhereInputSchema).array()]).optional()
-}).strict();
-const UserCreateNestedOneWithoutAccountMembershipsInputSchema = z.object({
+});
+const UserCreateNestedOneWithoutAccountMembershipsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutAccountMembershipsInputSchema), z.lazy(() => UserUncheckedCreateWithoutAccountMembershipsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutAccountMembershipsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
-}).strict();
-const FinancialAccountCreateNestedOneWithoutAccountUsersInputSchema = z.object({
+});
+const FinancialAccountCreateNestedOneWithoutAccountUsersInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutAccountUsersInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutAccountUsersInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutAccountUsersInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional()
-}).strict();
-const TransactionCreateNestedManyWithoutInitiatorInputSchema = z.object({
+});
+const TransactionCreateNestedManyWithoutInitiatorInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutInitiatorInputSchema), z.lazy(() => TransactionCreateWithoutInitiatorInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutInitiatorInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutInitiatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutInitiatorInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutInitiatorInputSchema).array()]).optional(),
   createMany: z.lazy(() => TransactionCreateManyInitiatorInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => TransactionWhereUniqueInputSchema), z.lazy(() => TransactionWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const InvestmentCreateNestedManyWithoutInvestorInputSchema = z.object({
+});
+const InvestmentCreateNestedManyWithoutInvestorInputSchema = z.strictObject({
   create: z.union([z.lazy(() => InvestmentCreateWithoutInvestorInputSchema), z.lazy(() => InvestmentCreateWithoutInvestorInputSchema).array(), z.lazy(() => InvestmentUncheckedCreateWithoutInvestorInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutInvestorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => InvestmentCreateOrConnectWithoutInvestorInputSchema), z.lazy(() => InvestmentCreateOrConnectWithoutInvestorInputSchema).array()]).optional(),
   createMany: z.lazy(() => InvestmentCreateManyInvestorInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => InvestmentWhereUniqueInputSchema), z.lazy(() => InvestmentWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const TransactionUncheckedCreateNestedManyWithoutInitiatorInputSchema = z.object({
+});
+const TransactionUncheckedCreateNestedManyWithoutInitiatorInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutInitiatorInputSchema), z.lazy(() => TransactionCreateWithoutInitiatorInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutInitiatorInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutInitiatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutInitiatorInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutInitiatorInputSchema).array()]).optional(),
   createMany: z.lazy(() => TransactionCreateManyInitiatorInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => TransactionWhereUniqueInputSchema), z.lazy(() => TransactionWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const InvestmentUncheckedCreateNestedManyWithoutInvestorInputSchema = z.object({
+});
+const InvestmentUncheckedCreateNestedManyWithoutInvestorInputSchema = z.strictObject({
   create: z.union([z.lazy(() => InvestmentCreateWithoutInvestorInputSchema), z.lazy(() => InvestmentCreateWithoutInvestorInputSchema).array(), z.lazy(() => InvestmentUncheckedCreateWithoutInvestorInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutInvestorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => InvestmentCreateOrConnectWithoutInvestorInputSchema), z.lazy(() => InvestmentCreateOrConnectWithoutInvestorInputSchema).array()]).optional(),
   createMany: z.lazy(() => InvestmentCreateManyInvestorInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => InvestmentWhereUniqueInputSchema), z.lazy(() => InvestmentWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const EnumAccountUserRoleFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumAccountUserRoleFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => AccountUserRoleSchema).optional()
-}).strict();
-const UserUpdateOneRequiredWithoutAccountMembershipsNestedInputSchema = z.object({
+});
+const UserUpdateOneRequiredWithoutAccountMembershipsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutAccountMembershipsInputSchema), z.lazy(() => UserUncheckedCreateWithoutAccountMembershipsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutAccountMembershipsInputSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutAccountMembershipsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutAccountMembershipsInputSchema), z.lazy(() => UserUpdateWithoutAccountMembershipsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutAccountMembershipsInputSchema)]).optional()
-}).strict();
-const FinancialAccountUpdateOneRequiredWithoutAccountUsersNestedInputSchema = z.object({
+});
+const FinancialAccountUpdateOneRequiredWithoutAccountUsersNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutAccountUsersInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutAccountUsersInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutAccountUsersInputSchema).optional(),
   upsert: z.lazy(() => FinancialAccountUpsertWithoutAccountUsersInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => FinancialAccountUpdateToOneWithWhereWithoutAccountUsersInputSchema), z.lazy(() => FinancialAccountUpdateWithoutAccountUsersInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutAccountUsersInputSchema)]).optional()
-}).strict();
-const TransactionUpdateManyWithoutInitiatorNestedInputSchema = z.object({
+});
+const TransactionUpdateManyWithoutInitiatorNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutInitiatorInputSchema), z.lazy(() => TransactionCreateWithoutInitiatorInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutInitiatorInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutInitiatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutInitiatorInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutInitiatorInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => TransactionUpsertWithWhereUniqueWithoutInitiatorInputSchema), z.lazy(() => TransactionUpsertWithWhereUniqueWithoutInitiatorInputSchema).array()]).optional(),
@@ -6610,8 +6610,8 @@ const TransactionUpdateManyWithoutInitiatorNestedInputSchema = z.object({
   update: z.union([z.lazy(() => TransactionUpdateWithWhereUniqueWithoutInitiatorInputSchema), z.lazy(() => TransactionUpdateWithWhereUniqueWithoutInitiatorInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => TransactionUpdateManyWithWhereWithoutInitiatorInputSchema), z.lazy(() => TransactionUpdateManyWithWhereWithoutInitiatorInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => TransactionScalarWhereInputSchema), z.lazy(() => TransactionScalarWhereInputSchema).array()]).optional()
-}).strict();
-const InvestmentUpdateManyWithoutInvestorNestedInputSchema = z.object({
+});
+const InvestmentUpdateManyWithoutInvestorNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => InvestmentCreateWithoutInvestorInputSchema), z.lazy(() => InvestmentCreateWithoutInvestorInputSchema).array(), z.lazy(() => InvestmentUncheckedCreateWithoutInvestorInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutInvestorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => InvestmentCreateOrConnectWithoutInvestorInputSchema), z.lazy(() => InvestmentCreateOrConnectWithoutInvestorInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => InvestmentUpsertWithWhereUniqueWithoutInvestorInputSchema), z.lazy(() => InvestmentUpsertWithWhereUniqueWithoutInvestorInputSchema).array()]).optional(),
@@ -6623,8 +6623,8 @@ const InvestmentUpdateManyWithoutInvestorNestedInputSchema = z.object({
   update: z.union([z.lazy(() => InvestmentUpdateWithWhereUniqueWithoutInvestorInputSchema), z.lazy(() => InvestmentUpdateWithWhereUniqueWithoutInvestorInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => InvestmentUpdateManyWithWhereWithoutInvestorInputSchema), z.lazy(() => InvestmentUpdateManyWithWhereWithoutInvestorInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => InvestmentScalarWhereInputSchema), z.lazy(() => InvestmentScalarWhereInputSchema).array()]).optional()
-}).strict();
-const TransactionUncheckedUpdateManyWithoutInitiatorNestedInputSchema = z.object({
+});
+const TransactionUncheckedUpdateManyWithoutInitiatorNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutInitiatorInputSchema), z.lazy(() => TransactionCreateWithoutInitiatorInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutInitiatorInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutInitiatorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutInitiatorInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutInitiatorInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => TransactionUpsertWithWhereUniqueWithoutInitiatorInputSchema), z.lazy(() => TransactionUpsertWithWhereUniqueWithoutInitiatorInputSchema).array()]).optional(),
@@ -6636,8 +6636,8 @@ const TransactionUncheckedUpdateManyWithoutInitiatorNestedInputSchema = z.object
   update: z.union([z.lazy(() => TransactionUpdateWithWhereUniqueWithoutInitiatorInputSchema), z.lazy(() => TransactionUpdateWithWhereUniqueWithoutInitiatorInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => TransactionUpdateManyWithWhereWithoutInitiatorInputSchema), z.lazy(() => TransactionUpdateManyWithWhereWithoutInitiatorInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => TransactionScalarWhereInputSchema), z.lazy(() => TransactionScalarWhereInputSchema).array()]).optional()
-}).strict();
-const InvestmentUncheckedUpdateManyWithoutInvestorNestedInputSchema = z.object({
+});
+const InvestmentUncheckedUpdateManyWithoutInvestorNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => InvestmentCreateWithoutInvestorInputSchema), z.lazy(() => InvestmentCreateWithoutInvestorInputSchema).array(), z.lazy(() => InvestmentUncheckedCreateWithoutInvestorInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutInvestorInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => InvestmentCreateOrConnectWithoutInvestorInputSchema), z.lazy(() => InvestmentCreateOrConnectWithoutInvestorInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => InvestmentUpsertWithWhereUniqueWithoutInvestorInputSchema), z.lazy(() => InvestmentUpsertWithWhereUniqueWithoutInvestorInputSchema).array()]).optional(),
@@ -6649,33 +6649,33 @@ const InvestmentUncheckedUpdateManyWithoutInvestorNestedInputSchema = z.object({
   update: z.union([z.lazy(() => InvestmentUpdateWithWhereUniqueWithoutInvestorInputSchema), z.lazy(() => InvestmentUpdateWithWhereUniqueWithoutInvestorInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => InvestmentUpdateManyWithWhereWithoutInvestorInputSchema), z.lazy(() => InvestmentUpdateManyWithWhereWithoutInvestorInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => InvestmentScalarWhereInputSchema), z.lazy(() => InvestmentScalarWhereInputSchema).array()]).optional()
-}).strict();
-const UserCreateNestedOneWithoutCreatedJointAccountRequestsInputSchema = z.object({
+});
+const UserCreateNestedOneWithoutCreatedJointAccountRequestsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutCreatedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutCreatedJointAccountRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutCreatedJointAccountRequestsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
-}).strict();
-const UserCreateNestedOneWithoutReceivedJointAccountRequestsInputSchema = z.object({
+});
+const UserCreateNestedOneWithoutReceivedJointAccountRequestsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutReceivedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutReceivedJointAccountRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutReceivedJointAccountRequestsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
-}).strict();
-const FinancialAccountCreateNestedOneWithoutJointAccountRequestsInputSchema = z.object({
+});
+const FinancialAccountCreateNestedOneWithoutJointAccountRequestsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutJointAccountRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutJointAccountRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutJointAccountRequestsInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional()
-}).strict();
-const EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => JointAccountRequestStatusSchema).optional()
-}).strict();
-const UserUpdateOneRequiredWithoutCreatedJointAccountRequestsNestedInputSchema = z.object({
+});
+const UserUpdateOneRequiredWithoutCreatedJointAccountRequestsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutCreatedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutCreatedJointAccountRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutCreatedJointAccountRequestsInputSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutCreatedJointAccountRequestsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutCreatedJointAccountRequestsInputSchema), z.lazy(() => UserUpdateWithoutCreatedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutCreatedJointAccountRequestsInputSchema)]).optional()
-}).strict();
-const UserUpdateOneWithoutReceivedJointAccountRequestsNestedInputSchema = z.object({
+});
+const UserUpdateOneWithoutReceivedJointAccountRequestsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutReceivedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutReceivedJointAccountRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutReceivedJointAccountRequestsInputSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutReceivedJointAccountRequestsInputSchema).optional(),
@@ -6683,59 +6683,59 @@ const UserUpdateOneWithoutReceivedJointAccountRequestsNestedInputSchema = z.obje
   delete: z.union([z.boolean(), z.lazy(() => UserWhereInputSchema)]).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutReceivedJointAccountRequestsInputSchema), z.lazy(() => UserUpdateWithoutReceivedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutReceivedJointAccountRequestsInputSchema)]).optional()
-}).strict();
-const FinancialAccountUpdateOneRequiredWithoutJointAccountRequestsNestedInputSchema = z.object({
+});
+const FinancialAccountUpdateOneRequiredWithoutJointAccountRequestsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutJointAccountRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutJointAccountRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutJointAccountRequestsInputSchema).optional(),
   upsert: z.lazy(() => FinancialAccountUpsertWithoutJointAccountRequestsInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => FinancialAccountUpdateToOneWithWhereWithoutJointAccountRequestsInputSchema), z.lazy(() => FinancialAccountUpdateWithoutJointAccountRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutJointAccountRequestsInputSchema)]).optional()
-}).strict();
-const UserCreateNestedOneWithoutCreatedJointAccountModRequestsInputSchema = z.object({
+});
+const UserCreateNestedOneWithoutCreatedJointAccountModRequestsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutCreatedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutCreatedJointAccountModRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutCreatedJointAccountModRequestsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
-}).strict();
-const FinancialAccountCreateNestedOneWithoutJointAccountModRequestsInputSchema = z.object({
+});
+const FinancialAccountCreateNestedOneWithoutJointAccountModRequestsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutJointAccountModRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutJointAccountModRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutJointAccountModRequestsInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional()
-}).strict();
-const TransactionCreateNestedOneWithoutJointAccountModRequestsInputSchema = z.object({
+});
+const TransactionCreateNestedOneWithoutJointAccountModRequestsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutJointAccountModRequestsInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutJointAccountModRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => TransactionCreateOrConnectWithoutJointAccountModRequestsInputSchema).optional(),
   connect: z.lazy(() => TransactionWhereUniqueInputSchema).optional()
-}).strict();
-const JointAccountModRequestApprovalCreateNestedManyWithoutRequestInputSchema = z.object({
+});
+const JointAccountModRequestApprovalCreateNestedManyWithoutRequestInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestApprovalCreateWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateWithoutRequestInputSchema).array(), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutRequestInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutRequestInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountModRequestApprovalCreateManyRequestInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema), z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutRequestInputSchema = z.object({
+});
+const JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutRequestInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestApprovalCreateWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateWithoutRequestInputSchema).array(), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutRequestInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutRequestInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountModRequestApprovalCreateManyRequestInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema), z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => JointAccountModRequestTypeSchema).optional()
-}).strict();
-const UserUpdateOneRequiredWithoutCreatedJointAccountModRequestsNestedInputSchema = z.object({
+});
+const UserUpdateOneRequiredWithoutCreatedJointAccountModRequestsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutCreatedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutCreatedJointAccountModRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutCreatedJointAccountModRequestsInputSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutCreatedJointAccountModRequestsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutCreatedJointAccountModRequestsInputSchema), z.lazy(() => UserUpdateWithoutCreatedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutCreatedJointAccountModRequestsInputSchema)]).optional()
-}).strict();
-const FinancialAccountUpdateOneRequiredWithoutJointAccountModRequestsNestedInputSchema = z.object({
+});
+const FinancialAccountUpdateOneRequiredWithoutJointAccountModRequestsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutJointAccountModRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutJointAccountModRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutJointAccountModRequestsInputSchema).optional(),
   upsert: z.lazy(() => FinancialAccountUpsertWithoutJointAccountModRequestsInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => FinancialAccountUpdateToOneWithWhereWithoutJointAccountModRequestsInputSchema), z.lazy(() => FinancialAccountUpdateWithoutJointAccountModRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutJointAccountModRequestsInputSchema)]).optional()
-}).strict();
-const TransactionUpdateOneWithoutJointAccountModRequestsNestedInputSchema = z.object({
+});
+const TransactionUpdateOneWithoutJointAccountModRequestsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutJointAccountModRequestsInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutJointAccountModRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => TransactionCreateOrConnectWithoutJointAccountModRequestsInputSchema).optional(),
   upsert: z.lazy(() => TransactionUpsertWithoutJointAccountModRequestsInputSchema).optional(),
@@ -6743,8 +6743,8 @@ const TransactionUpdateOneWithoutJointAccountModRequestsNestedInputSchema = z.ob
   delete: z.union([z.boolean(), z.lazy(() => TransactionWhereInputSchema)]).optional(),
   connect: z.lazy(() => TransactionWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => TransactionUpdateToOneWithWhereWithoutJointAccountModRequestsInputSchema), z.lazy(() => TransactionUpdateWithoutJointAccountModRequestsInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutJointAccountModRequestsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestApprovalUpdateManyWithoutRequestNestedInputSchema = z.object({
+});
+const JointAccountModRequestApprovalUpdateManyWithoutRequestNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestApprovalCreateWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateWithoutRequestInputSchema).array(), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutRequestInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutRequestInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutRequestInputSchema).array()]).optional(),
@@ -6756,8 +6756,8 @@ const JointAccountModRequestApprovalUpdateManyWithoutRequestNestedInputSchema = 
   update: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateWithWhereUniqueWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUpdateWithWhereUniqueWithoutRequestInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateManyWithWhereWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUpdateManyWithWhereWithoutRequestInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema), z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestApprovalUncheckedUpdateManyWithoutRequestNestedInputSchema = z.object({
+});
+const JointAccountModRequestApprovalUncheckedUpdateManyWithoutRequestNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestApprovalCreateWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateWithoutRequestInputSchema).array(), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutRequestInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateOrConnectWithoutRequestInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutRequestInputSchema).array()]).optional(),
@@ -6769,82 +6769,82 @@ const JointAccountModRequestApprovalUncheckedUpdateManyWithoutRequestNestedInput
   update: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateWithWhereUniqueWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUpdateWithWhereUniqueWithoutRequestInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateManyWithWhereWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUpdateManyWithWhereWithoutRequestInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema), z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestCreateNestedOneWithoutApprovalsInputSchema = z.object({
+});
+const JointAccountModRequestCreateNestedOneWithoutApprovalsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutApprovalsInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutApprovalsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => JointAccountModRequestCreateOrConnectWithoutApprovalsInputSchema).optional(),
   connect: z.lazy(() => JointAccountModRequestWhereUniqueInputSchema).optional()
-}).strict();
-const UserCreateNestedOneWithoutApprovedJointAccountModRequestsInputSchema = z.object({
+});
+const UserCreateNestedOneWithoutApprovedJointAccountModRequestsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutApprovedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutApprovedJointAccountModRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutApprovedJointAccountModRequestsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
-}).strict();
-const JointAccountModRequestUpdateOneRequiredWithoutApprovalsNestedInputSchema = z.object({
+});
+const JointAccountModRequestUpdateOneRequiredWithoutApprovalsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutApprovalsInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutApprovalsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => JointAccountModRequestCreateOrConnectWithoutApprovalsInputSchema).optional(),
   upsert: z.lazy(() => JointAccountModRequestUpsertWithoutApprovalsInputSchema).optional(),
   connect: z.lazy(() => JointAccountModRequestWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => JointAccountModRequestUpdateToOneWithWhereWithoutApprovalsInputSchema), z.lazy(() => JointAccountModRequestUpdateWithoutApprovalsInputSchema), z.lazy(() => JointAccountModRequestUncheckedUpdateWithoutApprovalsInputSchema)]).optional()
-}).strict();
-const UserUpdateOneRequiredWithoutApprovedJointAccountModRequestsNestedInputSchema = z.object({
+});
+const UserUpdateOneRequiredWithoutApprovedJointAccountModRequestsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutApprovedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutApprovedJointAccountModRequestsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutApprovedJointAccountModRequestsInputSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutApprovedJointAccountModRequestsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutApprovedJointAccountModRequestsInputSchema), z.lazy(() => UserUpdateWithoutApprovedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutApprovedJointAccountModRequestsInputSchema)]).optional()
-}).strict();
-const EnumInvestmentPlanCategoryFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumInvestmentPlanCategoryFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => InvestmentPlanCategorySchema).optional()
-}).strict();
-const EnumProfitDistributionFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumProfitDistributionFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => ProfitDistributionSchema).optional()
-}).strict();
-const AccountUserCreateNestedOneWithoutInvestmentsInputSchema = z.object({
+});
+const AccountUserCreateNestedOneWithoutInvestmentsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountUserCreateWithoutInvestmentsInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutInvestmentsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => AccountUserCreateOrConnectWithoutInvestmentsInputSchema).optional(),
   connect: z.lazy(() => AccountUserWhereUniqueInputSchema).optional()
-}).strict();
-const TransactionCreateNestedManyWithoutInvestmentInputSchema = z.object({
+});
+const TransactionCreateNestedManyWithoutInvestmentInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutInvestmentInputSchema), z.lazy(() => TransactionCreateWithoutInvestmentInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutInvestmentInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutInvestmentInputSchema).array()]).optional(),
   createMany: z.lazy(() => TransactionCreateManyInvestmentInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => TransactionWhereUniqueInputSchema), z.lazy(() => TransactionWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema = z.object({
+});
+const FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutInvestmentsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutInvestmentsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutInvestmentsInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional()
-}).strict();
-const ProfitCreateNestedManyWithoutInvestmentInputSchema = z.object({
+});
+const ProfitCreateNestedManyWithoutInvestmentInputSchema = z.strictObject({
   create: z.union([z.lazy(() => ProfitCreateWithoutInvestmentInputSchema), z.lazy(() => ProfitCreateWithoutInvestmentInputSchema).array(), z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema), z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema), z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema).array()]).optional(),
   createMany: z.lazy(() => ProfitCreateManyInvestmentInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => ProfitWhereUniqueInputSchema), z.lazy(() => ProfitWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema = z.object({
+});
+const TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutInvestmentInputSchema), z.lazy(() => TransactionCreateWithoutInvestmentInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutInvestmentInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutInvestmentInputSchema).array()]).optional(),
   createMany: z.lazy(() => TransactionCreateManyInvestmentInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => TransactionWhereUniqueInputSchema), z.lazy(() => TransactionWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const ProfitUncheckedCreateNestedManyWithoutInvestmentInputSchema = z.object({
+});
+const ProfitUncheckedCreateNestedManyWithoutInvestmentInputSchema = z.strictObject({
   create: z.union([z.lazy(() => ProfitCreateWithoutInvestmentInputSchema), z.lazy(() => ProfitCreateWithoutInvestmentInputSchema).array(), z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema), z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema), z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema).array()]).optional(),
   createMany: z.lazy(() => ProfitCreateManyInvestmentInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => ProfitWhereUniqueInputSchema), z.lazy(() => ProfitWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const EnumInvestmentStatusFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumInvestmentStatusFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => InvestmentStatusSchema).optional()
-}).strict();
-const AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema = z.object({
+});
+const AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountUserCreateWithoutInvestmentsInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutInvestmentsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => AccountUserCreateOrConnectWithoutInvestmentsInputSchema).optional(),
   upsert: z.lazy(() => AccountUserUpsertWithoutInvestmentsInputSchema).optional(),
   connect: z.lazy(() => AccountUserWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => AccountUserUpdateToOneWithWhereWithoutInvestmentsInputSchema), z.lazy(() => AccountUserUpdateWithoutInvestmentsInputSchema), z.lazy(() => AccountUserUncheckedUpdateWithoutInvestmentsInputSchema)]).optional()
-}).strict();
-const TransactionUpdateManyWithoutInvestmentNestedInputSchema = z.object({
+});
+const TransactionUpdateManyWithoutInvestmentNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutInvestmentInputSchema), z.lazy(() => TransactionCreateWithoutInvestmentInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutInvestmentInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutInvestmentInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => TransactionUpsertWithWhereUniqueWithoutInvestmentInputSchema), z.lazy(() => TransactionUpsertWithWhereUniqueWithoutInvestmentInputSchema).array()]).optional(),
@@ -6856,15 +6856,15 @@ const TransactionUpdateManyWithoutInvestmentNestedInputSchema = z.object({
   update: z.union([z.lazy(() => TransactionUpdateWithWhereUniqueWithoutInvestmentInputSchema), z.lazy(() => TransactionUpdateWithWhereUniqueWithoutInvestmentInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => TransactionUpdateManyWithWhereWithoutInvestmentInputSchema), z.lazy(() => TransactionUpdateManyWithWhereWithoutInvestmentInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => TransactionScalarWhereInputSchema), z.lazy(() => TransactionScalarWhereInputSchema).array()]).optional()
-}).strict();
-const FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema = z.object({
+});
+const FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutInvestmentsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutInvestmentsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutInvestmentsInputSchema).optional(),
   upsert: z.lazy(() => FinancialAccountUpsertWithoutInvestmentsInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => FinancialAccountUpdateToOneWithWhereWithoutInvestmentsInputSchema), z.lazy(() => FinancialAccountUpdateWithoutInvestmentsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutInvestmentsInputSchema)]).optional()
-}).strict();
-const ProfitUpdateManyWithoutInvestmentNestedInputSchema = z.object({
+});
+const ProfitUpdateManyWithoutInvestmentNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => ProfitCreateWithoutInvestmentInputSchema), z.lazy(() => ProfitCreateWithoutInvestmentInputSchema).array(), z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema), z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema), z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => ProfitUpsertWithWhereUniqueWithoutInvestmentInputSchema), z.lazy(() => ProfitUpsertWithWhereUniqueWithoutInvestmentInputSchema).array()]).optional(),
@@ -6876,8 +6876,8 @@ const ProfitUpdateManyWithoutInvestmentNestedInputSchema = z.object({
   update: z.union([z.lazy(() => ProfitUpdateWithWhereUniqueWithoutInvestmentInputSchema), z.lazy(() => ProfitUpdateWithWhereUniqueWithoutInvestmentInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => ProfitUpdateManyWithWhereWithoutInvestmentInputSchema), z.lazy(() => ProfitUpdateManyWithWhereWithoutInvestmentInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => ProfitScalarWhereInputSchema), z.lazy(() => ProfitScalarWhereInputSchema).array()]).optional()
-}).strict();
-const TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema = z.object({
+});
+const TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutInvestmentInputSchema), z.lazy(() => TransactionCreateWithoutInvestmentInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutInvestmentInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutInvestmentInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => TransactionUpsertWithWhereUniqueWithoutInvestmentInputSchema), z.lazy(() => TransactionUpsertWithWhereUniqueWithoutInvestmentInputSchema).array()]).optional(),
@@ -6889,8 +6889,8 @@ const TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema = z.objec
   update: z.union([z.lazy(() => TransactionUpdateWithWhereUniqueWithoutInvestmentInputSchema), z.lazy(() => TransactionUpdateWithWhereUniqueWithoutInvestmentInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => TransactionUpdateManyWithWhereWithoutInvestmentInputSchema), z.lazy(() => TransactionUpdateManyWithWhereWithoutInvestmentInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => TransactionScalarWhereInputSchema), z.lazy(() => TransactionScalarWhereInputSchema).array()]).optional()
-}).strict();
-const ProfitUncheckedUpdateManyWithoutInvestmentNestedInputSchema = z.object({
+});
+const ProfitUncheckedUpdateManyWithoutInvestmentNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => ProfitCreateWithoutInvestmentInputSchema), z.lazy(() => ProfitCreateWithoutInvestmentInputSchema).array(), z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema), z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema), z.lazy(() => ProfitCreateOrConnectWithoutInvestmentInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => ProfitUpsertWithWhereUniqueWithoutInvestmentInputSchema), z.lazy(() => ProfitUpsertWithWhereUniqueWithoutInvestmentInputSchema).array()]).optional(),
@@ -6902,75 +6902,75 @@ const ProfitUncheckedUpdateManyWithoutInvestmentNestedInputSchema = z.object({
   update: z.union([z.lazy(() => ProfitUpdateWithWhereUniqueWithoutInvestmentInputSchema), z.lazy(() => ProfitUpdateWithWhereUniqueWithoutInvestmentInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => ProfitUpdateManyWithWhereWithoutInvestmentInputSchema), z.lazy(() => ProfitUpdateManyWithWhereWithoutInvestmentInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => ProfitScalarWhereInputSchema), z.lazy(() => ProfitScalarWhereInputSchema).array()]).optional()
-}).strict();
-const InvestmentCreateNestedOneWithoutProfitsInputSchema = z.object({
+});
+const InvestmentCreateNestedOneWithoutProfitsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => InvestmentCreateWithoutProfitsInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutProfitsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => InvestmentCreateOrConnectWithoutProfitsInputSchema).optional(),
   connect: z.lazy(() => InvestmentWhereUniqueInputSchema).optional()
-}).strict();
-const InvestmentUpdateOneRequiredWithoutProfitsNestedInputSchema = z.object({
+});
+const InvestmentUpdateOneRequiredWithoutProfitsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => InvestmentCreateWithoutProfitsInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutProfitsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => InvestmentCreateOrConnectWithoutProfitsInputSchema).optional(),
   upsert: z.lazy(() => InvestmentUpsertWithoutProfitsInputSchema).optional(),
   connect: z.lazy(() => InvestmentWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => InvestmentUpdateToOneWithWhereWithoutProfitsInputSchema), z.lazy(() => InvestmentUpdateWithoutProfitsInputSchema), z.lazy(() => InvestmentUncheckedUpdateWithoutProfitsInputSchema)]).optional()
-}).strict();
-const AccountUserCreateNestedOneWithoutTransactionsInputSchema = z.object({
+});
+const AccountUserCreateNestedOneWithoutTransactionsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountUserCreateWithoutTransactionsInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutTransactionsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => AccountUserCreateOrConnectWithoutTransactionsInputSchema).optional(),
   connect: z.lazy(() => AccountUserWhereUniqueInputSchema).optional()
-}).strict();
-const FinancialAccountCreateNestedOneWithoutTransactionsInputSchema = z.object({
+});
+const FinancialAccountCreateNestedOneWithoutTransactionsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutTransactionsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutTransactionsInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional()
-}).strict();
-const FinancialAccountCreateNestedOneWithoutReceivedTransactionsInputSchema = z.object({
+});
+const FinancialAccountCreateNestedOneWithoutReceivedTransactionsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutReceivedTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutReceivedTransactionsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutReceivedTransactionsInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional()
-}).strict();
-const InvestmentCreateNestedOneWithoutTransactionsInputSchema = z.object({
+});
+const InvestmentCreateNestedOneWithoutTransactionsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => InvestmentCreateWithoutTransactionsInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutTransactionsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => InvestmentCreateOrConnectWithoutTransactionsInputSchema).optional(),
   connect: z.lazy(() => InvestmentWhereUniqueInputSchema).optional()
-}).strict();
-const JointAccountModRequestCreateNestedManyWithoutTransactionInputSchema = z.object({
+});
+const JointAccountModRequestCreateNestedManyWithoutTransactionInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestCreateWithoutTransactionInputSchema).array(), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestCreateOrConnectWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestCreateOrConnectWithoutTransactionInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountModRequestCreateManyTransactionInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountModRequestWhereUniqueInputSchema), z.lazy(() => JointAccountModRequestWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const TransactionCreateNestedOneWithoutChildTransactionsInputSchema = z.object({
+});
+const TransactionCreateNestedOneWithoutChildTransactionsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutChildTransactionsInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutChildTransactionsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => TransactionCreateOrConnectWithoutChildTransactionsInputSchema).optional(),
   connect: z.lazy(() => TransactionWhereUniqueInputSchema).optional()
-}).strict();
-const TransactionCreateNestedManyWithoutParentTransactionInputSchema = z.object({
+});
+const TransactionCreateNestedManyWithoutParentTransactionInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutParentTransactionInputSchema), z.lazy(() => TransactionCreateWithoutParentTransactionInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutParentTransactionInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutParentTransactionInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutParentTransactionInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutParentTransactionInputSchema).array()]).optional(),
   createMany: z.lazy(() => TransactionCreateManyParentTransactionInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => TransactionWhereUniqueInputSchema), z.lazy(() => TransactionWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestUncheckedCreateNestedManyWithoutTransactionInputSchema = z.object({
+});
+const JointAccountModRequestUncheckedCreateNestedManyWithoutTransactionInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestCreateWithoutTransactionInputSchema).array(), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestCreateOrConnectWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestCreateOrConnectWithoutTransactionInputSchema).array()]).optional(),
   createMany: z.lazy(() => JointAccountModRequestCreateManyTransactionInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => JointAccountModRequestWhereUniqueInputSchema), z.lazy(() => JointAccountModRequestWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const TransactionUncheckedCreateNestedManyWithoutParentTransactionInputSchema = z.object({
+});
+const TransactionUncheckedCreateNestedManyWithoutParentTransactionInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutParentTransactionInputSchema), z.lazy(() => TransactionCreateWithoutParentTransactionInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutParentTransactionInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutParentTransactionInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutParentTransactionInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutParentTransactionInputSchema).array()]).optional(),
   createMany: z.lazy(() => TransactionCreateManyParentTransactionInputEnvelopeSchema).optional(),
   connect: z.union([z.lazy(() => TransactionWhereUniqueInputSchema), z.lazy(() => TransactionWhereUniqueInputSchema).array()]).optional()
-}).strict();
-const EnumTransactionTypeFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumTransactionTypeFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => TransactionTypeSchema).optional()
-}).strict();
-const EnumTransactionStatusFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumTransactionStatusFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => TransactionStatusSchema).optional()
-}).strict();
-const AccountUserUpdateOneWithoutTransactionsNestedInputSchema = z.object({
+});
+const AccountUserUpdateOneWithoutTransactionsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => AccountUserCreateWithoutTransactionsInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutTransactionsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => AccountUserCreateOrConnectWithoutTransactionsInputSchema).optional(),
   upsert: z.lazy(() => AccountUserUpsertWithoutTransactionsInputSchema).optional(),
@@ -6978,15 +6978,15 @@ const AccountUserUpdateOneWithoutTransactionsNestedInputSchema = z.object({
   delete: z.union([z.boolean(), z.lazy(() => AccountUserWhereInputSchema)]).optional(),
   connect: z.lazy(() => AccountUserWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => AccountUserUpdateToOneWithWhereWithoutTransactionsInputSchema), z.lazy(() => AccountUserUpdateWithoutTransactionsInputSchema), z.lazy(() => AccountUserUncheckedUpdateWithoutTransactionsInputSchema)]).optional()
-}).strict();
-const FinancialAccountUpdateOneRequiredWithoutTransactionsNestedInputSchema = z.object({
+});
+const FinancialAccountUpdateOneRequiredWithoutTransactionsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutTransactionsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutTransactionsInputSchema).optional(),
   upsert: z.lazy(() => FinancialAccountUpsertWithoutTransactionsInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => FinancialAccountUpdateToOneWithWhereWithoutTransactionsInputSchema), z.lazy(() => FinancialAccountUpdateWithoutTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutTransactionsInputSchema)]).optional()
-}).strict();
-const FinancialAccountUpdateOneWithoutReceivedTransactionsNestedInputSchema = z.object({
+});
+const FinancialAccountUpdateOneWithoutReceivedTransactionsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutReceivedTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutReceivedTransactionsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutReceivedTransactionsInputSchema).optional(),
   upsert: z.lazy(() => FinancialAccountUpsertWithoutReceivedTransactionsInputSchema).optional(),
@@ -6994,8 +6994,8 @@ const FinancialAccountUpdateOneWithoutReceivedTransactionsNestedInputSchema = z.
   delete: z.union([z.boolean(), z.lazy(() => FinancialAccountWhereInputSchema)]).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => FinancialAccountUpdateToOneWithWhereWithoutReceivedTransactionsInputSchema), z.lazy(() => FinancialAccountUpdateWithoutReceivedTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutReceivedTransactionsInputSchema)]).optional()
-}).strict();
-const InvestmentUpdateOneWithoutTransactionsNestedInputSchema = z.object({
+});
+const InvestmentUpdateOneWithoutTransactionsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => InvestmentCreateWithoutTransactionsInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutTransactionsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => InvestmentCreateOrConnectWithoutTransactionsInputSchema).optional(),
   upsert: z.lazy(() => InvestmentUpsertWithoutTransactionsInputSchema).optional(),
@@ -7003,8 +7003,8 @@ const InvestmentUpdateOneWithoutTransactionsNestedInputSchema = z.object({
   delete: z.union([z.boolean(), z.lazy(() => InvestmentWhereInputSchema)]).optional(),
   connect: z.lazy(() => InvestmentWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => InvestmentUpdateToOneWithWhereWithoutTransactionsInputSchema), z.lazy(() => InvestmentUpdateWithoutTransactionsInputSchema), z.lazy(() => InvestmentUncheckedUpdateWithoutTransactionsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema = z.object({
+});
+const JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestCreateWithoutTransactionInputSchema).array(), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestCreateOrConnectWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestCreateOrConnectWithoutTransactionInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountModRequestUpsertWithWhereUniqueWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUpsertWithWhereUniqueWithoutTransactionInputSchema).array()]).optional(),
@@ -7016,8 +7016,8 @@ const JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema = z.ob
   update: z.union([z.lazy(() => JointAccountModRequestUpdateWithWhereUniqueWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUpdateWithWhereUniqueWithoutTransactionInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountModRequestUpdateManyWithWhereWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUpdateManyWithWhereWithoutTransactionInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountModRequestScalarWhereInputSchema), z.lazy(() => JointAccountModRequestScalarWhereInputSchema).array()]).optional()
-}).strict();
-const TransactionUpdateOneWithoutChildTransactionsNestedInputSchema = z.object({
+});
+const TransactionUpdateOneWithoutChildTransactionsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutChildTransactionsInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutChildTransactionsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => TransactionCreateOrConnectWithoutChildTransactionsInputSchema).optional(),
   upsert: z.lazy(() => TransactionUpsertWithoutChildTransactionsInputSchema).optional(),
@@ -7025,8 +7025,8 @@ const TransactionUpdateOneWithoutChildTransactionsNestedInputSchema = z.object({
   delete: z.union([z.boolean(), z.lazy(() => TransactionWhereInputSchema)]).optional(),
   connect: z.lazy(() => TransactionWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => TransactionUpdateToOneWithWhereWithoutChildTransactionsInputSchema), z.lazy(() => TransactionUpdateWithoutChildTransactionsInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutChildTransactionsInputSchema)]).optional()
-}).strict();
-const TransactionUpdateManyWithoutParentTransactionNestedInputSchema = z.object({
+});
+const TransactionUpdateManyWithoutParentTransactionNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutParentTransactionInputSchema), z.lazy(() => TransactionCreateWithoutParentTransactionInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutParentTransactionInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutParentTransactionInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutParentTransactionInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutParentTransactionInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => TransactionUpsertWithWhereUniqueWithoutParentTransactionInputSchema), z.lazy(() => TransactionUpsertWithWhereUniqueWithoutParentTransactionInputSchema).array()]).optional(),
@@ -7038,8 +7038,8 @@ const TransactionUpdateManyWithoutParentTransactionNestedInputSchema = z.object(
   update: z.union([z.lazy(() => TransactionUpdateWithWhereUniqueWithoutParentTransactionInputSchema), z.lazy(() => TransactionUpdateWithWhereUniqueWithoutParentTransactionInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => TransactionUpdateManyWithWhereWithoutParentTransactionInputSchema), z.lazy(() => TransactionUpdateManyWithWhereWithoutParentTransactionInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => TransactionScalarWhereInputSchema), z.lazy(() => TransactionScalarWhereInputSchema).array()]).optional()
-}).strict();
-const JointAccountModRequestUncheckedUpdateManyWithoutTransactionNestedInputSchema = z.object({
+});
+const JointAccountModRequestUncheckedUpdateManyWithoutTransactionNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestCreateWithoutTransactionInputSchema).array(), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => JointAccountModRequestCreateOrConnectWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestCreateOrConnectWithoutTransactionInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => JointAccountModRequestUpsertWithWhereUniqueWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUpsertWithWhereUniqueWithoutTransactionInputSchema).array()]).optional(),
@@ -7051,8 +7051,8 @@ const JointAccountModRequestUncheckedUpdateManyWithoutTransactionNestedInputSche
   update: z.union([z.lazy(() => JointAccountModRequestUpdateWithWhereUniqueWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUpdateWithWhereUniqueWithoutTransactionInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => JointAccountModRequestUpdateManyWithWhereWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUpdateManyWithWhereWithoutTransactionInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => JointAccountModRequestScalarWhereInputSchema), z.lazy(() => JointAccountModRequestScalarWhereInputSchema).array()]).optional()
-}).strict();
-const TransactionUncheckedUpdateManyWithoutParentTransactionNestedInputSchema = z.object({
+});
+const TransactionUncheckedUpdateManyWithoutParentTransactionNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => TransactionCreateWithoutParentTransactionInputSchema), z.lazy(() => TransactionCreateWithoutParentTransactionInputSchema).array(), z.lazy(() => TransactionUncheckedCreateWithoutParentTransactionInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutParentTransactionInputSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => TransactionCreateOrConnectWithoutParentTransactionInputSchema), z.lazy(() => TransactionCreateOrConnectWithoutParentTransactionInputSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => TransactionUpsertWithWhereUniqueWithoutParentTransactionInputSchema), z.lazy(() => TransactionUpsertWithWhereUniqueWithoutParentTransactionInputSchema).array()]).optional(),
@@ -7064,21 +7064,21 @@ const TransactionUncheckedUpdateManyWithoutParentTransactionNestedInputSchema = 
   update: z.union([z.lazy(() => TransactionUpdateWithWhereUniqueWithoutParentTransactionInputSchema), z.lazy(() => TransactionUpdateWithWhereUniqueWithoutParentTransactionInputSchema).array()]).optional(),
   updateMany: z.union([z.lazy(() => TransactionUpdateManyWithWhereWithoutParentTransactionInputSchema), z.lazy(() => TransactionUpdateManyWithWhereWithoutParentTransactionInputSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => TransactionScalarWhereInputSchema), z.lazy(() => TransactionScalarWhereInputSchema).array()]).optional()
-}).strict();
-const UserCreateNestedOneWithoutNotificationsInputSchema = z.object({
+});
+const UserCreateNestedOneWithoutNotificationsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutNotificationsInputSchema), z.lazy(() => UserUncheckedCreateWithoutNotificationsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutNotificationsInputSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional()
-}).strict();
-const FinancialAccountCreateNestedOneWithoutNotificationsInputSchema = z.object({
+});
+const FinancialAccountCreateNestedOneWithoutNotificationsInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutNotificationsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutNotificationsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutNotificationsInputSchema).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional()
-}).strict();
-const EnumNotificationBodyTypeFieldUpdateOperationsInputSchema = z.object({
+});
+const EnumNotificationBodyTypeFieldUpdateOperationsInputSchema = z.strictObject({
   set: z.lazy(() => NotificationBodyTypeSchema).optional()
-}).strict();
-const UserUpdateOneWithoutNotificationsNestedInputSchema = z.object({
+});
+const UserUpdateOneWithoutNotificationsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => UserCreateWithoutNotificationsInputSchema), z.lazy(() => UserUncheckedCreateWithoutNotificationsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutNotificationsInputSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutNotificationsInputSchema).optional(),
@@ -7086,8 +7086,8 @@ const UserUpdateOneWithoutNotificationsNestedInputSchema = z.object({
   delete: z.union([z.boolean(), z.lazy(() => UserWhereInputSchema)]).optional(),
   connect: z.lazy(() => UserWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutNotificationsInputSchema), z.lazy(() => UserUpdateWithoutNotificationsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutNotificationsInputSchema)]).optional()
-}).strict();
-const FinancialAccountUpdateOneWithoutNotificationsNestedInputSchema = z.object({
+});
+const FinancialAccountUpdateOneWithoutNotificationsNestedInputSchema = z.strictObject({
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutNotificationsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutNotificationsInputSchema)]).optional(),
   connectOrCreate: z.lazy(() => FinancialAccountCreateOrConnectWithoutNotificationsInputSchema).optional(),
   upsert: z.lazy(() => FinancialAccountUpsertWithoutNotificationsInputSchema).optional(),
@@ -7095,8 +7095,8 @@ const FinancialAccountUpdateOneWithoutNotificationsNestedInputSchema = z.object(
   delete: z.union([z.boolean(), z.lazy(() => FinancialAccountWhereInputSchema)]).optional(),
   connect: z.lazy(() => FinancialAccountWhereUniqueInputSchema).optional(),
   update: z.union([z.lazy(() => FinancialAccountUpdateToOneWithWhereWithoutNotificationsInputSchema), z.lazy(() => FinancialAccountUpdateWithoutNotificationsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutNotificationsInputSchema)]).optional()
-}).strict();
-const NestedStringFilterSchema = z.object({
+});
+const NestedStringFilterSchema = z.strictObject({
   equals: z.string().optional(),
   in: z.string().array().optional(),
   notIn: z.string().array().optional(),
@@ -7108,12 +7108,12 @@ const NestedStringFilterSchema = z.object({
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
   not: z.union([z.string(), z.lazy(() => NestedStringFilterSchema)]).optional()
-}).strict();
-const NestedBoolFilterSchema = z.object({
+});
+const NestedBoolFilterSchema = z.strictObject({
   equals: z.boolean().optional(),
   not: z.union([z.boolean(), z.lazy(() => NestedBoolFilterSchema)]).optional()
-}).strict();
-const NestedStringNullableFilterSchema = z.object({
+});
+const NestedStringNullableFilterSchema = z.strictObject({
   equals: z.string().optional().nullable(),
   in: z.string().array().optional().nullable(),
   notIn: z.string().array().optional().nullable(),
@@ -7125,18 +7125,18 @@ const NestedStringNullableFilterSchema = z.object({
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
   not: z.union([z.string(), z.lazy(() => NestedStringNullableFilterSchema)]).optional().nullable()
-}).strict();
-const NestedEnumUserRoleFilterSchema = z.object({
+});
+const NestedEnumUserRoleFilterSchema = z.strictObject({
   equals: z.lazy(() => UserRoleSchema).optional(),
   in: z.lazy(() => UserRoleSchema).array().optional(),
   notIn: z.lazy(() => UserRoleSchema).array().optional(),
   not: z.union([z.lazy(() => UserRoleSchema), z.lazy(() => NestedEnumUserRoleFilterSchema)]).optional()
-}).strict();
-const NestedBoolNullableFilterSchema = z.object({
+});
+const NestedBoolNullableFilterSchema = z.strictObject({
   equals: z.boolean().optional().nullable(),
   not: z.union([z.boolean(), z.lazy(() => NestedBoolNullableFilterSchema)]).optional().nullable()
-}).strict();
-const NestedDateTimeNullableFilterSchema = z.object({
+});
+const NestedDateTimeNullableFilterSchema = z.strictObject({
   equals: z.coerce.date().optional().nullable(),
   in: z.coerce.date().array().optional().nullable(),
   notIn: z.coerce.date().array().optional().nullable(),
@@ -7145,8 +7145,8 @@ const NestedDateTimeNullableFilterSchema = z.object({
   gt: z.coerce.date().optional(),
   gte: z.coerce.date().optional(),
   not: z.union([z.coerce.date(), z.lazy(() => NestedDateTimeNullableFilterSchema)]).optional().nullable()
-}).strict();
-const NestedDateTimeFilterSchema = z.object({
+});
+const NestedDateTimeFilterSchema = z.strictObject({
   equals: z.coerce.date().optional(),
   in: z.coerce.date().array().optional(),
   notIn: z.coerce.date().array().optional(),
@@ -7155,8 +7155,8 @@ const NestedDateTimeFilterSchema = z.object({
   gt: z.coerce.date().optional(),
   gte: z.coerce.date().optional(),
   not: z.union([z.coerce.date(), z.lazy(() => NestedDateTimeFilterSchema)]).optional()
-}).strict();
-const NestedStringWithAggregatesFilterSchema = z.object({
+});
+const NestedStringWithAggregatesFilterSchema = z.strictObject({
   equals: z.string().optional(),
   in: z.string().array().optional(),
   notIn: z.string().array().optional(),
@@ -7171,8 +7171,8 @@ const NestedStringWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedStringFilterSchema).optional(),
   _max: z.lazy(() => NestedStringFilterSchema).optional()
-}).strict();
-const NestedIntFilterSchema = z.object({
+});
+const NestedIntFilterSchema = z.strictObject({
   equals: z.number().optional(),
   in: z.number().array().optional(),
   notIn: z.number().array().optional(),
@@ -7181,15 +7181,15 @@ const NestedIntFilterSchema = z.object({
   gt: z.number().optional(),
   gte: z.number().optional(),
   not: z.union([z.number(), z.lazy(() => NestedIntFilterSchema)]).optional()
-}).strict();
-const NestedBoolWithAggregatesFilterSchema = z.object({
+});
+const NestedBoolWithAggregatesFilterSchema = z.strictObject({
   equals: z.boolean().optional(),
   not: z.union([z.boolean(), z.lazy(() => NestedBoolWithAggregatesFilterSchema)]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedBoolFilterSchema).optional(),
   _max: z.lazy(() => NestedBoolFilterSchema).optional()
-}).strict();
-const NestedStringNullableWithAggregatesFilterSchema = z.object({
+});
+const NestedStringNullableWithAggregatesFilterSchema = z.strictObject({
   equals: z.string().optional().nullable(),
   in: z.string().array().optional().nullable(),
   notIn: z.string().array().optional().nullable(),
@@ -7204,8 +7204,8 @@ const NestedStringNullableWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedStringNullableFilterSchema).optional()
-}).strict();
-const NestedIntNullableFilterSchema = z.object({
+});
+const NestedIntNullableFilterSchema = z.strictObject({
   equals: z.number().optional().nullable(),
   in: z.number().array().optional().nullable(),
   notIn: z.number().array().optional().nullable(),
@@ -7214,8 +7214,8 @@ const NestedIntNullableFilterSchema = z.object({
   gt: z.number().optional(),
   gte: z.number().optional(),
   not: z.union([z.number(), z.lazy(() => NestedIntNullableFilterSchema)]).optional().nullable()
-}).strict();
-const NestedEnumUserRoleWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumUserRoleWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => UserRoleSchema).optional(),
   in: z.lazy(() => UserRoleSchema).array().optional(),
   notIn: z.lazy(() => UserRoleSchema).array().optional(),
@@ -7223,15 +7223,15 @@ const NestedEnumUserRoleWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumUserRoleFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumUserRoleFilterSchema).optional()
-}).strict();
-const NestedBoolNullableWithAggregatesFilterSchema = z.object({
+});
+const NestedBoolNullableWithAggregatesFilterSchema = z.strictObject({
   equals: z.boolean().optional().nullable(),
   not: z.union([z.boolean(), z.lazy(() => NestedBoolNullableWithAggregatesFilterSchema)]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedBoolNullableFilterSchema).optional()
-}).strict();
-const NestedDateTimeNullableWithAggregatesFilterSchema = z.object({
+});
+const NestedDateTimeNullableWithAggregatesFilterSchema = z.strictObject({
   equals: z.coerce.date().optional().nullable(),
   in: z.coerce.date().array().optional().nullable(),
   notIn: z.coerce.date().array().optional().nullable(),
@@ -7243,8 +7243,8 @@ const NestedDateTimeNullableWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedDateTimeNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedDateTimeNullableFilterSchema).optional()
-}).strict();
-const NestedDateTimeWithAggregatesFilterSchema = z.object({
+});
+const NestedDateTimeWithAggregatesFilterSchema = z.strictObject({
   equals: z.coerce.date().optional(),
   in: z.coerce.date().array().optional(),
   notIn: z.coerce.date().array().optional(),
@@ -7256,20 +7256,20 @@ const NestedDateTimeWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedDateTimeFilterSchema).optional(),
   _max: z.lazy(() => NestedDateTimeFilterSchema).optional()
-}).strict();
-const NestedEnumGovernmentIdTypeNullableFilterSchema = z.object({
+});
+const NestedEnumGovernmentIdTypeNullableFilterSchema = z.strictObject({
   equals: z.lazy(() => GovernmentIdTypeSchema).optional().nullable(),
   in: z.lazy(() => GovernmentIdTypeSchema).array().optional().nullable(),
   notIn: z.lazy(() => GovernmentIdTypeSchema).array().optional().nullable(),
   not: z.union([z.lazy(() => GovernmentIdTypeSchema), z.lazy(() => NestedEnumGovernmentIdTypeNullableFilterSchema)]).optional().nullable()
-}).strict();
-const NestedEnumKycStatusNullableFilterSchema = z.object({
+});
+const NestedEnumKycStatusNullableFilterSchema = z.strictObject({
   equals: z.lazy(() => KycStatusSchema).optional().nullable(),
   in: z.lazy(() => KycStatusSchema).array().optional().nullable(),
   notIn: z.lazy(() => KycStatusSchema).array().optional().nullable(),
   not: z.union([z.lazy(() => KycStatusSchema), z.lazy(() => NestedEnumKycStatusNullableFilterSchema)]).optional().nullable()
-}).strict();
-const NestedEnumGovernmentIdTypeNullableWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumGovernmentIdTypeNullableWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => GovernmentIdTypeSchema).optional().nullable(),
   in: z.lazy(() => GovernmentIdTypeSchema).array().optional().nullable(),
   notIn: z.lazy(() => GovernmentIdTypeSchema).array().optional().nullable(),
@@ -7277,8 +7277,8 @@ const NestedEnumGovernmentIdTypeNullableWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumGovernmentIdTypeNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumGovernmentIdTypeNullableFilterSchema).optional()
-}).strict();
-const NestedEnumKycStatusNullableWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumKycStatusNullableWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => KycStatusSchema).optional().nullable(),
   in: z.lazy(() => KycStatusSchema).array().optional().nullable(),
   notIn: z.lazy(() => KycStatusSchema).array().optional().nullable(),
@@ -7286,8 +7286,8 @@ const NestedEnumKycStatusNullableWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumKycStatusNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumKycStatusNullableFilterSchema).optional()
-}).strict();
-const NestedIntNullableWithAggregatesFilterSchema = z.object({
+});
+const NestedIntNullableWithAggregatesFilterSchema = z.strictObject({
   equals: z.number().optional().nullable(),
   in: z.number().array().optional().nullable(),
   notIn: z.number().array().optional().nullable(),
@@ -7301,8 +7301,8 @@ const NestedIntNullableWithAggregatesFilterSchema = z.object({
   _sum: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedIntNullableFilterSchema).optional()
-}).strict();
-const NestedFloatNullableFilterSchema = z.object({
+});
+const NestedFloatNullableFilterSchema = z.strictObject({
   equals: z.number().optional().nullable(),
   in: z.number().array().optional().nullable(),
   notIn: z.number().array().optional().nullable(),
@@ -7311,26 +7311,26 @@ const NestedFloatNullableFilterSchema = z.object({
   gt: z.number().optional(),
   gte: z.number().optional(),
   not: z.union([z.number(), z.lazy(() => NestedFloatNullableFilterSchema)]).optional().nullable()
-}).strict();
-const NestedEnumAccountStatusFilterSchema = z.object({
+});
+const NestedEnumAccountStatusFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountStatusSchema).optional(),
   in: z.lazy(() => AccountStatusSchema).array().optional(),
   notIn: z.lazy(() => AccountStatusSchema).array().optional(),
   not: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => NestedEnumAccountStatusFilterSchema)]).optional()
-}).strict();
-const NestedEnumAccountTypeFilterSchema = z.object({
+});
+const NestedEnumAccountTypeFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountTypeSchema).optional(),
   in: z.lazy(() => AccountTypeSchema).array().optional(),
   notIn: z.lazy(() => AccountTypeSchema).array().optional(),
   not: z.union([z.lazy(() => AccountTypeSchema), z.lazy(() => NestedEnumAccountTypeFilterSchema)]).optional()
-}).strict();
-const NestedEnumAccountOwnershipFilterSchema = z.object({
+});
+const NestedEnumAccountOwnershipFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountOwnershipSchema).optional(),
   in: z.lazy(() => AccountOwnershipSchema).array().optional(),
   notIn: z.lazy(() => AccountOwnershipSchema).array().optional(),
   not: z.union([z.lazy(() => AccountOwnershipSchema), z.lazy(() => NestedEnumAccountOwnershipFilterSchema)]).optional()
-}).strict();
-const NestedFloatFilterSchema = z.object({
+});
+const NestedFloatFilterSchema = z.strictObject({
   equals: z.number().optional(),
   in: z.number().array().optional(),
   notIn: z.number().array().optional(),
@@ -7339,8 +7339,8 @@ const NestedFloatFilterSchema = z.object({
   gt: z.number().optional(),
   gte: z.number().optional(),
   not: z.union([z.number(), z.lazy(() => NestedFloatFilterSchema)]).optional()
-}).strict();
-const NestedEnumAccountStatusWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumAccountStatusWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountStatusSchema).optional(),
   in: z.lazy(() => AccountStatusSchema).array().optional(),
   notIn: z.lazy(() => AccountStatusSchema).array().optional(),
@@ -7348,8 +7348,8 @@ const NestedEnumAccountStatusWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumAccountStatusFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumAccountStatusFilterSchema).optional()
-}).strict();
-const NestedEnumAccountTypeWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumAccountTypeWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountTypeSchema).optional(),
   in: z.lazy(() => AccountTypeSchema).array().optional(),
   notIn: z.lazy(() => AccountTypeSchema).array().optional(),
@@ -7357,8 +7357,8 @@ const NestedEnumAccountTypeWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumAccountTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumAccountTypeFilterSchema).optional()
-}).strict();
-const NestedEnumAccountOwnershipWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumAccountOwnershipWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountOwnershipSchema).optional(),
   in: z.lazy(() => AccountOwnershipSchema).array().optional(),
   notIn: z.lazy(() => AccountOwnershipSchema).array().optional(),
@@ -7366,8 +7366,8 @@ const NestedEnumAccountOwnershipWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumAccountOwnershipFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumAccountOwnershipFilterSchema).optional()
-}).strict();
-const NestedFloatWithAggregatesFilterSchema = z.object({
+});
+const NestedFloatWithAggregatesFilterSchema = z.strictObject({
   equals: z.number().optional(),
   in: z.number().array().optional(),
   notIn: z.number().array().optional(),
@@ -7381,8 +7381,8 @@ const NestedFloatWithAggregatesFilterSchema = z.object({
   _sum: z.lazy(() => NestedFloatFilterSchema).optional(),
   _min: z.lazy(() => NestedFloatFilterSchema).optional(),
   _max: z.lazy(() => NestedFloatFilterSchema).optional()
-}).strict();
-const NestedIntWithAggregatesFilterSchema = z.object({
+});
+const NestedIntWithAggregatesFilterSchema = z.strictObject({
   equals: z.number().optional(),
   in: z.number().array().optional(),
   notIn: z.number().array().optional(),
@@ -7396,14 +7396,14 @@ const NestedIntWithAggregatesFilterSchema = z.object({
   _sum: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedIntFilterSchema).optional(),
   _max: z.lazy(() => NestedIntFilterSchema).optional()
-}).strict();
-const NestedEnumAccountUserRoleFilterSchema = z.object({
+});
+const NestedEnumAccountUserRoleFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountUserRoleSchema).optional(),
   in: z.lazy(() => AccountUserRoleSchema).array().optional(),
   notIn: z.lazy(() => AccountUserRoleSchema).array().optional(),
   not: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => NestedEnumAccountUserRoleFilterSchema)]).optional()
-}).strict();
-const NestedEnumAccountUserRoleWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumAccountUserRoleWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => AccountUserRoleSchema).optional(),
   in: z.lazy(() => AccountUserRoleSchema).array().optional(),
   notIn: z.lazy(() => AccountUserRoleSchema).array().optional(),
@@ -7411,14 +7411,14 @@ const NestedEnumAccountUserRoleWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumAccountUserRoleFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumAccountUserRoleFilterSchema).optional()
-}).strict();
-const NestedEnumJointAccountRequestStatusFilterSchema = z.object({
+});
+const NestedEnumJointAccountRequestStatusFilterSchema = z.strictObject({
   equals: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   in: z.lazy(() => JointAccountRequestStatusSchema).array().optional(),
   notIn: z.lazy(() => JointAccountRequestStatusSchema).array().optional(),
   not: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => NestedEnumJointAccountRequestStatusFilterSchema)]).optional()
-}).strict();
-const NestedEnumJointAccountRequestStatusWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumJointAccountRequestStatusWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   in: z.lazy(() => JointAccountRequestStatusSchema).array().optional(),
   notIn: z.lazy(() => JointAccountRequestStatusSchema).array().optional(),
@@ -7426,14 +7426,14 @@ const NestedEnumJointAccountRequestStatusWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumJointAccountRequestStatusFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumJointAccountRequestStatusFilterSchema).optional()
-}).strict();
-const NestedEnumJointAccountModRequestTypeFilterSchema = z.object({
+});
+const NestedEnumJointAccountModRequestTypeFilterSchema = z.strictObject({
   equals: z.lazy(() => JointAccountModRequestTypeSchema).optional(),
   in: z.lazy(() => JointAccountModRequestTypeSchema).array().optional(),
   notIn: z.lazy(() => JointAccountModRequestTypeSchema).array().optional(),
   not: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => NestedEnumJointAccountModRequestTypeFilterSchema)]).optional()
-}).strict();
-const NestedEnumJointAccountModRequestTypeWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumJointAccountModRequestTypeWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => JointAccountModRequestTypeSchema).optional(),
   in: z.lazy(() => JointAccountModRequestTypeSchema).array().optional(),
   notIn: z.lazy(() => JointAccountModRequestTypeSchema).array().optional(),
@@ -7441,20 +7441,20 @@ const NestedEnumJointAccountModRequestTypeWithAggregatesFilterSchema = z.object(
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumJointAccountModRequestTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumJointAccountModRequestTypeFilterSchema).optional()
-}).strict();
-const NestedEnumInvestmentPlanCategoryFilterSchema = z.object({
+});
+const NestedEnumInvestmentPlanCategoryFilterSchema = z.strictObject({
   equals: z.lazy(() => InvestmentPlanCategorySchema).optional(),
   in: z.lazy(() => InvestmentPlanCategorySchema).array().optional(),
   notIn: z.lazy(() => InvestmentPlanCategorySchema).array().optional(),
   not: z.union([z.lazy(() => InvestmentPlanCategorySchema), z.lazy(() => NestedEnumInvestmentPlanCategoryFilterSchema)]).optional()
-}).strict();
-const NestedEnumProfitDistributionFilterSchema = z.object({
+});
+const NestedEnumProfitDistributionFilterSchema = z.strictObject({
   equals: z.lazy(() => ProfitDistributionSchema).optional(),
   in: z.lazy(() => ProfitDistributionSchema).array().optional(),
   notIn: z.lazy(() => ProfitDistributionSchema).array().optional(),
   not: z.union([z.lazy(() => ProfitDistributionSchema), z.lazy(() => NestedEnumProfitDistributionFilterSchema)]).optional()
-}).strict();
-const NestedEnumInvestmentPlanCategoryWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumInvestmentPlanCategoryWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => InvestmentPlanCategorySchema).optional(),
   in: z.lazy(() => InvestmentPlanCategorySchema).array().optional(),
   notIn: z.lazy(() => InvestmentPlanCategorySchema).array().optional(),
@@ -7462,8 +7462,8 @@ const NestedEnumInvestmentPlanCategoryWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumInvestmentPlanCategoryFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumInvestmentPlanCategoryFilterSchema).optional()
-}).strict();
-const NestedEnumProfitDistributionWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumProfitDistributionWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => ProfitDistributionSchema).optional(),
   in: z.lazy(() => ProfitDistributionSchema).array().optional(),
   notIn: z.lazy(() => ProfitDistributionSchema).array().optional(),
@@ -7471,14 +7471,14 @@ const NestedEnumProfitDistributionWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumProfitDistributionFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumProfitDistributionFilterSchema).optional()
-}).strict();
-const NestedEnumInvestmentStatusFilterSchema = z.object({
+});
+const NestedEnumInvestmentStatusFilterSchema = z.strictObject({
   equals: z.lazy(() => InvestmentStatusSchema).optional(),
   in: z.lazy(() => InvestmentStatusSchema).array().optional(),
   notIn: z.lazy(() => InvestmentStatusSchema).array().optional(),
   not: z.union([z.lazy(() => InvestmentStatusSchema), z.lazy(() => NestedEnumInvestmentStatusFilterSchema)]).optional()
-}).strict();
-const NestedEnumInvestmentStatusWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumInvestmentStatusWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => InvestmentStatusSchema).optional(),
   in: z.lazy(() => InvestmentStatusSchema).array().optional(),
   notIn: z.lazy(() => InvestmentStatusSchema).array().optional(),
@@ -7486,20 +7486,20 @@ const NestedEnumInvestmentStatusWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumInvestmentStatusFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumInvestmentStatusFilterSchema).optional()
-}).strict();
-const NestedEnumTransactionTypeFilterSchema = z.object({
+});
+const NestedEnumTransactionTypeFilterSchema = z.strictObject({
   equals: z.lazy(() => TransactionTypeSchema).optional(),
   in: z.lazy(() => TransactionTypeSchema).array().optional(),
   notIn: z.lazy(() => TransactionTypeSchema).array().optional(),
   not: z.union([z.lazy(() => TransactionTypeSchema), z.lazy(() => NestedEnumTransactionTypeFilterSchema)]).optional()
-}).strict();
-const NestedEnumTransactionStatusFilterSchema = z.object({
+});
+const NestedEnumTransactionStatusFilterSchema = z.strictObject({
   equals: z.lazy(() => TransactionStatusSchema).optional(),
   in: z.lazy(() => TransactionStatusSchema).array().optional(),
   notIn: z.lazy(() => TransactionStatusSchema).array().optional(),
   not: z.union([z.lazy(() => TransactionStatusSchema), z.lazy(() => NestedEnumTransactionStatusFilterSchema)]).optional()
-}).strict();
-const NestedEnumTransactionTypeWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumTransactionTypeWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => TransactionTypeSchema).optional(),
   in: z.lazy(() => TransactionTypeSchema).array().optional(),
   notIn: z.lazy(() => TransactionTypeSchema).array().optional(),
@@ -7507,8 +7507,8 @@ const NestedEnumTransactionTypeWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumTransactionTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumTransactionTypeFilterSchema).optional()
-}).strict();
-const NestedEnumTransactionStatusWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumTransactionStatusWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => TransactionStatusSchema).optional(),
   in: z.lazy(() => TransactionStatusSchema).array().optional(),
   notIn: z.lazy(() => TransactionStatusSchema).array().optional(),
@@ -7516,14 +7516,14 @@ const NestedEnumTransactionStatusWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumTransactionStatusFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumTransactionStatusFilterSchema).optional()
-}).strict();
-const NestedEnumNotificationBodyTypeFilterSchema = z.object({
+});
+const NestedEnumNotificationBodyTypeFilterSchema = z.strictObject({
   equals: z.lazy(() => NotificationBodyTypeSchema).optional(),
   in: z.lazy(() => NotificationBodyTypeSchema).array().optional(),
   notIn: z.lazy(() => NotificationBodyTypeSchema).array().optional(),
   not: z.union([z.lazy(() => NotificationBodyTypeSchema), z.lazy(() => NestedEnumNotificationBodyTypeFilterSchema)]).optional()
-}).strict();
-const NestedEnumNotificationBodyTypeWithAggregatesFilterSchema = z.object({
+});
+const NestedEnumNotificationBodyTypeWithAggregatesFilterSchema = z.strictObject({
   equals: z.lazy(() => NotificationBodyTypeSchema).optional(),
   in: z.lazy(() => NotificationBodyTypeSchema).array().optional(),
   notIn: z.lazy(() => NotificationBodyTypeSchema).array().optional(),
@@ -7531,9 +7531,9 @@ const NestedEnumNotificationBodyTypeWithAggregatesFilterSchema = z.object({
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumNotificationBodyTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumNotificationBodyTypeFilterSchema).optional()
-}).strict();
-const ProfileCreateWithoutUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const ProfileCreateWithoutUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   address: z.string().optional().nullable(),
   country: z.string().optional().nullable(),
   state: z.string().optional().nullable(),
@@ -7545,9 +7545,9 @@ const ProfileCreateWithoutUserInputSchema = z.object({
   kycStatus: z.lazy(() => KycStatusSchema).optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const ProfileUncheckedCreateWithoutUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const ProfileUncheckedCreateWithoutUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   address: z.string().optional().nullable(),
   country: z.string().optional().nullable(),
   state: z.string().optional().nullable(),
@@ -7559,13 +7559,13 @@ const ProfileUncheckedCreateWithoutUserInputSchema = z.object({
   kycStatus: z.lazy(() => KycStatusSchema).optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const ProfileCreateOrConnectWithoutUserInputSchema = z.object({
+});
+const ProfileCreateOrConnectWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => ProfileWhereUniqueInputSchema),
   create: z.union([z.lazy(() => ProfileCreateWithoutUserInputSchema), z.lazy(() => ProfileUncheckedCreateWithoutUserInputSchema)])
-}).strict();
-const SessionCreateWithoutUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const SessionCreateWithoutUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   token: z.string(),
   expiresAt: z.coerce.date(),
   ipAddress: z.string().optional().nullable(),
@@ -7573,9 +7573,9 @@ const SessionCreateWithoutUserInputSchema = z.object({
   impersonatedBy: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const SessionUncheckedCreateWithoutUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const SessionUncheckedCreateWithoutUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   token: z.string(),
   expiresAt: z.coerce.date(),
   ipAddress: z.string().optional().nullable(),
@@ -7583,16 +7583,16 @@ const SessionUncheckedCreateWithoutUserInputSchema = z.object({
   impersonatedBy: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const SessionCreateOrConnectWithoutUserInputSchema = z.object({
+});
+const SessionCreateOrConnectWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => SessionWhereUniqueInputSchema),
   create: z.union([z.lazy(() => SessionCreateWithoutUserInputSchema), z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema)])
-}).strict();
-const SessionCreateManyUserInputEnvelopeSchema = z.object({
+});
+const SessionCreateManyUserInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => SessionCreateManyUserInputSchema), z.lazy(() => SessionCreateManyUserInputSchema).array()])
-}).strict();
-const AccountCreateWithoutUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountCreateWithoutUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   accountId: z.string(),
   providerId: z.string(),
   accessToken: z.string().optional().nullable(),
@@ -7604,9 +7604,9 @@ const AccountCreateWithoutUserInputSchema = z.object({
   password: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const AccountUncheckedCreateWithoutUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUncheckedCreateWithoutUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   accountId: z.string(),
   providerId: z.string(),
   accessToken: z.string().optional().nullable(),
@@ -7618,16 +7618,16 @@ const AccountUncheckedCreateWithoutUserInputSchema = z.object({
   password: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const AccountCreateOrConnectWithoutUserInputSchema = z.object({
+});
+const AccountCreateOrConnectWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => AccountWhereUniqueInputSchema),
   create: z.union([z.lazy(() => AccountCreateWithoutUserInputSchema), z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema)])
-}).strict();
-const AccountCreateManyUserInputEnvelopeSchema = z.object({
+});
+const AccountCreateManyUserInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => AccountCreateManyUserInputSchema), z.lazy(() => AccountCreateManyUserInputSchema).array()])
-}).strict();
-const FinancialAccountCreateWithoutCreatorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountCreateWithoutCreatorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   number: z.string(),
   status: z.lazy(() => AccountStatusSchema).optional(),
@@ -7650,9 +7650,9 @@ const FinancialAccountCreateWithoutCreatorInputSchema = z.object({
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedCreateWithoutCreatorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountUncheckedCreateWithoutCreatorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   number: z.string(),
   status: z.lazy(() => AccountStatusSchema).optional(),
@@ -7675,16 +7675,16 @@ const FinancialAccountUncheckedCreateWithoutCreatorInputSchema = z.object({
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountCreateOrConnectWithoutCreatorInputSchema = z.object({
+});
+const FinancialAccountCreateOrConnectWithoutCreatorInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereUniqueInputSchema),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutCreatorInputSchema)])
-}).strict();
-const FinancialAccountCreateManyCreatorInputEnvelopeSchema = z.object({
+});
+const FinancialAccountCreateManyCreatorInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => FinancialAccountCreateManyCreatorInputSchema), z.lazy(() => FinancialAccountCreateManyCreatorInputSchema).array()])
-}).strict();
-const AccountUserCreateWithoutUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserCreateWithoutUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
   ownership: z.number().optional(),
   autosign: z.boolean().optional(),
@@ -7693,9 +7693,9 @@ const AccountUserCreateWithoutUserInputSchema = z.object({
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutAccountUsersInputSchema),
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutInitiatorInputSchema).optional(),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutInvestorInputSchema).optional()
-}).strict();
-const AccountUserUncheckedCreateWithoutUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserUncheckedCreateWithoutUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
   ownership: z.number().optional(),
@@ -7704,16 +7704,16 @@ const AccountUserUncheckedCreateWithoutUserInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInitiatorInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutInvestorInputSchema).optional()
-}).strict();
-const AccountUserCreateOrConnectWithoutUserInputSchema = z.object({
+});
+const AccountUserCreateOrConnectWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => AccountUserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => AccountUserCreateWithoutUserInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutUserInputSchema)])
-}).strict();
-const AccountUserCreateManyUserInputEnvelopeSchema = z.object({
+});
+const AccountUserCreateManyUserInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => AccountUserCreateManyUserInputSchema), z.lazy(() => AccountUserCreateManyUserInputSchema).array()])
-}).strict();
-const JointAccountRequestCreateWithoutCreatorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountRequestCreateWithoutCreatorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   recipientName: z.string(),
   recipientEmail: z.string(),
   role: z.lazy(() => AccountUserRoleSchema),
@@ -7726,9 +7726,9 @@ const JointAccountRequestCreateWithoutCreatorInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   recipient: z.lazy(() => UserCreateNestedOneWithoutReceivedJointAccountRequestsInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutJointAccountRequestsInputSchema)
-}).strict();
-const JointAccountRequestUncheckedCreateWithoutCreatorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountRequestUncheckedCreateWithoutCreatorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   recipientName: z.string(),
   recipientEmail: z.string(),
   role: z.lazy(() => AccountUserRoleSchema),
@@ -7741,16 +7741,16 @@ const JointAccountRequestUncheckedCreateWithoutCreatorInputSchema = z.object({
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountRequestCreateOrConnectWithoutCreatorInputSchema = z.object({
+});
+const JointAccountRequestCreateOrConnectWithoutCreatorInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountRequestWhereUniqueInputSchema),
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutCreatorInputSchema)])
-}).strict();
-const JointAccountRequestCreateManyCreatorInputEnvelopeSchema = z.object({
+});
+const JointAccountRequestCreateManyCreatorInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => JointAccountRequestCreateManyCreatorInputSchema), z.lazy(() => JointAccountRequestCreateManyCreatorInputSchema).array()])
-}).strict();
-const JointAccountRequestCreateWithoutRecipientInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountRequestCreateWithoutRecipientInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   recipientName: z.string(),
   recipientEmail: z.string(),
   role: z.lazy(() => AccountUserRoleSchema),
@@ -7763,9 +7763,9 @@ const JointAccountRequestCreateWithoutRecipientInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   creator: z.lazy(() => UserCreateNestedOneWithoutCreatedJointAccountRequestsInputSchema),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutJointAccountRequestsInputSchema)
-}).strict();
-const JointAccountRequestUncheckedCreateWithoutRecipientInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountRequestUncheckedCreateWithoutRecipientInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   recipientName: z.string(),
   recipientEmail: z.string(),
@@ -7778,16 +7778,16 @@ const JointAccountRequestUncheckedCreateWithoutRecipientInputSchema = z.object({
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountRequestCreateOrConnectWithoutRecipientInputSchema = z.object({
+});
+const JointAccountRequestCreateOrConnectWithoutRecipientInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountRequestWhereUniqueInputSchema),
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutRecipientInputSchema)])
-}).strict();
-const JointAccountRequestCreateManyRecipientInputEnvelopeSchema = z.object({
+});
+const JointAccountRequestCreateManyRecipientInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => JointAccountRequestCreateManyRecipientInputSchema), z.lazy(() => JointAccountRequestCreateManyRecipientInputSchema).array()])
-}).strict();
-const JointAccountModRequestCreateWithoutCreatorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestCreateWithoutCreatorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -7795,9 +7795,9 @@ const JointAccountModRequestCreateWithoutCreatorInputSchema = z.object({
   account: z.lazy(() => FinancialAccountCreateNestedOneWithoutJointAccountModRequestsInputSchema),
   transaction: z.lazy(() => TransactionCreateNestedOneWithoutJointAccountModRequestsInputSchema).optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutRequestInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
   transactionId: z.string().optional().nullable(),
@@ -7805,16 +7805,16 @@ const JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema = z.object(
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutRequestInputSchema).optional()
-}).strict();
-const JointAccountModRequestCreateOrConnectWithoutCreatorInputSchema = z.object({
+});
+const JointAccountModRequestCreateOrConnectWithoutCreatorInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestWhereUniqueInputSchema),
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema)])
-}).strict();
-const JointAccountModRequestCreateManyCreatorInputEnvelopeSchema = z.object({
+});
+const JointAccountModRequestCreateManyCreatorInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => JointAccountModRequestCreateManyCreatorInputSchema), z.lazy(() => JointAccountModRequestCreateManyCreatorInputSchema).array()])
-}).strict();
-const NotificationCreateWithoutUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const NotificationCreateWithoutUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   title: z.string(),
   body: z.string(),
   bodyType: z.lazy(() => NotificationBodyTypeSchema).optional(),
@@ -7823,9 +7823,9 @@ const NotificationCreateWithoutUserInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutNotificationsInputSchema).optional()
-}).strict();
-const NotificationUncheckedCreateWithoutUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const NotificationUncheckedCreateWithoutUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   title: z.string(),
   body: z.string(),
   bodyType: z.lazy(() => NotificationBodyTypeSchema).optional(),
@@ -7834,46 +7834,46 @@ const NotificationUncheckedCreateWithoutUserInputSchema = z.object({
   isRead: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const NotificationCreateOrConnectWithoutUserInputSchema = z.object({
+});
+const NotificationCreateOrConnectWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => NotificationWhereUniqueInputSchema),
   create: z.union([z.lazy(() => NotificationCreateWithoutUserInputSchema), z.lazy(() => NotificationUncheckedCreateWithoutUserInputSchema)])
-}).strict();
-const NotificationCreateManyUserInputEnvelopeSchema = z.object({
+});
+const NotificationCreateManyUserInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => NotificationCreateManyUserInputSchema), z.lazy(() => NotificationCreateManyUserInputSchema).array()])
-}).strict();
-const JointAccountModRequestApprovalCreateWithoutApproverInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestApprovalCreateWithoutApproverInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   request: z.lazy(() => JointAccountModRequestCreateNestedOneWithoutApprovalsInputSchema)
-}).strict();
-const JointAccountModRequestApprovalUncheckedCreateWithoutApproverInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestApprovalUncheckedCreateWithoutApproverInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   jointAccountModRequestId: z.string(),
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountModRequestApprovalCreateOrConnectWithoutApproverInputSchema = z.object({
+});
+const JointAccountModRequestApprovalCreateOrConnectWithoutApproverInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema),
   create: z.union([z.lazy(() => JointAccountModRequestApprovalCreateWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutApproverInputSchema)])
-}).strict();
-const JointAccountModRequestApprovalCreateManyApproverInputEnvelopeSchema = z.object({
+});
+const JointAccountModRequestApprovalCreateManyApproverInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => JointAccountModRequestApprovalCreateManyApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateManyApproverInputSchema).array()])
-}).strict();
-const ProfileUpsertWithoutUserInputSchema = z.object({
+});
+const ProfileUpsertWithoutUserInputSchema = z.strictObject({
   update: z.union([z.lazy(() => ProfileUpdateWithoutUserInputSchema), z.lazy(() => ProfileUncheckedUpdateWithoutUserInputSchema)]),
   create: z.union([z.lazy(() => ProfileCreateWithoutUserInputSchema), z.lazy(() => ProfileUncheckedCreateWithoutUserInputSchema)]),
   where: z.lazy(() => ProfileWhereInputSchema).optional()
-}).strict();
-const ProfileUpdateToOneWithWhereWithoutUserInputSchema = z.object({
+});
+const ProfileUpdateToOneWithWhereWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => ProfileWhereInputSchema).optional(),
   data: z.union([z.lazy(() => ProfileUpdateWithoutUserInputSchema), z.lazy(() => ProfileUncheckedUpdateWithoutUserInputSchema)])
-}).strict();
-const ProfileUpdateWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfileUpdateWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   address: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   country: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   state: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -7885,9 +7885,9 @@ const ProfileUpdateWithoutUserInputSchema = z.object({
   kycStatus: z.union([z.lazy(() => KycStatusSchema), z.lazy(() => NullableEnumKycStatusFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const ProfileUncheckedUpdateWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfileUncheckedUpdateWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   address: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   country: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   state: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -7899,21 +7899,21 @@ const ProfileUncheckedUpdateWithoutUserInputSchema = z.object({
   kycStatus: z.union([z.lazy(() => KycStatusSchema), z.lazy(() => NullableEnumKycStatusFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const SessionUpsertWithWhereUniqueWithoutUserInputSchema = z.object({
+});
+const SessionUpsertWithWhereUniqueWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => SessionWhereUniqueInputSchema),
   update: z.union([z.lazy(() => SessionUpdateWithoutUserInputSchema), z.lazy(() => SessionUncheckedUpdateWithoutUserInputSchema)]),
   create: z.union([z.lazy(() => SessionCreateWithoutUserInputSchema), z.lazy(() => SessionUncheckedCreateWithoutUserInputSchema)])
-}).strict();
-const SessionUpdateWithWhereUniqueWithoutUserInputSchema = z.object({
+});
+const SessionUpdateWithWhereUniqueWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => SessionWhereUniqueInputSchema),
   data: z.union([z.lazy(() => SessionUpdateWithoutUserInputSchema), z.lazy(() => SessionUncheckedUpdateWithoutUserInputSchema)])
-}).strict();
-const SessionUpdateManyWithWhereWithoutUserInputSchema = z.object({
+});
+const SessionUpdateManyWithWhereWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => SessionScalarWhereInputSchema),
   data: z.union([z.lazy(() => SessionUpdateManyMutationInputSchema), z.lazy(() => SessionUncheckedUpdateManyWithoutUserInputSchema)])
-}).strict();
-const SessionScalarWhereInputSchema = z.object({
+});
+const SessionScalarWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => SessionScalarWhereInputSchema), z.lazy(() => SessionScalarWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => SessionScalarWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => SessionScalarWhereInputSchema), z.lazy(() => SessionScalarWhereInputSchema).array()]).optional(),
@@ -7926,21 +7926,21 @@ const SessionScalarWhereInputSchema = z.object({
   impersonatedBy: z.union([z.lazy(() => StringNullableFilterSchema), z.string()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const AccountUpsertWithWhereUniqueWithoutUserInputSchema = z.object({
+});
+const AccountUpsertWithWhereUniqueWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => AccountWhereUniqueInputSchema),
   update: z.union([z.lazy(() => AccountUpdateWithoutUserInputSchema), z.lazy(() => AccountUncheckedUpdateWithoutUserInputSchema)]),
   create: z.union([z.lazy(() => AccountCreateWithoutUserInputSchema), z.lazy(() => AccountUncheckedCreateWithoutUserInputSchema)])
-}).strict();
-const AccountUpdateWithWhereUniqueWithoutUserInputSchema = z.object({
+});
+const AccountUpdateWithWhereUniqueWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => AccountWhereUniqueInputSchema),
   data: z.union([z.lazy(() => AccountUpdateWithoutUserInputSchema), z.lazy(() => AccountUncheckedUpdateWithoutUserInputSchema)])
-}).strict();
-const AccountUpdateManyWithWhereWithoutUserInputSchema = z.object({
+});
+const AccountUpdateManyWithWhereWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => AccountScalarWhereInputSchema),
   data: z.union([z.lazy(() => AccountUpdateManyMutationInputSchema), z.lazy(() => AccountUncheckedUpdateManyWithoutUserInputSchema)])
-}).strict();
-const AccountScalarWhereInputSchema = z.object({
+});
+const AccountScalarWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => AccountScalarWhereInputSchema), z.lazy(() => AccountScalarWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => AccountScalarWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => AccountScalarWhereInputSchema), z.lazy(() => AccountScalarWhereInputSchema).array()]).optional(),
@@ -7957,21 +7957,21 @@ const AccountScalarWhereInputSchema = z.object({
   password: z.union([z.lazy(() => StringNullableFilterSchema), z.string()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const FinancialAccountUpsertWithWhereUniqueWithoutCreatorInputSchema = z.object({
+});
+const FinancialAccountUpsertWithWhereUniqueWithoutCreatorInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereUniqueInputSchema),
   update: z.union([z.lazy(() => FinancialAccountUpdateWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutCreatorInputSchema)]),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutCreatorInputSchema)])
-}).strict();
-const FinancialAccountUpdateWithWhereUniqueWithoutCreatorInputSchema = z.object({
+});
+const FinancialAccountUpdateWithWhereUniqueWithoutCreatorInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereUniqueInputSchema),
   data: z.union([z.lazy(() => FinancialAccountUpdateWithoutCreatorInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutCreatorInputSchema)])
-}).strict();
-const FinancialAccountUpdateManyWithWhereWithoutCreatorInputSchema = z.object({
+});
+const FinancialAccountUpdateManyWithWhereWithoutCreatorInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountScalarWhereInputSchema),
   data: z.union([z.lazy(() => FinancialAccountUpdateManyMutationInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateManyWithoutCreatorInputSchema)])
-}).strict();
-const FinancialAccountScalarWhereInputSchema = z.object({
+});
+const FinancialAccountScalarWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => FinancialAccountScalarWhereInputSchema), z.lazy(() => FinancialAccountScalarWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => FinancialAccountScalarWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => FinancialAccountScalarWhereInputSchema), z.lazy(() => FinancialAccountScalarWhereInputSchema).array()]).optional(),
@@ -7991,21 +7991,21 @@ const FinancialAccountScalarWhereInputSchema = z.object({
   dormantAt: z.union([z.lazy(() => DateTimeNullableFilterSchema), z.coerce.date()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const AccountUserUpsertWithWhereUniqueWithoutUserInputSchema = z.object({
+});
+const AccountUserUpsertWithWhereUniqueWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => AccountUserWhereUniqueInputSchema),
   update: z.union([z.lazy(() => AccountUserUpdateWithoutUserInputSchema), z.lazy(() => AccountUserUncheckedUpdateWithoutUserInputSchema)]),
   create: z.union([z.lazy(() => AccountUserCreateWithoutUserInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutUserInputSchema)])
-}).strict();
-const AccountUserUpdateWithWhereUniqueWithoutUserInputSchema = z.object({
+});
+const AccountUserUpdateWithWhereUniqueWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => AccountUserWhereUniqueInputSchema),
   data: z.union([z.lazy(() => AccountUserUpdateWithoutUserInputSchema), z.lazy(() => AccountUserUncheckedUpdateWithoutUserInputSchema)])
-}).strict();
-const AccountUserUpdateManyWithWhereWithoutUserInputSchema = z.object({
+});
+const AccountUserUpdateManyWithWhereWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => AccountUserScalarWhereInputSchema),
   data: z.union([z.lazy(() => AccountUserUpdateManyMutationInputSchema), z.lazy(() => AccountUserUncheckedUpdateManyWithoutUserInputSchema)])
-}).strict();
-const AccountUserScalarWhereInputSchema = z.object({
+});
+const AccountUserScalarWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => AccountUserScalarWhereInputSchema), z.lazy(() => AccountUserScalarWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => AccountUserScalarWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => AccountUserScalarWhereInputSchema), z.lazy(() => AccountUserScalarWhereInputSchema).array()]).optional(),
@@ -8017,21 +8017,21 @@ const AccountUserScalarWhereInputSchema = z.object({
   autosign: z.union([z.lazy(() => BoolFilterSchema), z.boolean()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const JointAccountRequestUpsertWithWhereUniqueWithoutCreatorInputSchema = z.object({
+});
+const JointAccountRequestUpsertWithWhereUniqueWithoutCreatorInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountRequestWhereUniqueInputSchema),
   update: z.union([z.lazy(() => JointAccountRequestUpdateWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUncheckedUpdateWithoutCreatorInputSchema)]),
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutCreatorInputSchema)])
-}).strict();
-const JointAccountRequestUpdateWithWhereUniqueWithoutCreatorInputSchema = z.object({
+});
+const JointAccountRequestUpdateWithWhereUniqueWithoutCreatorInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountRequestWhereUniqueInputSchema),
   data: z.union([z.lazy(() => JointAccountRequestUpdateWithoutCreatorInputSchema), z.lazy(() => JointAccountRequestUncheckedUpdateWithoutCreatorInputSchema)])
-}).strict();
-const JointAccountRequestUpdateManyWithWhereWithoutCreatorInputSchema = z.object({
+});
+const JointAccountRequestUpdateManyWithWhereWithoutCreatorInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountRequestScalarWhereInputSchema),
   data: z.union([z.lazy(() => JointAccountRequestUpdateManyMutationInputSchema), z.lazy(() => JointAccountRequestUncheckedUpdateManyWithoutCreatorInputSchema)])
-}).strict();
-const JointAccountRequestScalarWhereInputSchema = z.object({
+});
+const JointAccountRequestScalarWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => JointAccountRequestScalarWhereInputSchema), z.lazy(() => JointAccountRequestScalarWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => JointAccountRequestScalarWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => JointAccountRequestScalarWhereInputSchema), z.lazy(() => JointAccountRequestScalarWhereInputSchema).array()]).optional(),
@@ -8049,34 +8049,34 @@ const JointAccountRequestScalarWhereInputSchema = z.object({
   status: z.union([z.lazy(() => EnumJointAccountRequestStatusFilterSchema), z.lazy(() => JointAccountRequestStatusSchema)]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const JointAccountRequestUpsertWithWhereUniqueWithoutRecipientInputSchema = z.object({
+});
+const JointAccountRequestUpsertWithWhereUniqueWithoutRecipientInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountRequestWhereUniqueInputSchema),
   update: z.union([z.lazy(() => JointAccountRequestUpdateWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUncheckedUpdateWithoutRecipientInputSchema)]),
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutRecipientInputSchema)])
-}).strict();
-const JointAccountRequestUpdateWithWhereUniqueWithoutRecipientInputSchema = z.object({
+});
+const JointAccountRequestUpdateWithWhereUniqueWithoutRecipientInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountRequestWhereUniqueInputSchema),
   data: z.union([z.lazy(() => JointAccountRequestUpdateWithoutRecipientInputSchema), z.lazy(() => JointAccountRequestUncheckedUpdateWithoutRecipientInputSchema)])
-}).strict();
-const JointAccountRequestUpdateManyWithWhereWithoutRecipientInputSchema = z.object({
+});
+const JointAccountRequestUpdateManyWithWhereWithoutRecipientInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountRequestScalarWhereInputSchema),
   data: z.union([z.lazy(() => JointAccountRequestUpdateManyMutationInputSchema), z.lazy(() => JointAccountRequestUncheckedUpdateManyWithoutRecipientInputSchema)])
-}).strict();
-const JointAccountModRequestUpsertWithWhereUniqueWithoutCreatorInputSchema = z.object({
+});
+const JointAccountModRequestUpsertWithWhereUniqueWithoutCreatorInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestWhereUniqueInputSchema),
   update: z.union([z.lazy(() => JointAccountModRequestUpdateWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUncheckedUpdateWithoutCreatorInputSchema)]),
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutCreatorInputSchema)])
-}).strict();
-const JointAccountModRequestUpdateWithWhereUniqueWithoutCreatorInputSchema = z.object({
+});
+const JointAccountModRequestUpdateWithWhereUniqueWithoutCreatorInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestWhereUniqueInputSchema),
   data: z.union([z.lazy(() => JointAccountModRequestUpdateWithoutCreatorInputSchema), z.lazy(() => JointAccountModRequestUncheckedUpdateWithoutCreatorInputSchema)])
-}).strict();
-const JointAccountModRequestUpdateManyWithWhereWithoutCreatorInputSchema = z.object({
+});
+const JointAccountModRequestUpdateManyWithWhereWithoutCreatorInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestScalarWhereInputSchema),
   data: z.union([z.lazy(() => JointAccountModRequestUpdateManyMutationInputSchema), z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutCreatorInputSchema)])
-}).strict();
-const JointAccountModRequestScalarWhereInputSchema = z.object({
+});
+const JointAccountModRequestScalarWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => JointAccountModRequestScalarWhereInputSchema), z.lazy(() => JointAccountModRequestScalarWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => JointAccountModRequestScalarWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => JointAccountModRequestScalarWhereInputSchema), z.lazy(() => JointAccountModRequestScalarWhereInputSchema).array()]).optional(),
@@ -8088,21 +8088,21 @@ const JointAccountModRequestScalarWhereInputSchema = z.object({
   description: z.union([z.lazy(() => StringNullableFilterSchema), z.string()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const NotificationUpsertWithWhereUniqueWithoutUserInputSchema = z.object({
+});
+const NotificationUpsertWithWhereUniqueWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => NotificationWhereUniqueInputSchema),
   update: z.union([z.lazy(() => NotificationUpdateWithoutUserInputSchema), z.lazy(() => NotificationUncheckedUpdateWithoutUserInputSchema)]),
   create: z.union([z.lazy(() => NotificationCreateWithoutUserInputSchema), z.lazy(() => NotificationUncheckedCreateWithoutUserInputSchema)])
-}).strict();
-const NotificationUpdateWithWhereUniqueWithoutUserInputSchema = z.object({
+});
+const NotificationUpdateWithWhereUniqueWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => NotificationWhereUniqueInputSchema),
   data: z.union([z.lazy(() => NotificationUpdateWithoutUserInputSchema), z.lazy(() => NotificationUncheckedUpdateWithoutUserInputSchema)])
-}).strict();
-const NotificationUpdateManyWithWhereWithoutUserInputSchema = z.object({
+});
+const NotificationUpdateManyWithWhereWithoutUserInputSchema = z.strictObject({
   where: z.lazy(() => NotificationScalarWhereInputSchema),
   data: z.union([z.lazy(() => NotificationUpdateManyMutationInputSchema), z.lazy(() => NotificationUncheckedUpdateManyWithoutUserInputSchema)])
-}).strict();
-const NotificationScalarWhereInputSchema = z.object({
+});
+const NotificationScalarWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => NotificationScalarWhereInputSchema), z.lazy(() => NotificationScalarWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => NotificationScalarWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => NotificationScalarWhereInputSchema), z.lazy(() => NotificationScalarWhereInputSchema).array()]).optional(),
@@ -8116,21 +8116,21 @@ const NotificationScalarWhereInputSchema = z.object({
   isRead: z.union([z.lazy(() => BoolFilterSchema), z.boolean()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutApproverInputSchema = z.object({
+});
+const JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutApproverInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema),
   update: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateWithoutApproverInputSchema)]),
   create: z.union([z.lazy(() => JointAccountModRequestApprovalCreateWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutApproverInputSchema)])
-}).strict();
-const JointAccountModRequestApprovalUpdateWithWhereUniqueWithoutApproverInputSchema = z.object({
+});
+const JointAccountModRequestApprovalUpdateWithWhereUniqueWithoutApproverInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema),
   data: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateWithoutApproverInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateWithoutApproverInputSchema)])
-}).strict();
-const JointAccountModRequestApprovalUpdateManyWithWhereWithoutApproverInputSchema = z.object({
+});
+const JointAccountModRequestApprovalUpdateManyWithWhereWithoutApproverInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema),
   data: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateManyMutationInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverInputSchema)])
-}).strict();
-const JointAccountModRequestApprovalScalarWhereInputSchema = z.object({
+});
+const JointAccountModRequestApprovalScalarWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema), z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema), z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema).array()]).optional(),
@@ -8140,9 +8140,9 @@ const JointAccountModRequestApprovalScalarWhereInputSchema = z.object({
   status: z.union([z.lazy(() => EnumJointAccountRequestStatusFilterSchema), z.lazy(() => JointAccountRequestStatusSchema)]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const UserCreateWithoutSessionsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserCreateWithoutSessionsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -8162,9 +8162,9 @@ const UserCreateWithoutSessionsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserUncheckedCreateWithoutSessionsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserUncheckedCreateWithoutSessionsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -8184,22 +8184,22 @@ const UserUncheckedCreateWithoutSessionsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserCreateOrConnectWithoutSessionsInputSchema = z.object({
+});
+const UserCreateOrConnectWithoutSessionsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => UserCreateWithoutSessionsInputSchema), z.lazy(() => UserUncheckedCreateWithoutSessionsInputSchema)])
-}).strict();
-const UserUpsertWithoutSessionsInputSchema = z.object({
+});
+const UserUpsertWithoutSessionsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => UserUpdateWithoutSessionsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutSessionsInputSchema)]),
   create: z.union([z.lazy(() => UserCreateWithoutSessionsInputSchema), z.lazy(() => UserUncheckedCreateWithoutSessionsInputSchema)]),
   where: z.lazy(() => UserWhereInputSchema).optional()
-}).strict();
-const UserUpdateToOneWithWhereWithoutSessionsInputSchema = z.object({
+});
+const UserUpdateToOneWithWhereWithoutSessionsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereInputSchema).optional(),
   data: z.union([z.lazy(() => UserUpdateWithoutSessionsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutSessionsInputSchema)])
-}).strict();
-const UserUpdateWithoutSessionsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUpdateWithoutSessionsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -8219,9 +8219,9 @@ const UserUpdateWithoutSessionsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserUncheckedUpdateWithoutSessionsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUncheckedUpdateWithoutSessionsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -8241,9 +8241,9 @@ const UserUncheckedUpdateWithoutSessionsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserCreateWithoutAccountsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserCreateWithoutAccountsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -8263,9 +8263,9 @@ const UserCreateWithoutAccountsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserUncheckedCreateWithoutAccountsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserUncheckedCreateWithoutAccountsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -8285,22 +8285,22 @@ const UserUncheckedCreateWithoutAccountsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserCreateOrConnectWithoutAccountsInputSchema = z.object({
+});
+const UserCreateOrConnectWithoutAccountsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => UserCreateWithoutAccountsInputSchema), z.lazy(() => UserUncheckedCreateWithoutAccountsInputSchema)])
-}).strict();
-const UserUpsertWithoutAccountsInputSchema = z.object({
+});
+const UserUpsertWithoutAccountsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => UserUpdateWithoutAccountsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutAccountsInputSchema)]),
   create: z.union([z.lazy(() => UserCreateWithoutAccountsInputSchema), z.lazy(() => UserUncheckedCreateWithoutAccountsInputSchema)]),
   where: z.lazy(() => UserWhereInputSchema).optional()
-}).strict();
-const UserUpdateToOneWithWhereWithoutAccountsInputSchema = z.object({
+});
+const UserUpdateToOneWithWhereWithoutAccountsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereInputSchema).optional(),
   data: z.union([z.lazy(() => UserUpdateWithoutAccountsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutAccountsInputSchema)])
-}).strict();
-const UserUpdateWithoutAccountsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUpdateWithoutAccountsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -8320,9 +8320,9 @@ const UserUpdateWithoutAccountsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserUncheckedUpdateWithoutAccountsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUncheckedUpdateWithoutAccountsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -8342,9 +8342,9 @@ const UserUncheckedUpdateWithoutAccountsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserCreateWithoutProfileInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserCreateWithoutProfileInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -8364,9 +8364,9 @@ const UserCreateWithoutProfileInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserUncheckedCreateWithoutProfileInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserUncheckedCreateWithoutProfileInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -8386,22 +8386,22 @@ const UserUncheckedCreateWithoutProfileInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserCreateOrConnectWithoutProfileInputSchema = z.object({
+});
+const UserCreateOrConnectWithoutProfileInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => UserCreateWithoutProfileInputSchema), z.lazy(() => UserUncheckedCreateWithoutProfileInputSchema)])
-}).strict();
-const UserUpsertWithoutProfileInputSchema = z.object({
+});
+const UserUpsertWithoutProfileInputSchema = z.strictObject({
   update: z.union([z.lazy(() => UserUpdateWithoutProfileInputSchema), z.lazy(() => UserUncheckedUpdateWithoutProfileInputSchema)]),
   create: z.union([z.lazy(() => UserCreateWithoutProfileInputSchema), z.lazy(() => UserUncheckedCreateWithoutProfileInputSchema)]),
   where: z.lazy(() => UserWhereInputSchema).optional()
-}).strict();
-const UserUpdateToOneWithWhereWithoutProfileInputSchema = z.object({
+});
+const UserUpdateToOneWithWhereWithoutProfileInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereInputSchema).optional(),
   data: z.union([z.lazy(() => UserUpdateWithoutProfileInputSchema), z.lazy(() => UserUncheckedUpdateWithoutProfileInputSchema)])
-}).strict();
-const UserUpdateWithoutProfileInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUpdateWithoutProfileInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -8421,9 +8421,9 @@ const UserUpdateWithoutProfileInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserUncheckedUpdateWithoutProfileInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUncheckedUpdateWithoutProfileInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -8443,9 +8443,9 @@ const UserUncheckedUpdateWithoutProfileInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const FinancialAccountCreateWithoutBusinessProfileInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountCreateWithoutBusinessProfileInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   number: z.string(),
   status: z.lazy(() => AccountStatusSchema).optional(),
@@ -8468,9 +8468,9 @@ const FinancialAccountCreateWithoutBusinessProfileInputSchema = z.object({
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedCreateWithoutBusinessProfileInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountUncheckedCreateWithoutBusinessProfileInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   name: z.string(),
   number: z.string(),
@@ -8493,22 +8493,22 @@ const FinancialAccountUncheckedCreateWithoutBusinessProfileInputSchema = z.objec
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountCreateOrConnectWithoutBusinessProfileInputSchema = z.object({
+});
+const FinancialAccountCreateOrConnectWithoutBusinessProfileInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereUniqueInputSchema),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutBusinessProfileInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutBusinessProfileInputSchema)])
-}).strict();
-const FinancialAccountUpsertWithoutBusinessProfileInputSchema = z.object({
+});
+const FinancialAccountUpsertWithoutBusinessProfileInputSchema = z.strictObject({
   update: z.union([z.lazy(() => FinancialAccountUpdateWithoutBusinessProfileInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutBusinessProfileInputSchema)]),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutBusinessProfileInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutBusinessProfileInputSchema)]),
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional()
-}).strict();
-const FinancialAccountUpdateToOneWithWhereWithoutBusinessProfileInputSchema = z.object({
+});
+const FinancialAccountUpdateToOneWithWhereWithoutBusinessProfileInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional(),
   data: z.union([z.lazy(() => FinancialAccountUpdateWithoutBusinessProfileInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutBusinessProfileInputSchema)])
-}).strict();
-const FinancialAccountUpdateWithoutBusinessProfileInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUpdateWithoutBusinessProfileInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -8531,9 +8531,9 @@ const FinancialAccountUpdateWithoutBusinessProfileInputSchema = z.object({
   transactions: z.lazy(() => TransactionUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateWithoutBusinessProfileInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUncheckedUpdateWithoutBusinessProfileInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -8556,9 +8556,9 @@ const FinancialAccountUncheckedUpdateWithoutBusinessProfileInputSchema = z.objec
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const UserCreateWithoutCreatedAccountsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserCreateWithoutCreatedAccountsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -8578,9 +8578,9 @@ const UserCreateWithoutCreatedAccountsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserUncheckedCreateWithoutCreatedAccountsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserUncheckedCreateWithoutCreatedAccountsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -8600,13 +8600,13 @@ const UserUncheckedCreateWithoutCreatedAccountsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserCreateOrConnectWithoutCreatedAccountsInputSchema = z.object({
+});
+const UserCreateOrConnectWithoutCreatedAccountsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => UserCreateWithoutCreatedAccountsInputSchema), z.lazy(() => UserUncheckedCreateWithoutCreatedAccountsInputSchema)])
-}).strict();
-const BusinessProfileCreateWithoutAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const BusinessProfileCreateWithoutAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   address: z.string().optional().nullable(),
   creationMonth: z.string().optional().nullable(),
   creationYear: z.number().int().optional().nullable(),
@@ -8617,9 +8617,9 @@ const BusinessProfileCreateWithoutAccountInputSchema = z.object({
   approved: z.boolean(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const BusinessProfileUncheckedCreateWithoutAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const BusinessProfileUncheckedCreateWithoutAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   address: z.string().optional().nullable(),
   creationMonth: z.string().optional().nullable(),
   creationYear: z.number().int().optional().nullable(),
@@ -8630,13 +8630,13 @@ const BusinessProfileUncheckedCreateWithoutAccountInputSchema = z.object({
   approved: z.boolean(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const BusinessProfileCreateOrConnectWithoutAccountInputSchema = z.object({
+});
+const BusinessProfileCreateOrConnectWithoutAccountInputSchema = z.strictObject({
   where: z.lazy(() => BusinessProfileWhereUniqueInputSchema),
   create: z.union([z.lazy(() => BusinessProfileCreateWithoutAccountInputSchema), z.lazy(() => BusinessProfileUncheckedCreateWithoutAccountInputSchema)])
-}).strict();
-const AccountUserCreateWithoutFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserCreateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
   ownership: z.number().optional(),
   autosign: z.boolean().optional(),
@@ -8645,9 +8645,9 @@ const AccountUserCreateWithoutFinancialAccountInputSchema = z.object({
   user: z.lazy(() => UserCreateNestedOneWithoutAccountMembershipsInputSchema),
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutInitiatorInputSchema).optional(),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutInvestorInputSchema).optional()
-}).strict();
-const AccountUserUncheckedCreateWithoutFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserUncheckedCreateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
   ownership: z.number().optional(),
@@ -8656,16 +8656,16 @@ const AccountUserUncheckedCreateWithoutFinancialAccountInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInitiatorInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutInvestorInputSchema).optional()
-}).strict();
-const AccountUserCreateOrConnectWithoutFinancialAccountInputSchema = z.object({
+});
+const AccountUserCreateOrConnectWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => AccountUserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => AccountUserCreateWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutFinancialAccountInputSchema)])
-}).strict();
-const AccountUserCreateManyFinancialAccountInputEnvelopeSchema = z.object({
+});
+const AccountUserCreateManyFinancialAccountInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => AccountUserCreateManyFinancialAccountInputSchema), z.lazy(() => AccountUserCreateManyFinancialAccountInputSchema).array()])
-}).strict();
-const JointAccountRequestCreateWithoutFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountRequestCreateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   recipientName: z.string(),
   recipientEmail: z.string(),
   role: z.lazy(() => AccountUserRoleSchema),
@@ -8678,9 +8678,9 @@ const JointAccountRequestCreateWithoutFinancialAccountInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   creator: z.lazy(() => UserCreateNestedOneWithoutCreatedJointAccountRequestsInputSchema),
   recipient: z.lazy(() => UserCreateNestedOneWithoutReceivedJointAccountRequestsInputSchema).optional()
-}).strict();
-const JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   recipientName: z.string(),
   recipientEmail: z.string(),
@@ -8693,16 +8693,16 @@ const JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema = z.o
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountRequestCreateOrConnectWithoutFinancialAccountInputSchema = z.object({
+});
+const JointAccountRequestCreateOrConnectWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountRequestWhereUniqueInputSchema),
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema)])
-}).strict();
-const JointAccountRequestCreateManyFinancialAccountInputEnvelopeSchema = z.object({
+});
+const JointAccountRequestCreateManyFinancialAccountInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => JointAccountRequestCreateManyFinancialAccountInputSchema), z.lazy(() => JointAccountRequestCreateManyFinancialAccountInputSchema).array()])
-}).strict();
-const JointAccountModRequestCreateWithoutAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestCreateWithoutAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -8710,9 +8710,9 @@ const JointAccountModRequestCreateWithoutAccountInputSchema = z.object({
   creator: z.lazy(() => UserCreateNestedOneWithoutCreatedJointAccountModRequestsInputSchema),
   transaction: z.lazy(() => TransactionCreateNestedOneWithoutJointAccountModRequestsInputSchema).optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutRequestInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedCreateWithoutAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestUncheckedCreateWithoutAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
   transactionId: z.string().optional().nullable(),
@@ -8720,16 +8720,16 @@ const JointAccountModRequestUncheckedCreateWithoutAccountInputSchema = z.object(
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutRequestInputSchema).optional()
-}).strict();
-const JointAccountModRequestCreateOrConnectWithoutAccountInputSchema = z.object({
+});
+const JointAccountModRequestCreateOrConnectWithoutAccountInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestWhereUniqueInputSchema),
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutAccountInputSchema)])
-}).strict();
-const JointAccountModRequestCreateManyAccountInputEnvelopeSchema = z.object({
+});
+const JointAccountModRequestCreateManyAccountInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => JointAccountModRequestCreateManyAccountInputSchema), z.lazy(() => JointAccountModRequestCreateManyAccountInputSchema).array()])
-}).strict();
-const NotificationCreateWithoutFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const NotificationCreateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   title: z.string(),
   body: z.string(),
   bodyType: z.lazy(() => NotificationBodyTypeSchema).optional(),
@@ -8738,9 +8738,9 @@ const NotificationCreateWithoutFinancialAccountInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutNotificationsInputSchema).optional()
-}).strict();
-const NotificationUncheckedCreateWithoutFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const NotificationUncheckedCreateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   title: z.string(),
   body: z.string(),
   bodyType: z.lazy(() => NotificationBodyTypeSchema).optional(),
@@ -8749,16 +8749,16 @@ const NotificationUncheckedCreateWithoutFinancialAccountInputSchema = z.object({
   isRead: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const NotificationCreateOrConnectWithoutFinancialAccountInputSchema = z.object({
+});
+const NotificationCreateOrConnectWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => NotificationWhereUniqueInputSchema),
   create: z.union([z.lazy(() => NotificationCreateWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUncheckedCreateWithoutFinancialAccountInputSchema)])
-}).strict();
-const NotificationCreateManyFinancialAccountInputEnvelopeSchema = z.object({
+});
+const NotificationCreateManyFinancialAccountInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => NotificationCreateManyFinancialAccountInputSchema), z.lazy(() => NotificationCreateManyFinancialAccountInputSchema).array()])
-}).strict();
-const TransactionCreateWithoutFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -8784,9 +8784,9 @@ const TransactionCreateWithoutFinancialAccountInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutTransactionInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionCreateNestedOneWithoutChildTransactionsInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionUncheckedCreateWithoutFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionUncheckedCreateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -8812,16 +8812,16 @@ const TransactionUncheckedCreateWithoutFinancialAccountInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutTransactionInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionCreateOrConnectWithoutFinancialAccountInputSchema = z.object({
+});
+const TransactionCreateOrConnectWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   create: z.union([z.lazy(() => TransactionCreateWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutFinancialAccountInputSchema)])
-}).strict();
-const TransactionCreateManyFinancialAccountInputEnvelopeSchema = z.object({
+});
+const TransactionCreateManyFinancialAccountInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => TransactionCreateManyFinancialAccountInputSchema), z.lazy(() => TransactionCreateManyFinancialAccountInputSchema).array()])
-}).strict();
-const TransactionCreateWithoutRecipientAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateWithoutRecipientAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -8847,9 +8847,9 @@ const TransactionCreateWithoutRecipientAccountInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutTransactionInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionCreateNestedOneWithoutChildTransactionsInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionUncheckedCreateWithoutRecipientAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionUncheckedCreateWithoutRecipientAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -8875,16 +8875,16 @@ const TransactionUncheckedCreateWithoutRecipientAccountInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutTransactionInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionCreateOrConnectWithoutRecipientAccountInputSchema = z.object({
+});
+const TransactionCreateOrConnectWithoutRecipientAccountInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   create: z.union([z.lazy(() => TransactionCreateWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutRecipientAccountInputSchema)])
-}).strict();
-const TransactionCreateManyRecipientAccountInputEnvelopeSchema = z.object({
+});
+const TransactionCreateManyRecipientAccountInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => TransactionCreateManyRecipientAccountInputSchema), z.lazy(() => TransactionCreateManyRecipientAccountInputSchema).array()])
-}).strict();
-const InvestmentCreateWithoutFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentCreateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   deposit: z.number(),
   investmentName: z.string(),
   totalProfit: z.number().optional(),
@@ -8909,9 +8909,9 @@ const InvestmentCreateWithoutFinancialAccountInputSchema = z.object({
   investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutInvestmentInputSchema).optional(),
   profits: z.lazy(() => ProfitCreateNestedManyWithoutInvestmentInputSchema).optional()
-}).strict();
-const InvestmentUncheckedCreateWithoutFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentUncheckedCreateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   investorId: z.string(),
   deposit: z.number(),
   investmentName: z.string(),
@@ -8936,25 +8936,25 @@ const InvestmentUncheckedCreateWithoutFinancialAccountInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional(),
   profits: z.lazy(() => ProfitUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
-}).strict();
-const InvestmentCreateOrConnectWithoutFinancialAccountInputSchema = z.object({
+});
+const InvestmentCreateOrConnectWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => InvestmentWhereUniqueInputSchema),
   create: z.union([z.lazy(() => InvestmentCreateWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutFinancialAccountInputSchema)])
-}).strict();
-const InvestmentCreateManyFinancialAccountInputEnvelopeSchema = z.object({
+});
+const InvestmentCreateManyFinancialAccountInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => InvestmentCreateManyFinancialAccountInputSchema), z.lazy(() => InvestmentCreateManyFinancialAccountInputSchema).array()])
-}).strict();
-const UserUpsertWithoutCreatedAccountsInputSchema = z.object({
+});
+const UserUpsertWithoutCreatedAccountsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => UserUpdateWithoutCreatedAccountsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutCreatedAccountsInputSchema)]),
   create: z.union([z.lazy(() => UserCreateWithoutCreatedAccountsInputSchema), z.lazy(() => UserUncheckedCreateWithoutCreatedAccountsInputSchema)]),
   where: z.lazy(() => UserWhereInputSchema).optional()
-}).strict();
-const UserUpdateToOneWithWhereWithoutCreatedAccountsInputSchema = z.object({
+});
+const UserUpdateToOneWithWhereWithoutCreatedAccountsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereInputSchema).optional(),
   data: z.union([z.lazy(() => UserUpdateWithoutCreatedAccountsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutCreatedAccountsInputSchema)])
-}).strict();
-const UserUpdateWithoutCreatedAccountsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUpdateWithoutCreatedAccountsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -8974,9 +8974,9 @@ const UserUpdateWithoutCreatedAccountsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserUncheckedUpdateWithoutCreatedAccountsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUncheckedUpdateWithoutCreatedAccountsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -8996,18 +8996,18 @@ const UserUncheckedUpdateWithoutCreatedAccountsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const BusinessProfileUpsertWithoutAccountInputSchema = z.object({
+});
+const BusinessProfileUpsertWithoutAccountInputSchema = z.strictObject({
   update: z.union([z.lazy(() => BusinessProfileUpdateWithoutAccountInputSchema), z.lazy(() => BusinessProfileUncheckedUpdateWithoutAccountInputSchema)]),
   create: z.union([z.lazy(() => BusinessProfileCreateWithoutAccountInputSchema), z.lazy(() => BusinessProfileUncheckedCreateWithoutAccountInputSchema)]),
   where: z.lazy(() => BusinessProfileWhereInputSchema).optional()
-}).strict();
-const BusinessProfileUpdateToOneWithWhereWithoutAccountInputSchema = z.object({
+});
+const BusinessProfileUpdateToOneWithWhereWithoutAccountInputSchema = z.strictObject({
   where: z.lazy(() => BusinessProfileWhereInputSchema).optional(),
   data: z.union([z.lazy(() => BusinessProfileUpdateWithoutAccountInputSchema), z.lazy(() => BusinessProfileUncheckedUpdateWithoutAccountInputSchema)])
-}).strict();
-const BusinessProfileUpdateWithoutAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const BusinessProfileUpdateWithoutAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   address: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   creationMonth: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   creationYear: z.union([z.number().int(), z.lazy(() => NullableIntFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -9018,9 +9018,9 @@ const BusinessProfileUpdateWithoutAccountInputSchema = z.object({
   approved: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const BusinessProfileUncheckedUpdateWithoutAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const BusinessProfileUncheckedUpdateWithoutAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   address: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   creationMonth: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   creationYear: z.union([z.number().int(), z.lazy(() => NullableIntFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -9031,73 +9031,73 @@ const BusinessProfileUncheckedUpdateWithoutAccountInputSchema = z.object({
   approved: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const AccountUserUpsertWithWhereUniqueWithoutFinancialAccountInputSchema = z.object({
+});
+const AccountUserUpsertWithWhereUniqueWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => AccountUserWhereUniqueInputSchema),
   update: z.union([z.lazy(() => AccountUserUpdateWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUncheckedUpdateWithoutFinancialAccountInputSchema)]),
   create: z.union([z.lazy(() => AccountUserCreateWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutFinancialAccountInputSchema)])
-}).strict();
-const AccountUserUpdateWithWhereUniqueWithoutFinancialAccountInputSchema = z.object({
+});
+const AccountUserUpdateWithWhereUniqueWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => AccountUserWhereUniqueInputSchema),
   data: z.union([z.lazy(() => AccountUserUpdateWithoutFinancialAccountInputSchema), z.lazy(() => AccountUserUncheckedUpdateWithoutFinancialAccountInputSchema)])
-}).strict();
-const AccountUserUpdateManyWithWhereWithoutFinancialAccountInputSchema = z.object({
+});
+const AccountUserUpdateManyWithWhereWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => AccountUserScalarWhereInputSchema),
   data: z.union([z.lazy(() => AccountUserUpdateManyMutationInputSchema), z.lazy(() => AccountUserUncheckedUpdateManyWithoutFinancialAccountInputSchema)])
-}).strict();
-const JointAccountRequestUpsertWithWhereUniqueWithoutFinancialAccountInputSchema = z.object({
+});
+const JointAccountRequestUpsertWithWhereUniqueWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountRequestWhereUniqueInputSchema),
   update: z.union([z.lazy(() => JointAccountRequestUpdateWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUncheckedUpdateWithoutFinancialAccountInputSchema)]),
   create: z.union([z.lazy(() => JointAccountRequestCreateWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUncheckedCreateWithoutFinancialAccountInputSchema)])
-}).strict();
-const JointAccountRequestUpdateWithWhereUniqueWithoutFinancialAccountInputSchema = z.object({
+});
+const JointAccountRequestUpdateWithWhereUniqueWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountRequestWhereUniqueInputSchema),
   data: z.union([z.lazy(() => JointAccountRequestUpdateWithoutFinancialAccountInputSchema), z.lazy(() => JointAccountRequestUncheckedUpdateWithoutFinancialAccountInputSchema)])
-}).strict();
-const JointAccountRequestUpdateManyWithWhereWithoutFinancialAccountInputSchema = z.object({
+});
+const JointAccountRequestUpdateManyWithWhereWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountRequestScalarWhereInputSchema),
   data: z.union([z.lazy(() => JointAccountRequestUpdateManyMutationInputSchema), z.lazy(() => JointAccountRequestUncheckedUpdateManyWithoutFinancialAccountInputSchema)])
-}).strict();
-const JointAccountModRequestUpsertWithWhereUniqueWithoutAccountInputSchema = z.object({
+});
+const JointAccountModRequestUpsertWithWhereUniqueWithoutAccountInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestWhereUniqueInputSchema),
   update: z.union([z.lazy(() => JointAccountModRequestUpdateWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUncheckedUpdateWithoutAccountInputSchema)]),
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutAccountInputSchema)])
-}).strict();
-const JointAccountModRequestUpdateWithWhereUniqueWithoutAccountInputSchema = z.object({
+});
+const JointAccountModRequestUpdateWithWhereUniqueWithoutAccountInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestWhereUniqueInputSchema),
   data: z.union([z.lazy(() => JointAccountModRequestUpdateWithoutAccountInputSchema), z.lazy(() => JointAccountModRequestUncheckedUpdateWithoutAccountInputSchema)])
-}).strict();
-const JointAccountModRequestUpdateManyWithWhereWithoutAccountInputSchema = z.object({
+});
+const JointAccountModRequestUpdateManyWithWhereWithoutAccountInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestScalarWhereInputSchema),
   data: z.union([z.lazy(() => JointAccountModRequestUpdateManyMutationInputSchema), z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutAccountInputSchema)])
-}).strict();
-const NotificationUpsertWithWhereUniqueWithoutFinancialAccountInputSchema = z.object({
+});
+const NotificationUpsertWithWhereUniqueWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => NotificationWhereUniqueInputSchema),
   update: z.union([z.lazy(() => NotificationUpdateWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUncheckedUpdateWithoutFinancialAccountInputSchema)]),
   create: z.union([z.lazy(() => NotificationCreateWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUncheckedCreateWithoutFinancialAccountInputSchema)])
-}).strict();
-const NotificationUpdateWithWhereUniqueWithoutFinancialAccountInputSchema = z.object({
+});
+const NotificationUpdateWithWhereUniqueWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => NotificationWhereUniqueInputSchema),
   data: z.union([z.lazy(() => NotificationUpdateWithoutFinancialAccountInputSchema), z.lazy(() => NotificationUncheckedUpdateWithoutFinancialAccountInputSchema)])
-}).strict();
-const NotificationUpdateManyWithWhereWithoutFinancialAccountInputSchema = z.object({
+});
+const NotificationUpdateManyWithWhereWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => NotificationScalarWhereInputSchema),
   data: z.union([z.lazy(() => NotificationUpdateManyMutationInputSchema), z.lazy(() => NotificationUncheckedUpdateManyWithoutFinancialAccountInputSchema)])
-}).strict();
-const TransactionUpsertWithWhereUniqueWithoutFinancialAccountInputSchema = z.object({
+});
+const TransactionUpsertWithWhereUniqueWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   update: z.union([z.lazy(() => TransactionUpdateWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutFinancialAccountInputSchema)]),
   create: z.union([z.lazy(() => TransactionCreateWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutFinancialAccountInputSchema)])
-}).strict();
-const TransactionUpdateWithWhereUniqueWithoutFinancialAccountInputSchema = z.object({
+});
+const TransactionUpdateWithWhereUniqueWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   data: z.union([z.lazy(() => TransactionUpdateWithoutFinancialAccountInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutFinancialAccountInputSchema)])
-}).strict();
-const TransactionUpdateManyWithWhereWithoutFinancialAccountInputSchema = z.object({
+});
+const TransactionUpdateManyWithWhereWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => TransactionScalarWhereInputSchema),
   data: z.union([z.lazy(() => TransactionUpdateManyMutationInputSchema), z.lazy(() => TransactionUncheckedUpdateManyWithoutFinancialAccountInputSchema)])
-}).strict();
-const TransactionScalarWhereInputSchema = z.object({
+});
+const TransactionScalarWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => TransactionScalarWhereInputSchema), z.lazy(() => TransactionScalarWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => TransactionScalarWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => TransactionScalarWhereInputSchema), z.lazy(() => TransactionScalarWhereInputSchema).array()]).optional(),
@@ -9126,34 +9126,34 @@ const TransactionScalarWhereInputSchema = z.object({
   description: z.union([z.lazy(() => StringNullableFilterSchema), z.string()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const TransactionUpsertWithWhereUniqueWithoutRecipientAccountInputSchema = z.object({
+});
+const TransactionUpsertWithWhereUniqueWithoutRecipientAccountInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   update: z.union([z.lazy(() => TransactionUpdateWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutRecipientAccountInputSchema)]),
   create: z.union([z.lazy(() => TransactionCreateWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutRecipientAccountInputSchema)])
-}).strict();
-const TransactionUpdateWithWhereUniqueWithoutRecipientAccountInputSchema = z.object({
+});
+const TransactionUpdateWithWhereUniqueWithoutRecipientAccountInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   data: z.union([z.lazy(() => TransactionUpdateWithoutRecipientAccountInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutRecipientAccountInputSchema)])
-}).strict();
-const TransactionUpdateManyWithWhereWithoutRecipientAccountInputSchema = z.object({
+});
+const TransactionUpdateManyWithWhereWithoutRecipientAccountInputSchema = z.strictObject({
   where: z.lazy(() => TransactionScalarWhereInputSchema),
   data: z.union([z.lazy(() => TransactionUpdateManyMutationInputSchema), z.lazy(() => TransactionUncheckedUpdateManyWithoutRecipientAccountInputSchema)])
-}).strict();
-const InvestmentUpsertWithWhereUniqueWithoutFinancialAccountInputSchema = z.object({
+});
+const InvestmentUpsertWithWhereUniqueWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => InvestmentWhereUniqueInputSchema),
   update: z.union([z.lazy(() => InvestmentUpdateWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUncheckedUpdateWithoutFinancialAccountInputSchema)]),
   create: z.union([z.lazy(() => InvestmentCreateWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutFinancialAccountInputSchema)])
-}).strict();
-const InvestmentUpdateWithWhereUniqueWithoutFinancialAccountInputSchema = z.object({
+});
+const InvestmentUpdateWithWhereUniqueWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => InvestmentWhereUniqueInputSchema),
   data: z.union([z.lazy(() => InvestmentUpdateWithoutFinancialAccountInputSchema), z.lazy(() => InvestmentUncheckedUpdateWithoutFinancialAccountInputSchema)])
-}).strict();
-const InvestmentUpdateManyWithWhereWithoutFinancialAccountInputSchema = z.object({
+});
+const InvestmentUpdateManyWithWhereWithoutFinancialAccountInputSchema = z.strictObject({
   where: z.lazy(() => InvestmentScalarWhereInputSchema),
   data: z.union([z.lazy(() => InvestmentUpdateManyMutationInputSchema), z.lazy(() => InvestmentUncheckedUpdateManyWithoutFinancialAccountInputSchema)])
-}).strict();
-const InvestmentScalarWhereInputSchema = z.object({
+});
+const InvestmentScalarWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => InvestmentScalarWhereInputSchema), z.lazy(() => InvestmentScalarWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => InvestmentScalarWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => InvestmentScalarWhereInputSchema), z.lazy(() => InvestmentScalarWhereInputSchema).array()]).optional(),
@@ -9181,9 +9181,9 @@ const InvestmentScalarWhereInputSchema = z.object({
   lastProfitDistributedAt: z.union([z.lazy(() => DateTimeNullableFilterSchema), z.coerce.date()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const UserCreateWithoutAccountMembershipsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserCreateWithoutAccountMembershipsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -9203,9 +9203,9 @@ const UserCreateWithoutAccountMembershipsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserUncheckedCreateWithoutAccountMembershipsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserUncheckedCreateWithoutAccountMembershipsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -9225,13 +9225,13 @@ const UserUncheckedCreateWithoutAccountMembershipsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserCreateOrConnectWithoutAccountMembershipsInputSchema = z.object({
+});
+const UserCreateOrConnectWithoutAccountMembershipsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => UserCreateWithoutAccountMembershipsInputSchema), z.lazy(() => UserUncheckedCreateWithoutAccountMembershipsInputSchema)])
-}).strict();
-const FinancialAccountCreateWithoutAccountUsersInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountCreateWithoutAccountUsersInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   number: z.string(),
   status: z.lazy(() => AccountStatusSchema).optional(),
@@ -9254,9 +9254,9 @@ const FinancialAccountCreateWithoutAccountUsersInputSchema = z.object({
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedCreateWithoutAccountUsersInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountUncheckedCreateWithoutAccountUsersInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   name: z.string(),
   number: z.string(),
@@ -9279,13 +9279,13 @@ const FinancialAccountUncheckedCreateWithoutAccountUsersInputSchema = z.object({
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountCreateOrConnectWithoutAccountUsersInputSchema = z.object({
+});
+const FinancialAccountCreateOrConnectWithoutAccountUsersInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereUniqueInputSchema),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutAccountUsersInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutAccountUsersInputSchema)])
-}).strict();
-const TransactionCreateWithoutInitiatorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateWithoutInitiatorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -9311,9 +9311,9 @@ const TransactionCreateWithoutInitiatorInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutTransactionInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionCreateNestedOneWithoutChildTransactionsInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionUncheckedCreateWithoutInitiatorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionUncheckedCreateWithoutInitiatorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -9339,16 +9339,16 @@ const TransactionUncheckedCreateWithoutInitiatorInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutTransactionInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionCreateOrConnectWithoutInitiatorInputSchema = z.object({
+});
+const TransactionCreateOrConnectWithoutInitiatorInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   create: z.union([z.lazy(() => TransactionCreateWithoutInitiatorInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutInitiatorInputSchema)])
-}).strict();
-const TransactionCreateManyInitiatorInputEnvelopeSchema = z.object({
+});
+const TransactionCreateManyInitiatorInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => TransactionCreateManyInitiatorInputSchema), z.lazy(() => TransactionCreateManyInitiatorInputSchema).array()])
-}).strict();
-const InvestmentCreateWithoutInvestorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentCreateWithoutInvestorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   deposit: z.number(),
   investmentName: z.string(),
   totalProfit: z.number().optional(),
@@ -9373,9 +9373,9 @@ const InvestmentCreateWithoutInvestorInputSchema = z.object({
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutInvestmentInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema),
   profits: z.lazy(() => ProfitCreateNestedManyWithoutInvestmentInputSchema).optional()
-}).strict();
-const InvestmentUncheckedCreateWithoutInvestorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentUncheckedCreateWithoutInvestorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string(),
   deposit: z.number(),
   investmentName: z.string(),
@@ -9400,25 +9400,25 @@ const InvestmentUncheckedCreateWithoutInvestorInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional(),
   profits: z.lazy(() => ProfitUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
-}).strict();
-const InvestmentCreateOrConnectWithoutInvestorInputSchema = z.object({
+});
+const InvestmentCreateOrConnectWithoutInvestorInputSchema = z.strictObject({
   where: z.lazy(() => InvestmentWhereUniqueInputSchema),
   create: z.union([z.lazy(() => InvestmentCreateWithoutInvestorInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutInvestorInputSchema)])
-}).strict();
-const InvestmentCreateManyInvestorInputEnvelopeSchema = z.object({
+});
+const InvestmentCreateManyInvestorInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => InvestmentCreateManyInvestorInputSchema), z.lazy(() => InvestmentCreateManyInvestorInputSchema).array()])
-}).strict();
-const UserUpsertWithoutAccountMembershipsInputSchema = z.object({
+});
+const UserUpsertWithoutAccountMembershipsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => UserUpdateWithoutAccountMembershipsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutAccountMembershipsInputSchema)]),
   create: z.union([z.lazy(() => UserCreateWithoutAccountMembershipsInputSchema), z.lazy(() => UserUncheckedCreateWithoutAccountMembershipsInputSchema)]),
   where: z.lazy(() => UserWhereInputSchema).optional()
-}).strict();
-const UserUpdateToOneWithWhereWithoutAccountMembershipsInputSchema = z.object({
+});
+const UserUpdateToOneWithWhereWithoutAccountMembershipsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereInputSchema).optional(),
   data: z.union([z.lazy(() => UserUpdateWithoutAccountMembershipsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutAccountMembershipsInputSchema)])
-}).strict();
-const UserUpdateWithoutAccountMembershipsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUpdateWithoutAccountMembershipsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -9438,9 +9438,9 @@ const UserUpdateWithoutAccountMembershipsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserUncheckedUpdateWithoutAccountMembershipsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUncheckedUpdateWithoutAccountMembershipsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -9460,18 +9460,18 @@ const UserUncheckedUpdateWithoutAccountMembershipsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUpsertWithoutAccountUsersInputSchema = z.object({
+});
+const FinancialAccountUpsertWithoutAccountUsersInputSchema = z.strictObject({
   update: z.union([z.lazy(() => FinancialAccountUpdateWithoutAccountUsersInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutAccountUsersInputSchema)]),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutAccountUsersInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutAccountUsersInputSchema)]),
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional()
-}).strict();
-const FinancialAccountUpdateToOneWithWhereWithoutAccountUsersInputSchema = z.object({
+});
+const FinancialAccountUpdateToOneWithWhereWithoutAccountUsersInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional(),
   data: z.union([z.lazy(() => FinancialAccountUpdateWithoutAccountUsersInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutAccountUsersInputSchema)])
-}).strict();
-const FinancialAccountUpdateWithoutAccountUsersInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUpdateWithoutAccountUsersInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -9494,9 +9494,9 @@ const FinancialAccountUpdateWithoutAccountUsersInputSchema = z.object({
   transactions: z.lazy(() => TransactionUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateWithoutAccountUsersInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUncheckedUpdateWithoutAccountUsersInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -9519,35 +9519,35 @@ const FinancialAccountUncheckedUpdateWithoutAccountUsersInputSchema = z.object({
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const TransactionUpsertWithWhereUniqueWithoutInitiatorInputSchema = z.object({
+});
+const TransactionUpsertWithWhereUniqueWithoutInitiatorInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   update: z.union([z.lazy(() => TransactionUpdateWithoutInitiatorInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutInitiatorInputSchema)]),
   create: z.union([z.lazy(() => TransactionCreateWithoutInitiatorInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutInitiatorInputSchema)])
-}).strict();
-const TransactionUpdateWithWhereUniqueWithoutInitiatorInputSchema = z.object({
+});
+const TransactionUpdateWithWhereUniqueWithoutInitiatorInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   data: z.union([z.lazy(() => TransactionUpdateWithoutInitiatorInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutInitiatorInputSchema)])
-}).strict();
-const TransactionUpdateManyWithWhereWithoutInitiatorInputSchema = z.object({
+});
+const TransactionUpdateManyWithWhereWithoutInitiatorInputSchema = z.strictObject({
   where: z.lazy(() => TransactionScalarWhereInputSchema),
   data: z.union([z.lazy(() => TransactionUpdateManyMutationInputSchema), z.lazy(() => TransactionUncheckedUpdateManyWithoutInitiatorInputSchema)])
-}).strict();
-const InvestmentUpsertWithWhereUniqueWithoutInvestorInputSchema = z.object({
+});
+const InvestmentUpsertWithWhereUniqueWithoutInvestorInputSchema = z.strictObject({
   where: z.lazy(() => InvestmentWhereUniqueInputSchema),
   update: z.union([z.lazy(() => InvestmentUpdateWithoutInvestorInputSchema), z.lazy(() => InvestmentUncheckedUpdateWithoutInvestorInputSchema)]),
   create: z.union([z.lazy(() => InvestmentCreateWithoutInvestorInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutInvestorInputSchema)])
-}).strict();
-const InvestmentUpdateWithWhereUniqueWithoutInvestorInputSchema = z.object({
+});
+const InvestmentUpdateWithWhereUniqueWithoutInvestorInputSchema = z.strictObject({
   where: z.lazy(() => InvestmentWhereUniqueInputSchema),
   data: z.union([z.lazy(() => InvestmentUpdateWithoutInvestorInputSchema), z.lazy(() => InvestmentUncheckedUpdateWithoutInvestorInputSchema)])
-}).strict();
-const InvestmentUpdateManyWithWhereWithoutInvestorInputSchema = z.object({
+});
+const InvestmentUpdateManyWithWhereWithoutInvestorInputSchema = z.strictObject({
   where: z.lazy(() => InvestmentScalarWhereInputSchema),
   data: z.union([z.lazy(() => InvestmentUpdateManyMutationInputSchema), z.lazy(() => InvestmentUncheckedUpdateManyWithoutInvestorInputSchema)])
-}).strict();
-const UserCreateWithoutCreatedJointAccountRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserCreateWithoutCreatedJointAccountRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -9567,9 +9567,9 @@ const UserCreateWithoutCreatedJointAccountRequestsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserUncheckedCreateWithoutCreatedJointAccountRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserUncheckedCreateWithoutCreatedJointAccountRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -9589,13 +9589,13 @@ const UserUncheckedCreateWithoutCreatedJointAccountRequestsInputSchema = z.objec
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserCreateOrConnectWithoutCreatedJointAccountRequestsInputSchema = z.object({
+});
+const UserCreateOrConnectWithoutCreatedJointAccountRequestsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => UserCreateWithoutCreatedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutCreatedJointAccountRequestsInputSchema)])
-}).strict();
-const UserCreateWithoutReceivedJointAccountRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserCreateWithoutReceivedJointAccountRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -9615,9 +9615,9 @@ const UserCreateWithoutReceivedJointAccountRequestsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserUncheckedCreateWithoutReceivedJointAccountRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserUncheckedCreateWithoutReceivedJointAccountRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -9637,13 +9637,13 @@ const UserUncheckedCreateWithoutReceivedJointAccountRequestsInputSchema = z.obje
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserCreateOrConnectWithoutReceivedJointAccountRequestsInputSchema = z.object({
+});
+const UserCreateOrConnectWithoutReceivedJointAccountRequestsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => UserCreateWithoutReceivedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutReceivedJointAccountRequestsInputSchema)])
-}).strict();
-const FinancialAccountCreateWithoutJointAccountRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountCreateWithoutJointAccountRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   number: z.string(),
   status: z.lazy(() => AccountStatusSchema).optional(),
@@ -9666,9 +9666,9 @@ const FinancialAccountCreateWithoutJointAccountRequestsInputSchema = z.object({
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedCreateWithoutJointAccountRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountUncheckedCreateWithoutJointAccountRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   name: z.string(),
   number: z.string(),
@@ -9691,22 +9691,22 @@ const FinancialAccountUncheckedCreateWithoutJointAccountRequestsInputSchema = z.
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountCreateOrConnectWithoutJointAccountRequestsInputSchema = z.object({
+});
+const FinancialAccountCreateOrConnectWithoutJointAccountRequestsInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereUniqueInputSchema),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutJointAccountRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutJointAccountRequestsInputSchema)])
-}).strict();
-const UserUpsertWithoutCreatedJointAccountRequestsInputSchema = z.object({
+});
+const UserUpsertWithoutCreatedJointAccountRequestsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => UserUpdateWithoutCreatedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutCreatedJointAccountRequestsInputSchema)]),
   create: z.union([z.lazy(() => UserCreateWithoutCreatedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutCreatedJointAccountRequestsInputSchema)]),
   where: z.lazy(() => UserWhereInputSchema).optional()
-}).strict();
-const UserUpdateToOneWithWhereWithoutCreatedJointAccountRequestsInputSchema = z.object({
+});
+const UserUpdateToOneWithWhereWithoutCreatedJointAccountRequestsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereInputSchema).optional(),
   data: z.union([z.lazy(() => UserUpdateWithoutCreatedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutCreatedJointAccountRequestsInputSchema)])
-}).strict();
-const UserUpdateWithoutCreatedJointAccountRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUpdateWithoutCreatedJointAccountRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -9726,9 +9726,9 @@ const UserUpdateWithoutCreatedJointAccountRequestsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserUncheckedUpdateWithoutCreatedJointAccountRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUncheckedUpdateWithoutCreatedJointAccountRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -9748,18 +9748,18 @@ const UserUncheckedUpdateWithoutCreatedJointAccountRequestsInputSchema = z.objec
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserUpsertWithoutReceivedJointAccountRequestsInputSchema = z.object({
+});
+const UserUpsertWithoutReceivedJointAccountRequestsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => UserUpdateWithoutReceivedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutReceivedJointAccountRequestsInputSchema)]),
   create: z.union([z.lazy(() => UserCreateWithoutReceivedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutReceivedJointAccountRequestsInputSchema)]),
   where: z.lazy(() => UserWhereInputSchema).optional()
-}).strict();
-const UserUpdateToOneWithWhereWithoutReceivedJointAccountRequestsInputSchema = z.object({
+});
+const UserUpdateToOneWithWhereWithoutReceivedJointAccountRequestsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereInputSchema).optional(),
   data: z.union([z.lazy(() => UserUpdateWithoutReceivedJointAccountRequestsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutReceivedJointAccountRequestsInputSchema)])
-}).strict();
-const UserUpdateWithoutReceivedJointAccountRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUpdateWithoutReceivedJointAccountRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -9779,9 +9779,9 @@ const UserUpdateWithoutReceivedJointAccountRequestsInputSchema = z.object({
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserUncheckedUpdateWithoutReceivedJointAccountRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUncheckedUpdateWithoutReceivedJointAccountRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -9801,18 +9801,18 @@ const UserUncheckedUpdateWithoutReceivedJointAccountRequestsInputSchema = z.obje
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUpsertWithoutJointAccountRequestsInputSchema = z.object({
+});
+const FinancialAccountUpsertWithoutJointAccountRequestsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => FinancialAccountUpdateWithoutJointAccountRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutJointAccountRequestsInputSchema)]),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutJointAccountRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutJointAccountRequestsInputSchema)]),
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional()
-}).strict();
-const FinancialAccountUpdateToOneWithWhereWithoutJointAccountRequestsInputSchema = z.object({
+});
+const FinancialAccountUpdateToOneWithWhereWithoutJointAccountRequestsInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional(),
   data: z.union([z.lazy(() => FinancialAccountUpdateWithoutJointAccountRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutJointAccountRequestsInputSchema)])
-}).strict();
-const FinancialAccountUpdateWithoutJointAccountRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUpdateWithoutJointAccountRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -9835,9 +9835,9 @@ const FinancialAccountUpdateWithoutJointAccountRequestsInputSchema = z.object({
   transactions: z.lazy(() => TransactionUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateWithoutJointAccountRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUncheckedUpdateWithoutJointAccountRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -9860,9 +9860,9 @@ const FinancialAccountUncheckedUpdateWithoutJointAccountRequestsInputSchema = z.
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const UserCreateWithoutCreatedJointAccountModRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserCreateWithoutCreatedJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -9882,9 +9882,9 @@ const UserCreateWithoutCreatedJointAccountModRequestsInputSchema = z.object({
   receivedJointAccountRequests: z.lazy(() => JointAccountRequestCreateNestedManyWithoutRecipientInputSchema).optional(),
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserUncheckedCreateWithoutCreatedJointAccountModRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserUncheckedCreateWithoutCreatedJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -9904,13 +9904,13 @@ const UserUncheckedCreateWithoutCreatedJointAccountModRequestsInputSchema = z.ob
   receivedJointAccountRequests: z.lazy(() => JointAccountRequestUncheckedCreateNestedManyWithoutRecipientInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutUserInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserCreateOrConnectWithoutCreatedJointAccountModRequestsInputSchema = z.object({
+});
+const UserCreateOrConnectWithoutCreatedJointAccountModRequestsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => UserCreateWithoutCreatedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutCreatedJointAccountModRequestsInputSchema)])
-}).strict();
-const FinancialAccountCreateWithoutJointAccountModRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountCreateWithoutJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   number: z.string(),
   status: z.lazy(() => AccountStatusSchema).optional(),
@@ -9933,9 +9933,9 @@ const FinancialAccountCreateWithoutJointAccountModRequestsInputSchema = z.object
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedCreateWithoutJointAccountModRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountUncheckedCreateWithoutJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   name: z.string(),
   number: z.string(),
@@ -9958,13 +9958,13 @@ const FinancialAccountUncheckedCreateWithoutJointAccountModRequestsInputSchema =
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountCreateOrConnectWithoutJointAccountModRequestsInputSchema = z.object({
+});
+const FinancialAccountCreateOrConnectWithoutJointAccountModRequestsInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereUniqueInputSchema),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutJointAccountModRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutJointAccountModRequestsInputSchema)])
-}).strict();
-const TransactionCreateWithoutJointAccountModRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateWithoutJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -9990,9 +9990,9 @@ const TransactionCreateWithoutJointAccountModRequestsInputSchema = z.object({
   investment: z.lazy(() => InvestmentCreateNestedOneWithoutTransactionsInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionCreateNestedOneWithoutChildTransactionsInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionUncheckedCreateWithoutJointAccountModRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionUncheckedCreateWithoutJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -10018,43 +10018,43 @@ const TransactionUncheckedCreateWithoutJointAccountModRequestsInputSchema = z.ob
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   childTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionCreateOrConnectWithoutJointAccountModRequestsInputSchema = z.object({
+});
+const TransactionCreateOrConnectWithoutJointAccountModRequestsInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   create: z.union([z.lazy(() => TransactionCreateWithoutJointAccountModRequestsInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutJointAccountModRequestsInputSchema)])
-}).strict();
-const JointAccountModRequestApprovalCreateWithoutRequestInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestApprovalCreateWithoutRequestInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   approver: z.lazy(() => UserCreateNestedOneWithoutApprovedJointAccountModRequestsInputSchema)
-}).strict();
-const JointAccountModRequestApprovalUncheckedCreateWithoutRequestInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestApprovalUncheckedCreateWithoutRequestInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   approverId: z.string(),
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountModRequestApprovalCreateOrConnectWithoutRequestInputSchema = z.object({
+});
+const JointAccountModRequestApprovalCreateOrConnectWithoutRequestInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema),
   create: z.union([z.lazy(() => JointAccountModRequestApprovalCreateWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutRequestInputSchema)])
-}).strict();
-const JointAccountModRequestApprovalCreateManyRequestInputEnvelopeSchema = z.object({
+});
+const JointAccountModRequestApprovalCreateManyRequestInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => JointAccountModRequestApprovalCreateManyRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalCreateManyRequestInputSchema).array()])
-}).strict();
-const UserUpsertWithoutCreatedJointAccountModRequestsInputSchema = z.object({
+});
+const UserUpsertWithoutCreatedJointAccountModRequestsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => UserUpdateWithoutCreatedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutCreatedJointAccountModRequestsInputSchema)]),
   create: z.union([z.lazy(() => UserCreateWithoutCreatedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutCreatedJointAccountModRequestsInputSchema)]),
   where: z.lazy(() => UserWhereInputSchema).optional()
-}).strict();
-const UserUpdateToOneWithWhereWithoutCreatedJointAccountModRequestsInputSchema = z.object({
+});
+const UserUpdateToOneWithWhereWithoutCreatedJointAccountModRequestsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereInputSchema).optional(),
   data: z.union([z.lazy(() => UserUpdateWithoutCreatedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutCreatedJointAccountModRequestsInputSchema)])
-}).strict();
-const UserUpdateWithoutCreatedJointAccountModRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUpdateWithoutCreatedJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -10074,9 +10074,9 @@ const UserUpdateWithoutCreatedJointAccountModRequestsInputSchema = z.object({
   receivedJointAccountRequests: z.lazy(() => JointAccountRequestUpdateManyWithoutRecipientNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserUncheckedUpdateWithoutCreatedJointAccountModRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUncheckedUpdateWithoutCreatedJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -10096,18 +10096,18 @@ const UserUncheckedUpdateWithoutCreatedJointAccountModRequestsInputSchema = z.ob
   receivedJointAccountRequests: z.lazy(() => JointAccountRequestUncheckedUpdateManyWithoutRecipientNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutUserNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUpsertWithoutJointAccountModRequestsInputSchema = z.object({
+});
+const FinancialAccountUpsertWithoutJointAccountModRequestsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => FinancialAccountUpdateWithoutJointAccountModRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutJointAccountModRequestsInputSchema)]),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutJointAccountModRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutJointAccountModRequestsInputSchema)]),
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional()
-}).strict();
-const FinancialAccountUpdateToOneWithWhereWithoutJointAccountModRequestsInputSchema = z.object({
+});
+const FinancialAccountUpdateToOneWithWhereWithoutJointAccountModRequestsInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional(),
   data: z.union([z.lazy(() => FinancialAccountUpdateWithoutJointAccountModRequestsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutJointAccountModRequestsInputSchema)])
-}).strict();
-const FinancialAccountUpdateWithoutJointAccountModRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUpdateWithoutJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -10130,9 +10130,9 @@ const FinancialAccountUpdateWithoutJointAccountModRequestsInputSchema = z.object
   transactions: z.lazy(() => TransactionUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateWithoutJointAccountModRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUncheckedUpdateWithoutJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -10155,18 +10155,18 @@ const FinancialAccountUncheckedUpdateWithoutJointAccountModRequestsInputSchema =
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const TransactionUpsertWithoutJointAccountModRequestsInputSchema = z.object({
+});
+const TransactionUpsertWithoutJointAccountModRequestsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => TransactionUpdateWithoutJointAccountModRequestsInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutJointAccountModRequestsInputSchema)]),
   create: z.union([z.lazy(() => TransactionCreateWithoutJointAccountModRequestsInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutJointAccountModRequestsInputSchema)]),
   where: z.lazy(() => TransactionWhereInputSchema).optional()
-}).strict();
-const TransactionUpdateToOneWithWhereWithoutJointAccountModRequestsInputSchema = z.object({
+});
+const TransactionUpdateToOneWithWhereWithoutJointAccountModRequestsInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereInputSchema).optional(),
   data: z.union([z.lazy(() => TransactionUpdateWithoutJointAccountModRequestsInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutJointAccountModRequestsInputSchema)])
-}).strict();
-const TransactionUpdateWithoutJointAccountModRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUpdateWithoutJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -10192,9 +10192,9 @@ const TransactionUpdateWithoutJointAccountModRequestsInputSchema = z.object({
   investment: z.lazy(() => InvestmentUpdateOneWithoutTransactionsNestedInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionUpdateOneWithoutChildTransactionsNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateWithoutJointAccountModRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateWithoutJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -10220,22 +10220,22 @@ const TransactionUncheckedUpdateWithoutJointAccountModRequestsInputSchema = z.ob
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutRequestInputSchema = z.object({
+});
+const JointAccountModRequestApprovalUpsertWithWhereUniqueWithoutRequestInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema),
   update: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateWithoutRequestInputSchema)]),
   create: z.union([z.lazy(() => JointAccountModRequestApprovalCreateWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedCreateWithoutRequestInputSchema)])
-}).strict();
-const JointAccountModRequestApprovalUpdateWithWhereUniqueWithoutRequestInputSchema = z.object({
+});
+const JointAccountModRequestApprovalUpdateWithWhereUniqueWithoutRequestInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestApprovalWhereUniqueInputSchema),
   data: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateWithoutRequestInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateWithoutRequestInputSchema)])
-}).strict();
-const JointAccountModRequestApprovalUpdateManyWithWhereWithoutRequestInputSchema = z.object({
+});
+const JointAccountModRequestApprovalUpdateManyWithWhereWithoutRequestInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestApprovalScalarWhereInputSchema),
   data: z.union([z.lazy(() => JointAccountModRequestApprovalUpdateManyMutationInputSchema), z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutRequestInputSchema)])
-}).strict();
-const JointAccountModRequestCreateWithoutApprovalsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestCreateWithoutApprovalsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -10243,9 +10243,9 @@ const JointAccountModRequestCreateWithoutApprovalsInputSchema = z.object({
   creator: z.lazy(() => UserCreateNestedOneWithoutCreatedJointAccountModRequestsInputSchema),
   account: z.lazy(() => FinancialAccountCreateNestedOneWithoutJointAccountModRequestsInputSchema),
   transaction: z.lazy(() => TransactionCreateNestedOneWithoutJointAccountModRequestsInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedCreateWithoutApprovalsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestUncheckedCreateWithoutApprovalsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   financialAccountId: z.string(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
@@ -10253,13 +10253,13 @@ const JointAccountModRequestUncheckedCreateWithoutApprovalsInputSchema = z.objec
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountModRequestCreateOrConnectWithoutApprovalsInputSchema = z.object({
+});
+const JointAccountModRequestCreateOrConnectWithoutApprovalsInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestWhereUniqueInputSchema),
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutApprovalsInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutApprovalsInputSchema)])
-}).strict();
-const UserCreateWithoutApprovedJointAccountModRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserCreateWithoutApprovedJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -10279,9 +10279,9 @@ const UserCreateWithoutApprovedJointAccountModRequestsInputSchema = z.object({
   receivedJointAccountRequests: z.lazy(() => JointAccountRequestCreateNestedManyWithoutRecipientInputSchema).optional(),
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutUserInputSchema).optional()
-}).strict();
-const UserUncheckedCreateWithoutApprovedJointAccountModRequestsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserUncheckedCreateWithoutApprovedJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -10301,22 +10301,22 @@ const UserUncheckedCreateWithoutApprovedJointAccountModRequestsInputSchema = z.o
   receivedJointAccountRequests: z.lazy(() => JointAccountRequestUncheckedCreateNestedManyWithoutRecipientInputSchema).optional(),
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutCreatorInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutUserInputSchema).optional()
-}).strict();
-const UserCreateOrConnectWithoutApprovedJointAccountModRequestsInputSchema = z.object({
+});
+const UserCreateOrConnectWithoutApprovedJointAccountModRequestsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => UserCreateWithoutApprovedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutApprovedJointAccountModRequestsInputSchema)])
-}).strict();
-const JointAccountModRequestUpsertWithoutApprovalsInputSchema = z.object({
+});
+const JointAccountModRequestUpsertWithoutApprovalsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => JointAccountModRequestUpdateWithoutApprovalsInputSchema), z.lazy(() => JointAccountModRequestUncheckedUpdateWithoutApprovalsInputSchema)]),
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutApprovalsInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutApprovalsInputSchema)]),
   where: z.lazy(() => JointAccountModRequestWhereInputSchema).optional()
-}).strict();
-const JointAccountModRequestUpdateToOneWithWhereWithoutApprovalsInputSchema = z.object({
+});
+const JointAccountModRequestUpdateToOneWithWhereWithoutApprovalsInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestWhereInputSchema).optional(),
   data: z.union([z.lazy(() => JointAccountModRequestUpdateWithoutApprovalsInputSchema), z.lazy(() => JointAccountModRequestUncheckedUpdateWithoutApprovalsInputSchema)])
-}).strict();
-const JointAccountModRequestUpdateWithoutApprovalsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUpdateWithoutApprovalsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
@@ -10324,9 +10324,9 @@ const JointAccountModRequestUpdateWithoutApprovalsInputSchema = z.object({
   creator: z.lazy(() => UserUpdateOneRequiredWithoutCreatedJointAccountModRequestsNestedInputSchema).optional(),
   account: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutJointAccountModRequestsNestedInputSchema).optional(),
   transaction: z.lazy(() => TransactionUpdateOneWithoutJointAccountModRequestsNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedUpdateWithoutApprovalsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUncheckedUpdateWithoutApprovalsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -10334,18 +10334,18 @@ const JointAccountModRequestUncheckedUpdateWithoutApprovalsInputSchema = z.objec
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const UserUpsertWithoutApprovedJointAccountModRequestsInputSchema = z.object({
+});
+const UserUpsertWithoutApprovedJointAccountModRequestsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => UserUpdateWithoutApprovedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutApprovedJointAccountModRequestsInputSchema)]),
   create: z.union([z.lazy(() => UserCreateWithoutApprovedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedCreateWithoutApprovedJointAccountModRequestsInputSchema)]),
   where: z.lazy(() => UserWhereInputSchema).optional()
-}).strict();
-const UserUpdateToOneWithWhereWithoutApprovedJointAccountModRequestsInputSchema = z.object({
+});
+const UserUpdateToOneWithWhereWithoutApprovedJointAccountModRequestsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereInputSchema).optional(),
   data: z.union([z.lazy(() => UserUpdateWithoutApprovedJointAccountModRequestsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutApprovedJointAccountModRequestsInputSchema)])
-}).strict();
-const UserUpdateWithoutApprovedJointAccountModRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUpdateWithoutApprovedJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -10365,9 +10365,9 @@ const UserUpdateWithoutApprovedJointAccountModRequestsInputSchema = z.object({
   receivedJointAccountRequests: z.lazy(() => JointAccountRequestUpdateManyWithoutRecipientNestedInputSchema).optional(),
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUpdateManyWithoutUserNestedInputSchema).optional()
-}).strict();
-const UserUncheckedUpdateWithoutApprovedJointAccountModRequestsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUncheckedUpdateWithoutApprovedJointAccountModRequestsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -10387,9 +10387,9 @@ const UserUncheckedUpdateWithoutApprovedJointAccountModRequestsInputSchema = z.o
   receivedJointAccountRequests: z.lazy(() => JointAccountRequestUncheckedUpdateManyWithoutRecipientNestedInputSchema).optional(),
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema).optional(),
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutUserNestedInputSchema).optional()
-}).strict();
-const AccountUserCreateWithoutInvestmentsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserCreateWithoutInvestmentsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
   ownership: z.number().optional(),
   autosign: z.boolean().optional(),
@@ -10398,9 +10398,9 @@ const AccountUserCreateWithoutInvestmentsInputSchema = z.object({
   user: z.lazy(() => UserCreateNestedOneWithoutAccountMembershipsInputSchema),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutAccountUsersInputSchema),
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutInitiatorInputSchema).optional()
-}).strict();
-const AccountUserUncheckedCreateWithoutInvestmentsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserUncheckedCreateWithoutInvestmentsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string(),
   financialAccountId: z.string(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
@@ -10409,13 +10409,13 @@ const AccountUserUncheckedCreateWithoutInvestmentsInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInitiatorInputSchema).optional()
-}).strict();
-const AccountUserCreateOrConnectWithoutInvestmentsInputSchema = z.object({
+});
+const AccountUserCreateOrConnectWithoutInvestmentsInputSchema = z.strictObject({
   where: z.lazy(() => AccountUserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => AccountUserCreateWithoutInvestmentsInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutInvestmentsInputSchema)])
-}).strict();
-const TransactionCreateWithoutInvestmentInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateWithoutInvestmentInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -10441,9 +10441,9 @@ const TransactionCreateWithoutInvestmentInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutTransactionInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionCreateNestedOneWithoutChildTransactionsInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionUncheckedCreateWithoutInvestmentInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionUncheckedCreateWithoutInvestmentInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -10469,16 +10469,16 @@ const TransactionUncheckedCreateWithoutInvestmentInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutTransactionInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionCreateOrConnectWithoutInvestmentInputSchema = z.object({
+});
+const TransactionCreateOrConnectWithoutInvestmentInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   create: z.union([z.lazy(() => TransactionCreateWithoutInvestmentInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema)])
-}).strict();
-const TransactionCreateManyInvestmentInputEnvelopeSchema = z.object({
+});
+const TransactionCreateManyInvestmentInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => TransactionCreateManyInvestmentInputSchema), z.lazy(() => TransactionCreateManyInvestmentInputSchema).array()])
-}).strict();
-const FinancialAccountCreateWithoutInvestmentsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountCreateWithoutInvestmentsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   number: z.string(),
   status: z.lazy(() => AccountStatusSchema).optional(),
@@ -10501,9 +10501,9 @@ const FinancialAccountCreateWithoutInvestmentsInputSchema = z.object({
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionCreateNestedManyWithoutRecipientAccountInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedCreateWithoutInvestmentsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountUncheckedCreateWithoutInvestmentsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   name: z.string(),
   number: z.string(),
@@ -10526,13 +10526,13 @@ const FinancialAccountUncheckedCreateWithoutInvestmentsInputSchema = z.object({
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutRecipientAccountInputSchema).optional()
-}).strict();
-const FinancialAccountCreateOrConnectWithoutInvestmentsInputSchema = z.object({
+});
+const FinancialAccountCreateOrConnectWithoutInvestmentsInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereUniqueInputSchema),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutInvestmentsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutInvestmentsInputSchema)])
-}).strict();
-const ProfitCreateWithoutInvestmentInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const ProfitCreateWithoutInvestmentInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   number: z.number().int(),
   intendedAmount: z.number(),
   actualAmount: z.number(),
@@ -10540,9 +10540,9 @@ const ProfitCreateWithoutInvestmentInputSchema = z.object({
   distributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const ProfitUncheckedCreateWithoutInvestmentInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const ProfitUncheckedCreateWithoutInvestmentInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   number: z.number().int(),
   intendedAmount: z.number(),
   actualAmount: z.number(),
@@ -10550,25 +10550,25 @@ const ProfitUncheckedCreateWithoutInvestmentInputSchema = z.object({
   distributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const ProfitCreateOrConnectWithoutInvestmentInputSchema = z.object({
+});
+const ProfitCreateOrConnectWithoutInvestmentInputSchema = z.strictObject({
   where: z.lazy(() => ProfitWhereUniqueInputSchema),
   create: z.union([z.lazy(() => ProfitCreateWithoutInvestmentInputSchema), z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema)])
-}).strict();
-const ProfitCreateManyInvestmentInputEnvelopeSchema = z.object({
+});
+const ProfitCreateManyInvestmentInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => ProfitCreateManyInvestmentInputSchema), z.lazy(() => ProfitCreateManyInvestmentInputSchema).array()])
-}).strict();
-const AccountUserUpsertWithoutInvestmentsInputSchema = z.object({
+});
+const AccountUserUpsertWithoutInvestmentsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => AccountUserUpdateWithoutInvestmentsInputSchema), z.lazy(() => AccountUserUncheckedUpdateWithoutInvestmentsInputSchema)]),
   create: z.union([z.lazy(() => AccountUserCreateWithoutInvestmentsInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutInvestmentsInputSchema)]),
   where: z.lazy(() => AccountUserWhereInputSchema).optional()
-}).strict();
-const AccountUserUpdateToOneWithWhereWithoutInvestmentsInputSchema = z.object({
+});
+const AccountUserUpdateToOneWithWhereWithoutInvestmentsInputSchema = z.strictObject({
   where: z.lazy(() => AccountUserWhereInputSchema).optional(),
   data: z.union([z.lazy(() => AccountUserUpdateWithoutInvestmentsInputSchema), z.lazy(() => AccountUserUncheckedUpdateWithoutInvestmentsInputSchema)])
-}).strict();
-const AccountUserUpdateWithoutInvestmentsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUpdateWithoutInvestmentsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
   ownership: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   autosign: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -10577,9 +10577,9 @@ const AccountUserUpdateWithoutInvestmentsInputSchema = z.object({
   user: z.lazy(() => UserUpdateOneRequiredWithoutAccountMembershipsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutAccountUsersNestedInputSchema).optional(),
   transactions: z.lazy(() => TransactionUpdateManyWithoutInitiatorNestedInputSchema).optional()
-}).strict();
-const AccountUserUncheckedUpdateWithoutInvestmentsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUncheckedUpdateWithoutInvestmentsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   userId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
@@ -10588,31 +10588,31 @@ const AccountUserUncheckedUpdateWithoutInvestmentsInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInitiatorNestedInputSchema).optional()
-}).strict();
-const TransactionUpsertWithWhereUniqueWithoutInvestmentInputSchema = z.object({
+});
+const TransactionUpsertWithWhereUniqueWithoutInvestmentInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   update: z.union([z.lazy(() => TransactionUpdateWithoutInvestmentInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutInvestmentInputSchema)]),
   create: z.union([z.lazy(() => TransactionCreateWithoutInvestmentInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutInvestmentInputSchema)])
-}).strict();
-const TransactionUpdateWithWhereUniqueWithoutInvestmentInputSchema = z.object({
+});
+const TransactionUpdateWithWhereUniqueWithoutInvestmentInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   data: z.union([z.lazy(() => TransactionUpdateWithoutInvestmentInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutInvestmentInputSchema)])
-}).strict();
-const TransactionUpdateManyWithWhereWithoutInvestmentInputSchema = z.object({
+});
+const TransactionUpdateManyWithWhereWithoutInvestmentInputSchema = z.strictObject({
   where: z.lazy(() => TransactionScalarWhereInputSchema),
   data: z.union([z.lazy(() => TransactionUpdateManyMutationInputSchema), z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentInputSchema)])
-}).strict();
-const FinancialAccountUpsertWithoutInvestmentsInputSchema = z.object({
+});
+const FinancialAccountUpsertWithoutInvestmentsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => FinancialAccountUpdateWithoutInvestmentsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutInvestmentsInputSchema)]),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutInvestmentsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutInvestmentsInputSchema)]),
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional()
-}).strict();
-const FinancialAccountUpdateToOneWithWhereWithoutInvestmentsInputSchema = z.object({
+});
+const FinancialAccountUpdateToOneWithWhereWithoutInvestmentsInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional(),
   data: z.union([z.lazy(() => FinancialAccountUpdateWithoutInvestmentsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutInvestmentsInputSchema)])
-}).strict();
-const FinancialAccountUpdateWithoutInvestmentsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUpdateWithoutInvestmentsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -10635,9 +10635,9 @@ const FinancialAccountUpdateWithoutInvestmentsInputSchema = z.object({
   notifications: z.lazy(() => NotificationUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   transactions: z.lazy(() => TransactionUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUpdateManyWithoutRecipientAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateWithoutInvestmentsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUncheckedUpdateWithoutInvestmentsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -10660,21 +10660,21 @@ const FinancialAccountUncheckedUpdateWithoutInvestmentsInputSchema = z.object({
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema).optional()
-}).strict();
-const ProfitUpsertWithWhereUniqueWithoutInvestmentInputSchema = z.object({
+});
+const ProfitUpsertWithWhereUniqueWithoutInvestmentInputSchema = z.strictObject({
   where: z.lazy(() => ProfitWhereUniqueInputSchema),
   update: z.union([z.lazy(() => ProfitUpdateWithoutInvestmentInputSchema), z.lazy(() => ProfitUncheckedUpdateWithoutInvestmentInputSchema)]),
   create: z.union([z.lazy(() => ProfitCreateWithoutInvestmentInputSchema), z.lazy(() => ProfitUncheckedCreateWithoutInvestmentInputSchema)])
-}).strict();
-const ProfitUpdateWithWhereUniqueWithoutInvestmentInputSchema = z.object({
+});
+const ProfitUpdateWithWhereUniqueWithoutInvestmentInputSchema = z.strictObject({
   where: z.lazy(() => ProfitWhereUniqueInputSchema),
   data: z.union([z.lazy(() => ProfitUpdateWithoutInvestmentInputSchema), z.lazy(() => ProfitUncheckedUpdateWithoutInvestmentInputSchema)])
-}).strict();
-const ProfitUpdateManyWithWhereWithoutInvestmentInputSchema = z.object({
+});
+const ProfitUpdateManyWithWhereWithoutInvestmentInputSchema = z.strictObject({
   where: z.lazy(() => ProfitScalarWhereInputSchema),
   data: z.union([z.lazy(() => ProfitUpdateManyMutationInputSchema), z.lazy(() => ProfitUncheckedUpdateManyWithoutInvestmentInputSchema)])
-}).strict();
-const ProfitScalarWhereInputSchema = z.object({
+});
+const ProfitScalarWhereInputSchema = z.strictObject({
   AND: z.union([z.lazy(() => ProfitScalarWhereInputSchema), z.lazy(() => ProfitScalarWhereInputSchema).array()]).optional(),
   OR: z.lazy(() => ProfitScalarWhereInputSchema).array().optional(),
   NOT: z.union([z.lazy(() => ProfitScalarWhereInputSchema), z.lazy(() => ProfitScalarWhereInputSchema).array()]).optional(),
@@ -10687,9 +10687,9 @@ const ProfitScalarWhereInputSchema = z.object({
   distributedAt: z.union([z.lazy(() => DateTimeNullableFilterSchema), z.coerce.date()]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterSchema), z.coerce.date()]).optional()
-}).strict();
-const InvestmentCreateWithoutProfitsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentCreateWithoutProfitsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   deposit: z.number(),
   investmentName: z.string(),
   totalProfit: z.number().optional(),
@@ -10714,9 +10714,9 @@ const InvestmentCreateWithoutProfitsInputSchema = z.object({
   investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutInvestmentInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema)
-}).strict();
-const InvestmentUncheckedCreateWithoutProfitsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentUncheckedCreateWithoutProfitsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string(),
   investorId: z.string(),
   deposit: z.number(),
@@ -10741,22 +10741,22 @@ const InvestmentUncheckedCreateWithoutProfitsInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
-}).strict();
-const InvestmentCreateOrConnectWithoutProfitsInputSchema = z.object({
+});
+const InvestmentCreateOrConnectWithoutProfitsInputSchema = z.strictObject({
   where: z.lazy(() => InvestmentWhereUniqueInputSchema),
   create: z.union([z.lazy(() => InvestmentCreateWithoutProfitsInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutProfitsInputSchema)])
-}).strict();
-const InvestmentUpsertWithoutProfitsInputSchema = z.object({
+});
+const InvestmentUpsertWithoutProfitsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => InvestmentUpdateWithoutProfitsInputSchema), z.lazy(() => InvestmentUncheckedUpdateWithoutProfitsInputSchema)]),
   create: z.union([z.lazy(() => InvestmentCreateWithoutProfitsInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutProfitsInputSchema)]),
   where: z.lazy(() => InvestmentWhereInputSchema).optional()
-}).strict();
-const InvestmentUpdateToOneWithWhereWithoutProfitsInputSchema = z.object({
+});
+const InvestmentUpdateToOneWithWhereWithoutProfitsInputSchema = z.strictObject({
   where: z.lazy(() => InvestmentWhereInputSchema).optional(),
   data: z.union([z.lazy(() => InvestmentUpdateWithoutProfitsInputSchema), z.lazy(() => InvestmentUncheckedUpdateWithoutProfitsInputSchema)])
-}).strict();
-const InvestmentUpdateWithoutProfitsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUpdateWithoutProfitsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   investmentName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   totalProfit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -10781,9 +10781,9 @@ const InvestmentUpdateWithoutProfitsInputSchema = z.object({
   investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
   transactions: z.lazy(() => TransactionUpdateManyWithoutInvestmentNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional()
-}).strict();
-const InvestmentUncheckedUpdateWithoutProfitsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUncheckedUpdateWithoutProfitsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   investorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -10808,9 +10808,9 @@ const InvestmentUncheckedUpdateWithoutProfitsInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
-}).strict();
-const AccountUserCreateWithoutTransactionsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserCreateWithoutTransactionsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
   ownership: z.number().optional(),
   autosign: z.boolean().optional(),
@@ -10819,9 +10819,9 @@ const AccountUserCreateWithoutTransactionsInputSchema = z.object({
   user: z.lazy(() => UserCreateNestedOneWithoutAccountMembershipsInputSchema),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutAccountUsersInputSchema),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutInvestorInputSchema).optional()
-}).strict();
-const AccountUserUncheckedCreateWithoutTransactionsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserUncheckedCreateWithoutTransactionsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string(),
   financialAccountId: z.string(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
@@ -10830,13 +10830,13 @@ const AccountUserUncheckedCreateWithoutTransactionsInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutInvestorInputSchema).optional()
-}).strict();
-const AccountUserCreateOrConnectWithoutTransactionsInputSchema = z.object({
+});
+const AccountUserCreateOrConnectWithoutTransactionsInputSchema = z.strictObject({
   where: z.lazy(() => AccountUserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => AccountUserCreateWithoutTransactionsInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutTransactionsInputSchema)])
-}).strict();
-const FinancialAccountCreateWithoutTransactionsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountCreateWithoutTransactionsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   number: z.string(),
   status: z.lazy(() => AccountStatusSchema).optional(),
@@ -10859,9 +10859,9 @@ const FinancialAccountCreateWithoutTransactionsInputSchema = z.object({
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedCreateWithoutTransactionsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountUncheckedCreateWithoutTransactionsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   name: z.string(),
   number: z.string(),
@@ -10884,13 +10884,13 @@ const FinancialAccountUncheckedCreateWithoutTransactionsInputSchema = z.object({
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountCreateOrConnectWithoutTransactionsInputSchema = z.object({
+});
+const FinancialAccountCreateOrConnectWithoutTransactionsInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereUniqueInputSchema),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutTransactionsInputSchema)])
-}).strict();
-const FinancialAccountCreateWithoutReceivedTransactionsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountCreateWithoutReceivedTransactionsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   number: z.string(),
   status: z.lazy(() => AccountStatusSchema).optional(),
@@ -10913,9 +10913,9 @@ const FinancialAccountCreateWithoutReceivedTransactionsInputSchema = z.object({
   notifications: z.lazy(() => NotificationCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedCreateWithoutReceivedTransactionsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountUncheckedCreateWithoutReceivedTransactionsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   name: z.string(),
   number: z.string(),
@@ -10938,13 +10938,13 @@ const FinancialAccountUncheckedCreateWithoutReceivedTransactionsInputSchema = z.
   notifications: z.lazy(() => NotificationUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountCreateOrConnectWithoutReceivedTransactionsInputSchema = z.object({
+});
+const FinancialAccountCreateOrConnectWithoutReceivedTransactionsInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereUniqueInputSchema),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutReceivedTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutReceivedTransactionsInputSchema)])
-}).strict();
-const InvestmentCreateWithoutTransactionsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentCreateWithoutTransactionsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   deposit: z.number(),
   investmentName: z.string(),
   totalProfit: z.number().optional(),
@@ -10969,9 +10969,9 @@ const InvestmentCreateWithoutTransactionsInputSchema = z.object({
   investor: z.lazy(() => AccountUserCreateNestedOneWithoutInvestmentsInputSchema),
   financialAccount: z.lazy(() => FinancialAccountCreateNestedOneWithoutInvestmentsInputSchema),
   profits: z.lazy(() => ProfitCreateNestedManyWithoutInvestmentInputSchema).optional()
-}).strict();
-const InvestmentUncheckedCreateWithoutTransactionsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentUncheckedCreateWithoutTransactionsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string(),
   investorId: z.string(),
   deposit: z.number(),
@@ -10996,13 +10996,13 @@ const InvestmentUncheckedCreateWithoutTransactionsInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   profits: z.lazy(() => ProfitUncheckedCreateNestedManyWithoutInvestmentInputSchema).optional()
-}).strict();
-const InvestmentCreateOrConnectWithoutTransactionsInputSchema = z.object({
+});
+const InvestmentCreateOrConnectWithoutTransactionsInputSchema = z.strictObject({
   where: z.lazy(() => InvestmentWhereUniqueInputSchema),
   create: z.union([z.lazy(() => InvestmentCreateWithoutTransactionsInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutTransactionsInputSchema)])
-}).strict();
-const JointAccountModRequestCreateWithoutTransactionInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestCreateWithoutTransactionInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -11010,9 +11010,9 @@ const JointAccountModRequestCreateWithoutTransactionInputSchema = z.object({
   creator: z.lazy(() => UserCreateNestedOneWithoutCreatedJointAccountModRequestsInputSchema),
   account: z.lazy(() => FinancialAccountCreateNestedOneWithoutJointAccountModRequestsInputSchema),
   approvals: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutRequestInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   financialAccountId: z.string(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
@@ -11020,16 +11020,16 @@ const JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema = z.obj
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutRequestInputSchema).optional()
-}).strict();
-const JointAccountModRequestCreateOrConnectWithoutTransactionInputSchema = z.object({
+});
+const JointAccountModRequestCreateOrConnectWithoutTransactionInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestWhereUniqueInputSchema),
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema)])
-}).strict();
-const JointAccountModRequestCreateManyTransactionInputEnvelopeSchema = z.object({
+});
+const JointAccountModRequestCreateManyTransactionInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => JointAccountModRequestCreateManyTransactionInputSchema), z.lazy(() => JointAccountModRequestCreateManyTransactionInputSchema).array()])
-}).strict();
-const TransactionCreateWithoutChildTransactionsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateWithoutChildTransactionsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -11055,9 +11055,9 @@ const TransactionCreateWithoutChildTransactionsInputSchema = z.object({
   investment: z.lazy(() => InvestmentCreateNestedOneWithoutTransactionsInputSchema).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutTransactionInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionCreateNestedOneWithoutChildTransactionsInputSchema).optional()
-}).strict();
-const TransactionUncheckedCreateWithoutChildTransactionsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionUncheckedCreateWithoutChildTransactionsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -11083,13 +11083,13 @@ const TransactionUncheckedCreateWithoutChildTransactionsInputSchema = z.object({
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutTransactionInputSchema).optional()
-}).strict();
-const TransactionCreateOrConnectWithoutChildTransactionsInputSchema = z.object({
+});
+const TransactionCreateOrConnectWithoutChildTransactionsInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   create: z.union([z.lazy(() => TransactionCreateWithoutChildTransactionsInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutChildTransactionsInputSchema)])
-}).strict();
-const TransactionCreateWithoutParentTransactionInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateWithoutParentTransactionInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -11115,9 +11115,9 @@ const TransactionCreateWithoutParentTransactionInputSchema = z.object({
   investment: z.lazy(() => InvestmentCreateNestedOneWithoutTransactionsInputSchema).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutTransactionInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionUncheckedCreateWithoutParentTransactionInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionUncheckedCreateWithoutParentTransactionInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -11143,25 +11143,25 @@ const TransactionUncheckedCreateWithoutParentTransactionInputSchema = z.object({
   updatedAt: z.coerce.date().optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutTransactionInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutParentTransactionInputSchema).optional()
-}).strict();
-const TransactionCreateOrConnectWithoutParentTransactionInputSchema = z.object({
+});
+const TransactionCreateOrConnectWithoutParentTransactionInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   create: z.union([z.lazy(() => TransactionCreateWithoutParentTransactionInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutParentTransactionInputSchema)])
-}).strict();
-const TransactionCreateManyParentTransactionInputEnvelopeSchema = z.object({
+});
+const TransactionCreateManyParentTransactionInputEnvelopeSchema = z.strictObject({
   data: z.union([z.lazy(() => TransactionCreateManyParentTransactionInputSchema), z.lazy(() => TransactionCreateManyParentTransactionInputSchema).array()])
-}).strict();
-const AccountUserUpsertWithoutTransactionsInputSchema = z.object({
+});
+const AccountUserUpsertWithoutTransactionsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => AccountUserUpdateWithoutTransactionsInputSchema), z.lazy(() => AccountUserUncheckedUpdateWithoutTransactionsInputSchema)]),
   create: z.union([z.lazy(() => AccountUserCreateWithoutTransactionsInputSchema), z.lazy(() => AccountUserUncheckedCreateWithoutTransactionsInputSchema)]),
   where: z.lazy(() => AccountUserWhereInputSchema).optional()
-}).strict();
-const AccountUserUpdateToOneWithWhereWithoutTransactionsInputSchema = z.object({
+});
+const AccountUserUpdateToOneWithWhereWithoutTransactionsInputSchema = z.strictObject({
   where: z.lazy(() => AccountUserWhereInputSchema).optional(),
   data: z.union([z.lazy(() => AccountUserUpdateWithoutTransactionsInputSchema), z.lazy(() => AccountUserUncheckedUpdateWithoutTransactionsInputSchema)])
-}).strict();
-const AccountUserUpdateWithoutTransactionsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUpdateWithoutTransactionsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
   ownership: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   autosign: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -11170,9 +11170,9 @@ const AccountUserUpdateWithoutTransactionsInputSchema = z.object({
   user: z.lazy(() => UserUpdateOneRequiredWithoutAccountMembershipsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutAccountUsersNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutInvestorNestedInputSchema).optional()
-}).strict();
-const AccountUserUncheckedUpdateWithoutTransactionsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUncheckedUpdateWithoutTransactionsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   userId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
@@ -11181,18 +11181,18 @@ const AccountUserUncheckedUpdateWithoutTransactionsInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutInvestorNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUpsertWithoutTransactionsInputSchema = z.object({
+});
+const FinancialAccountUpsertWithoutTransactionsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => FinancialAccountUpdateWithoutTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutTransactionsInputSchema)]),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutTransactionsInputSchema)]),
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional()
-}).strict();
-const FinancialAccountUpdateToOneWithWhereWithoutTransactionsInputSchema = z.object({
+});
+const FinancialAccountUpdateToOneWithWhereWithoutTransactionsInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional(),
   data: z.union([z.lazy(() => FinancialAccountUpdateWithoutTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutTransactionsInputSchema)])
-}).strict();
-const FinancialAccountUpdateWithoutTransactionsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUpdateWithoutTransactionsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -11215,9 +11215,9 @@ const FinancialAccountUpdateWithoutTransactionsInputSchema = z.object({
   notifications: z.lazy(() => NotificationUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateWithoutTransactionsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUncheckedUpdateWithoutTransactionsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -11240,18 +11240,18 @@ const FinancialAccountUncheckedUpdateWithoutTransactionsInputSchema = z.object({
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUpsertWithoutReceivedTransactionsInputSchema = z.object({
+});
+const FinancialAccountUpsertWithoutReceivedTransactionsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => FinancialAccountUpdateWithoutReceivedTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutReceivedTransactionsInputSchema)]),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutReceivedTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutReceivedTransactionsInputSchema)]),
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional()
-}).strict();
-const FinancialAccountUpdateToOneWithWhereWithoutReceivedTransactionsInputSchema = z.object({
+});
+const FinancialAccountUpdateToOneWithWhereWithoutReceivedTransactionsInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional(),
   data: z.union([z.lazy(() => FinancialAccountUpdateWithoutReceivedTransactionsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutReceivedTransactionsInputSchema)])
-}).strict();
-const FinancialAccountUpdateWithoutReceivedTransactionsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUpdateWithoutReceivedTransactionsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -11274,9 +11274,9 @@ const FinancialAccountUpdateWithoutReceivedTransactionsInputSchema = z.object({
   notifications: z.lazy(() => NotificationUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   transactions: z.lazy(() => TransactionUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateWithoutReceivedTransactionsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUncheckedUpdateWithoutReceivedTransactionsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -11299,18 +11299,18 @@ const FinancialAccountUncheckedUpdateWithoutReceivedTransactionsInputSchema = z.
   notifications: z.lazy(() => NotificationUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const InvestmentUpsertWithoutTransactionsInputSchema = z.object({
+});
+const InvestmentUpsertWithoutTransactionsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => InvestmentUpdateWithoutTransactionsInputSchema), z.lazy(() => InvestmentUncheckedUpdateWithoutTransactionsInputSchema)]),
   create: z.union([z.lazy(() => InvestmentCreateWithoutTransactionsInputSchema), z.lazy(() => InvestmentUncheckedCreateWithoutTransactionsInputSchema)]),
   where: z.lazy(() => InvestmentWhereInputSchema).optional()
-}).strict();
-const InvestmentUpdateToOneWithWhereWithoutTransactionsInputSchema = z.object({
+});
+const InvestmentUpdateToOneWithWhereWithoutTransactionsInputSchema = z.strictObject({
   where: z.lazy(() => InvestmentWhereInputSchema).optional(),
   data: z.union([z.lazy(() => InvestmentUpdateWithoutTransactionsInputSchema), z.lazy(() => InvestmentUncheckedUpdateWithoutTransactionsInputSchema)])
-}).strict();
-const InvestmentUpdateWithoutTransactionsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUpdateWithoutTransactionsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   investmentName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   totalProfit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -11335,9 +11335,9 @@ const InvestmentUpdateWithoutTransactionsInputSchema = z.object({
   investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
   profits: z.lazy(() => ProfitUpdateManyWithoutInvestmentNestedInputSchema).optional()
-}).strict();
-const InvestmentUncheckedUpdateWithoutTransactionsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUncheckedUpdateWithoutTransactionsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   investorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -11362,31 +11362,31 @@ const InvestmentUncheckedUpdateWithoutTransactionsInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   profits: z.lazy(() => ProfitUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestUpsertWithWhereUniqueWithoutTransactionInputSchema = z.object({
+});
+const JointAccountModRequestUpsertWithWhereUniqueWithoutTransactionInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestWhereUniqueInputSchema),
   update: z.union([z.lazy(() => JointAccountModRequestUpdateWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUncheckedUpdateWithoutTransactionInputSchema)]),
   create: z.union([z.lazy(() => JointAccountModRequestCreateWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUncheckedCreateWithoutTransactionInputSchema)])
-}).strict();
-const JointAccountModRequestUpdateWithWhereUniqueWithoutTransactionInputSchema = z.object({
+});
+const JointAccountModRequestUpdateWithWhereUniqueWithoutTransactionInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestWhereUniqueInputSchema),
   data: z.union([z.lazy(() => JointAccountModRequestUpdateWithoutTransactionInputSchema), z.lazy(() => JointAccountModRequestUncheckedUpdateWithoutTransactionInputSchema)])
-}).strict();
-const JointAccountModRequestUpdateManyWithWhereWithoutTransactionInputSchema = z.object({
+});
+const JointAccountModRequestUpdateManyWithWhereWithoutTransactionInputSchema = z.strictObject({
   where: z.lazy(() => JointAccountModRequestScalarWhereInputSchema),
   data: z.union([z.lazy(() => JointAccountModRequestUpdateManyMutationInputSchema), z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutTransactionInputSchema)])
-}).strict();
-const TransactionUpsertWithoutChildTransactionsInputSchema = z.object({
+});
+const TransactionUpsertWithoutChildTransactionsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => TransactionUpdateWithoutChildTransactionsInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutChildTransactionsInputSchema)]),
   create: z.union([z.lazy(() => TransactionCreateWithoutChildTransactionsInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutChildTransactionsInputSchema)]),
   where: z.lazy(() => TransactionWhereInputSchema).optional()
-}).strict();
-const TransactionUpdateToOneWithWhereWithoutChildTransactionsInputSchema = z.object({
+});
+const TransactionUpdateToOneWithWhereWithoutChildTransactionsInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereInputSchema).optional(),
   data: z.union([z.lazy(() => TransactionUpdateWithoutChildTransactionsInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutChildTransactionsInputSchema)])
-}).strict();
-const TransactionUpdateWithoutChildTransactionsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUpdateWithoutChildTransactionsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -11412,9 +11412,9 @@ const TransactionUpdateWithoutChildTransactionsInputSchema = z.object({
   investment: z.lazy(() => InvestmentUpdateOneWithoutTransactionsNestedInputSchema).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionUpdateOneWithoutChildTransactionsNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateWithoutChildTransactionsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateWithoutChildTransactionsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -11440,22 +11440,22 @@ const TransactionUncheckedUpdateWithoutChildTransactionsInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUpsertWithWhereUniqueWithoutParentTransactionInputSchema = z.object({
+});
+const TransactionUpsertWithWhereUniqueWithoutParentTransactionInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   update: z.union([z.lazy(() => TransactionUpdateWithoutParentTransactionInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutParentTransactionInputSchema)]),
   create: z.union([z.lazy(() => TransactionCreateWithoutParentTransactionInputSchema), z.lazy(() => TransactionUncheckedCreateWithoutParentTransactionInputSchema)])
-}).strict();
-const TransactionUpdateWithWhereUniqueWithoutParentTransactionInputSchema = z.object({
+});
+const TransactionUpdateWithWhereUniqueWithoutParentTransactionInputSchema = z.strictObject({
   where: z.lazy(() => TransactionWhereUniqueInputSchema),
   data: z.union([z.lazy(() => TransactionUpdateWithoutParentTransactionInputSchema), z.lazy(() => TransactionUncheckedUpdateWithoutParentTransactionInputSchema)])
-}).strict();
-const TransactionUpdateManyWithWhereWithoutParentTransactionInputSchema = z.object({
+});
+const TransactionUpdateManyWithWhereWithoutParentTransactionInputSchema = z.strictObject({
   where: z.lazy(() => TransactionScalarWhereInputSchema),
   data: z.union([z.lazy(() => TransactionUpdateManyMutationInputSchema), z.lazy(() => TransactionUncheckedUpdateManyWithoutParentTransactionInputSchema)])
-}).strict();
-const UserCreateWithoutNotificationsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserCreateWithoutNotificationsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -11475,9 +11475,9 @@ const UserCreateWithoutNotificationsInputSchema = z.object({
   receivedJointAccountRequests: z.lazy(() => JointAccountRequestCreateNestedManyWithoutRecipientInputSchema).optional(),
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestCreateNestedManyWithoutCreatorInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserUncheckedCreateWithoutNotificationsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const UserUncheckedCreateWithoutNotificationsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   email: z.string(),
   emailVerified: z.boolean(),
@@ -11497,13 +11497,13 @@ const UserUncheckedCreateWithoutNotificationsInputSchema = z.object({
   receivedJointAccountRequests: z.lazy(() => JointAccountRequestUncheckedCreateNestedManyWithoutRecipientInputSchema).optional(),
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedCreateNestedManyWithoutCreatorInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedCreateNestedManyWithoutApproverInputSchema).optional()
-}).strict();
-const UserCreateOrConnectWithoutNotificationsInputSchema = z.object({
+});
+const UserCreateOrConnectWithoutNotificationsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereUniqueInputSchema),
   create: z.union([z.lazy(() => UserCreateWithoutNotificationsInputSchema), z.lazy(() => UserUncheckedCreateWithoutNotificationsInputSchema)])
-}).strict();
-const FinancialAccountCreateWithoutNotificationsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountCreateWithoutNotificationsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   number: z.string(),
   status: z.lazy(() => AccountStatusSchema).optional(),
@@ -11526,9 +11526,9 @@ const FinancialAccountCreateWithoutNotificationsInputSchema = z.object({
   transactions: z.lazy(() => TransactionCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedCreateWithoutNotificationsInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountUncheckedCreateWithoutNotificationsInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   name: z.string(),
   number: z.string(),
@@ -11551,22 +11551,22 @@ const FinancialAccountUncheckedCreateWithoutNotificationsInputSchema = z.object(
   transactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedCreateNestedManyWithoutRecipientAccountInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedCreateNestedManyWithoutFinancialAccountInputSchema).optional()
-}).strict();
-const FinancialAccountCreateOrConnectWithoutNotificationsInputSchema = z.object({
+});
+const FinancialAccountCreateOrConnectWithoutNotificationsInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereUniqueInputSchema),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutNotificationsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutNotificationsInputSchema)])
-}).strict();
-const UserUpsertWithoutNotificationsInputSchema = z.object({
+});
+const UserUpsertWithoutNotificationsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => UserUpdateWithoutNotificationsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutNotificationsInputSchema)]),
   create: z.union([z.lazy(() => UserCreateWithoutNotificationsInputSchema), z.lazy(() => UserUncheckedCreateWithoutNotificationsInputSchema)]),
   where: z.lazy(() => UserWhereInputSchema).optional()
-}).strict();
-const UserUpdateToOneWithWhereWithoutNotificationsInputSchema = z.object({
+});
+const UserUpdateToOneWithWhereWithoutNotificationsInputSchema = z.strictObject({
   where: z.lazy(() => UserWhereInputSchema).optional(),
   data: z.union([z.lazy(() => UserUpdateWithoutNotificationsInputSchema), z.lazy(() => UserUncheckedUpdateWithoutNotificationsInputSchema)])
-}).strict();
-const UserUpdateWithoutNotificationsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUpdateWithoutNotificationsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -11586,9 +11586,9 @@ const UserUpdateWithoutNotificationsInputSchema = z.object({
   receivedJointAccountRequests: z.lazy(() => JointAccountRequestUpdateManyWithoutRecipientNestedInputSchema).optional(),
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutCreatorNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const UserUncheckedUpdateWithoutNotificationsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const UserUncheckedUpdateWithoutNotificationsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   email: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   emailVerified: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -11608,18 +11608,18 @@ const UserUncheckedUpdateWithoutNotificationsInputSchema = z.object({
   receivedJointAccountRequests: z.lazy(() => JointAccountRequestUncheckedUpdateManyWithoutRecipientNestedInputSchema).optional(),
   createdJointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutCreatorNestedInputSchema).optional(),
   approvedJointAccountModRequests: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUpsertWithoutNotificationsInputSchema = z.object({
+});
+const FinancialAccountUpsertWithoutNotificationsInputSchema = z.strictObject({
   update: z.union([z.lazy(() => FinancialAccountUpdateWithoutNotificationsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutNotificationsInputSchema)]),
   create: z.union([z.lazy(() => FinancialAccountCreateWithoutNotificationsInputSchema), z.lazy(() => FinancialAccountUncheckedCreateWithoutNotificationsInputSchema)]),
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional()
-}).strict();
-const FinancialAccountUpdateToOneWithWhereWithoutNotificationsInputSchema = z.object({
+});
+const FinancialAccountUpdateToOneWithWhereWithoutNotificationsInputSchema = z.strictObject({
   where: z.lazy(() => FinancialAccountWhereInputSchema).optional(),
   data: z.union([z.lazy(() => FinancialAccountUpdateWithoutNotificationsInputSchema), z.lazy(() => FinancialAccountUncheckedUpdateWithoutNotificationsInputSchema)])
-}).strict();
-const FinancialAccountUpdateWithoutNotificationsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUpdateWithoutNotificationsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -11642,9 +11642,9 @@ const FinancialAccountUpdateWithoutNotificationsInputSchema = z.object({
   transactions: z.lazy(() => TransactionUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateWithoutNotificationsInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUncheckedUpdateWithoutNotificationsInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -11667,9 +11667,9 @@ const FinancialAccountUncheckedUpdateWithoutNotificationsInputSchema = z.object(
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const SessionCreateManyUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const SessionCreateManyUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   token: z.string(),
   expiresAt: z.coerce.date(),
   ipAddress: z.string().optional().nullable(),
@@ -11677,9 +11677,9 @@ const SessionCreateManyUserInputSchema = z.object({
   impersonatedBy: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const AccountCreateManyUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountCreateManyUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   accountId: z.string(),
   providerId: z.string(),
   accessToken: z.string().optional().nullable(),
@@ -11691,9 +11691,9 @@ const AccountCreateManyUserInputSchema = z.object({
   password: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const FinancialAccountCreateManyCreatorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const FinancialAccountCreateManyCreatorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   name: z.string(),
   number: z.string(),
   status: z.lazy(() => AccountStatusSchema).optional(),
@@ -11708,18 +11708,18 @@ const FinancialAccountCreateManyCreatorInputSchema = z.object({
   dormantAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const AccountUserCreateManyUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserCreateManyUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
   ownership: z.number().optional(),
   autosign: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountRequestCreateManyCreatorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountRequestCreateManyCreatorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   recipientName: z.string(),
   recipientEmail: z.string(),
   role: z.lazy(() => AccountUserRoleSchema),
@@ -11732,9 +11732,9 @@ const JointAccountRequestCreateManyCreatorInputSchema = z.object({
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountRequestCreateManyRecipientInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountRequestCreateManyRecipientInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   recipientName: z.string(),
   recipientEmail: z.string(),
@@ -11747,18 +11747,18 @@ const JointAccountRequestCreateManyRecipientInputSchema = z.object({
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountModRequestCreateManyCreatorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestCreateManyCreatorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
   transactionId: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const NotificationCreateManyUserInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const NotificationCreateManyUserInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   title: z.string(),
   body: z.string(),
   bodyType: z.lazy(() => NotificationBodyTypeSchema).optional(),
@@ -11767,16 +11767,16 @@ const NotificationCreateManyUserInputSchema = z.object({
   isRead: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountModRequestApprovalCreateManyApproverInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestApprovalCreateManyApproverInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   jointAccountModRequestId: z.string(),
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const SessionUpdateWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const SessionUpdateWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   token: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   expiresAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   ipAddress: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -11784,9 +11784,9 @@ const SessionUpdateWithoutUserInputSchema = z.object({
   impersonatedBy: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const SessionUncheckedUpdateWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const SessionUncheckedUpdateWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   token: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   expiresAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   ipAddress: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -11794,9 +11794,9 @@ const SessionUncheckedUpdateWithoutUserInputSchema = z.object({
   impersonatedBy: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const SessionUncheckedUpdateManyWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const SessionUncheckedUpdateManyWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   token: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   expiresAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   ipAddress: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -11804,9 +11804,9 @@ const SessionUncheckedUpdateManyWithoutUserInputSchema = z.object({
   impersonatedBy: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const AccountUpdateWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUpdateWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   accountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   providerId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   accessToken: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -11818,9 +11818,9 @@ const AccountUpdateWithoutUserInputSchema = z.object({
   password: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const AccountUncheckedUpdateWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUncheckedUpdateWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   accountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   providerId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   accessToken: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -11832,9 +11832,9 @@ const AccountUncheckedUpdateWithoutUserInputSchema = z.object({
   password: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const AccountUncheckedUpdateManyWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUncheckedUpdateManyWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   accountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   providerId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   accessToken: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -11846,9 +11846,9 @@ const AccountUncheckedUpdateManyWithoutUserInputSchema = z.object({
   password: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const FinancialAccountUpdateWithoutCreatorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUpdateWithoutCreatorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -11871,9 +11871,9 @@ const FinancialAccountUpdateWithoutCreatorInputSchema = z.object({
   transactions: z.lazy(() => TransactionUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateWithoutCreatorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUncheckedUpdateWithoutCreatorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -11896,9 +11896,9 @@ const FinancialAccountUncheckedUpdateWithoutCreatorInputSchema = z.object({
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional(),
   receivedTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutRecipientAccountNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutFinancialAccountNestedInputSchema).optional()
-}).strict();
-const FinancialAccountUncheckedUpdateManyWithoutCreatorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const FinancialAccountUncheckedUpdateManyWithoutCreatorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => AccountStatusSchema), z.lazy(() => EnumAccountStatusFieldUpdateOperationsInputSchema)]).optional(),
@@ -11913,9 +11913,9 @@ const FinancialAccountUncheckedUpdateManyWithoutCreatorInputSchema = z.object({
   dormantAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const AccountUserUpdateWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUpdateWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
   ownership: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   autosign: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -11924,9 +11924,9 @@ const AccountUserUpdateWithoutUserInputSchema = z.object({
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutAccountUsersNestedInputSchema).optional(),
   transactions: z.lazy(() => TransactionUpdateManyWithoutInitiatorNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutInvestorNestedInputSchema).optional()
-}).strict();
-const AccountUserUncheckedUpdateWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUncheckedUpdateWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
   ownership: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -11935,18 +11935,18 @@ const AccountUserUncheckedUpdateWithoutUserInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInitiatorNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutInvestorNestedInputSchema).optional()
-}).strict();
-const AccountUserUncheckedUpdateManyWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUncheckedUpdateManyWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
   ownership: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   autosign: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountRequestUpdateWithoutCreatorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUpdateWithoutCreatorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
@@ -11959,9 +11959,9 @@ const JointAccountRequestUpdateWithoutCreatorInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   recipient: z.lazy(() => UserUpdateOneWithoutReceivedJointAccountRequestsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutJointAccountRequestsNestedInputSchema).optional()
-}).strict();
-const JointAccountRequestUncheckedUpdateWithoutCreatorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUncheckedUpdateWithoutCreatorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
@@ -11974,9 +11974,9 @@ const JointAccountRequestUncheckedUpdateWithoutCreatorInputSchema = z.object({
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountRequestUncheckedUpdateManyWithoutCreatorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUncheckedUpdateManyWithoutCreatorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
@@ -11989,9 +11989,9 @@ const JointAccountRequestUncheckedUpdateManyWithoutCreatorInputSchema = z.object
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountRequestUpdateWithoutRecipientInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUpdateWithoutRecipientInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
@@ -12004,9 +12004,9 @@ const JointAccountRequestUpdateWithoutRecipientInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   creator: z.lazy(() => UserUpdateOneRequiredWithoutCreatedJointAccountRequestsNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutJointAccountRequestsNestedInputSchema).optional()
-}).strict();
-const JointAccountRequestUncheckedUpdateWithoutRecipientInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUncheckedUpdateWithoutRecipientInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -12019,9 +12019,9 @@ const JointAccountRequestUncheckedUpdateWithoutRecipientInputSchema = z.object({
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountRequestUncheckedUpdateManyWithoutRecipientInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUncheckedUpdateManyWithoutRecipientInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -12034,9 +12034,9 @@ const JointAccountRequestUncheckedUpdateManyWithoutRecipientInputSchema = z.obje
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestUpdateWithoutCreatorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUpdateWithoutCreatorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
@@ -12044,9 +12044,9 @@ const JointAccountModRequestUpdateWithoutCreatorInputSchema = z.object({
   account: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutJointAccountModRequestsNestedInputSchema).optional(),
   transaction: z.lazy(() => TransactionUpdateOneWithoutJointAccountModRequestsNestedInputSchema).optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutRequestNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedUpdateWithoutCreatorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUncheckedUpdateWithoutCreatorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
   transactionId: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -12054,18 +12054,18 @@ const JointAccountModRequestUncheckedUpdateWithoutCreatorInputSchema = z.object(
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutRequestNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedUpdateManyWithoutCreatorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUncheckedUpdateManyWithoutCreatorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
   transactionId: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const NotificationUpdateWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const NotificationUpdateWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   body: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   bodyType: z.union([z.lazy(() => NotificationBodyTypeSchema), z.lazy(() => EnumNotificationBodyTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -12074,9 +12074,9 @@ const NotificationUpdateWithoutUserInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneWithoutNotificationsNestedInputSchema).optional()
-}).strict();
-const NotificationUncheckedUpdateWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const NotificationUncheckedUpdateWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   body: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   bodyType: z.union([z.lazy(() => NotificationBodyTypeSchema), z.lazy(() => EnumNotificationBodyTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -12085,9 +12085,9 @@ const NotificationUncheckedUpdateWithoutUserInputSchema = z.object({
   isRead: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const NotificationUncheckedUpdateManyWithoutUserInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const NotificationUncheckedUpdateManyWithoutUserInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   body: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   bodyType: z.union([z.lazy(() => NotificationBodyTypeSchema), z.lazy(() => EnumNotificationBodyTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -12096,39 +12096,39 @@ const NotificationUncheckedUpdateManyWithoutUserInputSchema = z.object({
   isRead: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestApprovalUpdateWithoutApproverInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestApprovalUpdateWithoutApproverInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   request: z.lazy(() => JointAccountModRequestUpdateOneRequiredWithoutApprovalsNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestApprovalUncheckedUpdateWithoutApproverInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestApprovalUncheckedUpdateWithoutApproverInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   jointAccountModRequestId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestApprovalUncheckedUpdateManyWithoutApproverInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   jointAccountModRequestId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const AccountUserCreateManyFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const AccountUserCreateManyFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   userId: z.string(),
   role: z.lazy(() => AccountUserRoleSchema).optional(),
   ownership: z.number().optional(),
   autosign: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountRequestCreateManyFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountRequestCreateManyFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   recipientName: z.string(),
   recipientEmail: z.string(),
@@ -12141,18 +12141,18 @@ const JointAccountRequestCreateManyFinancialAccountInputSchema = z.object({
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountModRequestCreateManyAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestCreateManyAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
   transactionId: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const NotificationCreateManyFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const NotificationCreateManyFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   title: z.string(),
   body: z.string(),
   bodyType: z.lazy(() => NotificationBodyTypeSchema).optional(),
@@ -12161,9 +12161,9 @@ const NotificationCreateManyFinancialAccountInputSchema = z.object({
   isRead: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const TransactionCreateManyFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateManyFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -12187,9 +12187,9 @@ const TransactionCreateManyFinancialAccountInputSchema = z.object({
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const TransactionCreateManyRecipientAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateManyRecipientAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -12213,9 +12213,9 @@ const TransactionCreateManyRecipientAccountInputSchema = z.object({
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const InvestmentCreateManyFinancialAccountInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentCreateManyFinancialAccountInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   investorId: z.string(),
   deposit: z.number(),
   investmentName: z.string(),
@@ -12238,9 +12238,9 @@ const InvestmentCreateManyFinancialAccountInputSchema = z.object({
   lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const AccountUserUpdateWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUpdateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
   ownership: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   autosign: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
@@ -12249,9 +12249,9 @@ const AccountUserUpdateWithoutFinancialAccountInputSchema = z.object({
   user: z.lazy(() => UserUpdateOneRequiredWithoutAccountMembershipsNestedInputSchema).optional(),
   transactions: z.lazy(() => TransactionUpdateManyWithoutInitiatorNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUpdateManyWithoutInvestorNestedInputSchema).optional()
-}).strict();
-const AccountUserUncheckedUpdateWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUncheckedUpdateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   userId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
   ownership: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12260,18 +12260,18 @@ const AccountUserUncheckedUpdateWithoutFinancialAccountInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInitiatorNestedInputSchema).optional(),
   investments: z.lazy(() => InvestmentUncheckedUpdateManyWithoutInvestorNestedInputSchema).optional()
-}).strict();
-const AccountUserUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const AccountUserUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   userId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
   ownership: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   autosign: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountRequestUpdateWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUpdateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   role: z.union([z.lazy(() => AccountUserRoleSchema), z.lazy(() => EnumAccountUserRoleFieldUpdateOperationsInputSchema)]).optional(),
@@ -12284,9 +12284,9 @@ const JointAccountRequestUpdateWithoutFinancialAccountInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   creator: z.lazy(() => UserUpdateOneRequiredWithoutCreatedJointAccountRequestsNestedInputSchema).optional(),
   recipient: z.lazy(() => UserUpdateOneWithoutReceivedJointAccountRequestsNestedInputSchema).optional()
-}).strict();
-const JointAccountRequestUncheckedUpdateWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUncheckedUpdateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -12299,9 +12299,9 @@ const JointAccountRequestUncheckedUpdateWithoutFinancialAccountInputSchema = z.o
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountRequestUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountRequestUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   recipientEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -12314,9 +12314,9 @@ const JointAccountRequestUncheckedUpdateManyWithoutFinancialAccountInputSchema =
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestUpdateWithoutAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUpdateWithoutAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
@@ -12324,9 +12324,9 @@ const JointAccountModRequestUpdateWithoutAccountInputSchema = z.object({
   creator: z.lazy(() => UserUpdateOneRequiredWithoutCreatedJointAccountModRequestsNestedInputSchema).optional(),
   transaction: z.lazy(() => TransactionUpdateOneWithoutJointAccountModRequestsNestedInputSchema).optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutRequestNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedUpdateWithoutAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUncheckedUpdateWithoutAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
   transactionId: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
@@ -12334,18 +12334,18 @@ const JointAccountModRequestUncheckedUpdateWithoutAccountInputSchema = z.object(
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutRequestNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedUpdateManyWithoutAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUncheckedUpdateManyWithoutAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
   transactionId: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const NotificationUpdateWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const NotificationUpdateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   body: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   bodyType: z.union([z.lazy(() => NotificationBodyTypeSchema), z.lazy(() => EnumNotificationBodyTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -12354,9 +12354,9 @@ const NotificationUpdateWithoutFinancialAccountInputSchema = z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   user: z.lazy(() => UserUpdateOneWithoutNotificationsNestedInputSchema).optional()
-}).strict();
-const NotificationUncheckedUpdateWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const NotificationUncheckedUpdateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   body: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   bodyType: z.union([z.lazy(() => NotificationBodyTypeSchema), z.lazy(() => EnumNotificationBodyTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -12365,9 +12365,9 @@ const NotificationUncheckedUpdateWithoutFinancialAccountInputSchema = z.object({
   isRead: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const NotificationUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const NotificationUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   title: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   body: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   bodyType: z.union([z.lazy(() => NotificationBodyTypeSchema), z.lazy(() => EnumNotificationBodyTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -12376,9 +12376,9 @@ const NotificationUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.obje
   isRead: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const TransactionUpdateWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUpdateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12404,9 +12404,9 @@ const TransactionUpdateWithoutFinancialAccountInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionUpdateOneWithoutChildTransactionsNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12432,9 +12432,9 @@ const TransactionUncheckedUpdateWithoutFinancialAccountInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutTransactionNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12458,9 +12458,9 @@ const TransactionUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.objec
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const TransactionUpdateWithoutRecipientAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUpdateWithoutRecipientAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12486,9 +12486,9 @@ const TransactionUpdateWithoutRecipientAccountInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionUpdateOneWithoutChildTransactionsNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateWithoutRecipientAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateWithoutRecipientAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12514,9 +12514,9 @@ const TransactionUncheckedUpdateWithoutRecipientAccountInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutTransactionNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateManyWithoutRecipientAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateManyWithoutRecipientAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12540,9 +12540,9 @@ const TransactionUncheckedUpdateManyWithoutRecipientAccountInputSchema = z.objec
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const InvestmentUpdateWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUpdateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   investmentName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   totalProfit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12567,9 +12567,9 @@ const InvestmentUpdateWithoutFinancialAccountInputSchema = z.object({
   investor: z.lazy(() => AccountUserUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
   transactions: z.lazy(() => TransactionUpdateManyWithoutInvestmentNestedInputSchema).optional(),
   profits: z.lazy(() => ProfitUpdateManyWithoutInvestmentNestedInputSchema).optional()
-}).strict();
-const InvestmentUncheckedUpdateWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUncheckedUpdateWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   investorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   investmentName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -12594,9 +12594,9 @@ const InvestmentUncheckedUpdateWithoutFinancialAccountInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional(),
   profits: z.lazy(() => ProfitUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
-}).strict();
-const InvestmentUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   investorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   investmentName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -12619,9 +12619,9 @@ const InvestmentUncheckedUpdateManyWithoutFinancialAccountInputSchema = z.object
   lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const TransactionCreateManyInitiatorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateManyInitiatorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -12645,9 +12645,9 @@ const TransactionCreateManyInitiatorInputSchema = z.object({
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const InvestmentCreateManyInvestorInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const InvestmentCreateManyInvestorInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   financialAccountId: z.string(),
   deposit: z.number(),
   investmentName: z.string(),
@@ -12670,9 +12670,9 @@ const InvestmentCreateManyInvestorInputSchema = z.object({
   lastProfitDistributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const TransactionUpdateWithoutInitiatorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUpdateWithoutInitiatorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12698,9 +12698,9 @@ const TransactionUpdateWithoutInitiatorInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionUpdateOneWithoutChildTransactionsNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateWithoutInitiatorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateWithoutInitiatorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12726,9 +12726,9 @@ const TransactionUncheckedUpdateWithoutInitiatorInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutTransactionNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateManyWithoutInitiatorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateManyWithoutInitiatorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12752,9 +12752,9 @@ const TransactionUncheckedUpdateManyWithoutInitiatorInputSchema = z.object({
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const InvestmentUpdateWithoutInvestorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUpdateWithoutInvestorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   investmentName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   totalProfit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12779,9 +12779,9 @@ const InvestmentUpdateWithoutInvestorInputSchema = z.object({
   transactions: z.lazy(() => TransactionUpdateManyWithoutInvestmentNestedInputSchema).optional(),
   financialAccount: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutInvestmentsNestedInputSchema).optional(),
   profits: z.lazy(() => ProfitUpdateManyWithoutInvestmentNestedInputSchema).optional()
-}).strict();
-const InvestmentUncheckedUpdateWithoutInvestorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUncheckedUpdateWithoutInvestorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   investmentName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -12806,9 +12806,9 @@ const InvestmentUncheckedUpdateWithoutInvestorInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   transactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional(),
   profits: z.lazy(() => ProfitUncheckedUpdateManyWithoutInvestmentNestedInputSchema).optional()
-}).strict();
-const InvestmentUncheckedUpdateManyWithoutInvestorInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const InvestmentUncheckedUpdateManyWithoutInvestorInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   deposit: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   investmentName: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
@@ -12831,37 +12831,37 @@ const InvestmentUncheckedUpdateManyWithoutInvestorInputSchema = z.object({
   lastProfitDistributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestApprovalCreateManyRequestInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestApprovalCreateManyRequestInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   approverId: z.string(),
   status: z.lazy(() => JointAccountRequestStatusSchema).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountModRequestApprovalUpdateWithoutRequestInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestApprovalUpdateWithoutRequestInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   approver: z.lazy(() => UserUpdateOneRequiredWithoutApprovedJointAccountModRequestsNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestApprovalUncheckedUpdateWithoutRequestInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestApprovalUncheckedUpdateWithoutRequestInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   approverId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestApprovalUncheckedUpdateManyWithoutRequestInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestApprovalUncheckedUpdateManyWithoutRequestInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   approverId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   status: z.union([z.lazy(() => JointAccountRequestStatusSchema), z.lazy(() => EnumJointAccountRequestStatusFieldUpdateOperationsInputSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const TransactionCreateManyInvestmentInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateManyInvestmentInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -12885,9 +12885,9 @@ const TransactionCreateManyInvestmentInputSchema = z.object({
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const ProfitCreateManyInvestmentInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const ProfitCreateManyInvestmentInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   number: z.number().int(),
   intendedAmount: z.number(),
   actualAmount: z.number(),
@@ -12895,9 +12895,9 @@ const ProfitCreateManyInvestmentInputSchema = z.object({
   distributedAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const TransactionUpdateWithoutInvestmentInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUpdateWithoutInvestmentInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12923,9 +12923,9 @@ const TransactionUpdateWithoutInvestmentInputSchema = z.object({
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema).optional(),
   parentTransaction: z.lazy(() => TransactionUpdateOneWithoutChildTransactionsNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateWithoutInvestmentInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateWithoutInvestmentInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12951,9 +12951,9 @@ const TransactionUncheckedUpdateWithoutInvestmentInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutTransactionNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateManyWithoutInvestmentInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateManyWithoutInvestmentInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12977,9 +12977,9 @@ const TransactionUncheckedUpdateManyWithoutInvestmentInputSchema = z.object({
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const ProfitUpdateWithoutInvestmentInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfitUpdateWithoutInvestmentInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputSchema)]).optional(),
   intendedAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   actualAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12987,9 +12987,9 @@ const ProfitUpdateWithoutInvestmentInputSchema = z.object({
   distributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const ProfitUncheckedUpdateWithoutInvestmentInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfitUncheckedUpdateWithoutInvestmentInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputSchema)]).optional(),
   intendedAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   actualAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -12997,9 +12997,9 @@ const ProfitUncheckedUpdateWithoutInvestmentInputSchema = z.object({
   distributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const ProfitUncheckedUpdateManyWithoutInvestmentInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const ProfitUncheckedUpdateManyWithoutInvestmentInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   number: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputSchema)]).optional(),
   intendedAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   actualAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -13007,18 +13007,18 @@ const ProfitUncheckedUpdateManyWithoutInvestmentInputSchema = z.object({
   distributedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const JointAccountModRequestCreateManyTransactionInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const JointAccountModRequestCreateManyTransactionInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   creatorId: z.string(),
   financialAccountId: z.string(),
   type: z.lazy(() => JointAccountModRequestTypeSchema),
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const TransactionCreateManyParentTransactionInputSchema = z.object({
-  id: z.string().uuid().optional(),
+});
+const TransactionCreateManyParentTransactionInputSchema = z.strictObject({
+  id: z.uuid().optional(),
   amount: z.number(),
   currency: z.string().optional(),
   USDAmount: z.number(),
@@ -13042,9 +13042,9 @@ const TransactionCreateManyParentTransactionInputSchema = z.object({
   description: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
-}).strict();
-const JointAccountModRequestUpdateWithoutTransactionInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUpdateWithoutTransactionInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
@@ -13052,9 +13052,9 @@ const JointAccountModRequestUpdateWithoutTransactionInputSchema = z.object({
   creator: z.lazy(() => UserUpdateOneRequiredWithoutCreatedJointAccountModRequestsNestedInputSchema).optional(),
   account: z.lazy(() => FinancialAccountUpdateOneRequiredWithoutJointAccountModRequestsNestedInputSchema).optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalUpdateManyWithoutRequestNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedUpdateWithoutTransactionInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUncheckedUpdateWithoutTransactionInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
@@ -13062,18 +13062,18 @@ const JointAccountModRequestUncheckedUpdateWithoutTransactionInputSchema = z.obj
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   approvals: z.lazy(() => JointAccountModRequestApprovalUncheckedUpdateManyWithoutRequestNestedInputSchema).optional()
-}).strict();
-const JointAccountModRequestUncheckedUpdateManyWithoutTransactionInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const JointAccountModRequestUncheckedUpdateManyWithoutTransactionInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   creatorId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   financialAccountId: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   type: z.union([z.lazy(() => JointAccountModRequestTypeSchema), z.lazy(() => EnumJointAccountModRequestTypeFieldUpdateOperationsInputSchema)]).optional(),
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
-const TransactionUpdateWithoutParentTransactionInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUpdateWithoutParentTransactionInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -13099,9 +13099,9 @@ const TransactionUpdateWithoutParentTransactionInputSchema = z.object({
   investment: z.lazy(() => InvestmentUpdateOneWithoutTransactionsNestedInputSchema).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUpdateManyWithoutTransactionNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateWithoutParentTransactionInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateWithoutParentTransactionInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -13127,9 +13127,9 @@ const TransactionUncheckedUpdateWithoutParentTransactionInputSchema = z.object({
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   jointAccountModRequests: z.lazy(() => JointAccountModRequestUncheckedUpdateManyWithoutTransactionNestedInputSchema).optional(),
   childTransactions: z.lazy(() => TransactionUncheckedUpdateManyWithoutParentTransactionNestedInputSchema).optional()
-}).strict();
-const TransactionUncheckedUpdateManyWithoutParentTransactionInputSchema = z.object({
-  id: z.union([z.string().uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
+});
+const TransactionUncheckedUpdateManyWithoutParentTransactionInputSchema = z.strictObject({
+  id: z.union([z.uuid(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   amount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
   currency: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputSchema)]).optional(),
   USDAmount: z.union([z.number(), z.lazy(() => FloatFieldUpdateOperationsInputSchema)]).optional(),
@@ -13153,7 +13153,7 @@ const TransactionUncheckedUpdateManyWithoutParentTransactionInputSchema = z.obje
   description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputSchema)]).optional()
-}).strict();
+});
 z.object({
   select: UserSelectSchema.optional(),
   include: UserIncludeSchema.optional(),

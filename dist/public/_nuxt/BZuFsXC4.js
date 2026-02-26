@@ -1,0 +1,1 @@
+import{o as n,x as o,B as c}from"./20-joxqj.js";import{_}from"./DlAUqK2U.js";const a={};function t(s,r){const e=c;return n(),o(e,{name:"lucide:loader",size:"2rem",class:"animate animate-spin"})}const p=Object.assign(_(a,[["render",t]]),{__name:"NuxtLoader"});export{p as _};

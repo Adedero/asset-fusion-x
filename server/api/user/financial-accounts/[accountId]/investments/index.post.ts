@@ -2,10 +2,17 @@ import { notificationEmitter } from "~~/server/events/notifications/emitter";
 import type { ProfitDistribution } from "~~/server/generated/prisma/enums";
 import { prisma } from "~~/server/lib/prisma";
 import { InvestmentSchema } from "~~/shared/zod";
+import { checkUserKycApproval } from "~~/server/utils/accound-validation";
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user as EventContextUser;
   const accountId = getRouterParam(event, "accountId");
+
+  const res = await checkUserKycApproval(user.id);
+
+  if (!res.success) {
+    throw createError(res.error);
+  }
 
   const { success, error, data } = await readValidatedBody(
     event,
@@ -40,7 +47,7 @@ export default defineEventHandler(async (event) => {
     totalProfitCount,
     deposit: data.deposit,
     percentageReturn: data.totalReturn
-  })
+  });
 
   const { investment, financialAccount } = await prisma.$transaction(
     async (tx) => {

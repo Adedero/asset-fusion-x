@@ -1,4 +1,4 @@
-import { B as Button, L as Layout } from '../nitro/nitro.mjs';
+import { B as Button, L as Layout } from './nitro.mjs';
 
 function jointAccountRequestEmail(params) {
   const { user, data, subject } = params != null ? params : {};

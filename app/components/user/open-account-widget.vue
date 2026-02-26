@@ -24,14 +24,16 @@ async function openAccount() {
     return;
   }
 
-  await execute();
+  await navigateTo({ name: "user-accounts-open" });
 
-  if (data.value?.profile?.kycStatus === "verified") {
-    await navigateTo({ name: "user-accounts-open" });
-    return;
-  }
+  //await execute();
 
-  open.value = true;
+  // if (data.value?.profile?.kycStatus === "verified") {
+  //   await navigateTo({ name: "user-accounts-open" });
+  //   return;
+  // }
+
+  // open.value = true;
 }
 </script>
 
