@@ -33,7 +33,7 @@
     "html2canvas-pro": "^1.5.11",
     "jspdf": "^3.0.3",
     "nodemailer": "^7.0.6",
-    "nuxt": "^4.1.2",
+    "nuxt": "^4.3.1",
     "nuxt-charts": "^0.2.4",
     "nuxt-marquee": "1.0.4",
     "prisma": "^6.16.2",
