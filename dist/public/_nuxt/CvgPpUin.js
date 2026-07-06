@@ -1,1 +1,0 @@
-import{c0 as u}from"./20-joxqj.js";function f(){const e=u();function o(t){return typeof t=="string"?e.params?.[t]?.toString()??"":t.map(n=>e.params?.[n]?.toString()??"")}function r(t){return typeof t=="string"?e.query?.[t]?.toString()??"":t.map(n=>e.query?.[n]?.toString()??"")}return{getParams:o,getSearchParams:r,raw:e}}export{f as u};

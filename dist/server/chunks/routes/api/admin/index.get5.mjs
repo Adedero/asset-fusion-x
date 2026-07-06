@@ -24,6 +24,7 @@ import 'node:crypto';
 import 'consola';
 
 const index_get = defineEventHandler(async (event) => {
+  var _a, _b;
   const schema = z.object({
     ...paginationQuerySchema.shape,
     type: z.enum(["deposit", "withdrawal", "transfer", "investment", "profit"]).optional(),
@@ -33,7 +34,7 @@ const index_get = defineEventHandler(async (event) => {
   if (!query.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: query.error.issues[0].message
+      statusMessage: (_b = (_a = query.error.issues[0]) == null ? void 0 : _a.message) != null ? _b : "Server error"
     });
   }
   const { type, status, page = 0, limit } = query.data;
@@ -85,12 +86,15 @@ const index_get = defineEventHandler(async (event) => {
       createdAt: "desc"
     }
   });
-  return transactions.map((txn) => ({
-    ...txn,
-    initiator: txn.initiator.user.name,
-    financialAccountName: txn.financialAccount.name,
-    financialAccount: void 0
-  }));
+  return transactions.map((txn) => {
+    var _a2, _b2, _c;
+    return {
+      ...txn,
+      initiator: (_c = (_b2 = (_a2 = txn.initiator) == null ? void 0 : _a2.user) == null ? void 0 : _b2.name) != null ? _c : "system",
+      financialAccountName: txn.financialAccount.name,
+      financialAccount: void 0
+    };
+  });
 });
 
 export { index_get as default };
