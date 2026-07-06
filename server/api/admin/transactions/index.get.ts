@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   if (!query.success) {
     throw createError({
       statusCode: 400,
-      statusMessage: query.error.issues[0].message
+      statusMessage: query.error.issues[0]?.message ?? "Server error"
     });
   }
   const { type, status, page = 0, limit } = query.data;
@@ -72,7 +72,7 @@ export default defineEventHandler(async (event) => {
 
   return transactions.map((txn) => ({
     ...txn,
-    initiator: txn.initiator!.user.name,
+    initiator: txn.initiator?.user?.name ?? "system",
     financialAccountName: txn.financialAccount.name,
     financialAccount: undefined
   }));
