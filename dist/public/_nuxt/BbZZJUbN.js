@@ -1,0 +1,1 @@
+function e(n,r=2){if(!Number.isFinite(n))return NaN;if(!Number.isInteger(r)||r<0)throw new Error("Decimals must be a non-negative integer");const t=Math.pow(10,r);return Math.round((n+Number.EPSILON)*t)/t}export{e as r};

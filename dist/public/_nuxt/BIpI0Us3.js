@@ -1,0 +1,1 @@
+const t=e=>({open:"success",closed:"primary",terminated:"error",paused:"warning"})[e],n=e=>({open:"lucide-circle-check",closed:"lucide-circle-x",terminated:"lucide-info",paused:"lucide-circle-pause"})[e];export{n as a,t as g};
