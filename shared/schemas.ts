@@ -2,8 +2,16 @@ import { z } from "zod";
 import { MIN_PASSWORD_LENGTH } from "./constants";
 import months from "../app/data/months";
 import { accountRoles } from "../app/data/account";
+import { isValidIP } from "./utils/ip-address";
 
 export const EmailSchema = z.email({ message: "Invalid email" });
+
+// Reuses better-auth's own IPv4/IPv6 validator so a banned IP is always in
+// the same format the ip-ban middleware and session records use.
+export const IpAddressSchema = z
+  .string()
+  .min(1, "IP address is required")
+  .refine((val) => isValidIP(val), { message: "Invalid IP address" });
 
 export const PasswordSchema = z
   .string("Invalid password")
@@ -182,11 +190,14 @@ export const BanUserSchema = z
     message: "IP address is required to ban it",
     path: ["ipAddress"]
   })
- 
+  .refine((data) => !data.ipAddress || isValidIP(data.ipAddress), {
+    message: "Invalid IP address",
+    path: ["ipAddress"]
+  });
 export type BanUserSchemaType = z.infer<typeof BanUserSchema>;
 
 export const BannedIpSchema = z.object({
-  ipAddress: z.string().min(1, "Enter an IP address"),
+  ipAddress: IpAddressSchema,
   reason: z.string().min(1, "A reason is required"),
   duration: z.enum(banDurations, { message: "Invalid duration" })
 });

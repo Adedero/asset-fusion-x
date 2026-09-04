@@ -24,6 +24,11 @@ function reset() {
 
 const error = ref<Error | null>(null);
 
+const routeError = route.query.error?.toString();
+if (routeError) {
+  error.value = new Error(routeError);
+}
+
 async function onSubmit(event: FormSubmitEvent<LoginSchemaType>) {
   error.value = null;
 

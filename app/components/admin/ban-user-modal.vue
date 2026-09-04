@@ -101,19 +101,17 @@ const handleSubmit = async (event: FormSubmitEvent<BanUserSchemaType>) => {
 
         <NuxtFormField name="banIp">
           <div class="flex items-center gap-2">
-            <NuxtCheckbox v-model="state.banIp" />
+            <NuxtCheckbox v-model="state.banIp" :disabled="!state.ipAddress" />
             <p>Also ban this user's IP address</p>
           </div>
+          <p v-if="!state.ipAddress" class="text-sm text-muted">
+            No known IP address for this user
+          </p>
         </NuxtFormField>
 
-        <NuxtFormField
-          v-if="state.banIp"
-          name="ipAddress"
-          label="IP Address"
-          required
-        >
-          <NuxtInput v-model="state.ipAddress" class="w-full" />
-        </NuxtFormField>
+        <p v-if="state.banIp && state.ipAddress" class="text-sm text-muted">
+          Will also ban <span class="font-mono">{{ state.ipAddress }}</span>
+        </p>
 
         <div class="flex items-center justify-end gap-2">
           <NuxtButton
