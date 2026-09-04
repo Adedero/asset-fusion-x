@@ -49,6 +49,12 @@ export const links = ({
       onSelect: () => close()
     },
     {
+      label: "Banned IPs",
+      icon: "lucide:shield-ban",
+      to: "/admin/banned-ips",
+      onSelect: () => close()
+    },
+    {
       label: "Transactions",
       icon: "lucide:arrow-left-right",
       to: "/admin/transactions",

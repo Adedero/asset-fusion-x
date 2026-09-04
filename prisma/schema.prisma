@@ -515,3 +515,16 @@ model Settings {
 
   @@map("settings")
 }
+
+model BannedIp {
+  id        String    @id @default(uuid())
+  ipAddress String    @unique
+  reason    String
+  userId    String?
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("banned_ip")
+}

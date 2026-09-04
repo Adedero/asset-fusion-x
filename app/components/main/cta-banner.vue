@@ -55,12 +55,20 @@ const classes = computed(() => {
       </p>
 
       <div class="mt-5 grid place-content-center">
-        <NuxtLink :to="buttonHref || !authStore.user.value ? '/sign-up' : '/sign-in'">
+        <NuxtLink
+          :to="buttonHref || !authStore.user.value ? '/sign-up' : '/sign-in'"
+        >
           <button
             class="cursor-pointer pointer-events-none rounded-full font-medium px-6 py-3 flex items-center gap-2 transition-colors"
             :class="classes.button"
           >
-            <p>{{ buttonLabel || !authStore.user.value ? "Create Account" : "Continue on AssetFusionX" }}</p>
+            <p>
+              {{
+                !authStore.user.value
+                  ? buttonLabel || "Create Account"
+                  : "Log in to your AssetFusionX account"
+              }}
+            </p>
             <NuxtIcon
               :name="buttonIcon || 'lucide:circle-arrow-right'"
               size="1.2rem"

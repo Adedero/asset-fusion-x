@@ -138,3 +138,8 @@ export type Currency = Prisma.CurrencyModel
  * 
  */
 export type Settings = Prisma.SettingsModel
+/**
+ * Model BannedIp
+ * 
+ */
+export type BannedIp = Prisma.BannedIpModel

@@ -48,6 +48,8 @@ export const CurrencyScalarFieldEnumSchema = z.enum(['id','name','symbol','image
 
 export const SettingsScalarFieldEnumSchema = z.enum(['id','allowWithdrawals']);
 
+export const BannedIpScalarFieldEnumSchema = z.enum(['id','ipAddress','reason','userId','expiresAt','createdAt','updatedAt']);
+
 export const SortOrderSchema = z.enum(['asc','desc']);
 
 export const NullsOrderSchema = z.enum(['first','last']);
@@ -495,6 +497,22 @@ export const SettingsSchema = z.object({
 })
 
 export type Settings = z.infer<typeof SettingsSchema>
+
+/////////////////////////////////////////
+// BANNED IP SCHEMA
+/////////////////////////////////////////
+
+export const BannedIpSchema = z.object({
+  id: z.uuid(),
+  ipAddress: z.string(),
+  reason: z.string(),
+  userId: z.string().nullable(),
+  expiresAt: z.coerce.date().nullable(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+})
+
+export type BannedIp = z.infer<typeof BannedIpSchema>
 
 /////////////////////////////////////////
 // SELECT & INCLUDE
@@ -1109,6 +1127,19 @@ export const CurrencySelectSchema: z.ZodType<Prisma.CurrencySelect> = z.object({
 export const SettingsSelectSchema: z.ZodType<Prisma.SettingsSelect> = z.object({
   id: z.boolean().optional(),
   allowWithdrawals: z.boolean().optional(),
+}).strict()
+
+// BANNED IP
+//------------------------------------------------------
+
+export const BannedIpSelectSchema: z.ZodType<Prisma.BannedIpSelect> = z.object({
+  id: z.boolean().optional(),
+  ipAddress: z.boolean().optional(),
+  reason: z.boolean().optional(),
+  userId: z.boolean().optional(),
+  expiresAt: z.boolean().optional(),
+  createdAt: z.boolean().optional(),
+  updatedAt: z.boolean().optional(),
 }).strict()
 
 
@@ -2957,6 +2988,80 @@ export const SettingsScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Sett
   NOT: z.union([ z.lazy(() => SettingsScalarWhereWithAggregatesInputSchema), z.lazy(() => SettingsScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema), z.string() ]).optional(),
   allowWithdrawals: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema), z.boolean() ]).optional(),
+});
+
+export const BannedIpWhereInputSchema: z.ZodType<Prisma.BannedIpWhereInput> = z.strictObject({
+  AND: z.union([ z.lazy(() => BannedIpWhereInputSchema), z.lazy(() => BannedIpWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => BannedIpWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => BannedIpWhereInputSchema), z.lazy(() => BannedIpWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema), z.string() ]).optional(),
+  ipAddress: z.union([ z.lazy(() => StringFilterSchema), z.string() ]).optional(),
+  reason: z.union([ z.lazy(() => StringFilterSchema), z.string() ]).optional(),
+  userId: z.union([ z.lazy(() => StringNullableFilterSchema), z.string() ]).optional().nullable(),
+  expiresAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema), z.coerce.date() ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeFilterSchema), z.coerce.date() ]).optional(),
+  updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema), z.coerce.date() ]).optional(),
+});
+
+export const BannedIpOrderByWithRelationInputSchema: z.ZodType<Prisma.BannedIpOrderByWithRelationInput> = z.strictObject({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  ipAddress: z.lazy(() => SortOrderSchema).optional(),
+  reason: z.lazy(() => SortOrderSchema).optional(),
+  userId: z.union([ z.lazy(() => SortOrderSchema), z.lazy(() => SortOrderInputSchema) ]).optional(),
+  expiresAt: z.union([ z.lazy(() => SortOrderSchema), z.lazy(() => SortOrderInputSchema) ]).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional(),
+});
+
+export const BannedIpWhereUniqueInputSchema: z.ZodType<Prisma.BannedIpWhereUniqueInput> = z.union([
+  z.object({
+    id: z.uuid(),
+    ipAddress: z.string(),
+  }),
+  z.object({
+    id: z.uuid(),
+  }),
+  z.object({
+    ipAddress: z.string(),
+  }),
+])
+.and(z.strictObject({
+  id: z.uuid().optional(),
+  ipAddress: z.string().optional(),
+  AND: z.union([ z.lazy(() => BannedIpWhereInputSchema), z.lazy(() => BannedIpWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => BannedIpWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => BannedIpWhereInputSchema), z.lazy(() => BannedIpWhereInputSchema).array() ]).optional(),
+  reason: z.union([ z.lazy(() => StringFilterSchema), z.string() ]).optional(),
+  userId: z.union([ z.lazy(() => StringNullableFilterSchema), z.string() ]).optional().nullable(),
+  expiresAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema), z.coerce.date() ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeFilterSchema), z.coerce.date() ]).optional(),
+  updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema), z.coerce.date() ]).optional(),
+}));
+
+export const BannedIpOrderByWithAggregationInputSchema: z.ZodType<Prisma.BannedIpOrderByWithAggregationInput> = z.strictObject({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  ipAddress: z.lazy(() => SortOrderSchema).optional(),
+  reason: z.lazy(() => SortOrderSchema).optional(),
+  userId: z.union([ z.lazy(() => SortOrderSchema), z.lazy(() => SortOrderInputSchema) ]).optional(),
+  expiresAt: z.union([ z.lazy(() => SortOrderSchema), z.lazy(() => SortOrderInputSchema) ]).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => BannedIpCountOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => BannedIpMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => BannedIpMinOrderByAggregateInputSchema).optional(),
+});
+
+export const BannedIpScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.BannedIpScalarWhereWithAggregatesInput> = z.strictObject({
+  AND: z.union([ z.lazy(() => BannedIpScalarWhereWithAggregatesInputSchema), z.lazy(() => BannedIpScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => BannedIpScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => BannedIpScalarWhereWithAggregatesInputSchema), z.lazy(() => BannedIpScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema), z.string() ]).optional(),
+  ipAddress: z.union([ z.lazy(() => StringWithAggregatesFilterSchema), z.string() ]).optional(),
+  reason: z.union([ z.lazy(() => StringWithAggregatesFilterSchema), z.string() ]).optional(),
+  userId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema), z.string() ]).optional().nullable(),
+  expiresAt: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema), z.coerce.date() ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date() ]).optional(),
+  updatedAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema), z.coerce.date() ]).optional(),
 });
 
 export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z.strictObject({
@@ -4910,6 +5015,76 @@ export const SettingsUncheckedUpdateManyInputSchema: z.ZodType<Prisma.SettingsUn
   allowWithdrawals: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 });
 
+export const BannedIpCreateInputSchema: z.ZodType<Prisma.BannedIpCreateInput> = z.strictObject({
+  id: z.uuid().optional(),
+  ipAddress: z.string(),
+  reason: z.string(),
+  userId: z.string().optional().nullable(),
+  expiresAt: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+});
+
+export const BannedIpUncheckedCreateInputSchema: z.ZodType<Prisma.BannedIpUncheckedCreateInput> = z.strictObject({
+  id: z.uuid().optional(),
+  ipAddress: z.string(),
+  reason: z.string(),
+  userId: z.string().optional().nullable(),
+  expiresAt: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+});
+
+export const BannedIpUpdateInputSchema: z.ZodType<Prisma.BannedIpUpdateInput> = z.strictObject({
+  id: z.union([ z.uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  ipAddress: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  reason: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  userId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  expiresAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+});
+
+export const BannedIpUncheckedUpdateInputSchema: z.ZodType<Prisma.BannedIpUncheckedUpdateInput> = z.strictObject({
+  id: z.union([ z.uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  ipAddress: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  reason: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  userId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  expiresAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+});
+
+export const BannedIpCreateManyInputSchema: z.ZodType<Prisma.BannedIpCreateManyInput> = z.strictObject({
+  id: z.uuid().optional(),
+  ipAddress: z.string(),
+  reason: z.string(),
+  userId: z.string().optional().nullable(),
+  expiresAt: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+});
+
+export const BannedIpUpdateManyMutationInputSchema: z.ZodType<Prisma.BannedIpUpdateManyMutationInput> = z.strictObject({
+  id: z.union([ z.uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  ipAddress: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  reason: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  userId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  expiresAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+});
+
+export const BannedIpUncheckedUpdateManyInputSchema: z.ZodType<Prisma.BannedIpUncheckedUpdateManyInput> = z.strictObject({
+  id: z.union([ z.uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  ipAddress: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  reason: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  userId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  expiresAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+  updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
+});
+
 export const StringFilterSchema: z.ZodType<Prisma.StringFilter> = z.strictObject({
   equals: z.string().optional(),
   in: z.string().array().optional(),
@@ -6485,6 +6660,36 @@ export const SettingsMaxOrderByAggregateInputSchema: z.ZodType<Prisma.SettingsMa
 export const SettingsMinOrderByAggregateInputSchema: z.ZodType<Prisma.SettingsMinOrderByAggregateInput> = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
   allowWithdrawals: z.lazy(() => SortOrderSchema).optional(),
+});
+
+export const BannedIpCountOrderByAggregateInputSchema: z.ZodType<Prisma.BannedIpCountOrderByAggregateInput> = z.strictObject({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  ipAddress: z.lazy(() => SortOrderSchema).optional(),
+  reason: z.lazy(() => SortOrderSchema).optional(),
+  userId: z.lazy(() => SortOrderSchema).optional(),
+  expiresAt: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional(),
+});
+
+export const BannedIpMaxOrderByAggregateInputSchema: z.ZodType<Prisma.BannedIpMaxOrderByAggregateInput> = z.strictObject({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  ipAddress: z.lazy(() => SortOrderSchema).optional(),
+  reason: z.lazy(() => SortOrderSchema).optional(),
+  userId: z.lazy(() => SortOrderSchema).optional(),
+  expiresAt: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional(),
+});
+
+export const BannedIpMinOrderByAggregateInputSchema: z.ZodType<Prisma.BannedIpMinOrderByAggregateInput> = z.strictObject({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  ipAddress: z.lazy(() => SortOrderSchema).optional(),
+  reason: z.lazy(() => SortOrderSchema).optional(),
+  userId: z.lazy(() => SortOrderSchema).optional(),
+  expiresAt: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
+  updatedAt: z.lazy(() => SortOrderSchema).optional(),
 });
 
 export const ProfileCreateNestedOneWithoutUserInputSchema: z.ZodType<Prisma.ProfileCreateNestedOneWithoutUserInput> = z.strictObject({
@@ -15651,6 +15856,63 @@ export const SettingsFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.SettingsFindU
   where: SettingsWhereUniqueInputSchema, 
 }).strict();
 
+export const BannedIpFindFirstArgsSchema: z.ZodType<Prisma.BannedIpFindFirstArgs> = z.object({
+  select: BannedIpSelectSchema.optional(),
+  where: BannedIpWhereInputSchema.optional(), 
+  orderBy: z.union([ BannedIpOrderByWithRelationInputSchema.array(), BannedIpOrderByWithRelationInputSchema ]).optional(),
+  cursor: BannedIpWhereUniqueInputSchema.optional(), 
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: z.union([ BannedIpScalarFieldEnumSchema, BannedIpScalarFieldEnumSchema.array() ]).optional(),
+}).strict();
+
+export const BannedIpFindFirstOrThrowArgsSchema: z.ZodType<Prisma.BannedIpFindFirstOrThrowArgs> = z.object({
+  select: BannedIpSelectSchema.optional(),
+  where: BannedIpWhereInputSchema.optional(), 
+  orderBy: z.union([ BannedIpOrderByWithRelationInputSchema.array(), BannedIpOrderByWithRelationInputSchema ]).optional(),
+  cursor: BannedIpWhereUniqueInputSchema.optional(), 
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: z.union([ BannedIpScalarFieldEnumSchema, BannedIpScalarFieldEnumSchema.array() ]).optional(),
+}).strict();
+
+export const BannedIpFindManyArgsSchema: z.ZodType<Prisma.BannedIpFindManyArgs> = z.object({
+  select: BannedIpSelectSchema.optional(),
+  where: BannedIpWhereInputSchema.optional(), 
+  orderBy: z.union([ BannedIpOrderByWithRelationInputSchema.array(), BannedIpOrderByWithRelationInputSchema ]).optional(),
+  cursor: BannedIpWhereUniqueInputSchema.optional(), 
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: z.union([ BannedIpScalarFieldEnumSchema, BannedIpScalarFieldEnumSchema.array() ]).optional(),
+}).strict();
+
+export const BannedIpAggregateArgsSchema: z.ZodType<Prisma.BannedIpAggregateArgs> = z.object({
+  where: BannedIpWhereInputSchema.optional(), 
+  orderBy: z.union([ BannedIpOrderByWithRelationInputSchema.array(), BannedIpOrderByWithRelationInputSchema ]).optional(),
+  cursor: BannedIpWhereUniqueInputSchema.optional(), 
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict();
+
+export const BannedIpGroupByArgsSchema: z.ZodType<Prisma.BannedIpGroupByArgs> = z.object({
+  where: BannedIpWhereInputSchema.optional(), 
+  orderBy: z.union([ BannedIpOrderByWithAggregationInputSchema.array(), BannedIpOrderByWithAggregationInputSchema ]).optional(),
+  by: BannedIpScalarFieldEnumSchema.array(), 
+  having: BannedIpScalarWhereWithAggregatesInputSchema.optional(), 
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict();
+
+export const BannedIpFindUniqueArgsSchema: z.ZodType<Prisma.BannedIpFindUniqueArgs> = z.object({
+  select: BannedIpSelectSchema.optional(),
+  where: BannedIpWhereUniqueInputSchema, 
+}).strict();
+
+export const BannedIpFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.BannedIpFindUniqueOrThrowArgs> = z.object({
+  select: BannedIpSelectSchema.optional(),
+  where: BannedIpWhereUniqueInputSchema, 
+}).strict();
+
 export const UserCreateArgsSchema: z.ZodType<Prisma.UserCreateArgs> = z.object({
   select: UserSelectSchema.optional(),
   include: UserIncludeSchema.optional(),
@@ -16568,5 +16830,53 @@ export const SettingsUpdateManyAndReturnArgsSchema: z.ZodType<Prisma.SettingsUpd
 
 export const SettingsDeleteManyArgsSchema: z.ZodType<Prisma.SettingsDeleteManyArgs> = z.object({
   where: SettingsWhereInputSchema.optional(), 
+  limit: z.number().optional(),
+}).strict();
+
+export const BannedIpCreateArgsSchema: z.ZodType<Prisma.BannedIpCreateArgs> = z.object({
+  select: BannedIpSelectSchema.optional(),
+  data: z.union([ BannedIpCreateInputSchema, BannedIpUncheckedCreateInputSchema ]),
+}).strict();
+
+export const BannedIpUpsertArgsSchema: z.ZodType<Prisma.BannedIpUpsertArgs> = z.object({
+  select: BannedIpSelectSchema.optional(),
+  where: BannedIpWhereUniqueInputSchema, 
+  create: z.union([ BannedIpCreateInputSchema, BannedIpUncheckedCreateInputSchema ]),
+  update: z.union([ BannedIpUpdateInputSchema, BannedIpUncheckedUpdateInputSchema ]),
+}).strict();
+
+export const BannedIpCreateManyArgsSchema: z.ZodType<Prisma.BannedIpCreateManyArgs> = z.object({
+  data: z.union([ BannedIpCreateManyInputSchema, BannedIpCreateManyInputSchema.array() ]),
+}).strict();
+
+export const BannedIpCreateManyAndReturnArgsSchema: z.ZodType<Prisma.BannedIpCreateManyAndReturnArgs> = z.object({
+  data: z.union([ BannedIpCreateManyInputSchema, BannedIpCreateManyInputSchema.array() ]),
+}).strict();
+
+export const BannedIpDeleteArgsSchema: z.ZodType<Prisma.BannedIpDeleteArgs> = z.object({
+  select: BannedIpSelectSchema.optional(),
+  where: BannedIpWhereUniqueInputSchema, 
+}).strict();
+
+export const BannedIpUpdateArgsSchema: z.ZodType<Prisma.BannedIpUpdateArgs> = z.object({
+  select: BannedIpSelectSchema.optional(),
+  data: z.union([ BannedIpUpdateInputSchema, BannedIpUncheckedUpdateInputSchema ]),
+  where: BannedIpWhereUniqueInputSchema, 
+}).strict();
+
+export const BannedIpUpdateManyArgsSchema: z.ZodType<Prisma.BannedIpUpdateManyArgs> = z.object({
+  data: z.union([ BannedIpUpdateManyMutationInputSchema, BannedIpUncheckedUpdateManyInputSchema ]),
+  where: BannedIpWhereInputSchema.optional(), 
+  limit: z.number().optional(),
+}).strict();
+
+export const BannedIpUpdateManyAndReturnArgsSchema: z.ZodType<Prisma.BannedIpUpdateManyAndReturnArgs> = z.object({
+  data: z.union([ BannedIpUpdateManyMutationInputSchema, BannedIpUncheckedUpdateManyInputSchema ]),
+  where: BannedIpWhereInputSchema.optional(), 
+  limit: z.number().optional(),
+}).strict();
+
+export const BannedIpDeleteManyArgsSchema: z.ZodType<Prisma.BannedIpDeleteManyArgs> = z.object({
+  where: BannedIpWhereInputSchema.optional(), 
   limit: z.number().optional(),
 }).strict();

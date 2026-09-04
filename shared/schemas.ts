@@ -1,9 +1,17 @@
 import { z } from "zod";
+import { isValidIP } from "@better-auth/core/utils";
 import { MIN_PASSWORD_LENGTH } from "./constants";
 import months from "../app/data/months";
 import { accountRoles } from "../app/data/account";
 
 export const EmailSchema = z.email({ message: "Invalid email" });
+
+// Reuses better-auth's own IPv4/IPv6 validator so a banned IP is always in
+// the same format the ip-ban middleware and session records use.
+export const IpAddressSchema = z
+  .string()
+  .nonempty("IP address is required")
+  .refine((val) => isValidIP(val), { message: "Invalid IP address" });
 
 export const PasswordSchema = z
   .string("Invalid password")
@@ -146,3 +154,51 @@ export const paginationQuerySchema = z.object({
   skip: z.coerce.number("Skip must be a number").optional(),
   search: z.string().optional()
 });
+
+export const banDurations = [
+  "1h",
+  "10h",
+  "1d",
+  "7d",
+  "14d",
+  "30d",
+  "60d",
+  "1y",
+  "permanent"
+] as const;
+export type BanDuration = (typeof banDurations)[number];
+export const banDurationToSeconds: Record<BanDuration, number | undefined> = {
+  permanent: undefined,
+  "1h": 60 * 60,
+  "10h": 60 * 60 * 10,
+  "1d": 60 * 60 * 24,
+  "7d": 60 * 60 * 24 * 7,
+  "14d": 60 * 60 * 24 * 14,
+  "30d": 60 * 60 * 24 * 30,
+  "60d": 60 * 60 * 24 * 60,
+  "1y": 60 * 60 * 24 * 365
+};
+
+export const BanUserSchema = z
+  .object({
+    reason: z.string().nonempty("A ban reason is required"),
+    duration: z.enum(banDurations, { message: "Invalid duration" }),
+    banIp: z.boolean(),
+    ipAddress: z.string().optional()
+  })
+  .refine((data) => !data.banIp || !!data.ipAddress?.trim(), {
+    message: "IP address is required to ban it",
+    path: ["ipAddress"]
+  })
+  .refine((data) => !data.ipAddress || isValidIP(data.ipAddress), {
+    message: "Invalid IP address",
+    path: ["ipAddress"]
+  });
+export type BanUserSchemaType = z.infer<typeof BanUserSchema>;
+
+export const BannedIpSchema = z.object({
+  ipAddress: IpAddressSchema,
+  reason: z.string().nonempty("A reason is required"),
+  duration: z.enum(banDurations, { message: "Invalid duration" })
+});
+export type BannedIpSchemaType = z.infer<typeof BannedIpSchema>;

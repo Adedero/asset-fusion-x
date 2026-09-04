@@ -407,7 +407,8 @@ export const ModelName = {
   Transaction: 'Transaction',
   Notification: 'Notification',
   Currency: 'Currency',
-  Settings: 'Settings'
+  Settings: 'Settings',
+  BannedIp: 'BannedIp'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -423,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "profile" | "businessProfile" | "financialAccount" | "accountUser" | "jointAccountRequest" | "jointAccountModRequest" | "jointAccountModRequestApproval" | "investmentPlan" | "investment" | "profit" | "transaction" | "notification" | "currency" | "settings"
+    modelProps: "user" | "session" | "account" | "verification" | "profile" | "businessProfile" | "financialAccount" | "accountUser" | "jointAccountRequest" | "jointAccountModRequest" | "jointAccountModRequestApproval" | "investmentPlan" | "investment" | "profit" | "transaction" | "notification" | "currency" | "settings" | "bannedIp"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1759,6 +1760,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BannedIp: {
+      payload: Prisma.$BannedIpPayload<ExtArgs>
+      fields: Prisma.BannedIpFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BannedIpFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannedIpPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BannedIpFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannedIpPayload>
+        }
+        findFirst: {
+          args: Prisma.BannedIpFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannedIpPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BannedIpFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannedIpPayload>
+        }
+        findMany: {
+          args: Prisma.BannedIpFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannedIpPayload>[]
+        }
+        create: {
+          args: Prisma.BannedIpCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannedIpPayload>
+        }
+        createMany: {
+          args: Prisma.BannedIpCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BannedIpCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannedIpPayload>[]
+        }
+        delete: {
+          args: Prisma.BannedIpDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannedIpPayload>
+        }
+        update: {
+          args: Prisma.BannedIpUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannedIpPayload>
+        }
+        deleteMany: {
+          args: Prisma.BannedIpDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BannedIpUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BannedIpUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannedIpPayload>[]
+        }
+        upsert: {
+          args: Prisma.BannedIpUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannedIpPayload>
+        }
+        aggregate: {
+          args: Prisma.BannedIpAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBannedIp>
+        }
+        groupBy: {
+          args: Prisma.BannedIpGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BannedIpGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BannedIpCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BannedIpCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2117,6 +2192,19 @@ export const SettingsScalarFieldEnum = {
 export type SettingsScalarFieldEnum = (typeof SettingsScalarFieldEnum)[keyof typeof SettingsScalarFieldEnum]
 
 
+export const BannedIpScalarFieldEnum = {
+  id: 'id',
+  ipAddress: 'ipAddress',
+  reason: 'reason',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BannedIpScalarFieldEnum = (typeof BannedIpScalarFieldEnum)[keyof typeof BannedIpScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2383,6 +2471,7 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   currency?: Prisma.CurrencyOmit
   settings?: Prisma.SettingsOmit
+  bannedIp?: Prisma.BannedIpOmit
 }
 
 /* Types for Logging */

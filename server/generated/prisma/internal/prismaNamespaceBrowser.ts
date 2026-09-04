@@ -66,7 +66,8 @@ export const ModelName = {
   Transaction: 'Transaction',
   Notification: 'Notification',
   Currency: 'Currency',
-  Settings: 'Settings'
+  Settings: 'Settings',
+  BannedIp: 'BannedIp'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,6 +403,19 @@ export const SettingsScalarFieldEnum = {
 } as const
 
 export type SettingsScalarFieldEnum = (typeof SettingsScalarFieldEnum)[keyof typeof SettingsScalarFieldEnum]
+
+
+export const BannedIpScalarFieldEnum = {
+  id: 'id',
+  ipAddress: 'ipAddress',
+  reason: 'reason',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BannedIpScalarFieldEnum = (typeof BannedIpScalarFieldEnum)[keyof typeof BannedIpScalarFieldEnum]
 
 
 export const SortOrder = {
