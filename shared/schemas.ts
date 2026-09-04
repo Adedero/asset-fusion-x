@@ -1,17 +1,9 @@
 import { z } from "zod";
-import { isValidIP } from "@better-auth/core/utils";
 import { MIN_PASSWORD_LENGTH } from "./constants";
 import months from "../app/data/months";
 import { accountRoles } from "../app/data/account";
 
 export const EmailSchema = z.email({ message: "Invalid email" });
-
-// Reuses better-auth's own IPv4/IPv6 validator so a banned IP is always in
-// the same format the ip-ban middleware and session records use.
-export const IpAddressSchema = z
-  .string()
-  .nonempty("IP address is required")
-  .refine((val) => isValidIP(val), { message: "Invalid IP address" });
 
 export const PasswordSchema = z
   .string("Invalid password")
@@ -36,7 +28,7 @@ export const RegisterSchema = z
   .object({
     name: z
       .string({ message: "Invalid name" })
-      .nonempty({ message: "Full name is required" }),
+      .min(1, { message: "Full name is required" }),
     email: EmailSchema,
     password: PasswordSchema,
     confirmPassword: z.string()
@@ -88,7 +80,7 @@ export type ProfileSchemaType = z.infer<typeof ProfileSchema>;
 export const BusinessProfileSchema = z.object({
   address: z
     .string({ message: "Business address is required" })
-    .nonempty({ message: "Business address is required" })
+    .min(1, { message: "Business address is required" })
     .optional(),
   creationMonth: z
     .enum(
@@ -114,7 +106,7 @@ export type BusinessProfileSchemaType = z.infer<typeof BusinessProfileSchema>;
 export const JointAccountRequestSchema = z.object({
   recipientName: z
     .string({ message: "Name is required" })
-    .nonempty({ message: "Name is required" }),
+    .min(1, { message: "Name is required" }),
   recipientEmail: z.email({ message: "Invalid email" }),
   role: z.enum(accountRoles, { message: "Invalid role" }),
   ownership: z
@@ -181,7 +173,7 @@ export const banDurationToSeconds: Record<BanDuration, number | undefined> = {
 
 export const BanUserSchema = z
   .object({
-    reason: z.string().nonempty("A ban reason is required"),
+    reason: z.string().min(1, "A ban reason is required"),
     duration: z.enum(banDurations, { message: "Invalid duration" }),
     banIp: z.boolean(),
     ipAddress: z.string().optional()
@@ -190,15 +182,12 @@ export const BanUserSchema = z
     message: "IP address is required to ban it",
     path: ["ipAddress"]
   })
-  .refine((data) => !data.ipAddress || isValidIP(data.ipAddress), {
-    message: "Invalid IP address",
-    path: ["ipAddress"]
-  });
+ 
 export type BanUserSchemaType = z.infer<typeof BanUserSchema>;
 
 export const BannedIpSchema = z.object({
-  ipAddress: IpAddressSchema,
-  reason: z.string().nonempty("A reason is required"),
+  ipAddress: z.string().min(1, "Enter an IP address"),
+  reason: z.string().min(1, "A reason is required"),
   duration: z.enum(banDurations, { message: "Invalid duration" })
 });
 export type BannedIpSchemaType = z.infer<typeof BannedIpSchema>;

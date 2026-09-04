@@ -7,6 +7,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "start": "node --import ./scripts/fix-nitro-import-meta.mjs dist/server/index.mjs",
     "postinstall": "nuxt prepare",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate deploy",
