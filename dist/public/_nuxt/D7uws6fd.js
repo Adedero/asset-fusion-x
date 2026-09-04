@@ -1,1 +1,0 @@
-import{d as t}from"./9Sj_QenJ.js";import{d as r,k as c,Z as e,j as o}from"./bsLPM5gF.js";const d=r({__name:"transfer",setup(s){const a=e("0021351082"),n=e("Eli and Lulu");return t({breadcrumb:[{label:"Accounts",to:"/user/accounts"},{label:n,to:`/user/accounts/${a.value}`},{label:"Transfer"}]}),(u,l)=>(o(),c("div",null,"Transfer"))}});export{d as default};

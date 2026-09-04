@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { isValidIP } from '@better-auth/core/utils';
 
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -32,7 +31,6 @@ const accountRoles = [
 
 var _a, _b;
 const EmailSchema = z.email({ message: "Invalid email" });
-const IpAddressSchema = z.string().nonempty("IP address is required").refine((val) => isValidIP(val), { message: "Invalid IP address" });
 const PasswordSchema = z.string("Invalid password").min(MIN_PASSWORD_LENGTH, {
   message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`
 }).refine((val) => /[a-z]/.test(val), {
@@ -45,7 +43,7 @@ const PasswordSchema = z.string("Invalid password").min(MIN_PASSWORD_LENGTH, {
   message: "Password must contain at least one special character"
 });
 const RegisterSchema = z.object({
-  name: z.string({ message: "Invalid name" }).nonempty({ message: "Full name is required" }),
+  name: z.string({ message: "Invalid name" }).min(1, { message: "Full name is required" }),
   email: EmailSchema,
   password: PasswordSchema,
   confirmPassword: z.string()
@@ -73,7 +71,7 @@ const ProfileSchema = z.object({
   postalCode: z.string({ message: "Postal code is required" }).min(1, "Postal code cannot be empty")
 });
 const BusinessProfileSchema = z.object({
-  address: z.string({ message: "Business address is required" }).nonempty({ message: "Business address is required" }).optional(),
+  address: z.string({ message: "Business address is required" }).min(1, { message: "Business address is required" }).optional(),
   creationMonth: z.enum(
     months.map((month) => month.long),
     { message: "Invalid month" }
@@ -87,7 +85,7 @@ const BusinessProfileSchema = z.object({
   certificateExt: z.string().optional()
 });
 const JointAccountRequestSchema = z.object({
-  recipientName: z.string({ message: "Name is required" }).nonempty({ message: "Name is required" }),
+  recipientName: z.string({ message: "Name is required" }).min(1, { message: "Name is required" }),
   recipientEmail: z.email({ message: "Invalid email" }),
   role: z.enum(accountRoles, { message: "Invalid role" }),
   ownership: z.number({ message: "Ownership is required" }).min(0, { message: "Ownership cannot be less than 0%" }).max(100, { message: "Ownership cannot be more than 100%" }),
@@ -134,7 +132,7 @@ const banDurationToSeconds = {
   "1y": 60 * 60 * 24 * 365
 };
 const BanUserSchema = z.object({
-  reason: z.string().nonempty("A ban reason is required"),
+  reason: z.string().min(1, "A ban reason is required"),
   duration: z.enum(banDurations, { message: "Invalid duration" }),
   banIp: z.boolean(),
   ipAddress: z.string().optional()
@@ -144,13 +142,10 @@ const BanUserSchema = z.object({
 }, {
   message: "IP address is required to ban it",
   path: ["ipAddress"]
-}).refine((data) => !data.ipAddress || isValidIP(data.ipAddress), {
-  message: "Invalid IP address",
-  path: ["ipAddress"]
 });
 const BannedIpSchema = z.object({
-  ipAddress: IpAddressSchema,
-  reason: z.string().nonempty("A reason is required"),
+  ipAddress: z.string().min(1, "Enter an IP address"),
+  reason: z.string().min(1, "A reason is required"),
   duration: z.enum(banDurations, { message: "Invalid duration" })
 });
 
